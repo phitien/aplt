@@ -10,21 +10,17 @@
  * | and give it the controller to call when that URI is requested.
  * |
  */
-Route::get ( '/', function () {
-	return view ( 'welcome' );
-} );
-
 Route::group ( [ 
 		'prefix' => 'api' 
 ], function () {
-	Route::resource ( 'authenticate', 'AuthenticateController', [ 
+	Route::resource ( 'login', 'IMAuthController', [ 
 			'only' => [ 
 					'index' 
 			] 
 	] );
-	Route::post ( 'authenticate', 'AuthenticateController@authenticate' );
-	Route::get ( 'authenticate/user', 'AuthenticateController@getAuthenticatedUser' );
-	
 	Route::post ( 'register', 'IMAuthController@register' );
+	Route::get ( 'activate/{activationCode}', 'IMAuthController@activate' );
+	Route::post ( 'activate', 'IMAuthController@sendActivationCode' );
 	Route::post ( 'login', 'IMAuthController@login' );
+	Route::get ( 'profile', 'IMAuthController@profile' );
 } );

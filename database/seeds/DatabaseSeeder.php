@@ -14,23 +14,23 @@ class DatabaseSeeder extends Seeder {
 		$users = array (
 				[ 
 						'name' => 'Phi Tien',
-						'email' => 'phitien@gmail.com',
-						'password' => Hash::make ( 'secret' ) 
+						'email' => 'im.phitien@gmail.com',
+						'password' => Hash::make ( 'phitien0' ) 
 				],
 				[ 
 						'name' => 'Phi Tien 2',
-						'email' => 'phitien2@gmail.com',
-						'password' => Hash::make ( 'secret' ) 
+						'email' => 'im.phitien2@gmail.com',
+						'password' => Hash::make ( 'phitien2' ) 
 				],
 				[ 
 						'name' => 'Phi Tien 3',
-						'email' => 'phitien3@gmail.com',
-						'password' => Hash::make ( 'secret' ) 
+						'email' => 'im.phitien3@gmail.com',
+						'password' => Hash::make ( 'phitien3' ) 
 				],
 				[ 
 						'name' => 'Phi Tien 4',
-						'email' => 'phitien4@gmail.com',
-						'password' => Hash::make ( 'secret' ) 
+						'email' => 'im.phitien4@gmail.com',
+						'password' => Hash::make ( 'phitien4' ) 
 				] 
 		);
 		
