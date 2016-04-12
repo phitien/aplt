@@ -24,4 +24,5 @@ Route::group ( [
 	Route::post ( 'login', 'IMAuthController@login' );
 	Route::get ( 'profile', 'IMAuthController@profile' );
 	Route::post ( 'profile', 'IMAuthController@updateProfile' );
+	Route::post ( 'passwodr', 'IMAuthController@password' );
 } );

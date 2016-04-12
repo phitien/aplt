@@ -50,6 +50,13 @@ class IMAuthController extends IMController {
 	 */
 	public function login(Request $request) {
 		$credentials = $request->only ( 'email', 'password' );
+		return $this->doLogin ( $credentials );
+	}
+	/**
+	 *
+	 * @param unknown $credentials        	
+	 */
+	protected function doLogin($credentials) {
 		$credentials ['active'] = 1;
 		try {
 			// verify the credentials and create a token for the user
@@ -63,6 +70,7 @@ class IMAuthController extends IMController {
 		// if no errors are encountered we can return a JWT
 		return $this->json ( null, $token );
 	}
+	
 	/**
 	 * Return the authenticated user
 	 *
@@ -164,6 +172,28 @@ class IMAuthController extends IMController {
 	 * @return Response
 	 */
 	public function updateProfile(Request $request) {
+		try {
+			if (! $user = JWTAuth::parseToken ()->authenticate ()) {
+				return $this->json ( 'user_not_found', null, ResponseStatus::NotFound );
+			}
+		} catch ( Tymon\JWTAuth\Exceptions\TokenExpiredException $e ) {
+			return $this->json ( 'token_expired', null, $e->getStatusCode () );
+		} catch ( Tymon\JWTAuth\Exceptions\TokenInvalidException $e ) {
+			return $this->json ( 'token_invalid', null, $e->getStatusCode () );
+		} catch ( Tymon\JWTAuth\Exceptions\JWTException $e ) {
+			return $this->json ( 'token_absent', null, $e->getStatusCode () );
+		}
+		$user->fill ( $request->all () );
+		$user->save ();
+		// the token is valid and we have found the user via the sub claim
+		return $this->json ( null, $user );
+	}
+	/**
+	 * Return the authenticated user
+	 *
+	 * @return Response
+	 */
+	public function password(Request $request) {
 		try {
 			if (! $user = JWTAuth::parseToken ()->authenticate ()) {
 				return $this->json ( 'user_not_found', null, ResponseStatus::NotFound );
