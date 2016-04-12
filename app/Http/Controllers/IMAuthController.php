@@ -158,4 +158,26 @@ class IMAuthController extends IMController {
 				'password' => bcrypt ( $data ['password'] ) 
 		] );
 	}
+	/**
+	 * Return the authenticated user
+	 *
+	 * @return Response
+	 */
+	public function updateProfile(Request $request) {
+		try {
+			if (! $user = JWTAuth::parseToken ()->authenticate ()) {
+				return $this->json ( 'user_not_found', null, ResponseStatus::NotFound );
+			}
+		} catch ( Tymon\JWTAuth\Exceptions\TokenExpiredException $e ) {
+			return $this->json ( 'token_expired', null, $e->getStatusCode () );
+		} catch ( Tymon\JWTAuth\Exceptions\TokenInvalidException $e ) {
+			return $this->json ( 'token_invalid', null, $e->getStatusCode () );
+		} catch ( Tymon\JWTAuth\Exceptions\JWTException $e ) {
+			return $this->json ( 'token_absent', null, $e->getStatusCode () );
+		}
+		$user->fill ( $request->all () );
+		$user->save ();
+		// the token is valid and we have found the user via the sub claim
+		return $this->json ( null, $user );
+	}
 }

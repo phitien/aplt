@@ -6,6 +6,41 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Crypt;
 use DateTime;
 
+class UserExtension {
+	protected $user;
+	protected $data;
+	public function __construct($json) {
+		if ($json && $data = json_decode ( $json )) {
+			$this->data = $data;
+		} else {
+			$this->data = new stdClass ();
+		}
+	}
+	public function all() {
+		return $this->data;
+	}
+	public function __get($key) {
+		if (property_exists ( $this->data, $key )) {
+			return $this->data->$key;
+		} else {
+			return null;
+		}
+	}
+	public function __set($key, $value) {
+		$this->data->$key = $value;
+	}
+	public function toJson() {
+		return json_encode ( $this->data );
+	}
+	public function fill($attributes) {
+		foreach ( $this->data as $key => $val ) {
+			unset ( $this->data->$key );
+		}
+		foreach ( $attributes as $key => $val ) {
+			$this->data->$key = $val;
+		}
+	}
+}
 class User extends Authenticatable {
 	protected $guarded = [ 
 			'id',
@@ -37,8 +72,7 @@ class User extends Authenticatable {
 			'cover',
 			'status',
 			'quote',
-			'description',
-			'json' 
+			'description' 
 	];
 	
 	/**
@@ -47,6 +81,7 @@ class User extends Authenticatable {
 	 * @var array
 	 */
 	protected $hidden = [ 
+			'json',
 			'active',
 			'activationCode',
 			'password',
@@ -139,5 +174,41 @@ class User extends Authenticatable {
 	 */
 	public function isActivated() {
 		return $this->active ? true : false;
+	}
+	public function toArray() {
+		$attributes = parent::toArray ();
+		return array_merge ( $attributes, [ 
+				'extension' => $this->extension ()->all () 
+		] );
+	}
+	protected $extension;
+	/**
+	 *
+	 * @return \App\UserExtension
+	 */
+	public function extension() {
+		if (! $this->extension)
+			$this->extension = new UserExtension ( $this->json );
+		return $this->extension;
+	}
+	/**
+	 * override save function to save json property
+	 */
+	public function save(array $options = []) {
+		$this->json = $this->extension ()->toJson ();
+		return parent::save ( $options );
+	}
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \Illuminate\Database\Eloquent\Model::fill()
+	 */
+	public function fill(array $attributes) {
+		if ($attributes && isset ( $attributes ['extension'] )) {
+			$extension = $attributes ['extension'];
+			$this->extension ()->fill ( $extension );
+		}
+		return parent::fill ( $attributes );
 	}
 }
