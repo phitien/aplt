@@ -16,7 +16,9 @@ class PasswordController extends Controller {
 		$this->middleware ( [ 
 				AuthMiddleware::class 
 		], [ 
-				'except' => [ ] 
+				'except' => [ 
+						'reset' 
+				] 
 		] );
 	}
 	/**
@@ -68,5 +70,13 @@ class PasswordController extends Controller {
 				'password' => $new_password 
 		];
 		return $this->doLogin ( $credentials );
+	}
+	/**
+	 * Reset: send reset link to the user email
+	 *
+	 * @param Request $request        	
+	 */
+	public function reset(Request $request) {
+		// TODO
 	}
 }

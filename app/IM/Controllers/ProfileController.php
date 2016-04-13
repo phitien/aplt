@@ -33,7 +33,10 @@ class ProfileController extends Controller {
 	 */
 	public function updateProfile(Request $request) {
 		$user = JWTAuth::authenticate ( JWTAuth::getToken () );
-		$user->fill ( $request->all () );
+		$data = $request->all ();
+		unset ( $data ['email'] );
+		unset ( $data ['password'] );
+		$user->fill ( $data );
 		$user->save ();
 		// the token is valid and we have found the user via the sub claim
 		return $this->jsonResponse ( null, $user );

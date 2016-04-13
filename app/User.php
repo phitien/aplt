@@ -5,44 +5,18 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Crypt;
 use DateTime;
-use stdClass;
+use App\IM\Models\User\Traits\Role;
+use App\IM\Models\User\Traits\Group;
+use App\IM\Models\User\Traits\Action;
+use App\IM\Models\User\Traits\Extension;
 
-class UserExtension {
-	protected $user;
-	protected $data;
-	public function __construct($json) {
-		if ($json && $data = json_decode ( $json )) {
-			$this->data = $data;
-		} else {
-			$this->data = new stdClass ();
-		}
-	}
-	public function all() {
-		return $this->data;
-	}
-	public function __get($key) {
-		if (property_exists ( $this->data, $key )) {
-			return $this->data->$key;
-		} else {
-			return null;
-		}
-	}
-	public function __set($key, $value) {
-		$this->data->$key = $value;
-	}
-	public function toJson() {
-		return json_encode ( $this->data );
-	}
-	public function fill($attributes) {
-		foreach ( $this->data as $key => $val ) {
-			unset ( $this->data->$key );
-		}
-		foreach ( $attributes as $key => $val ) {
-			$this->data->$key = $val;
-		}
-	}
-}
 class User extends Authenticatable {
+	/**
+	 * Traits
+	 */
+	use Extension, Group, Role, Action;
+	/**
+	 */
 	protected $guarded = [ 
 			'id',
 			'activationCode',
@@ -81,7 +55,7 @@ class User extends Authenticatable {
 	 *
 	 * @var array
 	 */
-	protected $hidden = [
+	protected $hidden = [ 
 			'id',
 			'json',
 			'active',
@@ -156,7 +130,7 @@ class User extends Authenticatable {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function followers() {
-		return $this->belongsToMany ( 'User', 'user_follower', 'follower_id', 'user_id' );
+		return $this->belongsToMany ( 'App\User', 'user_follower', 'follower_id', 'user_id' )->where ( 'users.active', '=', 1 );
 	}
 	/**
 	 * The users that user follows to
@@ -164,13 +138,7 @@ class User extends Authenticatable {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function following() {
-		return $this->belongsToMany ( 'User', 'user_follower', 'user_id', 'follower_id' )->where ( 'users.active', '=', 1 );
-	}
-	/**
-	 * The roles that belong to the user.
-	 */
-	public function roles() {
-		return $this->belongsToMany ( 'App\IM\Models\Role', 'user_role', 'user_id', 'role_id' )->where ( 'users.active', '=', 1 );
+		return $this->belongsToMany ( 'App\User', 'user_follower', 'user_id', 'follower_id' )->where ( 'users.active', '=', 1 );
 	}
 	/**
 	 */
@@ -180,18 +148,11 @@ class User extends Authenticatable {
 	public function toArray() {
 		$attributes = parent::toArray ();
 		return array_merge ( $attributes, [ 
-				'extension' => $this->extension ()->all () 
+				'extension' => $this->extension ()->all (),
+				'groups' => $this->groups,
+				'roles' => $this->roles,
+				'actions' => $this->actions 
 		] );
-	}
-	protected $extension;
-	/**
-	 *
-	 * @return \App\UserExtension
-	 */
-	public function extension() {
-		if (! $this->extension)
-			$this->extension = new UserExtension ( $this->json );
-		return $this->extension;
 	}
 	/**
 	 * override save function to save json property

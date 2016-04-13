@@ -13,14 +13,23 @@ class Role extends Model {
 	];
 	protected $fillable = [ 
 			'code',
-			'description',
-			'active' 
+			'name',
+			'description' 
 	];
 	protected $hidden = [ ];
 	/**
-	 * The users that have the role.
 	 */
 	public function users() {
-		return $this->belongsToMany ( 'User', 'user_role', 'role_id', 'user_id' );
+		return $this->belongsToMany ( 'App\User', 'user_role', 'role_id', 'user_id' );
+	}
+	/**
+	 */
+	public function groups() {
+		return $this->belongsToMany ( 'App\IM\Models\Group', 'group_role', 'role_id', 'group_id' );
+	}
+	/**
+	 */
+	public function actions() {
+		return $this->belongsToMany ( 'App\IM\Models\Action', 'role_action', 'role_id', 'action_id' );
 	}
 }

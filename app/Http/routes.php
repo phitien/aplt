@@ -19,4 +19,5 @@ Route::group ( [
 	Route::post ( 'profile', 'IM\Controllers\ProfileController@updateProfile' );
 	
 	Route::post ( 'password', 'IM\Controllers\PasswordController@password' );
+	Route::any ( 'reset', 'IM\Controllers\PasswordController@reset' );
 } );
