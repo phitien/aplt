@@ -134,10 +134,16 @@ class IMAuthController extends IMController {
 	 */
 	protected function registrationValidator(array $data) {
 		$validator = Validator::make ( $data, [ 
-				'email' => 'required|email|max:255|unique:users' 
+				'email' => 'required|email|max:255' 
 		] );
 		if ($validator->fails ()) {
 			return 'invalid_email';
+		}
+		$validator = Validator::make ( $data, [ 
+				'email' => 'unique:users' 
+		] );
+		if ($validator->fails ()) {
+			return 'email_used';
 		}
 		$validator = Validator::make ( $data, [ 
 				'password' => 'required|min:6' 
@@ -172,28 +178,6 @@ class IMAuthController extends IMController {
 	 * @return Response
 	 */
 	public function updateProfile(Request $request) {
-		try {
-			if (! $user = JWTAuth::parseToken ()->authenticate ()) {
-				return $this->json ( 'user_not_found', null, ResponseStatus::NotFound );
-			}
-		} catch ( Tymon\JWTAuth\Exceptions\TokenExpiredException $e ) {
-			return $this->json ( 'token_expired', null, $e->getStatusCode () );
-		} catch ( Tymon\JWTAuth\Exceptions\TokenInvalidException $e ) {
-			return $this->json ( 'token_invalid', null, $e->getStatusCode () );
-		} catch ( Tymon\JWTAuth\Exceptions\JWTException $e ) {
-			return $this->json ( 'token_absent', null, $e->getStatusCode () );
-		}
-		$user->fill ( $request->all () );
-		$user->save ();
-		// the token is valid and we have found the user via the sub claim
-		return $this->json ( null, $user );
-	}
-	/**
-	 * Return the authenticated user
-	 *
-	 * @return Response
-	 */
-	public function password(Request $request) {
 		try {
 			if (! $user = JWTAuth::parseToken ()->authenticate ()) {
 				return $this->json ( 'user_not_found', null, ResponseStatus::NotFound );

@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Models\\Role' => $baseDir . '/app/Models/Role.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreateRolesTable' => $baseDir . '/database/migrations/2016_04_07_072449_create_roles_table.php',
     'CreateSessionsTable' => $baseDir . '/database/migrations/2016_04_05_162256_create_sessions_table.php',

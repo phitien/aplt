@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Crypt;
 use DateTime;
+use stdClass;
 
 class UserExtension {
 	protected $user;

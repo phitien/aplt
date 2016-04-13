@@ -9,6 +9,7 @@ class DatabaseSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
+		Model::unguard ();
 		// $this->call ( UsersTableSeeder::class );
 		DB::table ( 'users' )->delete ();
 		$users = array (
