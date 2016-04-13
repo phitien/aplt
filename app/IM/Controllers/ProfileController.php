@@ -34,6 +34,7 @@ class ProfileController extends Controller {
 	public function updateProfile(Request $request) {
 		$user = JWTAuth::authenticate ( JWTAuth::getToken () );
 		$data = $request->all ();
+		unset ( $data ['name'] );
 		unset ( $data ['email'] );
 		unset ( $data ['password'] );
 		$user->fill ( $data );
