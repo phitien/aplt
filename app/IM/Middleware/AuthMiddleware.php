@@ -8,6 +8,7 @@ use App\IM\Utils;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Exception;
 
 class AuthMiddleware extends GetUserFromToken implements IMiddleware {
 	/**
@@ -37,6 +38,8 @@ class AuthMiddleware extends GetUserFromToken implements IMiddleware {
 		} catch ( TokenInvalidException $e ) {
 			return $this->jsonResponse ( 'token_invalid', null, $e->getStatusCode () );
 		} catch ( JWTException $e ) {
+			return $this->jsonResponse ( 'token_absent', null, $e->getStatusCode () );
+		} catch ( Exception $e ) {
 			return $this->jsonResponse ( 'token_absent', null, $e->getStatusCode () );
 		}
 		

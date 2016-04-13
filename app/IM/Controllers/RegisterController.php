@@ -105,7 +105,7 @@ class RegisterController extends Controller {
 	 * @return User
 	 */
 	protected function create(array $data) {
-		return User::create ( [ 
+		return User::createUser ( [ 
 				'name' => isset ( $data ['name'] ) ? $data ['name'] : uniqid ( 'IM' ),
 				'email' => $data ['email'],
 				'password' => $this->encode ( $data ['password'] ) 

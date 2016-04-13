@@ -6,15 +6,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Crypt;
 use DateTime;
 use App\IM\Models\User\Traits\Role;
-use App\IM\Models\User\Traits\Group;
 use App\IM\Models\User\Traits\Action;
 use App\IM\Models\User\Traits\Extension;
+use App\IM\Models\User\Traits\Follower;
+use App\IM\Models\User\Traits\Following;
 
 class User extends Authenticatable {
 	/**
 	 * Traits
 	 */
-	use Extension, Group, Role, Action;
+	use Extension, Role, Action, Follower;
 	/**
 	 */
 	protected $guarded = [ 
@@ -125,22 +126,6 @@ class User extends Authenticatable {
 		return $this->activationCode;
 	}
 	/**
-	 * The followers belong to user
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function followers() {
-		return $this->belongsToMany ( 'App\User', 'user_follower', 'follower_id', 'user_id' )->where ( 'users.active', '=', 1 );
-	}
-	/**
-	 * The users that user follows to
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-	 */
-	public function following() {
-		return $this->belongsToMany ( 'App\User', 'user_follower', 'user_id', 'follower_id' )->where ( 'users.active', '=', 1 );
-	}
-	/**
 	 */
 	public function isActivated() {
 		return $this->active ? true : false;
@@ -149,9 +134,10 @@ class User extends Authenticatable {
 		$attributes = parent::toArray ();
 		return array_merge ( $attributes, [ 
 				'extension' => $this->extension ()->all (),
-				'groups' => $this->groups,
 				'roles' => $this->roles,
-				'actions' => $this->actions 
+				'actions' => $this->actions,
+				'followers' => count ( $this->followers ),
+				'following' => count ( $this->following ) 
 		] );
 	}
 	/**

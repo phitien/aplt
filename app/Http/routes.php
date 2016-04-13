@@ -18,6 +18,8 @@ Route::group ( [
 	Route::any ( 'profile', 'IM\Controllers\ProfileController@profile' );
 	Route::post ( 'profile', 'IM\Controllers\ProfileController@updateProfile' );
 	
-	Route::post ( 'password', 'IM\Controllers\PasswordController@password' );
-	Route::any ( 'reset', 'IM\Controllers\PasswordController@reset' );
+	Route::post ( 'password', 'IM\Controllers\AccountController@password' );
+	Route::post ( 'reset', 'IM\Controllers\AccountController@reset' );
+	Route::post ( 'email', 'IM\Controllers\AccountController@email' );
+	Route::post ( 'account', 'IM\Controllers\AccountController@account' );
 } );

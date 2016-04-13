@@ -45,6 +45,6 @@ class AuthController extends Controller {
 			return $this->jsonResponse ( 'token_invalid', null, Status::Unauthorized );
 		}
 		// if no errors are encountered we can return a JWT
-		return $this->jsonResponse ( null, $token );
+		return $this->jsonResponse ( 'token_renewed', $token );
 	}
 }

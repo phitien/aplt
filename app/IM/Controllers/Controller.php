@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller as BaseController;
 use App\IM\Utils;
 use App\IM\Response\Status;
 use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Exception;
 
 abstract class Controller extends BaseController implements IController {
 	/**
@@ -43,8 +45,11 @@ abstract class Controller extends BaseController implements IController {
 		} catch ( JWTException $e ) {
 			// something went wrong
 			return $this->jsonResponse ( 'could_not_create_token', null, Status::InternalServerError );
+		} catch ( Exception $e ) {
+			// something went wrong
+			return $this->jsonResponse ( 'could_not_create_token', null, Status::InternalServerError );
 		}
 		// if no errors are encountered we can return a JWT
-		return $this->jsonResponse ( null, $token );
+		return $this->jsonResponse ( 'login_successfully', $token );
 	}
 }
