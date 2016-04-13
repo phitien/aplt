@@ -1,28 +1,22 @@
 <?php
-
-/*
- * |--------------------------------------------------------------------------
- * | Application Routes
- * |--------------------------------------------------------------------------
- * |
- * | Here is where you can register all of the routes for an application.
- * | It's a breeze. Simply tell Laravel the URIs it should respond to
- * | and give it the controller to call when that URI is requested.
- * |
- */
 Route::group ( [ 
 		'prefix' => 'api' 
 ], function () {
-	Route::resource ( 'login', 'IMAuthController', [ 
-			'only' => [ 
-					'index' 
-			] 
-	] );
-	Route::post ( 'register', 'IMAuthController@register' );
-	Route::get ( 'activate/{activationCode}', 'IMAuthController@activate' );
-	Route::post ( 'activate', 'IMAuthController@sendActivationCode' );
-	Route::post ( 'login', 'IMAuthController@login' );
-	Route::get ( 'profile', 'IMAuthController@profile' );
-	Route::post ( 'profile', 'IMAuthController@updateProfile' );
-	Route::post ( 'password', 'IMPasswordController@password' );
+	// Route::resource ( 'login', 'IM\Controllers\AuthController', [
+	// 'only' => [
+	// 'index'
+	// ]
+	// ] );
+	Route::post ( 'register', 'IM\Controllers\RegisterController@register' );
+	Route::any ( 'activate/{activationCode}', 'IM\Controllers\RegisterController@activate' );
+	Route::any ( 'activate', 'IM\Controllers\RegisterController@sendActivationCode' );
+	
+	Route::post ( 'login', 'IM\Controllers\AuthController@login' );
+	Route::any ( 'refresh', 'IM\Controllers\AuthController@refresh' );
+	Route::any ( 'logout', 'IM\Controllers\AuthController@logout' );
+	
+	Route::any ( 'profile', 'IM\Controllers\ProfileController@profile' );
+	Route::post ( 'profile', 'IM\Controllers\ProfileController@updateProfile' );
+	
+	Route::post ( 'password', 'IM\Controllers\PasswordController@password' );
 } );

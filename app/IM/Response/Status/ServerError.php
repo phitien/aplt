@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Response\Status;
+namespace App\IM\Response\Status;
 
 interface ServerError {
 	const InternalServerError = 500;
