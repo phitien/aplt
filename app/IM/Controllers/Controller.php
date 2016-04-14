@@ -8,8 +8,27 @@ use App\IM\Response\Status;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Exception;
+use App\IM\Middleware\AuthorizationMiddleware;
 
 abstract class Controller extends BaseController implements IController {
+	protected $_im_middlewares = [ ];
+	protected $_im_middlewaresOptions = [ ];
+	protected $_im_middlewaresExceptOption = [ ];
+	/**
+	 */
+	public function __construct() {
+		$this->middleware ( $this->getIMMiddlewares (), $this->getIMMiddlewaresOptions () );
+	}
+	protected function getIMMiddlewares() {
+		$items = $this->_im_middlewares ? $this->_im_middlewares : [ ];
+		$items [count ( $items )] = AuthorizationMiddleware::class;
+		return $items;
+	}
+	protected function getIMMiddlewaresOptions() {
+		$options = $this->_im_middlewaresOptions ? $this->_im_middlewaresOptions : [ ];
+		$options ['except'] = $this->_im_middlewaresExceptOption ? $this->_im_middlewaresExceptOption : [ ];
+		return $options;
+	}
 	/**
 	 * Shortcut of Utils::jsonResponse
 	 *

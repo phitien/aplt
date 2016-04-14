@@ -2,31 +2,19 @@
 
 namespace App\IM\Middleware;
 
-use Tymon\JWTAuth\Middleware\GetUserFromToken;
-use App\IM\Response\Status;
-use App\IM\Utils;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Exception;
+use Closure;
+use App\IM\Config;
 
-class AuthMiddleware extends GetUserFromToken implements IMiddleware {
+class AuthenticationMiddleware extends Middleware {
 	/**
 	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \App\IM\Response\IResponse::jsonResponse()
+	 * @param unknown $request        	
+	 * @param \Closure $next        	
 	 */
-	public function jsonResponse($message = null, $data = null, $status = Status::OK, array $headers = [], $options = 0) {
-		return Utils::jsonResponse ( $message, $data, $status, $headers, $options );
-	}
-	/**
-	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \Tymon\JWTAuth\Middleware\GetUserFromToken::handle()
-	 */
-	public function handle($request, \Closure $next) {
+	public function handle($request, Closure $next, $action = Config::ACTION_DEFAULT) {
 		if (! $token = $this->auth->setRequest ( $request )->getToken ()) {
 			return $this->jsonResponse ( 'token_not_provided', null, 400 );
 		}
@@ -37,8 +25,6 @@ class AuthMiddleware extends GetUserFromToken implements IMiddleware {
 			return $this->jsonResponse ( 'token_expired', null, $e->getStatusCode () );
 		} catch ( TokenInvalidException $e ) {
 			return $this->jsonResponse ( 'token_invalid', null, $e->getStatusCode () );
-		} catch ( JWTException $e ) {
-			return $this->jsonResponse ( 'token_absent', null, $e->getStatusCode () );
 		} catch ( Exception $e ) {
 			return $this->jsonResponse ( 'token_absent', null, $e->getStatusCode () );
 		}

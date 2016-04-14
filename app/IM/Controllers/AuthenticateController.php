@@ -7,16 +7,14 @@ use App\IM\Controllers\Controller;
 use App\IM\Response\Status;
 use Illuminate\Http\Request;
 
-class AuthController extends Controller {
-	public function __construct() {
-		$this->middleware ( [ 
-				'jwt.auth' 
-		], [ 
-				'except' => [ 
-						'login' 
-				] 
-		] );
-	}
+class AuthenticateController extends Controller {
+	protected $_im_middlewares = [ 
+			'jwt.auth' 
+	];
+	protected $_im_middlewaresOptions = [ ];
+	protected $_im_middlewaresExceptOption = [ 
+			'login' 
+	];
 	/**
 	 * Return a JWT
 	 *

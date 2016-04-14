@@ -10,13 +10,11 @@ use App\IM\Response\Status;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller {
-	public function __construct() {
-		$this->middleware ( [ 
-				Registration::class 
-		], [ 
-				'except' => [ ] 
-		] );
-	}
+	protected $_im_middlewares = [ 
+			Registration::class 
+	];
+	protected $_im_middlewaresOptions = [ ];
+	protected $_im_middlewaresExceptOption = [ ];
 	/**
 	 * Return a JWT
 	 *
@@ -28,14 +26,14 @@ class RegisterController extends Controller {
 			return $this->jsonResponse ( $msg, null, Status::PreconditionFailed );
 		}
 		$user = $this->create ( $data );
-		return $this->jsonResponse ( null, $user->activationCode );
+		return $this->jsonResponse ( 'user_registered', $user->activationCode );
 	}
 	/**
 	 * Activate user
 	 *
 	 * @param Request $request        	
 	 */
-	public function activate($activationCode) {
+	public function activate(Request $request, $activationCode) {
 		$ok = User::activateUser ( $activationCode );
 		if ($ok == 2) {
 			return $this->jsonResponse ( 'user_already_activated', null );
@@ -57,7 +55,7 @@ class RegisterController extends Controller {
 		$user = User::where ( 'email', '=', $email )->first ();
 		if ($user) {
 			if (! $user->isActivated ()) {
-				return $this->jsonResponse ( null, $user->getActivationCode () );
+				return $this->jsonResponse ( 'activation_code_sent', $user->getActivationCode () );
 			} else {
 				return $this->jsonResponse ( 'user_already_activated', null, Status::MethodNotAllowed );
 			}

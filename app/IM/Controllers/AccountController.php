@@ -6,21 +6,19 @@ use JWTAuth;
 use App\IM\Controllers\Controller;
 use App\User;
 use Validator;
-use App\IM\Middleware\AuthMiddleware;
+use App\IM\Middleware\AuthenticationMiddleware;
 use Illuminate\Http\Request;
 use Hash;
 use App\IM\Response\Status;
 
 class AccountController extends Controller {
-	public function __construct() {
-		$this->middleware ( [ 
-				AuthMiddleware::class 
-		], [ 
-				'except' => [ 
-						'reset' 
-				] 
-		] );
-	}
+	protected $_im_middlewares = [ 
+			AuthenticationMiddleware::class 
+	];
+	protected $_im_middlewaresOptions = [ ];
+	protected $_im_middlewaresExceptOption = [ 
+			'reset' 
+	];
 	/**
 	 * Get a validator for an incoming registration request.
 	 *

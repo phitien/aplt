@@ -4,7 +4,9 @@ namespace App\IM\Models\User\Traits;
 
 use App\User;
 use Exception;
-use App\IM\Configs;
+use App\IM\Config;
+use App\IM\Models\User\Relations\Followers;
+use App\IM\Models\User\Relations\Following;
 
 trait Follower
 {
@@ -14,7 +16,7 @@ trait Follower
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function followers() {
-		return $this->belongsToMany ( 'App\User', 'user_follower', 'follower_id', 'user_id' )->where ( 'users.active', '=', 1 );
+		return (new Followers ( $this, $this->getBelongsToManyCaller () ))->where ( 'users.active', '=', 1 );
 	}
 	/**
 	 * Return the users that the user follows
@@ -22,38 +24,46 @@ trait Follower
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function following() {
-		return $this->belongsToMany ( 'App\User', 'user_follower', 'user_id', 'follower_id' )->where ( 'users.active', '=', 1 );
+		return (new Following ( $this, $this->getBelongsToManyCaller () ))->where ( 'users.active', '=', 1 );
 	}
 	public function follow(User $user) {
 		try {
-			$this->following ()->attach ( $user->id, [ 
-					'active' => Configs::FOLLOWER_REQUESTED 
-			] );
+			if (! $this->isGuest () && ! $user->isGuest ()) {
+				$this->following ()->attach ( $user->id, [ 
+						'active' => Config::FOLLOWER_REQUESTED 
+				] );
+			}
 		} catch ( Exception $e ) {
 			return $e;
 		}
 	}
 	public function unfollow(User $user) {
 		try {
-			$this->following ()->detach ( $user->id );
+			if (! $this->isGuest () && ! $user->isGuest ()) {
+				$this->following ()->detach ( $user->id );
+			}
 		} catch ( Exception $e ) {
 			return $e;
 		}
 	}
 	public function acceptFollower(User $user) {
 		try {
-			$this->followers ()->updateExistingPivot ( $user->id, [ 
-					'active' => Configs::FOLLOWER_REQUEST_ACCEPTED 
-			] );
+			if (! $this->isGuest () && ! $user->isGuest ()) {
+				$this->followers ()->updateExistingPivot ( $user->id, [ 
+						'active' => Config::FOLLOWER_REQUEST_ACCEPTED 
+				] );
+			}
 		} catch ( Exception $e ) {
 			return $e;
 		}
 	}
 	public function refuseFollower(User $user) {
 		try {
-			$this->followers ()->updateExistingPivot ( $user->id, [ 
-					'active' => Configs::FOLLOWER_REQUEST_REFUSED 
-			] );
+			if (! $this->isGuest () && ! $user->isGuest ()) {
+				$this->followers ()->updateExistingPivot ( $user->id, [ 
+						'active' => Config::FOLLOWER_REQUEST_REFUSED 
+				] );
+			}
 		} catch ( Exception $e ) {
 			return $e;
 		}

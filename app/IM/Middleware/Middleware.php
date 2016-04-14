@@ -4,8 +4,14 @@ namespace App\IM\Middleware;
 
 use App\IM\Utils;
 use App\IM\Response\Status;
+use Tymon\JWTAuth\Middleware\BaseMiddleware;
+use Closure;
+use App\IM\Config;
 
-abstract class Middleware implements IMiddleware {
+abstract class Middleware extends BaseMiddleware implements IMiddleware {
+	public function handle($request, Closure $next, $action = Config::ACTION_DEFAULT) {
+		return $next ( $request );
+	}
 	/**
 	 *
 	 * {@inheritDoc}

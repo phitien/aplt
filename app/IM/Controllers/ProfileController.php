@@ -5,17 +5,15 @@ namespace App\IM\Controllers;
 use JWTAuth;
 use App\IM\Controllers\Controller;
 use App\User;
-use App\IM\Middleware\AuthMiddleware;
+use App\IM\Middleware\AuthenticationMiddleware;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller {
-	public function __construct() {
-		$this->middleware ( [ 
-				AuthMiddleware::class 
-		], [ 
-				'except' => [ ] 
-		] );
-	}
+	protected $_im_middlewares = [ 
+			AuthenticationMiddleware::class 
+	];
+	protected $_im_middlewaresOptions = [ ];
+	protected $_im_middlewaresExceptOption = [ ];
 	/**
 	 * Return the authenticated user
 	 *

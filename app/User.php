@@ -144,8 +144,10 @@ class User extends Authenticatable {
 	 * override save function to save json property
 	 */
 	public function save(array $options = []) {
-		$this->json = $this->extension ()->toJson ();
-		return parent::save ( $options );
+		if (! $this->isGuest ()) {
+			$this->json = $this->extension ()->toJson ();
+			return parent::save ( $options );
+		}
 	}
 	/**
 	 *
