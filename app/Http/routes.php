@@ -2,11 +2,6 @@
 Route::group ( [ 
 		'prefix' => 'api' 
 ], function () {
-	// Route::resource ( 'login', 'IM\Controllers\AuthenticateController', [
-	// 'only' => [
-	// 'index'
-	// ]
-	// ] );
 	Route::post ( 'register', 'IM\Controllers\RegisterController@register' );
 	Route::any ( 'activate/{activationCode}', 'IM\Controllers\RegisterController@activate' );
 	Route::any ( 'activate', 'IM\Controllers\RegisterController@sendActivationCode' );

@@ -4,12 +4,11 @@ namespace App\IM\Controllers;
 
 use App\IM\Controllers\Controller;
 use App\User;
-use App\IM\Middleware\Authentication;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller {
 	protected $_im_middlewares = [ 
-			Authentication::class 
+			'im.authentication' 
 	];
 	protected $_im_middlewaresOptions = [ ];
 	protected $_im_middlewaresExceptOption = [ ];

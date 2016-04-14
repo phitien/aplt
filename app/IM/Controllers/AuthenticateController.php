@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class AuthenticateController extends Controller {
 	protected $_im_middlewares = [ 
-			'jwt.auth' 
+			'im.authentication' 
 	];
 	protected $_im_middlewaresOptions = [ ];
 	protected $_im_middlewaresExceptOption = [ 

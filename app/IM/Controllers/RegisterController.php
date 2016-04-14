@@ -5,13 +5,12 @@ namespace App\IM\Controllers;
 use App\IM\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Validator;
-use App\IM\Middleware\Registration;
 use App\IM\Response\Status;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller {
 	protected $_im_middlewares = [ 
-			Registration::class 
+			'im.registration' 
 	];
 	protected $_im_middlewaresOptions = [ ];
 	protected $_im_middlewaresExceptOption = [ ];

@@ -5,6 +5,9 @@ namespace App\IM;
 use Hash;
 use App\IM\Models\Role;
 use App\IM\Models\Action;
+use Route;
+use Request;
+use Exception;
 
 class Config {
 	/**
@@ -22,6 +25,32 @@ class Config {
 	const ROLE_MANAGER = 'MANAGER';
 	const ROLE_USER = 'USER';
 	const ROLE_GUEST = 'GUEST';
+	/**
+	 */
+	public static function getMiddlewareAction() {
+		$arr = explode ( '@', Route::getCurrentRoute ()->getActionName () );
+		$controller = $arr [0];
+		$method = $arr [1];
+		$requestType = Request::method ();
+		try {
+			return static::MIDDLEWARE_ACTION_MAPS [$controller] [$method] [$requestType];
+		} catch ( Exception $e ) {
+			try {
+				return static::MIDDLEWARE_ACTION_MAPS [$controller] [$method];
+			} catch ( Exception $e ) {
+			}
+		}
+		return static::ACTION_DEFAULT;
+	}
+	const MIDDLEWARE_ACTION_MAPS = [ 
+			'App\IM\Controllers\RegisterController' => [ 
+					'register' => [ 
+							'POST' => 'CREATE' 
+					],
+					'activate' => 'UPDATE',
+					'sendActivationCode' => 'READ' 
+			] 
+	];
 	/**
 	 */
 	public static function getCoreActions() {
@@ -214,7 +243,7 @@ class Config {
 				return explode ( ',', $str );
 			case static::ROLE_GUEST :
 			default :
-				$str = '2,7,8,9';
+				$str = '2,3,7,8,9';
 				return explode ( ',', $str );
 		}
 	}

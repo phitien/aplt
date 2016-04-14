@@ -7,13 +7,16 @@ use App\IM\Utils;
 use App\IM\Response\Status;
 use JWTAuth;
 use Exception;
-use App\IM\Middleware\Authorization;
 use App\User;
+use Route;
+use App\IM\Config;
+use Request;
 
 abstract class Controller extends BaseController implements IController {
 	protected $_im_middlewares = [ ];
 	protected $_im_middlewaresOptions = [ ];
 	protected $_im_middlewaresExceptOption = [ ];
+	protected $_im_middlewaresActions = [ ];
 	protected $_user;
 	/**
 	 */
@@ -26,8 +29,15 @@ abstract class Controller extends BaseController implements IController {
 		}
 	}
 	protected function getIMMiddlewares() {
+		$action = Config::getMiddlewareAction ();
 		$items = $this->_im_middlewares ? $this->_im_middlewares : [ ];
-		$items [count ( $items )] = Authorization::class;
+		$count = count ( $items );
+		$pattern = '/(.+):(.*)/i';
+		$replacement = '${1}';
+		for($i = 0; $i < $count; $i ++) {
+			$items [$i] = preg_replace ( $pattern, $replacement, $items [$i] ) . ":{$action}";
+		}
+		$items [$count] = "im.authorization:{$action}";
 		return $items;
 	}
 	protected function getIMMiddlewaresOptions() {
