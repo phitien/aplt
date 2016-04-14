@@ -161,7 +161,7 @@ class User extends Authenticatable {
 	}
 	/**
 	 * Override save function to save json property
-	 * 
+	 *
 	 * @return User
 	 */
 	public function save(array $options = []) {
@@ -169,6 +169,7 @@ class User extends Authenticatable {
 			$this->json = $this->extension ()->toJson ();
 			return parent::save ( $options );
 		}
+		return $this;
 	}
 	/**
 	 *
