@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\IM\Models\Role;
 
 class Roles extends BelongsToMany {
+	/**
+	 *
+	 * @param User $user        	
+	 * @param unknown $relation        	
+	 */
 	public function __construct(User $user, $relation) {
 		$related = 'App\IM\Models\Role';
 		$table = 'user_role';

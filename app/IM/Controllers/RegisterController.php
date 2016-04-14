@@ -7,16 +7,29 @@ use App\User;
 use Illuminate\Support\Facades\Validator;
 use App\IM\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class RegisterController extends Controller {
-	protected $_im_middlewares = [ 
-			'im.registration' 
+	/**
+	 *
+	 * @var array $_authenticationMiddlewareOptions
+	 */
+	protected $_authenticationMiddlewareOptions = [ 
+			'except' => [ 
+					'register',
+					'activate',
+					'sendActivationCode' 
+			] 
 	];
-	protected $_im_middlewaresOptions = [ ];
-	protected $_im_middlewaresExceptOption = [ ];
+	/**
+	 *
+	 * @var array $_authorizationMiddlewareOptions
+	 */
+	protected $_authorizationMiddlewareOptions = [ ];
 	/**
 	 * Return a JWT
 	 *
+	 * @param Request $request        	
 	 * @return Response
 	 */
 	public function register(Request $request) {
@@ -24,49 +37,19 @@ class RegisterController extends Controller {
 		if ($msg = $this->registrationValidator ( $data )) {
 			return $this->jsonResponse ( $msg, null, Status::PreconditionFailed );
 		}
-		$user = $this->create ( $data );
+		$user = User::createUser ( [ 
+				'name' => isset ( $data ['name'] ) ? $data ['name'] : uniqid ( 'IM' ),
+				'email' => $data ['email'],
+				'password' => $this->encode ( $data ['password'] ) 
+		] );
 		return $this->jsonResponse ( 'user_registered', $user->activationCode );
 	}
-	/**
-	 * Activate user
-	 *
-	 * @param Request $request        	
-	 */
-	public function activate(Request $request, $activationCode) {
-		$ok = User::activateUser ( $activationCode );
-		if ($ok == 2) {
-			return $this->jsonResponse ( 'user_already_activated', null );
-		} else if ($ok == 1) {
-			return $this->jsonResponse ( 'user_activated', null );
-		} else if ($ok == - 1) {
-			return $this->jsonResponse ( 'activation_code_expired', null, Status::NotAcceptable );
-		} else if ($ok == - 2) {
-			return $this->jsonResponse ( 'invalid_activation_code', null, Status::PreconditionFailed );
-		}
-	}
-	/**
-	 * Send activation code
-	 *
-	 * @param Request $request        	
-	 */
-	public function sendActivationCode(Request $request) {
-		$email = $request->get ( 'email' );
-		$user = User::where ( 'email', '=', $email )->first ();
-		if ($user) {
-			if (! $user->isActivated ()) {
-				return $this->jsonResponse ( 'activation_code_sent', $user->getActivationCode () );
-			} else {
-				return $this->jsonResponse ( 'user_already_activated', null, Status::MethodNotAllowed );
-			}
-		} else {
-			return $this->jsonResponse ( 'email_not_found', null, Status::NotFound );
-		}
-	}
+	
 	/**
 	 * Get a validator for an incoming registration request.
 	 *
 	 * @param array $data        	
-	 * @return \Illuminate\Contracts\Validation\Validator
+	 * @return string
 	 */
 	protected function registrationValidator(array $data) {
 		$validator = Validator::make ( $data, [ 
@@ -94,18 +77,56 @@ class RegisterController extends Controller {
 			return 'password_confirmation_not_matched';
 		}
 	}
-	
 	/**
-	 * Create a new user instance after a valid registration.
+	 * Activate user
 	 *
-	 * @param array $data        	
-	 * @return User
+	 * @param Request $request        	
+	 * @param string $activationCode        	
+	 * @return Response
 	 */
-	protected function create(array $data) {
-		return User::createUser ( [ 
-				'name' => isset ( $data ['name'] ) ? $data ['name'] : uniqid ( 'IM' ),
-				'email' => $data ['email'],
-				'password' => $this->encode ( $data ['password'] ) 
-		] );
+	public function activate(Request $request, $activationCode) {
+		$ok = User::activateUser ( $activationCode );
+		if ($ok == 2) {
+			return $this->jsonResponse ( 'user_already_activated', null );
+		} else if ($ok == 1) {
+			return $this->jsonResponse ( 'user_activated', null );
+		} else if ($ok == - 1) {
+			return $this->jsonResponse ( 'activation_code_expired', null, Status::BadRequest );
+		} else if ($ok == - 2) {
+			return $this->jsonResponse ( 'invalid_activation_code', null, Status::BadRequest );
+		}
+	}
+	/**
+	 * Send activation code
+	 *
+	 * @param Request $request        	
+	 * @return Response
+	 */
+	public function sendActivationCode(Request $request) {
+		$email = $request->get ( 'email' );
+		$user = User::where ( 'email', '=', $email )->first ();
+		if ($user) {
+			if (! $user->isActivated ()) {
+				return $this->jsonResponse ( 'activation_code_sent', $user->getActivationCode () );
+			} else {
+				return $this->jsonResponse ( 'user_already_activated', null, Status::BadRequest );
+			}
+		} else {
+			return $this->jsonResponse ( 'email_not_found', null, Status::BadRequest );
+		}
+	}
+	/**
+	 * Deactivate user
+	 *
+	 * @param Request $request        	
+	 * @return Response
+	 */
+	public function deactivate(Request $request) {
+		$ok = $this->getUser ()->deactivate ();
+		if ($ok) {
+			return $this->jsonResponse ( 'deactivated_successfully', null );
+		} else {
+			return $this->jsonResponse ( 'deactivated_unsuccessfully', null, Status::BadRequest );
+		}
 	}
 }

@@ -8,20 +8,28 @@ use Validator;
 use Illuminate\Http\Request;
 use Hash;
 use App\IM\Response\Status;
+use Illuminate\Http\Response;
 
 class AccountController extends Controller {
-	protected $_im_middlewares = [ 
-			'im.authentication' 
+	/**
+	 *
+	 * @var array $_authenticationMiddlewareOptions
+	 */
+	protected $_authenticationMiddlewareOptions = [ 
+			'except' => [ 
+					'reset' 
+			] 
 	];
-	protected $_im_middlewaresOptions = [ ];
-	protected $_im_middlewaresExceptOption = [ 
-			'reset' 
-	];
+	/**
+	 *
+	 * @var array $_authorizationMiddlewareOptions
+	 */
+	protected $_authorizationMiddlewareOptions = [ ];
 	/**
 	 * Get a validator for an incoming registration request.
 	 *
 	 * @param array $data        	
-	 * @return \Illuminate\Contracts\Validation\Validator
+	 * @return string
 	 */
 	protected function passwordValidator(array $data) {
 		$validator = Validator::make ( $data, [ 
@@ -37,6 +45,11 @@ class AccountController extends Controller {
 			return 'password_confirmation_not_matched';
 		}
 	}
+	/**
+	 *
+	 * @param Request $request        	
+	 * @return Response void
+	 */
 	protected function enterWrongPassword(Request $request) {
 		$current_password = $request->get ( 'current_password' );
 		if (! $current_password) {
@@ -50,6 +63,7 @@ class AccountController extends Controller {
 	/**
 	 * Return the authenticated user
 	 *
+	 * @param Request $request        	
 	 * @return Response
 	 */
 	public function password(Request $request) {
@@ -75,6 +89,7 @@ class AccountController extends Controller {
 	 * Reset: send reset link to the user email
 	 *
 	 * @param Request $request        	
+	 * @return Response
 	 */
 	public function reset(Request $request) {
 		// TODO
@@ -83,6 +98,7 @@ class AccountController extends Controller {
 	 * Email: change user email
 	 *
 	 * @param Request $request        	
+	 * @return Response
 	 */
 	public function email(Request $request) {
 		if ($response = $this->enterWrongPassword ( $request )) {
@@ -94,6 +110,7 @@ class AccountController extends Controller {
 	 * Account: change user account
 	 *
 	 * @param Request $request        	
+	 * @return Response
 	 */
 	public function account(Request $request) {
 		if ($response = $this->enterWrongPassword ( $request )) {

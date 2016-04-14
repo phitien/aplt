@@ -9,6 +9,10 @@ use App\User;
 use App\IM\Config;
 
 class Actions extends Relation {
+	/**
+	 * 
+	 * @param User $parent
+	 */
 	public function __construct(User $parent) {
 		$instance = new Action ();
 		$query = $instance->newQuery ();

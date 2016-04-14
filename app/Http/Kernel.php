@@ -52,7 +52,6 @@ class Kernel extends HttpKernel {
 			// 'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
 			// 'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
 			'im.authentication' => \App\IM\Middleware\Authentication::class,
-			'im.authorization' => \App\IM\Middleware\Authorization::class,
-			'im.registration' => \App\IM\Middleware\Registration::class 
+			'im.authorization' => \App\IM\Middleware\Authorization::class 
 	];
 }

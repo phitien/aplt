@@ -10,11 +10,81 @@ use App\IM\Config;
 use App\User;
 use Exception;
 use App\IM\Exceptions\TokenNotFound;
+use Symfony\Component\HttpFoundation\Cookie;
 
 abstract class Middleware extends BaseMiddleware implements IMiddleware {
+	/**
+	 *
+	 * @var array
+	 */
+	protected $except = [ ];
+	/**
+	 *
+	 * @var User $_user
+	 */
 	protected $_user;
+	/**
+	 *
+	 * @var string
+	 */
+	protected $_token;
+	/**
+	 * Determine if the request has a URI that should pass through CSRF verification.
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return bool
+	 */
+	protected function shouldPassThrough($request) {
+		foreach ( $this->except as $except ) {
+			if ($except !== '/') {
+				$except = trim ( $except, '/' );
+			}
+			if ($request->is ( $except )) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * Add the IM token to the response cookies.
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @param \Illuminate\Http\Response $response        	
+	 * @return \Illuminate\Http\Response
+	 */
+	protected function addCookieToResponse($request, $response) {
+		$config = config ( 'session' );
+		$response->headers->setCookie ( new Cookie ( 'IM-TOKEN', $this->getToken ( $request ), time () + 60 * 120, $config ['path'], $config ['domain'], $config ['secure'], false ) );
+		return $response;
+	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @param Closure $next        	
+	 * @param string $action        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
+		return $this->addCookieToResponse ( $request, $next ( $request ) );
+	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return string $this->_token
+	 */
+	protected function getToken($request) {
+		if (! $this->_token)
+			$this->_token = $this->auth->setRequest ( $request )->getToken ();
+		return $this->_token;
+	}
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \App\IM\Middleware\IMiddleware::getUser()
+	 */
 	public function getUser($request, $throwException = false) {
-		$token = $this->auth->setRequest ( $request )->getToken ();
+		$token = $this->getToken ( $request );
 		if ($throwException) {
 			if (! $token) {
 				throw new TokenNotFound ( 'token_not_found' );
@@ -31,15 +101,6 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 			}
 			return $this->_user;
 		}
-	}
-	/**
-	 *
-	 * @param unknown $request        	
-	 * @param Closure $next        	
-	 * @param unknown $action        	
-	 */
-	public function handle($request, Closure $next, $action = Config::ACTION_DEFAULT) {
-		return $next ( $request );
 	}
 	/**
 	 *

@@ -5,18 +5,19 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Crypt;
 use DateTime;
-use App\IM\Models\User\Traits\Role;
-use App\IM\Models\User\Traits\Action;
-use App\IM\Models\User\Traits\Extension;
-use App\IM\Models\User\Traits\Follower;
-use App\IM\Models\User\Traits\Following;
+use App\IM\Models\User\Traits\RoleTrait;
+use App\IM\Models\User\Traits\ActionTrait;
+use App\IM\Models\User\Traits\ExtensionTrait;
+use App\IM\Models\User\Traits\FollowerTrait;
 
 class User extends Authenticatable {
 	/**
 	 * Traits
 	 */
-	use Extension, Role, Action, Follower;
+	use ExtensionTrait, RoleTrait, ActionTrait, FollowerTrait;
 	/**
+	 *
+	 * @var array
 	 */
 	protected $guarded = [ 
 			'id',
@@ -69,7 +70,7 @@ class User extends Authenticatable {
 	 * Save a new model and return the instance.
 	 *
 	 * @param array $attributes        	
-	 * @return static
+	 * @return User
 	 */
 	public static function create(array $attributes = []) {
 		$user = parent::create ( $attributes );
@@ -78,7 +79,8 @@ class User extends Authenticatable {
 	}
 	/**
 	 *
-	 * @param unknown $activationCode        	
+	 * @param string $activationCode        	
+	 * @return int -2|-1|1|2
 	 */
 	public static function activateUser($activationCode) {
 		$key = Crypt::decrypt ( $activationCode );
@@ -107,15 +109,24 @@ class User extends Authenticatable {
 	}
 	/**
 	 *
-	 * @param unknown $timestamp        	
-	 * @param User $user        	
+	 * @return boolean
+	 */
+	public function deactivate() {
+		$this->active = 0;
+		$this->save ();
+		return true;
+	}
+	/**
+	 *
+	 * @param string $activationCode        	
+	 * @return boolean
 	 */
 	protected function activationLinkExpired($activationCode) {
 		return $this->activationCode != $activationCode;
 	}
 	/**
 	 *
-	 * @return activation code
+	 * @return string activation code
 	 */
 	public function getActivationCode() {
 		$date = new DateTime ();
@@ -126,10 +137,18 @@ class User extends Authenticatable {
 		return $this->activationCode;
 	}
 	/**
+	 *
+	 * @return boolean
 	 */
 	public function isActivated() {
 		return $this->active ? true : false;
 	}
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \Illuminate\Database\Eloquent\Model::toArray()
+	 */
 	public function toArray() {
 		$attributes = parent::toArray ();
 		return array_merge ( $attributes, [ 
@@ -141,7 +160,9 @@ class User extends Authenticatable {
 		] );
 	}
 	/**
-	 * override save function to save json property
+	 * Override save function to save json property
+	 * 
+	 * @return User
 	 */
 	public function save(array $options = []) {
 		if (! $this->isGuest ()) {

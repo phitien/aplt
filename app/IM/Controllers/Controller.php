@@ -8,42 +8,102 @@ use App\IM\Response\Status;
 use JWTAuth;
 use Exception;
 use App\User;
-use Route;
 use App\IM\Config;
+use Route;
 use Request;
 
 abstract class Controller extends BaseController implements IController {
-	protected $_im_middlewares = [ ];
-	protected $_im_middlewaresOptions = [ ];
-	protected $_im_middlewaresExceptOption = [ ];
-	protected $_im_middlewaresActions = [ ];
+	/**
+	 *
+	 * @var string
+	 */
+	protected $_middleware_action = Config::ACTION_GUEST_ACT;
+	/**
+	 *
+	 * @var array
+	 */
+	protected $_authenticationMiddlewareOptions = [ ];
+	/**
+	 *
+	 * @var array
+	 */
+	protected $_authorizationMiddlewareOptions = [ ];
+	/**
+	 *
+	 * @var User
+	 */
 	protected $_user;
 	/**
+	 * Constructor
 	 */
 	public function __construct() {
-		$this->middleware ( $this->getIMMiddlewares (), $this->getIMMiddlewaresOptions () );
+		$this->_middleware_action = $this->getMiddlewareAction ();
+		$this->setupMiddlewares ();
+		$this->setupUser ();
+	}
+	/**
+	 *
+	 * @return void
+	 */
+	protected function setupUser() {
 		try {
 			$this->_user = JWTAuth::authenticate ( JWTAuth::getToken () );
 		} catch ( Exception $e ) {
 			$this->_user = User::getGuest ();
 		}
 	}
-	protected function getIMMiddlewares() {
-		$action = Config::getMiddlewareAction ();
-		$items = $this->_im_middlewares ? $this->_im_middlewares : [ ];
-		$count = count ( $items );
-		$pattern = '/(.+):(.*)/i';
-		$replacement = '${1}';
-		for($i = 0; $i < $count; $i ++) {
-			$items [$i] = preg_replace ( $pattern, $replacement, $items [$i] ) . ":{$action}";
-		}
-		$items [$count] = "im.authorization:{$action}";
-		return $items;
+	/**
+	 *
+	 * @return User
+	 */
+	protected function getUser() {
+		return $this->_user;
 	}
-	protected function getIMMiddlewaresOptions() {
-		$options = $this->_im_middlewaresOptions ? $this->_im_middlewaresOptions : [ ];
-		$options ['except'] = $this->_im_middlewaresExceptOption ? $this->_im_middlewaresExceptOption : [ ];
-		return $options;
+	/**
+	 *
+	 * @return void
+	 */
+	protected function setupMiddlewares() {
+		$this->middleware ( "im.authentication:{$this->_middleware_action}", $this->getAuthenticationMiddlewareOptions () );
+		$this->middleware ( "im.authorization:{$this->_middleware_action}", $this->getAuthorizationMiddlewareOptions () );
+	}
+	/**
+	 *
+	 * @return string|string|string[]|string
+	 */
+	protected function getMiddlewareAction() {
+		$arr = explode ( '@', Route::getCurrentRoute ()->getActionName () );
+		$controller = $arr [0];
+		$method = $arr [1];
+		$requestType = Request::method ();
+		$middlewareActionMaps = Config::getMiddlewareActionMaps ();
+		try {
+			return $middlewareActionMaps [$controller] [$method] [$requestType];
+		} catch ( Exception $e ) {
+			try {
+				return $middlewareActionMaps [$controller] [$method];
+			} catch ( Exception $e ) {
+			}
+		}
+		return Config::ACTION_GUEST_ACT;
+	}
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \App\IM\Controllers\IController::getAuthenticationMiddlewareOptions()
+	 */
+	public function getAuthenticationMiddlewareOptions() {
+		return $this->_authenticationMiddlewareOptions;
+	}
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \App\IM\Controllers\IController::getAuthorizationMiddlewareOptions()
+	 */
+	public function getAuthorizationMiddlewareOptions() {
+		return $this->_authorizationMiddlewareOptions;
 	}
 	/**
 	 * Shortcut of Utils::jsonResponse
@@ -62,13 +122,16 @@ abstract class Controller extends BaseController implements IController {
 	 * Shortcut of Utils::encode
 	 *
 	 * @param string $str        	
+	 * @return string
 	 */
 	protected function encode(string $str) {
 		return Utils::encode ( $str );
 	}
 	/**
+	 * Login
 	 *
-	 * @param unknown $credentials        	
+	 * @param array $credentials        	
+	 * @return \Illuminate\Http\JsonResponse
 	 */
 	protected function doLogin($credentials) {
 		$credentials ['active'] = 1;

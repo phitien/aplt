@@ -7,23 +7,30 @@ use App\User;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller {
-	protected $_im_middlewares = [ 
-			'im.authentication' 
-	];
-	protected $_im_middlewaresOptions = [ ];
-	protected $_im_middlewaresExceptOption = [ ];
+	/**
+	 *
+	 * @var string $_authenticationMiddlewareOptions
+	 */
+	protected $_authenticationMiddlewareOptions = [ ];
+	/**
+	 *
+	 * @var string $_authorizationMiddlewareOptions
+	 */
+	protected $_authorizationMiddlewareOptions = [ ];
 	/**
 	 * Return the authenticated user
 	 *
+	 * @param Request $request        	
 	 * @return Response
 	 */
-	public function profile() {
+	public function profile(Request $request) {
 		// the token is valid and we have found the user via the sub claim
 		return $this->jsonResponse ( null, $this->_user );
 	}
 	/**
 	 * Return the authenticated user
 	 *
+	 * @param Request $request        	
 	 * @return Response
 	 */
 	public function updateProfile(Request $request) {

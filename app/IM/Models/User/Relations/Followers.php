@@ -6,6 +6,11 @@ use App\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Followers extends BelongsToMany {
+	/**
+	 *
+	 * @param User $user        	
+	 * @param unknown $relation        	
+	 */
 	public function __construct(User $user, $relation) {
 		$related = 'App\User';
 		$table = 'user_follower';

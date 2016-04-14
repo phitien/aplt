@@ -6,18 +6,27 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\IM\Controllers\Controller;
 use App\IM\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class AuthenticateController extends Controller {
-	protected $_im_middlewares = [ 
-			'im.authentication' 
+	/**
+	 *
+	 * @var string $_authenticationMiddlewareOptions
+	 */
+	protected $_authenticationMiddlewareOptions = [ 
+			'except' => [ 
+					'login' 
+			] 
 	];
-	protected $_im_middlewaresOptions = [ ];
-	protected $_im_middlewaresExceptOption = [ 
-			'login' 
-	];
+	/**
+	 *
+	 * @var string $_authorizationMiddlewareOptions
+	 */
+	protected $_authorizationMiddlewareOptions = [ ];
 	/**
 	 * Return a JWT
 	 *
+	 * @param Request $request        	
 	 * @return Response
 	 */
 	public function login(Request $request) {
@@ -26,6 +35,8 @@ class AuthenticateController extends Controller {
 	}
 	/**
 	 * Logout
+	 *
+	 * @return Response
 	 */
 	public function logout() {
 		JWTAuth::invalidate ( JWTAuth::getToken () );
@@ -33,6 +44,8 @@ class AuthenticateController extends Controller {
 	}
 	/**
 	 * Refresh
+	 *
+	 * @return Response
 	 */
 	public function refresh() {
 		try {

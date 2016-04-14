@@ -22,38 +22,40 @@ class DatabaseSeeder extends Seeder {
 		$actions = Config::getCoreActions ();
 		
 		// add roles
-		foreach ( $roles as $role ) {
-			Role::create ( $role );
+		foreach ( $roles as $code => $name ) {
+			Role::create ( [ 
+					'code' => $code,
+					'name' => $name 
+			] );
 		}
 		
 		// add actions
-		foreach ( $actions as $action ) {
-			Action::create ( $action );
+		foreach ( $actions as $code => $name ) {
+			Action::create ( [ 
+					'code' => $code,
+					'name' => $name 
+			] );
 		}
 		
 		// add relationship
 		// Supreme role's actions
-		$supremeRole = Role::find ( 1 );
-		foreach ( Config::getRoleActions ( $supremeRole ) as $action ) {
-			$supremeRole->addAction ( $code = $actions [$action] ['code'] );
+		foreach ( Config::getRoleCoreActions ( Role::getSupreme () ) as $code ) {
+			Role::getSupreme ()->addAction ( $code );
 		}
 		
 		// Manager role's actions
-		$managerRole = Role::find ( 2 );
-		foreach ( Config::getRoleActions ( $managerRole ) as $action ) {
-			$managerRole->addAction ( $code = $actions [$action] ['code'] );
+		foreach ( Config::getRoleCoreActions ( Role::getManager () ) as $code ) {
+			Role::getManager ()->addAction ( $code );
 		}
 		
 		// User role's actions
-		$userRole = Role::find ( 3 );
-		foreach ( Config::getRoleActions ( $userRole ) as $action ) {
-			$userRole->addAction ( $code = $actions [$action] ['code'] );
+		foreach ( Config::getRoleCoreActions ( Role::getUser () ) as $code ) {
+			Role::getUser ()->addAction ( $code );
 		}
 		
 		// Guest role's actions
-		$guestRole = Role::find ( 4 );
-		foreach ( Config::getRoleActions ( $guestRole ) as $action ) {
-			$guestRole->addAction ( $code = $actions [$action] ['code'] );
+		foreach ( Config::getRoleCoreActions ( Role::getGuest () ) as $code ) {
+			Role::getGuest ()->addAction ( $code );
 		}
 		
 		/**
@@ -73,7 +75,7 @@ class DatabaseSeeder extends Seeder {
 		
 		$superadmin->acceptFollower ( $user );
 		$manager->refuseFollower ( $user );
-// 		$user->unfollow ( $manager );
+		// $user->unfollow ( $manager );
 		
 		Model::reguard ();
 	}

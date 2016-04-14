@@ -13,10 +13,11 @@ use App\IM\Exceptions\TokenNotFound;
 class Authentication extends Middleware {
 	/**
 	 *
-	 * @param unknown $request        	
+	 * @param \Illuminate\Http\Request $request        	
 	 * @param Closure $next        	
+	 * @return \Illuminate\Http\Response
 	 */
-	public function handle($request, Closure $next, $action = Config::ACTION_DEFAULT) {
+	public function handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
 		try {
 			$user = $this->getUser ( $request, true );
 		} catch ( TokenNotFound $e ) {
@@ -28,12 +29,10 @@ class Authentication extends Middleware {
 		} catch ( Exception $e ) {
 			return $this->jsonResponse ( 'token_absent', null, Status::BadRequest );
 		}
-		
 		if (! $user || $user->isGuest ())
 			return $this->jsonResponse ( 'user_not_found', null, 404 );
-		
 		$this->events->fire ( 'tymon.jwt.valid', $user );
 		
-		return $next ( $request );
+		return parent::handle ( $request, $next, $actions );
 	}
 }

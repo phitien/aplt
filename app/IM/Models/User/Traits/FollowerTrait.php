@@ -8,12 +8,12 @@ use App\IM\Config;
 use App\IM\Models\User\Relations\Followers;
 use App\IM\Models\User\Relations\Following;
 
-trait Follower
+trait FollowerTrait
 {
 	/**
 	 * Return the users that follow the user
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 * @return Followers
 	 */
 	public function followers() {
 		return (new Followers ( $this, $this->getBelongsToManyCaller () ))->where ( 'users.active', '=', 1 );
@@ -21,11 +21,15 @@ trait Follower
 	/**
 	 * Return the users that the user follows
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 * @return Following
 	 */
 	public function following() {
 		return (new Following ( $this, $this->getBelongsToManyCaller () ))->where ( 'users.active', '=', 1 );
 	}
+	/**
+	 *
+	 * @param User $user        	
+	 */
 	public function follow(User $user) {
 		try {
 			if (! $this->isGuest () && ! $user->isGuest ()) {
@@ -37,6 +41,10 @@ trait Follower
 			return $e;
 		}
 	}
+	/**
+	 *
+	 * @param User $user        	
+	 */
 	public function unfollow(User $user) {
 		try {
 			if (! $this->isGuest () && ! $user->isGuest ()) {
@@ -46,6 +54,10 @@ trait Follower
 			return $e;
 		}
 	}
+	/**
+	 *
+	 * @param User $user        	
+	 */
 	public function acceptFollower(User $user) {
 		try {
 			if (! $this->isGuest () && ! $user->isGuest ()) {
@@ -57,6 +69,10 @@ trait Follower
 			return $e;
 		}
 	}
+	/**
+	 *
+	 * @param User $user        	
+	 */
 	public function refuseFollower(User $user) {
 		try {
 			if (! $this->isGuest () && ! $user->isGuest ()) {

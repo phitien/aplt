@@ -4,7 +4,7 @@ namespace App\IM\Models\User\Traits;
 
 use App\IM\Models\User\UserExtension;
 
-trait Extension
+trait ExtensionTrait
 {
 	protected $extension;
 	/**
