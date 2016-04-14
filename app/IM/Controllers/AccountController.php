@@ -2,18 +2,17 @@
 
 namespace App\IM\Controllers;
 
-use JWTAuth;
 use App\IM\Controllers\Controller;
 use App\User;
 use Validator;
-use App\IM\Middleware\AuthenticationMiddleware;
+use App\IM\Middleware\Authentication;
 use Illuminate\Http\Request;
 use Hash;
 use App\IM\Response\Status;
 
 class AccountController extends Controller {
 	protected $_im_middlewares = [ 
-			AuthenticationMiddleware::class 
+			Authentication::class 
 	];
 	protected $_im_middlewaresOptions = [ ];
 	protected $_im_middlewaresExceptOption = [ 
@@ -39,15 +38,12 @@ class AccountController extends Controller {
 			return 'password_confirmation_not_matched';
 		}
 	}
-	protected $user;
 	protected function enterWrongPassword(Request $request) {
-		if (! $this->user)
-			$this->user = JWTAuth::authenticate ( JWTAuth::getToken () );
 		$current_password = $request->get ( 'current_password' );
 		if (! $current_password) {
 			return $this->jsonResponse ( 'current_password_not_provided', null, Status::PreconditionRequired );
 		}
-		if (strlen ( $current_password ) > 0 && ! Hash::check ( $current_password, $this->user->password )) {
+		if (strlen ( $current_password ) > 0 && ! Hash::check ( $current_password, $this->_user->password )) {
 			return $this->jsonResponse ( 'current_password_incorrect', null, Status::PreconditionFailed );
 		}
 		return false;
@@ -65,13 +61,13 @@ class AccountController extends Controller {
 			return $this->jsonResponse ( $msg, null, Status::PreconditionFailed );
 		}
 		$new_password = $request->get ( 'password' );
-		if (Hash::check ( $new_password, $this->user->password )) {
+		if (Hash::check ( $new_password, $this->_user->password )) {
 			return $this->jsonResponse ( 'same_new_password', null, Status::PreconditionFailed );
 		}
-		$this->user->password = $this->encode ( $new_password );
-		$this->user->save ();
+		$this->_user->password = $this->encode ( $new_password );
+		$this->_user->save ();
 		$credentials = [ 
-				'email' => $this->user->email,
+				'email' => $this->_user->email,
 				'password' => $new_password 
 		];
 		return $this->doLogin ( $credentials );

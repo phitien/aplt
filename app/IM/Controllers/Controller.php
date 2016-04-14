@@ -6,22 +6,28 @@ use App\Http\Controllers\Controller as BaseController;
 use App\IM\Utils;
 use App\IM\Response\Status;
 use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Exception;
-use App\IM\Middleware\AuthorizationMiddleware;
+use App\IM\Middleware\Authorization;
+use App\User;
 
 abstract class Controller extends BaseController implements IController {
 	protected $_im_middlewares = [ ];
 	protected $_im_middlewaresOptions = [ ];
 	protected $_im_middlewaresExceptOption = [ ];
+	protected $_user;
 	/**
 	 */
 	public function __construct() {
 		$this->middleware ( $this->getIMMiddlewares (), $this->getIMMiddlewaresOptions () );
+		try {
+			$this->_user = JWTAuth::authenticate ( JWTAuth::getToken () );
+		} catch ( Exception $e ) {
+			$this->_user = User::getGuest ();
+		}
 	}
 	protected function getIMMiddlewares() {
 		$items = $this->_im_middlewares ? $this->_im_middlewares : [ ];
-		$items [count ( $items )] = AuthorizationMiddleware::class;
+		$items [count ( $items )] = Authorization::class;
 		return $items;
 	}
 	protected function getIMMiddlewaresOptions() {
@@ -61,9 +67,6 @@ abstract class Controller extends BaseController implements IController {
 			if (! $token = JWTAuth::attempt ( $credentials )) {
 				return $this->jsonResponse ( 'invalid_credentials', null, Status::Unauthorized );
 			}
-		} catch ( JWTException $e ) {
-			// something went wrong
-			return $this->jsonResponse ( 'could_not_create_token', null, Status::InternalServerError );
 		} catch ( Exception $e ) {
 			// something went wrong
 			return $this->jsonResponse ( 'could_not_create_token', null, Status::InternalServerError );
