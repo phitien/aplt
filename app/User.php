@@ -169,7 +169,7 @@ class User extends Authenticatable {
 			$this->json = $this->extension ()->toJson ();
 			return parent::save ( $options );
 		}
-		return $this;
+		return false;
 	}
 	/**
 	 *

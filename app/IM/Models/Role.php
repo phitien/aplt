@@ -4,6 +4,8 @@ namespace App\IM\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\IM\Config;
+use App\IM\Utils;
+use Illuminate\Support\Facades\Log;
 
 class Role extends Model {
 	/**
@@ -120,15 +122,28 @@ class Role extends Model {
 		}
 		return static::$_guestRole;
 	}
-	
+	/**
+	 *
+	 * @return array
+	 */
+	public function getActions() {
+		$items = [ ];
+		$actions = $this->actions;
+		foreach ( $actions as $action ) {
+			array_push ( $items, $action->code );
+		}
+		return $items;
+	}
 	/**
 	 *
 	 * @param string $code        	
 	 */
 	public function addAction($code) {
 		$action = Action::getAction ( $code );
-		if ($this->canAddAction ( $action ))
+		if ($this->canAddAction ( $action )) {
 			$this->actions ()->attach ( $action->id );
+			Utils::buildRolesActions ( static::all () );
+		}
 	}
 	/**
 	 *
@@ -150,12 +165,14 @@ class Role extends Model {
 	 */
 	public function removeAction($code) {
 		$action = Action::getAction ( $code );
-		if ($this->canRemoveAction ( $action ))
+		if ($this->canRemoveAction ( $action )) {
 			$this->actions ()->detach ( $action->id );
+			Utils::buildRolesActions ( static::all () );
+		}
 	}
 	/**
-	 * 
-	 * @param Action $action
+	 *
+	 * @param Action $action        	
 	 * @return boolean
 	 */
 	protected function canRemoveAction(Action $action = null) {
@@ -176,5 +193,27 @@ class Role extends Model {
 	 * @return void
 	 */
 	private function __clone() {
+	}
+	/**
+	 *
+	 * Save the model and re-build App\IM\RolesActions class
+	 *
+	 * @return bool
+	 */
+	public function save(array $options = []) {
+		$rs = parent::save ( $options );
+		Utils::buildRolesActions ( static::all () );
+		return $rs;
+	}
+	/**
+	 *
+	 * Delete the model and re-build App\IM\RolesActions class
+	 *
+	 * @return bool
+	 */
+	public function delete() {
+		$rs = parent::delete ();
+		Utils::buildRolesActions ( static::all () );
+		return $rs;
 	}
 }

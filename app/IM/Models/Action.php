@@ -4,6 +4,7 @@ namespace App\IM\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Exception;
+use App\IM\Utils;
 
 class Action extends Model {
 	/**
@@ -60,5 +61,27 @@ class Action extends Model {
 		} catch ( Exception $e ) {
 		}
 		return null;
+	}
+	/**
+	 *
+	 * Save the model and re-build App\IM\RolesActions class
+	 *
+	 * @return bool
+	 */
+	public function save(array $options = []) {
+		$rs = parent::save ( $options );
+		Utils::buildRolesActions ( Role::all () );
+		return $rs;
+	}
+	/**
+	 *
+	 * Delete the model and re-build App\IM\RolesActions class
+	 *
+	 * @return bool
+	 */
+	public function delete() {
+		$rs = parent::delete ();
+		Utils::buildRolesActions ( Role::all () );
+		return $rs;
 	}
 }

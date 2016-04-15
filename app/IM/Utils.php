@@ -3,6 +3,9 @@
 namespace App\IM;
 
 use App\IM\Response\Status;
+use View;
+use Illuminate\Support\Facades\Storage;
+use Html;
 
 class Utils {
 	/**
@@ -27,5 +30,29 @@ class Utils {
 	 */
 	public static function encode(string $str) {
 		return bcrypt ( $str );
+	}
+	/**
+	 * Build App\IM\RolesActions class
+	 *
+	 * @param array $roles        	
+	 * @return void
+	 */
+	public static function buildRolesActions($roles = null) {
+		$items = [ ];
+		foreach ( $roles as $role ) {
+			$items [$role->code] = $role->getActions ();
+		}
+		$contents = Html::decode ( View::make ( 'IM.RolesActions.class', [ 
+				'php' => '<?php',
+				'namespace' => 'App\IM',
+				'classname' => 'RolesActions',
+				'public_static_vars' => [ 
+						'maps' => Html::decode ( View::make ( 'IM.RolesActions.maps', [ 
+								'roles' => $items 
+						] )->render () ) 
+				] 
+		] )->render () );
+		
+		Storage::disk ( 'im' )->put ( 'RolesActions.php', $contents );
 	}
 }

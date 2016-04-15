@@ -62,6 +62,11 @@ return [
             'bucket' => 'your-bucket',
         ],
 
+   		'im' => [
+   			'driver' => 'local',
+   			'root' => app_path('/IM')
+   		],
+    		
     ],
 
 ];
