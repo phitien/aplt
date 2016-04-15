@@ -33,13 +33,21 @@ trait FollowerTrait
 	public function follow(User $user) {
 		try {
 			if (! $this->isGuest () && ! $user->isGuest ()) {
-				$this->following ()->attach ( $user->id, [ 
-						'active' => Config::FOLLOWER_REQUESTED 
-				] );
+				try {
+					$this->following ()->attach ( $user->id, [ 
+							'active' => Config::FOLLOWER_REQUESTED 
+					] );
+					return true;
+				} catch ( Exception $e ) {
+					$this->following ()->updateExistingPivot ( $user->id, [ 
+							'active' => Config::FOLLOWER_REQUESTED 
+					] );
+					return true;
+				}
 			}
 		} catch ( Exception $e ) {
-			return $e;
 		}
+		return false;
 	}
 	/**
 	 *
@@ -49,10 +57,11 @@ trait FollowerTrait
 		try {
 			if (! $this->isGuest () && ! $user->isGuest ()) {
 				$this->following ()->detach ( $user->id );
+				return true;
 			}
 		} catch ( Exception $e ) {
-			return $e;
 		}
+		return false;
 	}
 	/**
 	 *
@@ -64,10 +73,11 @@ trait FollowerTrait
 				$this->followers ()->updateExistingPivot ( $user->id, [ 
 						'active' => Config::FOLLOWER_REQUEST_ACCEPTED 
 				] );
+				return true;
 			}
 		} catch ( Exception $e ) {
-			return $e;
 		}
+		return false;
 	}
 	/**
 	 *
@@ -79,9 +89,10 @@ trait FollowerTrait
 				$this->followers ()->updateExistingPivot ( $user->id, [ 
 						'active' => Config::FOLLOWER_REQUEST_REFUSED 
 				] );
+				return true;
 			}
 		} catch ( Exception $e ) {
-			return $e;
 		}
+		return false;
 	}
 }

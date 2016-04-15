@@ -2,7 +2,6 @@
 
 namespace App\IM\Controllers;
 
-use App\IM\Controllers\Controller;
 use App\User;
 use Validator;
 use Illuminate\Http\Request;
@@ -10,7 +9,7 @@ use Hash;
 use App\IM\Response\Status;
 use Illuminate\Http\Response;
 
-class AccountController extends Controller {
+class AccountController extends AuthenticableController {
 	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions

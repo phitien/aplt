@@ -70,7 +70,7 @@ class Action extends Model {
 	 */
 	public function save(array $options = []) {
 		$rs = parent::save ( $options );
-		Utils::buildRolesActions ( Role::all () );
+		Utils::buildRolesActions ();
 		return $rs;
 	}
 	/**
@@ -81,7 +81,7 @@ class Action extends Model {
 	 */
 	public function delete() {
 		$rs = parent::delete ();
-		Utils::buildRolesActions ( Role::all () );
+		Utils::buildRolesActions ();
 		return $rs;
 	}
 }

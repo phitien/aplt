@@ -21,7 +21,7 @@ return array(
     'App\\Http\\Requests\\Request' => $baseDir . '/app/Http/Requests/Request.php',
     'App\\IM\\Config' => $baseDir . '/app/IM/Config.php',
     'App\\IM\\Controllers\\AccountController' => $baseDir . '/app/IM/Controllers/AccountController.php',
-    'App\\IM\\Controllers\\AuthenticateController' => $baseDir . '/app/IM/Controllers/AuthenticateController.php',
+    'App\\IM\\Controllers\\AuthenticableController' => $baseDir . '/app/IM/Controllers/AuthenticableController.php',
     'App\\IM\\Controllers\\Controller' => $baseDir . '/app/IM/Controllers/Controller.php',
     'App\\IM\\Controllers\\IController' => $baseDir . '/app/IM/Controllers/IController.php',
     'App\\IM\\Controllers\\ProfileController' => $baseDir . '/app/IM/Controllers/ProfileController.php',

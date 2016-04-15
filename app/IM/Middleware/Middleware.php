@@ -79,9 +79,7 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	}
 	/**
 	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \App\IM\Middleware\IMiddleware::getUser()
+	 * @return User
 	 */
 	public function getUser($request, $throwException = false) {
 		$token = $this->getToken ( $request );
@@ -104,9 +102,7 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	}
 	/**
 	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \App\IM\Response\IResponse::jsonResponse()
+	 * @return \Illuminate\Http\Response
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Status::OK, array $headers = [], $options = 0) {
 		return Utils::jsonResponse ( $message, $data, $status, $headers, $options );

@@ -2,14 +2,14 @@
 
 namespace App\IM\Controllers;
 
-use App\IM\Controllers\Controller;
+use App\IM\Controllers\AuthenticableController;
 use App\User;
 use Illuminate\Support\Facades\Validator;
 use App\IM\Response\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class RegisterController extends Controller {
+class RegisterController extends AuthenticableController {
 	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions
@@ -18,6 +18,7 @@ class RegisterController extends Controller {
 			'except' => [ 
 					'register',
 					'activate',
+					'deactivate',
 					'sendActivationCode' 
 			] 
 	];
@@ -33,7 +34,7 @@ class RegisterController extends Controller {
 	 * @return Response
 	 */
 	public function register(Request $request) {
-		$data = $request->all ();
+		$data = $request->request->all ();//only get post data
 		if ($msg = $this->registrationValidator ( $data )) {
 			return $this->jsonResponse ( $msg, null, Status::PreconditionFailed );
 		}
@@ -123,6 +124,7 @@ class RegisterController extends Controller {
 	 */
 	public function deactivate(Request $request) {
 		$ok = $this->getUser ()->deactivate ();
+		$this->doLogout();
 		if ($ok) {
 			return $this->jsonResponse ( 'deactivated_successfully', null );
 		} else {

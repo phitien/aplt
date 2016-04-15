@@ -42,17 +42,19 @@ class Config {
 						'deactivate' => static::ACTION_OWN_ACT . '|' . static::ACTION_MANAGER_ACT . '|' . static::ACTION_ACCESS_USER,
 						'sendActivationCode' => static::ACTION_GUEST_ACT . '|' . static::ACTION_MANAGER_ACT . '|' . static::ACTION_ACCESS_USER 
 				],
-				'App\IM\Controllers\AuthenticateController' => [ 
+				'App\IM\Controllers\AuthenticableController' => [ 
 						'login' => static::ACTION_GUEST_ACT,
 						'refresh' => static::ACTION_OWN_ACT,
 						'logout' => static::ACTION_OWN_ACT 
 				],
-				'App\IM\Controllers\ProfileController' => [ 
-						'profile' => [ 
-								'POST' => static::ACTION_OWN_ACT . '|' . static::ACTION_MANAGER_ACT . '|' . static::ACTION_ACCESS_USER,
-								'GET' => static::ACTION_OWN_ACT . '|' . static::ACTION_MANAGER_ACT . '|' . static::ACTION_ACCESS_USER 
-						] 
-				],
+				/**
+				 * profile/updateProfile/updateExInfo
+				 */
+				'App\IM\Controllers\ProfileController' => static::ACTION_OWN_ACT . '|' . static::ACTION_MANAGER_ACT . '|' . static::ACTION_ACCESS_USER,
+				/**
+				 * followers/following/follow/accept/refuse
+				 */
+				'App\IM\Controllers\SocietyController' => static::ACTION_OWN_ACT . '|' . static::ACTION_MANAGER_ACT . '|' . static::ACTION_ACCESS_USER,
 				'App\IM\Controllers\AccountController' => [ 
 						'password' => static::ACTION_OWN_ACT . '|' . static::ACTION_MANAGER_ACT . '|' . static::ACTION_ACCESS_USER,
 						'email' => static::ACTION_OWN_ACT . '|' . static::ACTION_MANAGER_ACT . '|' . static::ACTION_ACCESS_USER,

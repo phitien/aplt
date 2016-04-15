@@ -6,6 +6,7 @@ use App\IM\Response\Status;
 use View;
 use Illuminate\Support\Facades\Storage;
 use Html;
+use App\IM\Models\Role;
 
 class Utils {
 	/**
@@ -34,11 +35,11 @@ class Utils {
 	/**
 	 * Build App\IM\RolesActions class
 	 *
-	 * @param array $roles        	
 	 * @return void
 	 */
-	public static function buildRolesActions($roles = null) {
+	public static function buildRolesActions() {
 		$items = [ ];
+		$roles = Role::all ();
 		foreach ( $roles as $role ) {
 			$items [$role->code] = $role->getActions ();
 		}

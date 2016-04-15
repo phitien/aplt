@@ -142,7 +142,7 @@ class Role extends Model {
 		$action = Action::getAction ( $code );
 		if ($this->canAddAction ( $action )) {
 			$this->actions ()->attach ( $action->id );
-			Utils::buildRolesActions ( static::all () );
+			Utils::buildRolesActions ();
 		}
 	}
 	/**
@@ -167,7 +167,7 @@ class Role extends Model {
 		$action = Action::getAction ( $code );
 		if ($this->canRemoveAction ( $action )) {
 			$this->actions ()->detach ( $action->id );
-			Utils::buildRolesActions ( static::all () );
+			Utils::buildRolesActions ();
 		}
 	}
 	/**
@@ -202,7 +202,7 @@ class Role extends Model {
 	 */
 	public function save(array $options = []) {
 		$rs = parent::save ( $options );
-		Utils::buildRolesActions ( static::all () );
+		Utils::buildRolesActions ();
 		return $rs;
 	}
 	/**
@@ -213,7 +213,7 @@ class Role extends Model {
 	 */
 	public function delete() {
 		$rs = parent::delete ();
-		Utils::buildRolesActions ( static::all () );
+		Utils::buildRolesActions ();
 		return $rs;
 	}
 }

@@ -8,7 +8,7 @@ use App\IM\Response\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class AuthenticateController extends Controller {
+class AuthenticableController extends Controller {
 	/**
 	 *
 	 * @var string $_authenticationMiddlewareOptions
@@ -34,11 +34,38 @@ class AuthenticateController extends Controller {
 		return $this->doLogin ( $credentials );
 	}
 	/**
+	 * Login
+	 *
+	 * @param array $credentials        	
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	protected function doLogin($credentials) {
+		$credentials ['active'] = 1;
+		try {
+			// verify the credentials and create a token for the user
+			if (! $token = JWTAuth::attempt ( $credentials )) {
+				return $this->jsonResponse ( 'invalid_credentials', null, Status::Unauthorized );
+			}
+		} catch ( Exception $e ) {
+			// something went wrong
+			return $this->jsonResponse ( 'could_not_create_token', null, Status::InternalServerError );
+		}
+		// if no errors are encountered we can return a JWT
+		return $this->jsonResponse ( 'login_successfully', $token );
+	}
+	/**
 	 * Logout
 	 *
 	 * @return Response
 	 */
 	public function logout() {
+		return $this->doLogout ();
+	}
+	/**
+	 *
+	 * @return void
+	 */
+	protected function doLogout() {
 		JWTAuth::invalidate ( JWTAuth::getToken () );
 		return $this->jsonResponse ( 'logged_out', null );
 	}

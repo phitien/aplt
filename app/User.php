@@ -95,6 +95,7 @@ class User extends Authenticatable {
 				if (! $user->active) {
 					if (! $user->activationLinkExpired ( $activationCode )) {
 						$user->active = 1;
+						$user->activationCode = '';
 						$user->save ();
 						return 1; // successful activated
 					} else {
@@ -113,6 +114,7 @@ class User extends Authenticatable {
 	 */
 	public function deactivate() {
 		$this->active = 0;
+		$this->activationCode = '';
 		$this->save ();
 		return true;
 	}
@@ -153,8 +155,6 @@ class User extends Authenticatable {
 		$attributes = parent::toArray ();
 		return array_merge ( $attributes, [ 
 				'extension' => $this->extension ()->all (),
-				'roles' => $this->roles,
-				'actions' => $this->actions,
 				'followers' => count ( $this->followers ),
 				'following' => count ( $this->following ) 
 		] );
@@ -183,5 +183,13 @@ class User extends Authenticatable {
 			$this->extension ()->fill ( $extension );
 		}
 		return parent::fill ( $attributes );
+	}
+	/**
+	 *
+	 * @param array $attributes        	
+	 */
+	public function fillEx(array $attributes) {
+		$this->extension ()->fill ( $attributes );
+		return $this;
 	}
 }

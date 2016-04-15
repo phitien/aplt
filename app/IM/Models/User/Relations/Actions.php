@@ -10,8 +10,8 @@ use App\IM\Config;
 
 class Actions extends Relation {
 	/**
-	 * 
-	 * @param User $parent
+	 *
+	 * @param User $parent        	
 	 */
 	public function __construct(User $parent) {
 		$instance = new Action ();

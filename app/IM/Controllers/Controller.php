@@ -77,12 +77,17 @@ abstract class Controller extends BaseController implements IController {
 		$method = $arr [1];
 		$requestType = Request::method ();
 		$middlewareActionMaps = Config::getMiddlewareActionMaps ();
+		// echo $controller . "-" . $method . "-" . $requestType;
 		try {
-			return $middlewareActionMaps [$controller] [$method] [$requestType];
+			return ( string ) $middlewareActionMaps [$controller] [$method] [$requestType];
 		} catch ( Exception $e ) {
 			try {
-				return $middlewareActionMaps [$controller] [$method];
+				return ( string ) $middlewareActionMaps [$controller] [$method];
 			} catch ( Exception $e ) {
+				try {
+					return ( string ) $middlewareActionMaps [$controller];
+				} catch ( Exception $e ) {
+				}
 			}
 		}
 		return Config::ACTION_GUEST_ACT;
@@ -126,25 +131,5 @@ abstract class Controller extends BaseController implements IController {
 	 */
 	protected function encode(string $str) {
 		return Utils::encode ( $str );
-	}
-	/**
-	 * Login
-	 *
-	 * @param array $credentials        	
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	protected function doLogin($credentials) {
-		$credentials ['active'] = 1;
-		try {
-			// verify the credentials and create a token for the user
-			if (! $token = JWTAuth::attempt ( $credentials )) {
-				return $this->jsonResponse ( 'invalid_credentials', null, Status::Unauthorized );
-			}
-		} catch ( Exception $e ) {
-			// something went wrong
-			return $this->jsonResponse ( 'could_not_create_token', null, Status::InternalServerError );
-		}
-		// if no errors are encountered we can return a JWT
-		return $this->jsonResponse ( 'login_successfully', $token );
 	}
 }
