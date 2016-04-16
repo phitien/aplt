@@ -4,6 +4,7 @@ namespace App\IM\Middleware;
 
 use App\IM\Response\IResponse;
 use Request;
+use Closure;
 
 interface IMiddleware extends IResponse {
 	/**
@@ -14,11 +15,4 @@ interface IMiddleware extends IResponse {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function im_handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT);
-	/**
-	 *
-	 * @param Request $request        	
-	 * @param string $throwException        	
-	 * @return App\User
-	 */
-	public function getUser($request, $throwException = false);
 }

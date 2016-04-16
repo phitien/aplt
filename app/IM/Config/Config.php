@@ -11,8 +11,8 @@ class Config {
 	 *
 	 * @var unknown
 	 */
-	const TOKEN_EXPIRING_TIME = 60 * 120;
-	//
+	const TOKEN_EXPIRING_TIME = 7200; // 60 * 120
+	                                  //
 	const FOLLOWER_REQUESTED = 0;
 	const FOLLOWER_REQUEST_ACCEPTED = 1;
 	const FOLLOWER_REQUEST_REFUSED = 2;

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('IM.email.html_template')
 
 @section('title', 'EZSell')
 
@@ -16,6 +16,9 @@
 
 @section('content')
 	<div class="content">
-    	<div class="title">Welcome</div>
+    	<div class="title">Welcome to EZSell</div>
+    	<br/>
+    	<br/>
+    	<div>Please active your account by clicking <a href="{{ $url }}">here</a> and start enjoy shopping.</div>
     </div>
 @endsection

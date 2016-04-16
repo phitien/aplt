@@ -8,8 +8,14 @@ use Illuminate\Support\Facades\Validator;
 use App\IM\Response\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\IM\Models\User\Traits\MailerTrait;
+use App\IM\Utils;
 
 class RegisterController extends AuthenticableController {
+	/**
+	 * TRAITS
+	 */
+	use MailerTrait;
 	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions
@@ -41,9 +47,15 @@ class RegisterController extends AuthenticableController {
 		$user = User::createUser ( [ 
 				'name' => isset ( $data ['name'] ) ? $data ['name'] : uniqid ( 'IM' ),
 				'email' => $data ['email'],
-				'password' => $this->encode ( $data ['password'] ) 
+				'password' => $this->encode ( $data ['password'] ),
+				'baseUrl' => Utils::getRequestBaseUrl () 
 		] );
-		return $this->jsonResponse ( 'user_registered', $user->activationCode );
+		$url = Utils::getRequestBaseUrl () . '/api/activate/' . $user->activationCode;
+		static::mailTo ( $user, 'register', 'Welcome to EZSell', [ 
+				'receiver' => $user,
+				'url' => $url 
+		] );
+		return $this->jsonResponse ( 'user_registered', 'Please active your account at ' . $user->email );
 	}
 	
 	/**
@@ -86,16 +98,18 @@ class RegisterController extends AuthenticableController {
 	 * @return Response
 	 */
 	public function activate(Request $request, $activationCode) {
-		$ok = User::activateUser ( $activationCode );
-		if ($ok == 2) {
-			return $this->jsonResponse ( 'user_already_activated', null );
-		} else if ($ok == 1) {
-			return $this->jsonResponse ( 'user_activated', null );
-		} else if ($ok == - 1) {
-			return $this->jsonResponse ( 'activation_code_expired', null, Status::BadRequest );
-		} else if ($ok == - 2) {
+		$data = User::decodeActivationCode ( $activationCode );
+		if (! $data)
 			return $this->jsonResponse ( 'invalid_activation_code', null, Status::BadRequest );
-		}
+		if (! ($user = User::find ( $data [1] )))
+			return $this->jsonResponse ( 'invalid_activation_code', null, Status::BadRequest );
+		if ($user->email != $data [2])
+			return $this->jsonResponse ( 'invalid_activation_code', null, Status::BadRequest );
+		if (! $user->activate ( $activationCode ))
+			return $this->jsonResponse ( 'invalid_activation_code_expired', null, Status::BadRequest );
+		$url = $user->baseUrl ? $user->baseUrl : '/';
+		header ( "Location: $url" );
+		exit ();
 	}
 	/**
 	 * Send activation code
@@ -108,7 +122,8 @@ class RegisterController extends AuthenticableController {
 		$user = User::where ( 'email', '=', $email )->first ();
 		if ($user) {
 			if (! $user->isActivated ()) {
-				return $this->jsonResponse ( 'activation_code_sent', $user->getActivationCode () );
+				$user->createActivationCode ();
+				return $this->jsonResponse ( 'activation_code_sent', $user->activationCode );
 			} else {
 				return $this->jsonResponse ( 'user_already_activated', null, Status::BadRequest );
 			}

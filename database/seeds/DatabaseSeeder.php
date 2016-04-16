@@ -63,11 +63,11 @@ class DatabaseSeeder extends Seeder {
 		 */
 		// Users
 		$superadmin = User::createSuperadmin ( Config::getSuperadminData () );
-		User::activateUser ( $superadmin->getActivationCode () );
+		$superadmin->activate ( $superadmin->activationCode );
 		$manager = User::createManager ( Config::getManagerData () );
-		User::activateUser ( $manager->getActivationCode () );
+		$manager->activate ( $manager->activationCode );
 		$user = User::createUser ( Config::getUserData () );
-		User::activateUser ( $user->getActivationCode () );
+		$user->activate ( $user->activationCode );
 		
 		// add followers
 		$user->follow ( $superadmin );

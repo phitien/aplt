@@ -1,4 +1,4 @@
-@extends('IM.class_template')
+@extends('IM.classgenerator.template')
 
 @section('functions')
 	/**

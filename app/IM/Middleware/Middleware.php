@@ -52,7 +52,7 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	 * @param array $headers        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public static function response($status = Status::OK, array $headers = []) {
+	public function response($status = Status::OK, array $headers = []) {
 		return Utils::response ( $status, $headers );
 	}
 	/**

@@ -12,6 +12,7 @@ use JWTAuth;
 use App\User;
 use Exception;
 use App\IM\Exceptions\UserNotFound;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class Utils {
 	/**
@@ -101,12 +102,12 @@ class Utils {
 		foreach ( $roles as $role ) {
 			$items [$role->code] = $role->getActions ();
 		}
-		$contents = Html::decode ( View::make ( 'IM.RolesActions.class', [ 
+		$contents = Html::decode ( View::make ( 'IM.classgenerator.RolesActions.class', [ 
 				'php' => '<?php',
 				'namespace' => 'App\IM\Config',
 				'classname' => 'RolesActions',
 				'constants' => [ 
-						'MAPS' => Html::decode ( View::make ( 'IM.RolesActions.maps', [ 
+						'MAPS' => Html::decode ( View::make ( 'IM.classgenerator.RolesActions.maps', [ 
 								'roles' => $items 
 						] )->render () ) 
 				] 
@@ -126,5 +127,12 @@ class Utils {
 		$expiringTime = time () + Config::TOKEN_EXPIRING_TIME;
 		$response->headers->setCookie ( new Cookie ( 'IM-TOKEN', $cookie, $expiringTime, $config ['path'], $config ['domain'], $config ['secure'], false ) );
 		return $response;
+	}
+	/**
+	 *
+	 * @return string
+	 */
+	public static function getRequestBaseUrl() {
+		return (request ()->secure () ? 'https' : 'http') . '://' . request ()->server->get ( 'SERVER_NAME' );
 	}
 }

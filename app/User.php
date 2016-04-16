@@ -21,7 +21,6 @@ class User extends Authenticatable {
 	 */
 	protected $guarded = [ 
 			'id',
-			'activationCode',
 			'created_at',
 			'updated_at' 
 	];
@@ -50,7 +49,8 @@ class User extends Authenticatable {
 			'cover',
 			'status',
 			'quote',
-			'description' 
+			'description',
+			'baseUrl' 
 	];
 	
 	/**
@@ -63,6 +63,7 @@ class User extends Authenticatable {
 			'json',
 			'active',
 			'activationCode',
+			'baseUrl',
 			'password',
 			'remember_token' 
 	];
@@ -75,43 +76,40 @@ class User extends Authenticatable {
 	 */
 	public static function create(array $attributes = []) {
 		$user = parent::create ( $attributes );
-		$user->getActivationCode ();
+		$user->createActivationCode ();
 		return $user;
 	}
 	/**
 	 *
 	 * @param string $activationCode        	
-	 * @return int -2|-1|1|2
+	 * @return bool
 	 */
-	public static function activateUser($activationCode) {
+	public static function decodeActivationCode($activationCode) {
 		$key = Crypt::decrypt ( $activationCode );
-		$pattern = '/\{(\d*)\}\-\{(.*)\}\-\{(\d+)\}/';
+		$pattern = '/\{(\d+)\}\-\{(.+)\}\-\{(\d+)\}-\{(.*)\}/';
 		preg_match ( $pattern, $key, $matches );
-		if ($matches && count ( $matches ) == 4) {
-			$date = new DateTime ();
-			$timestamp = $date->getTimestamp ();
-			
-			$user = User::find ( $matches [1] );
-			if ($user && $user->email == $matches [2]) {
-				if (! $user->active) {
-					if (! $user->activationLinkExpired ( $activationCode )) {
-						$user->active = 1;
-						$user->activationCode = '';
-						$user->save ();
-						return 1; // successful activated
-					} else {
-						return - 2; // link expired
-					}
-				} else {
-					return 2; // already activated
-				}
-			}
+		if ($matches && count ( $matches ) == 5) {
+			return $matches;
 		}
-		return - 1; // activation code invalid
+		return false;
 	}
 	/**
 	 *
-	 * @return boolean
+	 * @param string $activationCode        	
+	 * @return bool
+	 */
+	public function activate($activationCode) {
+		if (! $this->activationLinkExpired ( $activationCode )) {
+			$this->active = 1;
+			$this->activationCode = '';
+			$this->save ();
+			return true;
+		}
+		return false;
+	}
+	/**
+	 *
+	 * @return bool
 	 */
 	public function deactivate() {
 		$this->active = 0;
@@ -125,19 +123,19 @@ class User extends Authenticatable {
 	 * @return boolean
 	 */
 	protected function activationLinkExpired($activationCode) {
+		return false;
+		// TODO define when the code expired
 		return $this->activationCode != $activationCode;
 	}
 	/**
 	 *
 	 * @return string activation code
 	 */
-	public function getActivationCode() {
-		$date = new DateTime ();
-		$timestamp = $date->getTimestamp ();
-		$key = "{{$this->id}}-{{$this->email}}-{{$timestamp}}";
+	public function createActivationCode() {
+		$timestamp = (new DateTime ())->getTimestamp ();
+		$key = "{{$this->id}}-{{$this->email}}-{{$timestamp}}-{{$this->baseUrl}}";
 		$this->activationCode = Crypt::encrypt ( $key );
 		$this->save ();
-		return $this->activationCode;
 	}
 	/**
 	 *

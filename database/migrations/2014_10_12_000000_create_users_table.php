@@ -36,6 +36,7 @@ class CreateUsersTable extends Migration {
 			$table->text ( 'status' )->nullable ();
 			$table->text ( 'quote' )->nullable ();
 			$table->text ( 'description' )->nullable ();
+			$table->string ( 'baseUrl' )->nullable ();
 			$table->text ( 'json' )->nullable ();
 			$table->rememberToken ();
 			$table->timestamps ();
