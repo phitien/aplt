@@ -34,7 +34,7 @@ class RegisterController extends AuthenticableController {
 	 * @return Response
 	 */
 	public function register(Request $request) {
-		$data = $request->request->all ();//only get post data
+		$data = $request->request->all (); // only get post data
 		if ($msg = $this->registrationValidator ( $data )) {
 			return $this->jsonResponse ( $msg, null, Status::PreconditionFailed );
 		}
@@ -123,8 +123,8 @@ class RegisterController extends AuthenticableController {
 	 * @return Response
 	 */
 	public function deactivate(Request $request) {
-		$ok = $this->getUser ()->deactivate ();
-		$this->doLogout();
+		$ok = $this->_user->deactivate ();
+		$this->doLogout ();
 		if ($ok) {
 			return $this->jsonResponse ( 'deactivated_successfully', null );
 		} else {

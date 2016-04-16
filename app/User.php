@@ -45,6 +45,7 @@ class User extends Authenticatable {
 			'country',
 			'city',
 			'address',
+			'postcode',
 			'avatar',
 			'cover',
 			'status',

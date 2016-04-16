@@ -4,7 +4,7 @@ namespace App\IM\Models\User\Traits;
 
 use App\User;
 use Exception;
-use App\IM\Config;
+use App\IM\Config\Config;
 use App\IM\Models\User\Relations\Followers;
 use App\IM\Models\User\Relations\Following;
 

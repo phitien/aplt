@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'mailgun' => [
+	'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
     ],
@@ -35,4 +35,14 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+	'mandrill' => [
+    	'secret' => 'your-mandrill-key',
+	],
+		
+	'ses' => [
+		'key' => 'your-ses-key',
+		'secret' => 'your-ses-secret',
+		'region' => 'ses-region',  // e.g. us-east-1
+	],
+		
 ];

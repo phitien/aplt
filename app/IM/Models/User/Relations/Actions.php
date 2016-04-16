@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Collection;
 use App\IM\Models\Action;
 use App\User;
-use App\IM\Config;
+use App\IM\Config\Config;
 
 class Actions extends Relation {
 	/**

@@ -4,8 +4,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use App\IM\Models\Action;
 use App\IM\Models\Role;
-use App\IM\Config;
-use Illuminate\Support\Facades\Log;
+use App\IM\Config\Config;
 class DatabaseSeeder extends Seeder {
 	/**
 	 * Run the database seeds.

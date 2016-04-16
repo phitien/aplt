@@ -7,7 +7,7 @@
 	 * @return array
 	 */
 	public static function getActions($role) {
-		return isset ( static::$maps [$role] ) ? static::$maps [$role] : [ ];
+		return isset ( static::MAPS [$role] ) ? static::MAPS [$role] : [ ];
 	}
 	/**
 	 *

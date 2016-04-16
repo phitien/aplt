@@ -64,7 +64,7 @@ class Action extends Model {
 	}
 	/**
 	 *
-	 * Save the model and re-build App\IM\RolesActions class
+	 * Save the model and re-build App\IM\Config\RolesActions class
 	 *
 	 * @return bool
 	 */
@@ -75,7 +75,7 @@ class Action extends Model {
 	}
 	/**
 	 *
-	 * Delete the model and re-build App\IM\RolesActions class
+	 * Delete the model and re-build App\IM\Config\RolesActions class
 	 *
 	 * @return bool
 	 */

@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration {
 			$table->string ( 'state' )->nullable ();
 			$table->string ( 'city' )->nullable ();
 			$table->string ( 'address' )->nullable ();
+			$table->string ( 'postcode' )->nullable ();
 			$table->string ( 'avatar' )->nullable ();
 			$table->string ( 'cover' )->nullable ();
 			$table->text ( 'status' )->nullable ();

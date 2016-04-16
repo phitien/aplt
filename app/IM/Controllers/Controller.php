@@ -8,9 +8,10 @@ use App\IM\Response\Status;
 use JWTAuth;
 use Exception;
 use App\User;
-use App\IM\Config;
+use App\IM\Config\Config;
 use Route;
 use Request;
+use App\IM\Config\AuthorizationMaps;
 
 abstract class Controller extends BaseController implements IController {
 	/**
@@ -46,18 +47,7 @@ abstract class Controller extends BaseController implements IController {
 	 * @return void
 	 */
 	protected function setupUser() {
-		try {
-			$this->_user = JWTAuth::authenticate ( JWTAuth::getToken () );
-		} catch ( Exception $e ) {
-			$this->_user = User::getGuest ();
-		}
-	}
-	/**
-	 *
-	 * @return User
-	 */
-	protected function getUser() {
-		return $this->_user;
+		$this->_user = Utils::user ();
 	}
 	/**
 	 *
@@ -76,8 +66,7 @@ abstract class Controller extends BaseController implements IController {
 		$controller = $arr [0];
 		$method = $arr [1];
 		$requestType = Request::method ();
-		$middlewareActionMaps = Config::getMiddlewareActionMaps ();
-		// echo $controller . "-" . $method . "-" . $requestType;
+		$middlewareActionMaps = AuthorizationMaps::MAPS;
 		try {
 			return ( string ) $middlewareActionMaps [$controller] [$method] [$requestType];
 		} catch ( Exception $e ) {
@@ -111,6 +100,15 @@ abstract class Controller extends BaseController implements IController {
 		return $this->_authorizationMiddlewareOptions;
 	}
 	/**
+	 *
+	 * @param number $status        	
+	 * @param array $headers        	
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function response($status = Status::OK, array $headers = []) {
+		return Utils::setResponseCookieToken ( Utils::response ( $status, $headers ), JWTAuth::getToken () );
+	}
+	/**
 	 * Shortcut of Utils::jsonResponse
 	 *
 	 * @param unknown $message        	
@@ -121,7 +119,7 @@ abstract class Controller extends BaseController implements IController {
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Status::OK, array $headers = [], $options = 0) {
-		return Utils::jsonResponse ( $message, $data, $status, $headers, $options );
+		return Utils::setResponseCookieToken ( Utils::jsonResponse ( $message, $data, $status, $headers, $options ), JWTAuth::getToken () );
 	}
 	/**
 	 * Shortcut of Utils::encode

@@ -18,6 +18,7 @@ Route::group ( [
 	Route::any ( 'followers', 'IM\Controllers\SocietyController@followers' );
 	Route::any ( 'following', 'IM\Controllers\SocietyController@following' );
 	Route::post ( 'follow', 'IM\Controllers\SocietyController@follow' );
+	Route::post ( 'accept', 'IM\Controllers\SocietyController@accept' );
 	
 	Route::post ( 'password', 'IM\Controllers\AccountController@password' );
 	Route::post ( 'email', 'IM\Controllers\AccountController@email' );

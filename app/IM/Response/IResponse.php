@@ -6,6 +6,14 @@ use Illuminate\Http\Response;
 
 interface IResponse {
 	/**
+	 * Build response
+	 *
+	 * @param number $status        	
+	 * @param array $headers        	
+	 * @return Response
+	 */
+	public static function response($status = Status::OK, array $headers = []);
+	/**
 	 * Build json response
 	 *
 	 * @param string $message        	

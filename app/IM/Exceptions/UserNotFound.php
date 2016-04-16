@@ -5,7 +5,7 @@ namespace App\IM\Exceptions;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\IM\Response\Status;
 
-class TokenNotFound extends JWTException {
+class UserNotFound extends JWTException {
 	/**
 	 *
 	 * @var int
@@ -15,5 +15,5 @@ class TokenNotFound extends JWTException {
 	 *
 	 * @var string
 	 */
-	protected $message = 'token_not_found';
+	protected $message = 'user_not_found';
 }

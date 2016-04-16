@@ -4,7 +4,7 @@ namespace App\IM\Models\User\Traits;
 
 use App\IM\Models\User\Relations\Actions;
 use App\IM\Models\Action;
-use App\IM\RolesActions;
+use App\IM\Config\RolesActions;
 
 trait ActionTrait
 {

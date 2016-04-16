@@ -3,9 +3,8 @@
 namespace App\IM\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\IM\Config;
+use App\IM\Config\Config;
 use App\IM\Utils;
-use Illuminate\Support\Facades\Log;
 
 class Role extends Model {
 	/**
@@ -196,7 +195,7 @@ class Role extends Model {
 	}
 	/**
 	 *
-	 * Save the model and re-build App\IM\RolesActions class
+	 * Save the model and re-build App\IM\Config\RolesActions class
 	 *
 	 * @return bool
 	 */
@@ -207,7 +206,7 @@ class Role extends Model {
 	}
 	/**
 	 *
-	 * Delete the model and re-build App\IM\RolesActions class
+	 * Delete the model and re-build App\IM\Config\RolesActions class
 	 *
 	 * @return bool
 	 */

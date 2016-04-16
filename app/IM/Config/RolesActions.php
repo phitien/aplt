@@ -1,21 +1,12 @@
 <?php
 
-namespace App\IM;
+namespace App\IM\Config;
 
 class RolesActions {
 	/**
 	 * Constants
 	 */
-	/**
-	 * Private static variables
-	 */
-	/**
-	 * Protected static variables
-	 */
-	/**
-	 * Public static variables
-	 */
- 	public static $maps = [ 
+ 	const MAPS = [ 
 		'SUPREME' => [
 			'GOD_ACT', 
 		],
@@ -38,6 +29,15 @@ class RolesActions {
  
 	];
  	/**
+	 * Private static variables
+	 */
+	/**
+	 * Protected static variables
+	 */
+	/**
+	 * Public static variables
+	 */
+	/**
 	 * Private variables
 	 */
 	/**
@@ -55,7 +55,7 @@ class RolesActions {
 	 * @return  array
 	 */
 	public static function getActions($role) {
-		return isset ( static::$maps [$role] ) ? static::$maps [$role] : [ ];
+		return isset ( static::MAPS [$role] ) ? static::MAPS [$role] : [ ];
 	}
 	/**
 	 *
