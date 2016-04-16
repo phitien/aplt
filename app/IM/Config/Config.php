@@ -13,6 +13,8 @@ class Config {
 	 */
 	const TOKEN_EXPIRING_TIME = 7200; // 60 * 120
 	                                  //
+	const MAIL_SUBJECT_PREFIX = "[EZSell] ";
+	//
 	const FOLLOWER_REQUESTED = 0;
 	const FOLLOWER_REQUEST_ACCEPTED = 1;
 	const FOLLOWER_REQUEST_REFUSED = 2;

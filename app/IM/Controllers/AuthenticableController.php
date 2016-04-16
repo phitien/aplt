@@ -7,6 +7,7 @@ use App\IM\Controllers\Controller;
 use App\IM\Response\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\IM\Utils;
 
 class AuthenticableController extends Controller {
 	/**
@@ -51,7 +52,7 @@ class AuthenticableController extends Controller {
 			return $this->jsonResponse ( 'could_not_create_token', null, Status::InternalServerError );
 		}
 		// if no errors are encountered we can return a JWT
-		return $this->jsonResponse ( 'login_successfully', $token );
+		return Utils::setResponseCookieToken ( $this->jsonResponse ( 'login_successfully', $token ), $token );
 	}
 	/**
 	 * Logout

@@ -52,6 +52,7 @@ class RegisterController extends AuthenticableController {
 		] );
 		$url = Utils::getRequestBaseUrl () . '/api/activate/' . $user->activationCode;
 		static::mailTo ( $user, 'register', 'Welcome to EZSell', [ 
+				'title' => 'Welcome to EZSell',
 				'receiver' => $user,
 				'url' => $url 
 		] );
@@ -123,7 +124,13 @@ class RegisterController extends AuthenticableController {
 		if ($user) {
 			if (! $user->isActivated ()) {
 				$user->createActivationCode ();
-				return $this->jsonResponse ( 'activation_code_sent', $user->activationCode );
+				$url = Utils::getRequestBaseUrl () . '/api/activate/' . $user->activationCode;
+				static::mailTo ( $user, 'register', 'Activation Re-send', [ 
+						'title' => 'Activation Re-send',
+						'receiver' => $user,
+						'url' => $url 
+				] );
+				return $this->jsonResponse ( 'activation_code_sent', 'Please active your account at ' . $user->email );
 			} else {
 				return $this->jsonResponse ( 'user_already_activated', null, Status::BadRequest );
 			}

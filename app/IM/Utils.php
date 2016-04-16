@@ -12,7 +12,7 @@ use JWTAuth;
 use App\User;
 use Exception;
 use App\IM\Exceptions\UserNotFound;
-use Symfony\Component\HttpFoundation\Cookie;
+use App\IM\Exceptions\TokenNotFound;
 
 class Utils {
 	/**
@@ -123,10 +123,8 @@ class Utils {
 	 * @return \Illuminate\Http\Response
 	 */
 	public static function setResponseCookieToken($response, $cookie) {
-		$config = config ( 'session' );
 		$expiringTime = time () + Config::TOKEN_EXPIRING_TIME;
-		$response->headers->setCookie ( new Cookie ( 'IM-TOKEN', $cookie, $expiringTime, $config ['path'], $config ['domain'], $config ['secure'], false ) );
-		return $response;
+		return $response->withCookie ( 'IM-TOKEN', $cookie, $expiringTime );
 	}
 	/**
 	 *
@@ -134,5 +132,13 @@ class Utils {
 	 */
 	public static function getRequestBaseUrl() {
 		return (request ()->secure () ? 'https' : 'http') . '://' . request ()->server->get ( 'SERVER_NAME' );
+	}
+	/**
+	 *
+	 * @param string $subject        	
+	 * @return string
+	 */
+	public static function getMailSubject($subject) {
+		return Config::MAIL_SUBJECT_PREFIX . $subject;
 	}
 }
