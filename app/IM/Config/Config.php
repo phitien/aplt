@@ -15,6 +15,8 @@ class Config {
 	                                  //
 	const MAIL_SUBJECT_PREFIX = "[EZSell] ";
 	//
+	const TOKEN_KEY = "IM-TOKEN";
+	//
 	const FOLLOWER_REQUESTED = 0;
 	const FOLLOWER_REQUEST_ACCEPTED = 1;
 	const FOLLOWER_REQUEST_REFUSED = 2;

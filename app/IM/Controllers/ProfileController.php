@@ -5,6 +5,7 @@ namespace App\IM\Controllers;
 use App\IM\Controllers\AuthenticableController;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class ProfileController extends AuthenticableController {
 	/**

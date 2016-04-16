@@ -34,7 +34,7 @@ class Authentication extends Middleware {
 		} catch ( Exception $e ) {
 			return $this->jsonResponse ( 'token_absent', null, Status::BadRequest );
 		}
-
+		
 		$this->events->fire ( 'tymon.jwt.valid', $user );
 		
 		return $next ( $request );

@@ -13,6 +13,7 @@ use App\User;
 use Exception;
 use App\IM\Exceptions\UserNotFound;
 use App\IM\Exceptions\TokenNotFound;
+use Illuminate\Support\Facades\Cookie;
 
 class Utils {
 	/**
@@ -25,8 +26,9 @@ class Utils {
 	 * @return string token
 	 */
 	public static function token() {
-		if (! static::$__token)
-			static::$__token = JWTAuth::getToken ();
+		if (! static::$__token) {
+			static::$__token = Cookie::get ( Config::TOKEN_KEY, static::$__token = JWTAuth::getToken () );
+		}
 		return static::$__token;
 	}
 	/**
@@ -124,7 +126,7 @@ class Utils {
 	 */
 	public static function setResponseCookieToken($response, $cookie) {
 		$expiringTime = time () + Config::TOKEN_EXPIRING_TIME;
-		return $response->withCookie ( 'IM-TOKEN', $cookie, $expiringTime );
+		return $response->withCookie ( Config::TOKEN_KEY, $cookie, $expiringTime );
 	}
 	/**
 	 *
