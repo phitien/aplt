@@ -7,17 +7,11 @@ use App\IM\Config\Config;
 class AuthorizationMaps {
 	const MAPS = [ 
 			/**
-			 * profile/updateProfile/updateExInfo
-			 */
-			'App\IM\Controllers\ProfileController' => Config::ACTION_OWN_ACT . '|' . Config::ACTION_MANAGER_ACT . '|' . Config::ACTION_ACCESS_USER,
-			/**
-			 * followers/following/follow/accept/refuse
-			 */
-			'App\IM\Controllers\SocietyController' => Config::ACTION_OWN_ACT . '|' . Config::ACTION_MANAGER_ACT . '|' . Config::ACTION_ACCESS_USER,
-			/**
 			 * login/logout
 			 * register/activate/deactivate/code
 			 * password/email/account/forget
+			 * profile/profilex
+			 * followers/following/follow/accept/refuse
 			 */
 			'App\IM\Controllers\AccountController' => [ 
 					'login' => Config::ACTION_GUEST_ACT,

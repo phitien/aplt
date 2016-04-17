@@ -14,6 +14,7 @@ use App\IM\Exceptions\UserNotFound;
 use App\IM\Exceptions\TokenNotFound;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 class Utils {
 	/**
@@ -77,14 +78,26 @@ class Utils {
 	 * @param string $data        	
 	 * @param number $status        	
 	 * @param array $headers        	
-	 * @param number $options        	
-	 * @return Response
+	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public static function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = [], $options = 0) {
+	public static function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
 		return static::setResponseCookieToken ( response ()->json ( [ 
 				'message' => $message,
 				'data' => $data 
-		], $status, $headers, $options ), static::token () );
+		], $status, $headers ), static::token () );
+	}
+	/**
+	 *
+	 * @param Response $response        	
+	 * @param string $message        	
+	 * @param string $data        	
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public static function updateJsonResponse(JsonResponse $response, $message = null, $data = null) {
+		return $response->setData ( [ 
+				'message' => $message,
+				'data' => $data 
+		] );
 	}
 	/**
 	 *

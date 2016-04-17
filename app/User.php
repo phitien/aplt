@@ -76,7 +76,7 @@ class User extends Authenticatable {
 	 */
 	public static function create(array $attributes = []) {
 		$user = parent::create ( $attributes );
-		$user->createActivationCode ();
+		$user->generateActivationCode ();
 		return $user;
 	}
 	/**
@@ -129,11 +129,13 @@ class User extends Authenticatable {
 	 *
 	 * @return string activation code
 	 */
-	public function createActivationCode() {
+	public function generateActivationCode() {
 		$timestamp = (new DateTime ())->getTimestamp ();
 		$key = "{{$this->id}}-{{$this->email}}-{{$timestamp}}-{{$this->baseUrl}}";
 		$this->activationCode = Crypt::encrypt ( $key );
+		$this->active = 0;
 		$this->save ();
+		return $this->activationCode;
 	}
 	/**
 	 *
@@ -179,5 +181,37 @@ class User extends Authenticatable {
 			$this->fillEx ( $attributes ['extension'] );
 		}
 		return parent::fill ( $attributes );
+	}
+	/**
+	 *
+	 * @param string $email        	
+	 */
+	public function changeEmail($email) {
+		if (! $this->isGuest ()) {
+			$this->email = $email;
+			return $this->generateActivationCode ();
+		}
+	}
+	/**
+	 *
+	 * @param string $password        	
+	 */
+	public function changePassword($password) {
+		if (! $this->isGuest ()) {
+			$this->password = Utils::encode ( $password );
+			$this->save ();
+			return $this->password;
+		}
+	}
+	/**
+	 *
+	 * @param string $name        	
+	 */
+	public function changeName($name) {
+		if (! $this->isGuest ()) {
+			$this->name = $name;
+			$this->save ();
+			return $this->name;
+		}
 	}
 }

@@ -7,6 +7,7 @@ use Tymon\JWTAuth\Middleware\BaseMiddleware;
 use Closure;
 use App\IM\Config\Config;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	/**
@@ -49,7 +50,7 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	 *
 	 * @param number $status        	
 	 * @param array $headers        	
-	 * @return \Illuminate\Http\JsonResponse
+	 * @return \Illuminate\Http\Response
 	 */
 	public function response($status = Response::HTTP_OK, array $headers = []) {
 		return Utils::response ( $status, $headers );
@@ -60,10 +61,19 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	 * @param string $data        	
 	 * @param number $status        	
 	 * @param array $headers        	
-	 * @param number $options        	
-	 * @return Response
+	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = [], $options = 0) {
-		return Utils::jsonResponse ( $message, $data, $status, $headers, $options );
+	public static function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
+		return Utils::jsonResponse ( $message, $data, $status, $headers );
+	}
+	/**
+	 *
+	 * @param Response $response        	
+	 * @param string $message        	
+	 * @param string $data        	
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public static function updateJsonResponse(JsonResponse $response, $message = null, $data = null) {
+		return Utils::updateJsonResponse ( $response, $message, $data );
 	}
 }

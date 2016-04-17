@@ -19,7 +19,7 @@ trait MailerTrait
 		Mail::send ( "IM.email.$template", $params, function ($message) use ($receiver, $subject, $sendAsHtml) {
 			$message->from ( 'info@www.ezsell.com', 'EZSell' );
 			$message->to ( $receiver->email, $receiver->name )->subject ( Utils::getMailSubject ( $subject ) );
-			if ($sendAsHtml) {
+			if (! $sendAsHtml) {
 				// $message->setContentType ( 'text/html' );
 				// $message->setBody ( Html::decode ( $message->getBody () ) );
 			}

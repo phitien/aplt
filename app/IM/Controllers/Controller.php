@@ -12,6 +12,7 @@ use Route;
 use Request;
 use App\IM\Config\AuthorizationMaps;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 abstract class Controller extends BaseController implements IController {
 	/**
@@ -115,11 +116,20 @@ abstract class Controller extends BaseController implements IController {
 	 * @param unknown $data        	
 	 * @param unknown $status        	
 	 * @param array $headers        	
-	 * @param number $options        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = [], $options = 0) {
-		return Utils::setResponseCookieToken ( Utils::jsonResponse ( $message, $data, $status, $headers, $options ), JWTAuth::getToken () );
+	public static function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
+		return Utils::setResponseCookieToken ( Utils::jsonResponse ( $message, $data, $status, $headers ), JWTAuth::getToken () );
+	}
+	/**
+	 *
+	 * @param Response $response        	
+	 * @param string $message        	
+	 * @param string $data        	
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public static function updateJsonResponse(JsonResponse $response, $message = null, $data = null) {
+		return Utils::updateJsonResponse ( $response, $message, $data );
 	}
 	/**
 	 * Shortcut of Utils::encode

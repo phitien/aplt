@@ -19,6 +19,6 @@
     	<div class="title">{{ $title }}</div>
     	<br/>
     	<br/>
-    	<div>Please active your account by clicking <a href="{{ $url }}">here</a> and start enjoy shopping.</div>
+    	<div>Your email account has been changed to {{ $email }}. Please login to {{ $email }} to activate it.</div>
     </div>
 @endsection

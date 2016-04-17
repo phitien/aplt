@@ -20,10 +20,6 @@ trait  DeactivateTrait {
 		}
 		$ok = $this->_user->deactivate ();
 		$this->doLogout ();
-		if ($ok) {
-			return Utils::unsetResponseCookieToken ( $this->jsonResponse ( 'deactivated_successfully', null ) );
-		} else {
-			return $this->jsonResponse ( 'deactivated_unsuccessfully', null, Response::HTTP_BAD_REQUEST );
-		}
+		return Utils::unsetResponseCookieToken ( $this->jsonResponse ( 'deactivated_successfully', null ) );
 	}
 }

@@ -43,7 +43,6 @@ abstract class AuthenticableController extends Controller {
 			// something went wrong
 			return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_BAD_REQUEST );
 		}
-		// if no errors are encountered we can return a JWT
 		return Utils::setResponseCookieToken ( $this->jsonResponse ( 'login_successfully', $token ), $token );
 	}
 	/**
@@ -78,12 +77,38 @@ abstract class AuthenticableController extends Controller {
 		return false;
 	}
 	/**
-	 * Get a validator for an incoming registration request.
+	 * Validate user email
 	 *
 	 * @param array $data        	
 	 * @return string
 	 */
-	protected function passwordValidate(array $data) {
+	protected function validateEmail(array $data) {
+		$validator = Validator::make ( $data, [ 
+				'email' => 'required|email|max:255' 
+		] );
+		if ($validator->fails ()) {
+			return 'invalid_email';
+		}
+		$validator = Validator::make ( $data, [ 
+				'email' => 'unique:users,email' 
+		] );
+		if ($validator->fails ()) {
+			return 'email_used';
+		}
+		$validator = Validator::make ( $data, [ 
+				'email' => 'confirmed' 
+		] );
+		if ($validator->fails ()) {
+			return 'email_confirmation_not_matched';
+		}
+	}
+	/**
+	 * Validate user password
+	 *
+	 * @param array $data        	
+	 * @return string
+	 */
+	protected function validatePassword(array $data) {
 		$validator = Validator::make ( $data, [ 
 				'password' => 'required|min:6' 
 		] );
@@ -95,6 +120,26 @@ abstract class AuthenticableController extends Controller {
 		] );
 		if ($validator->fails ()) {
 			return 'password_confirmation_not_matched';
+		}
+	}
+	/**
+	 * Validate user name
+	 *
+	 * @param array $data        	
+	 * @return string
+	 */
+	protected function validateName(array $data) {
+		$validator = Validator::make ( $data, [ 
+				'name' => 'required|min:3|max:30|regex:/^[a-z0-9]([\._]?[a-z0-9]+)+$/' 
+		] );
+		if ($validator->fails ()) {
+			return 'invalid_name';
+		}
+		$validator = Validator::make ( $data, [ 
+				'name' => 'unique:users,name' 
+		] );
+		if ($validator->fails ()) {
+			return 'name_used';
 		}
 	}
 }

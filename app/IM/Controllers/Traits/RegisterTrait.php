@@ -26,7 +26,7 @@ trait  RegisterTrait {
 				'password' => $this->encode ( $data ['password'] ),
 				'baseUrl' => Utils::getRequestBaseUrl () 
 		] );
-		$url = Utils::getRequestBaseUrl () . '/api/activate/' . $user->activationCode;
+		$url = Utils::getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode ();
 		static::mailTo ( $user, 'register', 'Welcome to EZSell', [ 
 				'title' => 'Welcome to EZSell',
 				'receiver' => $user,
@@ -42,18 +42,9 @@ trait  RegisterTrait {
 	 * @return string
 	 */
 	protected function registrationValidator(array $data) {
-		$validator = Validator::make ( $data, [ 
-				'email' => 'required|email|max:255' 
-		] );
-		if ($validator->fails ()) {
-			return 'invalid_email';
+		if ($message = $this->validateEmail ( $data )) {
+			return $message;
 		}
-		$validator = Validator::make ( $data, [ 
-				'email' => 'unique:users' 
-		] );
-		if ($validator->fails ()) {
-			return 'email_used';
-		}
-		return $this->passwordValidate ( $data );
+		return $this->validatePassword ( $data );
 	}
 }
