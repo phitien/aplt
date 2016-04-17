@@ -73,8 +73,8 @@ class DatabaseSeeder extends Seeder {
 		$user->follow ( $superadmin );
 		$user->follow ( $manager );
 		
-		$superadmin->acceptFollower ( $user );
-		$manager->refuseFollower ( $user );
+		$superadmin->accept ( $user );
+		$manager->refuse ( $user );
 		// $user->unfollow ( $manager );
 		
 		Model::reguard ();

@@ -2,7 +2,6 @@
 
 namespace App\IM;
 
-use App\IM\Response\Status;
 use View;
 use Illuminate\Support\Facades\Storage;
 use Html;
@@ -14,6 +13,7 @@ use Exception;
 use App\IM\Exceptions\UserNotFound;
 use App\IM\Exceptions\TokenNotFound;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Http\Response;
 
 class Utils {
 	/**
@@ -55,8 +55,9 @@ class Utils {
 				try {
 					static::$__user = JWTAuth::authenticate ( $token );
 				} catch ( Exception $e ) {
-					static::$__user = User::getGuest ();
 				}
+				if (! static::$__user)
+					static::$__user = User::getGuest ();
 			}
 		}
 		return static::$__user;
@@ -67,7 +68,7 @@ class Utils {
 	 * @param array $headers        	
 	 * @return Response
 	 */
-	public static function response($status = Status::OK, array $headers = []) {
+	public static function response($status = Response::HTTP_OK, array $headers = []) {
 		return static::setResponseCookieToken ( response ( '', $status, $headers ), static::token () );
 	}
 	/**
@@ -79,7 +80,7 @@ class Utils {
 	 * @param number $options        	
 	 * @return Response
 	 */
-	public static function jsonResponse($message = null, $data = null, $status = Status::OK, array $headers = [], $options = 0) {
+	public static function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = [], $options = 0) {
 		return static::setResponseCookieToken ( response ()->json ( [ 
 				'message' => $message,
 				'data' => $data 
@@ -127,6 +128,16 @@ class Utils {
 	public static function setResponseCookieToken($response, $cookie) {
 		$expiringTime = time () + Config::TOKEN_EXPIRING_TIME;
 		return $response->withCookie ( Config::TOKEN_KEY, $cookie, $expiringTime );
+	}
+	/**
+	 * unset the IM token to the response cookies.
+	 *
+	 * @param \Illuminate\Http\Response $response        	
+	 * @param string $cookie        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public static function unsetResponseCookieToken($response) {
+		return $response->withCookie ( Config::TOKEN_KEY, Cookie::forget ( Config::TOKEN_KEY ) );
 	}
 	/**
 	 *

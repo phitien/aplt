@@ -4,7 +4,6 @@ namespace App\IM\Controllers;
 
 use App\Http\Controllers\Controller as BaseController;
 use App\IM\Utils;
-use App\IM\Response\Status;
 use JWTAuth;
 use Exception;
 use App\User;
@@ -12,6 +11,7 @@ use App\IM\Config\Config;
 use Route;
 use Request;
 use App\IM\Config\AuthorizationMaps;
+use Illuminate\Http\Response;
 
 abstract class Controller extends BaseController implements IController {
 	/**
@@ -105,7 +105,7 @@ abstract class Controller extends BaseController implements IController {
 	 * @param array $headers        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function response($status = Status::OK, array $headers = []) {
+	public function response($status = Response::HTTP_OK, array $headers = []) {
 		return Utils::setResponseCookieToken ( Utils::response ( $status, $headers ), JWTAuth::getToken () );
 	}
 	/**
@@ -118,7 +118,7 @@ abstract class Controller extends BaseController implements IController {
 	 * @param number $options        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function jsonResponse($message = null, $data = null, $status = Status::OK, array $headers = [], $options = 0) {
+	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = [], $options = 0) {
 		return Utils::setResponseCookieToken ( Utils::jsonResponse ( $message, $data, $status, $headers, $options ), JWTAuth::getToken () );
 	}
 	/**

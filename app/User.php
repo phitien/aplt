@@ -123,8 +123,6 @@ class User extends Authenticatable {
 	 * @return boolean
 	 */
 	protected function activationLinkExpired($activationCode) {
-		return false;
-		// TODO define when the code expired
 		return $this->activationCode != $activationCode;
 	}
 	/**
@@ -178,17 +176,8 @@ class User extends Authenticatable {
 	 */
 	public function fill(array $attributes) {
 		if ($attributes && isset ( $attributes ['extension'] )) {
-			$extension = $attributes ['extension'];
-			$this->extension ()->fill ( $extension );
+			$this->fillEx ( $attributes ['extension'] );
 		}
 		return parent::fill ( $attributes );
-	}
-	/**
-	 *
-	 * @param array $attributes        	
-	 */
-	public function fillEx(array $attributes) {
-		$this->extension ()->fill ( $attributes );
-		return $this;
 	}
 }

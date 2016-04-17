@@ -3,62 +3,44 @@
 namespace App\IM\Controllers;
 
 use App\User;
-use Validator;
 use Illuminate\Http\Request;
 use Hash;
-use App\IM\Response\Status;
 use Illuminate\Http\Response;
+use App\IM\Controllers\Traits\RegisterTrait;
+use App\IM\Controllers\Traits\ActivateTrait;
+use App\IM\Controllers\Traits\DeactivateTrait;
+use App\IM\Controllers\Traits\ProfileTrait;
+use App\IM\Controllers\Traits\SocietyTrait;
 
 class AccountController extends AuthenticableController {
+	/**
+	 * Traits
+	 */
+	use RegisterTrait, ActivateTrait, DeactivateTrait, ProfileTrait, SocietyTrait;
 	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
 			'except' => [ 
-					'reset' 
+					'login',
+					'code',
+					'register',
+					'activate' 
 			] 
 	];
 	/**
 	 *
 	 * @var array $_authorizationMiddlewareOptions
 	 */
-	protected $_authorizationMiddlewareOptions = [ ];
-	/**
-	 * Get a validator for an incoming registration request.
-	 *
-	 * @param array $data        	
-	 * @return string
-	 */
-	protected function passwordValidator(array $data) {
-		$validator = Validator::make ( $data, [ 
-				'password' => 'required|min:6' 
-		] );
-		if ($validator->fails ()) {
-			return 'invalid_password';
-		}
-		$validator = Validator::make ( $data, [ 
-				'password' => 'confirmed' 
-		] );
-		if ($validator->fails ()) {
-			return 'password_confirmation_not_matched';
-		}
-	}
-	/**
-	 *
-	 * @param Request $request        	
-	 * @return Response void
-	 */
-	protected function enterWrongPassword(Request $request) {
-		$current_password = $request->get ( 'current_password' );
-		if (! $current_password) {
-			return $this->jsonResponse ( 'current_password_not_provided', null, Status::PreconditionRequired );
-		}
-		if (strlen ( $current_password ) > 0 && ! Hash::check ( $current_password, $this->_user->password )) {
-			return $this->jsonResponse ( 'current_password_incorrect', null, Status::PreconditionFailed );
-		}
-		return false;
-	}
+	protected $_authorizationMiddlewareOptions = [ 
+			'except' => [ 
+					'login',
+					'code',
+					'register',
+					'activate' 
+			] 
+	];
 	/**
 	 * Return the authenticated user
 	 *
@@ -69,12 +51,12 @@ class AccountController extends AuthenticableController {
 		if ($response = $this->enterWrongPassword ( $request )) {
 			return $response;
 		}
-		if ($msg = $this->passwordValidator ( $request->all () )) {
-			return $this->jsonResponse ( $msg, null, Status::PreconditionFailed );
+		if ($msg = $this->passwordValidate ( $request->all () )) {
+			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
 		$new_password = $request->get ( 'password' );
 		if (Hash::check ( $new_password, $this->_user->password )) {
-			return $this->jsonResponse ( 'same_new_password', null, Status::PreconditionFailed );
+			return $this->jsonResponse ( 'same_new_password', null, Response::HTTP_BAD_REQUEST );
 		}
 		$this->_user->password = $this->encode ( $new_password );
 		$this->_user->save ();

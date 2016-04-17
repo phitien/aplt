@@ -3,14 +3,14 @@
 namespace App\IM\Exceptions;
 
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\IM\Response\Status;
+use Illuminate\Http\Response;
 
 class TokenNotFound extends JWTException {
 	/**
 	 *
 	 * @var int
 	 */
-	protected $statusCode = Status::BadRequest;
+	protected $statusCode = Response::HTTP_BAD_REQUEST;
 	/**
 	 *
 	 * @var string

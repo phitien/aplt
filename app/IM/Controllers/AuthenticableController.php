@@ -4,26 +4,18 @@ namespace App\IM\Controllers;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\IM\Controllers\Controller;
-use App\IM\Response\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\IM\Utils;
+use App\IM\Models\User\Traits\MailerTrait;
+use Validator;
+use Hash;
 
-class AuthenticableController extends Controller {
+abstract class AuthenticableController extends Controller {
 	/**
-	 *
-	 * @var string $_authenticationMiddlewareOptions
+	 * TRAITS
 	 */
-	protected $_authenticationMiddlewareOptions = [ 
-			'except' => [ 
-					'login' 
-			] 
-	];
-	/**
-	 *
-	 * @var string $_authorizationMiddlewareOptions
-	 */
-	protected $_authorizationMiddlewareOptions = [ ];
+	use MailerTrait;
 	/**
 	 * Return a JWT
 	 *
@@ -45,11 +37,11 @@ class AuthenticableController extends Controller {
 		try {
 			// verify the credentials and create a token for the user
 			if (! $token = JWTAuth::attempt ( $credentials )) {
-				return $this->jsonResponse ( 'invalid_credentials', null, Status::Unauthorized );
+				return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
 			}
 		} catch ( Exception $e ) {
 			// something went wrong
-			return $this->jsonResponse ( 'could_not_create_token', null, Status::InternalServerError );
+			return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_BAD_REQUEST );
 		}
 		// if no errors are encountered we can return a JWT
 		return Utils::setResponseCookieToken ( $this->jsonResponse ( 'login_successfully', $token ), $token );
@@ -68,22 +60,41 @@ class AuthenticableController extends Controller {
 	 */
 	protected function doLogout() {
 		JWTAuth::invalidate ( JWTAuth::getToken () );
-		return $this->jsonResponse ( 'logged_out', null );
+		return Utils::unsetResponseCookieToken ( $this->jsonResponse ( 'logged_out', null ) );
 	}
 	/**
-	 * Refresh
 	 *
-	 * @return Response
+	 * @param Request $request        	
+	 * @return Response void
 	 */
-	public function refresh() {
-		try {
-			if (! $token = JWTAuth::refresh ( JWTAuth::getToken () )) {
-				return $this->jsonResponse ( 'token_invalid', null, Status::Unauthorized );
-			}
-		} catch ( Exception $e ) {
-			return $this->jsonResponse ( 'token_invalid', null, Status::Unauthorized );
+	protected function enterWrongPassword(Request $request) {
+		$current_password = $request->get ( 'current_password' );
+		if (! $current_password) {
+			return $this->jsonResponse ( 'current_password_not_provided', null, Response::HTTP_BAD_REQUEST );
 		}
-		// if no errors are encountered we can return a JWT
-		return $this->jsonResponse ( 'token_renewed', $token );
+		if (strlen ( $current_password ) > 0 && ! Hash::check ( $current_password, $this->_user->password )) {
+			return $this->jsonResponse ( 'current_password_incorrect', null, Response::HTTP_BAD_REQUEST );
+		}
+		return false;
+	}
+	/**
+	 * Get a validator for an incoming registration request.
+	 *
+	 * @param array $data        	
+	 * @return string
+	 */
+	protected function passwordValidate(array $data) {
+		$validator = Validator::make ( $data, [ 
+				'password' => 'required|min:6' 
+		] );
+		if ($validator->fails ()) {
+			return 'invalid_password';
+		}
+		$validator = Validator::make ( $data, [ 
+				'password' => 'confirmed' 
+		] );
+		if ($validator->fails ()) {
+			return 'password_confirmation_not_matched';
+		}
 	}
 }

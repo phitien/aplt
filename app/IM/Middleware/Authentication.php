@@ -7,7 +7,7 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Exception;
 use Closure;
 use App\IM\Config\Config;
-use App\IM\Response\Status;
+use Illuminate\Http\Response;
 use App\IM\Exceptions\TokenNotFound;
 use App\IM\Utils;
 use App\IM\Exceptions\UserNotFound;
@@ -24,15 +24,15 @@ class Authentication extends Middleware {
 		try {
 			$user = Utils::user ( true );
 		} catch ( TokenNotFound $e ) {
-			return $this->jsonResponse ( 'token_not_found', null, Status::BadRequest );
+			return $this->jsonResponse ( 'token_not_found', null, Response::HTTP_BAD_REQUEST );
 		} catch ( UserNotFound $e ) {
-			return $this->jsonResponse ( 'unauthorized', null, Status::Unauthorized );
+			return $this->jsonResponse ( 'unauthorized', null, Response::HTTP_UNAUTHORIZED );
 		} catch ( TokenExpiredException $e ) {
-			return $this->jsonResponse ( 'token_expired', null, Status::BadRequest );
+			return $this->jsonResponse ( 'token_expired', null, Response::HTTP_BAD_REQUEST );
 		} catch ( TokenInvalidException $e ) {
-			return $this->jsonResponse ( 'token_invalid', null, Status::BadRequest );
+			return $this->jsonResponse ( 'token_invalid', null, Response::HTTP_BAD_REQUEST );
 		} catch ( Exception $e ) {
-			return $this->jsonResponse ( 'token_absent', null, Status::BadRequest );
+			return $this->jsonResponse ( 'token_absent', null, Response::HTTP_BAD_REQUEST );
 		}
 		
 		$this->events->fire ( 'tymon.jwt.valid', $user );

@@ -3,7 +3,6 @@
 namespace App\IM\Middleware;
 
 use App\IM\Utils;
-use App\IM\Response\Status;
 use Tymon\JWTAuth\Middleware\BaseMiddleware;
 use Closure;
 use App\IM\Config\Config;
@@ -52,7 +51,7 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	 * @param array $headers        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function response($status = Status::OK, array $headers = []) {
+	public function response($status = Response::HTTP_OK, array $headers = []) {
 		return Utils::response ( $status, $headers );
 	}
 	/**
@@ -64,7 +63,7 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	 * @param number $options        	
 	 * @return Response
 	 */
-	public function jsonResponse($message = null, $data = null, $status = Status::OK, array $headers = [], $options = 0) {
+	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = [], $options = 0) {
 		return Utils::jsonResponse ( $message, $data, $status, $headers, $options );
 	}
 }

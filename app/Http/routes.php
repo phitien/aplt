@@ -6,23 +6,22 @@ Route::get ( '/', function () {
 Route::group ( [ 
 		'prefix' => 'api' 
 ], function () {
-	Route::post ( 'register', 'IM\Controllers\RegisterController@register' );
-	Route::get ( 'activate/{activationCode}', 'IM\Controllers\RegisterController@activate' );
-	Route::post ( 'activate', 'IM\Controllers\RegisterController@sendActivationCode' );
-	Route::post ( 'deactivate', 'IM\Controllers\RegisterController@deactivate' );
+	Route::post ( 'register', 'IM\Controllers\AccountController@register' );
+	Route::any ( 'code', 'IM\Controllers\AccountController@code' );
+	Route::get ( 'activate/{code}', 'IM\Controllers\AccountController@activate' );
+	Route::post ( 'deactivate', 'IM\Controllers\AccountController@deactivate' );
 	
-	Route::post ( 'login', 'IM\Controllers\AuthenticableController@login' );
-	Route::any ( 'refresh', 'IM\Controllers\AuthenticableController@refresh' );
-	Route::any ( 'logout', 'IM\Controllers\AuthenticableController@logout' );
+	Route::post ( 'login', 'IM\Controllers\AccountController@login' );
+	Route::any ( 'logout', 'IM\Controllers\AccountController@logout' );
 	
-	Route::get ( 'profile', 'IM\Controllers\ProfileController@profile' );
-	Route::post ( 'profile', 'IM\Controllers\ProfileController@updateProfile' );
-	Route::post ( 'exinfo', 'IM\Controllers\ProfileController@updateExInfo' );
+	Route::any ( 'profile', 'IM\Controllers\AccountController@profile' );
+	Route::any ( 'profilex', 'IM\Controllers\AccountController@profilex' );
 	
-	Route::any ( 'followers', 'IM\Controllers\SocietyController@followers' );
-	Route::any ( 'following', 'IM\Controllers\SocietyController@following' );
-	Route::post ( 'follow', 'IM\Controllers\SocietyController@follow' );
-	Route::post ( 'accept', 'IM\Controllers\SocietyController@accept' );
+	Route::any ( 'followers', 'IM\Controllers\AccountController@followers' );
+	Route::any ( 'following', 'IM\Controllers\AccountController@following' );
+	Route::post ( 'follow/{id}', 'IM\Controllers\AccountController@follow' );
+	Route::post ( 'accept/{id}', 'IM\Controllers\AccountController@accept' );
+	Route::post ( 'refuse/{id}', 'IM\Controllers\AccountController@refuse' );
 	
 	Route::post ( 'password', 'IM\Controllers\AccountController@password' );
 	Route::post ( 'email', 'IM\Controllers\AccountController@email' );

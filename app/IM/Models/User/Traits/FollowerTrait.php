@@ -67,7 +67,7 @@ trait FollowerTrait
 	 *
 	 * @param User $user        	
 	 */
-	public function acceptFollower(User $user) {
+	public function accept(User $user) {
 		try {
 			if (! $this->isGuest () && ! $user->isGuest ()) {
 				$this->followers ()->updateExistingPivot ( $user->id, [ 
@@ -83,7 +83,7 @@ trait FollowerTrait
 	 *
 	 * @param User $user        	
 	 */
-	public function refuseFollower(User $user) {
+	public function refuse(User $user) {
 		try {
 			if (! $this->isGuest () && ! $user->isGuest ()) {
 				$this->followers ()->updateExistingPivot ( $user->id, [ 

@@ -12,7 +12,7 @@ interface IResponse {
 	 * @param array $headers        	
 	 * @return Response
 	 */
-	public function response($status = Status::OK, array $headers = []);
+	public function response($status = Response::HTTP_OK, array $headers = []);
 	/**
 	 * Build json response
 	 *
@@ -23,5 +23,5 @@ interface IResponse {
 	 * @param number $options        	
 	 * @return Response
 	 */
-	public function jsonResponse($message = null, $data = null, $status = Status::OK, array $headers = [], $options = 0);
+	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = [], $options = 0);
 }
