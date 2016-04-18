@@ -1,0 +1,1 @@
+@extends('IM.html.master')
