@@ -2,59 +2,18 @@
 
 namespace App\IM\Controllers;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\IM\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
 use Hash;
+use App\IM\Controllers\Traits\LoginTrait;
 
 abstract class AuthenticableController extends Controller {
 	/**
-	 * Return a JWT
-	 *
-	 * @param Request $request        	
-	 * @return Response
+	 * Traits
 	 */
-	public function login(Request $request) {
-		$credentials = $request->only ( 'email', 'password' );
-		return $this->doLogin ( $credentials );
-	}
-	/**
-	 * Login
-	 *
-	 * @param array $credentials        	
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	protected function doLogin($credentials) {
-		$credentials ['active'] = 1;
-		try {
-			// verify the credentials and create a token for the user
-			if (! $token = JWTAuth::attempt ( $credentials )) {
-				return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
-			}
-		} catch ( Exception $e ) {
-			// something went wrong
-			return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_BAD_REQUEST );
-		}
-		return $this->setResponseCookieToken ( $this->jsonResponse ( 'login_successfully', $token ), $token );
-	}
-	/**
-	 * Logout
-	 *
-	 * @return Response
-	 */
-	public function logout() {
-		return $this->doLogout ();
-	}
-	/**
-	 *
-	 * @return void
-	 */
-	protected function doLogout() {
-		JWTAuth::invalidate ( JWTAuth::getToken () );
-		return $this->forgetResponseCookieToken ( $this->jsonResponse ( 'logged_out', null ) );
-	}
+	use LoginTrait;
 	/**
 	 *
 	 * @param Request $request        	

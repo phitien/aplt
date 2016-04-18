@@ -2,13 +2,13 @@
 
 namespace App\IM\Traits;
 
-use Illuminate\Support\Facades\Cookie;
 use App\IM\Config\Config;
 use JWTAuth;
 use App\IM\Exceptions\TokenNotFound;
 use App\IM\Exceptions\UserNotFound;
 use App\User;
 use Exception;
+use Illuminate\Http\Request;
 
 trait UserTrait
 {
@@ -16,16 +16,16 @@ trait UserTrait
 	 *
 	 * @var string
 	 */
-	protected static $__token;
+	protected static $_token;
 	/**
 	 *
 	 * @return string token
 	 */
 	protected static function getToken() {
-		if (! static::$__token) {
-			static::$__token = Cookie::get ( Config::TOKEN_KEY, static::$__token = JWTAuth::getToken () );
+		if (! static::$_token) {
+			static::$_token = request ()->header ( Config::TOKEN_KEY, static::$_token = JWTAuth::getToken () );
 		}
-		return static::$__token;
+		return static::$_token;
 	}
 	/**
 	 *
@@ -36,34 +36,42 @@ trait UserTrait
 	}
 	/**
 	 *
+	 * @param string $token        	
+	 * @return string token
+	 */
+	protected function setToken($token) {
+		static::$_token = $token;
+	}
+	/**
+	 *
 	 * @var \App\User
 	 */
-	protected static $__user;
+	protected static $_user;
 	/**
 	 *
 	 * @return \App\User
 	 */
 	protected static function getUser($throwExceptionIfNotFound = false) {
-		if (! static::$__user || $throwExceptionIfNotFound) {
+		if (! static::$_user || $throwExceptionIfNotFound) {
 			$token = static::getToken ();
 			if ($throwExceptionIfNotFound) {
 				if (! $token) {
 					throw new TokenNotFound ();
 				} else {
-					static::$__user = JWTAuth::authenticate ( $token );
-					if (! static::$__user || static::$__user->isGuest ())
+					static::$_user = JWTAuth::authenticate ( $token );
+					if (! static::$_user || static::$_user->isGuest ())
 						throw new UserNotFound ();
 				}
 			} else {
 				try {
-					static::$__user = JWTAuth::authenticate ( $token );
+					static::$_user = JWTAuth::authenticate ( $token );
 				} catch ( Exception $e ) {
 				}
-				if (! static::$__user)
-					static::$__user = User::getGuest ();
+				if (! static::$_user)
+					static::$_user = User::getGuest ();
 			}
 		}
-		return static::$__user;
+		return static::$_user;
 	}
 	/**
 	 *

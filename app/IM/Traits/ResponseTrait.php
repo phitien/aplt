@@ -16,7 +16,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function response($status = Response::HTTP_OK, array $headers = []) {
-		return $this->setResponseCookieToken ( response ( '', $status, $headers ), $this->token () );
+		return response ( '', $status, $headers )->header ( Config::TOKEN_KEY, $this->token (), true );
 	}
 	/**
 	 *
@@ -27,10 +27,10 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
-		return $this->setResponseCookieToken ( response ()->json ( [ 
+		return response ()->json ( [ 
 				'message' => $message,
 				'data' => $data 
-		], $status, $headers ), $this->token () );
+		], $status, $headers )->header ( Config::TOKEN_KEY, $this->token (), true );
 	}
 	/**
 	 *
@@ -52,19 +52,8 @@ trait ResponseTrait
 	 * @param string $cookie        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function setResponseCookieToken($response, $cookie) {
-		$expiringTime = time () + Config::TOKEN_EXPIRING_TIME;
-		return $response->withCookie ( Config::TOKEN_KEY, $cookie, $expiringTime );
-	}
-	/**
-	 * unset the IM token to the response cookies.
-	 *
-	 * @param \Illuminate\Http\Response $response        	
-	 * @param string $cookie        	
-	 * @return \Illuminate\Http\Response
-	 */
-	public function forgetResponseCookieToken($response) {
-		return $response->withCookie ( Config::TOKEN_KEY, Cookie::forget ( Config::TOKEN_KEY ) );
+	public function setResponseToken($response, $token) {
+		return $response->header ( Config::TOKEN_KEY, $token, true );
 	}
 	/**
 	 *

@@ -3,8 +3,8 @@
 namespace App\IM\Controllers;
 
 use App\User;
-use Illuminate\Http\Request;
 use Hash;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\IM\Controllers\Traits\RegisterTrait;
 use App\IM\Controllers\Traits\ActivateTrait;

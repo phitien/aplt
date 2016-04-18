@@ -17,6 +17,6 @@ trait  DeactivateTrait {
 		}
 		$ok = $this->user ()->deactivate ();
 		$this->doLogout ();
-		return $this->forgetResponseCookieToken ( $this->jsonResponse ( 'deactivated_successfully', null ) );
+		return $this->jsonResponse ( 'deactivated_successfully', null );
 	}
 }
