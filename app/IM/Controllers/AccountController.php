@@ -11,7 +11,6 @@ use App\IM\Controllers\Traits\ActivateTrait;
 use App\IM\Controllers\Traits\DeactivateTrait;
 use App\IM\Controllers\Traits\ProfileTrait;
 use App\IM\Controllers\Traits\SocietyTrait;
-use App\IM\Utils;
 
 class AccountController extends AuthenticableController {
 	/**
@@ -56,12 +55,12 @@ class AccountController extends AuthenticableController {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
 		$new_password = $request->request->get ( 'password' );
-		if (Hash::check ( $new_password, $this->_user->password )) {
+		if (Hash::check ( $new_password, $this->user ()->password )) {
 			return $this->jsonResponse ( 'password_not_changed', null, Response::HTTP_BAD_REQUEST );
 		}
 		$credentials = [ 
-				'email' => $this->_user->email,
-				'password' => $this->_user->changePassword ( $new_password ) 
+				'email' => $this->user ()->email,
+				'password' => $this->user ()->changePassword ( $new_password ) 
 		];
 		return $this->updateJsonResponse ( $this->doLogin ( $credentials ), 'password_changed', null );
 	}
@@ -85,24 +84,24 @@ class AccountController extends AuthenticableController {
 			return $response;
 		}
 		$email = $request->request->get ( 'email' );
-		if ($email == $this->_user->email) {
+		if ($email == $this->user ()->email) {
 			return $this->jsonResponse ( 'email_not_changed', null, Response::HTTP_BAD_REQUEST );
 		}
 		if ($msg = $this->validateEmail ( $request->request->all () )) {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
-		static::mailTo ( $this->_user, 'email', 'Email changed', [ 
+		static::mailTo ( $this->user (), 'email', 'Email changed', [ 
 				'title' => 'Email changed',
-				'receiver' => $this->_user,
+				'receiver' => $this->user (),
 				'email' => $email 
 		] );
-		$url = Utils::getRequestBaseUrl () . '/api/activate/' . $this->_user->changeEmail ( $email );
-		static::mailTo ( $this->_user, 'register', 'Welcome to EZSell', [ 
+		$url = $this->getRequestBaseUrl () . '/api/activate/' . $this->user ()->changeEmail ( $email );
+		static::mailTo ( $this->user (), 'register', 'Welcome to EZSell', [ 
 				'title' => 'Welcome to EZSell',
-				'receiver' => $this->_user,
+				'receiver' => $this->user (),
 				'url' => $url 
 		] );
-		return $this->updateJsonResponse ( $this->doLogout (), 'user_email_changed', 'Please active your account at ' . $this->_user->email );
+		return $this->updateJsonResponse ( $this->doLogout (), 'user_email_changed', 'Please active your account at ' . $this->user ()->email );
 	}
 	/**
 	 * Account: change user account
@@ -115,13 +114,13 @@ class AccountController extends AuthenticableController {
 			return $response;
 		}
 		$name = $request->request->get ( 'name' );
-		if ($name == $this->_user->name) {
+		if ($name == $this->user ()->name) {
 			return $this->jsonResponse ( 'name_not_changed', null, Response::HTTP_BAD_REQUEST );
 		}
 		if ($msg = $this->validateName ( $request->request->all () )) {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
-		$this->_user->changeName ( $name );
+		$this->user ()->changeName ( $name );
 		return $this->jsonResponse ( 'name_changed', null );
 	}
 }

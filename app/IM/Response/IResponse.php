@@ -23,7 +23,7 @@ interface IResponse {
 	 * @param array $headers        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public static function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []);
+	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []);
 	/**
 	 *
 	 * @param Response $response        	
@@ -31,5 +31,21 @@ interface IResponse {
 	 * @param string $data        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public static function updateJsonResponse(JsonResponse $response, $message = null, $data = null);
+	public function updateJsonResponse(JsonResponse $response, $message = null, $data = null);
+	/**
+	 * set the IM token to the response cookies.
+	 *
+	 * @param \Illuminate\Http\Response $response        	
+	 * @param string $cookie        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function setResponseCookieToken($response, $cookie);
+	/**
+	 * unset the IM token to the response cookies.
+	 *
+	 * @param \Illuminate\Http\Response $response        	
+	 * @param string $cookie        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function forgetResponseCookieToken($response);
 }

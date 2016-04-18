@@ -4,9 +4,13 @@ namespace App\IM\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Exception;
-use App\IM\Utils;
+use App\IM\Traits\UtilTrait;
 
 class Action extends Model {
+	/**
+	 * Traits
+	 */
+	use UtilTrait;
 	/**
 	 *
 	 * @var bool $timestamps
@@ -70,7 +74,7 @@ class Action extends Model {
 	 */
 	public function save(array $options = []) {
 		$rs = parent::save ( $options );
-		Utils::buildRolesActions ();
+		$this->buildRolesActions ();
 		return $rs;
 	}
 	/**
@@ -81,7 +85,7 @@ class Action extends Model {
 	 */
 	public function delete() {
 		$rs = parent::delete ();
-		Utils::buildRolesActions ();
+		$this->buildRolesActions ();
 		return $rs;
 	}
 }

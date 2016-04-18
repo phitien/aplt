@@ -9,7 +9,6 @@ use Closure;
 use App\IM\Config\Config;
 use Illuminate\Http\Response;
 use App\IM\Exceptions\TokenNotFound;
-use App\IM\Utils;
 use App\IM\Exceptions\UserNotFound;
 
 class Authentication extends Middleware {
@@ -22,7 +21,7 @@ class Authentication extends Middleware {
 	 */
 	public function im_handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
 		try {
-			$user = Utils::user ( true );
+			$user = $this->user ( true );
 		} catch ( TokenNotFound $e ) {
 			return $this->jsonResponse ( 'token_not_found', null, Response::HTTP_BAD_REQUEST );
 		} catch ( UserNotFound $e ) {

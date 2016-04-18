@@ -6,7 +6,6 @@ use App\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\IM\Utils;
 
 trait  RegisterTrait {
 	/**
@@ -24,9 +23,9 @@ trait  RegisterTrait {
 				'name' => isset ( $data ['name'] ) ? $data ['name'] : uniqid ( 'IM' ),
 				'email' => $data ['email'],
 				'password' => $this->encode ( $data ['password'] ),
-				'baseUrl' => Utils::getRequestBaseUrl () 
+				'baseUrl' => $this->getRequestBaseUrl () 
 		] );
-		$url = Utils::getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode ();
+		$url = $this->getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode ();
 		static::mailTo ( $user, 'register', 'Welcome to EZSell', [ 
 				'title' => 'Welcome to EZSell',
 				'receiver' => $user,

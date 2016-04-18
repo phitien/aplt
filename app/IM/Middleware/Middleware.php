@@ -2,14 +2,20 @@
 
 namespace App\IM\Middleware;
 
-use App\IM\Utils;
 use Tymon\JWTAuth\Middleware\BaseMiddleware;
 use Closure;
 use App\IM\Config\Config;
 use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
+use App\IM\Traits\MailerTrait;
+use App\IM\Traits\UserTrait;
+use App\IM\Traits\ResponseTrait;
+use App\IM\Traits\EncoderTrait;
 
 abstract class Middleware extends BaseMiddleware implements IMiddleware {
+	/**
+	 * TRAITS
+	 */
+	use EncoderTrait, MailerTrait, UserTrait, ResponseTrait;
 	/**
 	 *
 	 * @var array
@@ -45,35 +51,5 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 		} else {
 			return $this->im_handle ( $request, $next, $actions );
 		}
-	}
-	/**
-	 *
-	 * @param number $status        	
-	 * @param array $headers        	
-	 * @return \Illuminate\Http\Response
-	 */
-	public function response($status = Response::HTTP_OK, array $headers = []) {
-		return Utils::response ( $status, $headers );
-	}
-	/**
-	 *
-	 * @param string $message        	
-	 * @param string $data        	
-	 * @param number $status        	
-	 * @param array $headers        	
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public static function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
-		return Utils::jsonResponse ( $message, $data, $status, $headers );
-	}
-	/**
-	 *
-	 * @param Response $response        	
-	 * @param string $message        	
-	 * @param string $data        	
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public static function updateJsonResponse(JsonResponse $response, $message = null, $data = null) {
-		return Utils::updateJsonResponse ( $response, $message, $data );
 	}
 }

@@ -4,9 +4,13 @@ namespace App\IM\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\IM\Config\Config;
-use App\IM\Utils;
+use App\IM\Traits\UtilTrait;
 
 class Role extends Model {
+	/**
+	 * Traits
+	 */
+	use UtilTrait;
 	/**
 	 *
 	 * @var bool
@@ -141,7 +145,7 @@ class Role extends Model {
 		$action = Action::getAction ( $code );
 		if ($this->canAddAction ( $action )) {
 			$this->actions ()->attach ( $action->id );
-			Utils::buildRolesActions ();
+			$this->buildRolesActions ();
 		}
 	}
 	/**
@@ -166,7 +170,7 @@ class Role extends Model {
 		$action = Action::getAction ( $code );
 		if ($this->canRemoveAction ( $action )) {
 			$this->actions ()->detach ( $action->id );
-			Utils::buildRolesActions ();
+			$this->buildRolesActions ();
 		}
 	}
 	/**
@@ -201,7 +205,7 @@ class Role extends Model {
 	 */
 	public function save(array $options = []) {
 		$rs = parent::save ( $options );
-		Utils::buildRolesActions ();
+		$this->buildRolesActions ();
 		return $rs;
 	}
 	/**
@@ -212,7 +216,7 @@ class Role extends Model {
 	 */
 	public function delete() {
 		$rs = parent::delete ();
-		Utils::buildRolesActions ();
+		$this->buildRolesActions ();
 		return $rs;
 	}
 }

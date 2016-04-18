@@ -40,7 +40,7 @@ trait  ActivateTrait {
 		$user = User::where ( 'email', '=', $email )->first ();
 		if ($user) {
 			if (! $user->isActivated ()) {
-				$url = Utils::getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode ();
+				$url = $this->getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode ();
 				static::mailTo ( $user, 'register', 'Activation Re-send', [ 
 						'title' => 'Activation Re-send',
 						'receiver' => $user,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\IM\Config;
+namespace App\Ezsell\Config;
 
 class RolesActions {
 	/**

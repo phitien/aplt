@@ -9,12 +9,13 @@ use App\IM\Models\User\Traits\RoleTrait;
 use App\IM\Models\User\Traits\ActionTrait;
 use App\IM\Models\User\Traits\ExtensionTrait;
 use App\IM\Models\User\Traits\FollowerTrait;
+use App\IM\Traits\EncoderTrait;
 
 class User extends Authenticatable {
 	/**
 	 * Traits
 	 */
-	use ExtensionTrait, RoleTrait, ActionTrait, FollowerTrait;
+	use EncoderTrait, ExtensionTrait, RoleTrait, ActionTrait, FollowerTrait;
 	/**
 	 *
 	 * @var array
@@ -198,7 +199,7 @@ class User extends Authenticatable {
 	 */
 	public function changePassword($password) {
 		if (! $this->isGuest ()) {
-			$this->password = Utils::encode ( $password );
+			$this->password = $this->encode ( $password );
 			$this->save ();
 			return $this->password;
 		}

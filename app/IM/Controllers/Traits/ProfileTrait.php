@@ -9,8 +9,8 @@ trait  ProfileTrait {
 	/**
 	 * Return the authenticated user
 	 *
-	 * @param Request $request        	
-	 * @return Response
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
 	 */
 	public function profile(Request $request) {
 		if ($request->isMethod ( 'post' )) {
@@ -22,33 +22,33 @@ trait  ProfileTrait {
 	/**
 	 * Return the authenticated user
 	 *
-	 * @param Request $request        	
-	 * @return Response
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
 	 */
 	protected function getProfile(Request $request) {
-		return $this->jsonResponse ( 'profile', $this->_user );
+		return $this->jsonResponse ( 'profile', $this->user () );
 	}
 	/**
 	 * Return the authenticated user
 	 *
-	 * @param Request $request        	
-	 * @return Response
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
 	 */
 	protected function saveProfile(Request $request) {
 		$data = $request->request->all (); // only get post data
 		unset ( $data ['name'] );
 		unset ( $data ['email'] );
 		unset ( $data ['password'] );
-		$this->_user->fill ( $data );
-		$this->_user->save ();
+		$this->user ()->fill ( $data );
+		$this->user ()->save ();
 		// the token is valid and we have found the user via the sub claim
-		return $this->jsonResponse ( 'update_profile_successfully', $this->_user );
+		return $this->jsonResponse ( 'update_profile_successfully', $this->user () );
 	}
 	/**
 	 * Return the authenticated user
 	 *
-	 * @param Request $request        	
-	 * @return Response
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
 	 */
 	public function profilex(Request $request) {
 		if ($request->isMethod ( 'post' )) {
@@ -60,21 +60,21 @@ trait  ProfileTrait {
 	/**
 	 * Return the authenticated user
 	 *
-	 * @param Request $request        	
-	 * @return Response
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
 	 */
 	protected function getProfileEx(Request $request) {
-		return $this->jsonResponse ( 'profile_extension', $this->_user->extension ()->all () );
+		return $this->jsonResponse ( 'profile_extension', $this->user ()->extension ()->all () );
 	}
 	/**
 	 * Return the authenticated user
 	 *
-	 * @param Request $request        	
-	 * @return Response
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
 	 */
 	protected function saveProfileEx(Request $request) {
-		$this->_user->fillEx ( $request->request->all () )->save ();
+		$this->user ()->fillEx ( $request->request->all () )->save ();
 		// the token is valid and we have found the user via the sub claim
-		return $this->jsonResponse ( 'update_profile_extension_successfully', $this->_user->extension ()->all () );
+		return $this->jsonResponse ( 'update_profile_extension_successfully', $this->user ()->extension ()->all () );
 	}
 }

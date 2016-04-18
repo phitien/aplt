@@ -6,16 +6,10 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\IM\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\IM\Utils;
-use App\IM\Models\User\Traits\MailerTrait;
 use Validator;
 use Hash;
 
 abstract class AuthenticableController extends Controller {
-	/**
-	 * TRAITS
-	 */
-	use MailerTrait;
 	/**
 	 * Return a JWT
 	 *
@@ -43,7 +37,7 @@ abstract class AuthenticableController extends Controller {
 			// something went wrong
 			return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_BAD_REQUEST );
 		}
-		return Utils::setResponseCookieToken ( $this->jsonResponse ( 'login_successfully', $token ), $token );
+		return $this->setResponseCookieToken ( $this->jsonResponse ( 'login_successfully', $token ), $token );
 	}
 	/**
 	 * Logout
@@ -59,7 +53,7 @@ abstract class AuthenticableController extends Controller {
 	 */
 	protected function doLogout() {
 		JWTAuth::invalidate ( JWTAuth::getToken () );
-		return Utils::unsetResponseCookieToken ( $this->jsonResponse ( 'logged_out', null ) );
+		return $this->forgetResponseCookieToken ( $this->jsonResponse ( 'logged_out', null ) );
 	}
 	/**
 	 *
