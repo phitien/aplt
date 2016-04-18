@@ -10,7 +10,7 @@ use App\IM\Config\Config;
 
 trait UtilTrait {
 	/**
-	 * Build App\Ezsell\RolesActions class
+	 * Build App\IM\RolesActions class
 	 *
 	 * @return void
 	 */
@@ -22,7 +22,7 @@ trait UtilTrait {
 		}
 		$contents = Html::decode ( View::make ( 'IM.classgenerator.RolesActions.class', [ 
 				'php' => '<?php',
-				'namespace' => 'App\Ezsell\Config',
+				'namespace' => 'App\IM\Config',
 				'classname' => 'RolesActions',
 				'constants' => [ 
 						'MAPS' => Html::decode ( View::make ( 'IM.classgenerator.RolesActions.maps', [ 

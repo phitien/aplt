@@ -11,7 +11,7 @@ class AuthorizationMaps {
 			 * register/activate/deactivate/code
 			 * password/email/account/forget
 			 * profile/profilex
-			 * followers/following/follow/accept/refuse
+			 * followers/following/follow/unfollow/accept/refuse
 			 */
 			'App\IM\Controllers\AccountController' => [ 
 					'login' => Config::ACTION_GUEST_ACT,
@@ -30,6 +30,7 @@ class AuthorizationMaps {
 					'followers' => Config::ACTION_OWN_ACT . '|' . Config::ACTION_MANAGER_ACT . '|' . Config::ACTION_ACCESS_USER,
 					'following' => Config::ACTION_OWN_ACT . '|' . Config::ACTION_MANAGER_ACT . '|' . Config::ACTION_ACCESS_USER,
 					'follow' => Config::ACTION_OWN_ACT . '|' . Config::ACTION_MANAGER_ACT . '|' . Config::ACTION_ACCESS_USER,
+					'unfollow' => Config::ACTION_OWN_ACT . '|' . Config::ACTION_MANAGER_ACT . '|' . Config::ACTION_ACCESS_USER,
 					'accept' => Config::ACTION_OWN_ACT . '|' . Config::ACTION_MANAGER_ACT . '|' . Config::ACTION_ACCESS_USER,
 					'refuse' => Config::ACTION_OWN_ACT . '|' . Config::ACTION_MANAGER_ACT . '|' . Config::ACTION_ACCESS_USER 
 			] 

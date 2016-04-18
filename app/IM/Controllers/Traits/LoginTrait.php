@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use JWTAuth;
 use Exception;
+use App\User;
 
 trait  LoginTrait {
 	/**
@@ -25,11 +26,17 @@ trait  LoginTrait {
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	protected function doLogin($credentials) {
+		$user = User::where ( 'email', $credentials ['email'] )->first ();
+		if (! $user)
+			return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
 		$credentials ['active'] = 1;
 		try {
 			// verify the credentials and create a token for the user
 			if (! $token = JWTAuth::attempt ( $credentials )) {
-				return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
+				if (! $user)
+					return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
+				else
+					return $this->jsonResponse ( 'user_is_not_active', null, Response::HTTP_UNAUTHORIZED );
 			}
 		} catch ( Exception $e ) {
 			// something went wrong
@@ -51,7 +58,8 @@ trait  LoginTrait {
 	 * @return void
 	 */
 	protected function doLogout() {
-		JWTAuth::invalidate ( JWTAuth::getToken () );
+		JWTAuth::invalidate ( $this->token () );
+		$this->setToken ( null );
 		return $this->jsonResponse ( 'logged_out', null );
 	}
 }

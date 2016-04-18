@@ -5,7 +5,6 @@ namespace App\IM\Controllers\Traits;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\IM\Utils;
 
 trait  ActivateTrait {
 	/**

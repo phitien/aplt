@@ -8,14 +8,14 @@ use DateTime;
 use App\IM\Models\User\Traits\RoleTrait;
 use App\IM\Models\User\Traits\ActionTrait;
 use App\IM\Models\User\Traits\ExtensionTrait;
-use App\IM\Models\User\Traits\FollowerTrait;
+use App\IM\Models\User\Traits\SocietyTrait;
 use App\IM\Traits\EncoderTrait;
 
 class User extends Authenticatable {
 	/**
 	 * Traits
 	 */
-	use EncoderTrait, ExtensionTrait, RoleTrait, ActionTrait, FollowerTrait;
+	use EncoderTrait, ExtensionTrait, RoleTrait, ActionTrait, SocietyTrait;
 	/**
 	 *
 	 * @var array

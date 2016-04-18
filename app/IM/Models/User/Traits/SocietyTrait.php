@@ -8,7 +8,7 @@ use App\IM\Config\Config;
 use App\IM\Models\User\Relations\Followers;
 use App\IM\Models\User\Relations\Following;
 
-trait FollowerTrait
+trait SocietyTrait
 {
 	/**
 	 * Return the users that follow the user

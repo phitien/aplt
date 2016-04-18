@@ -43,6 +43,21 @@ trait SocietyTrait {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
+	public function unfollow(Request $request, $id) {
+		$user = User::find ( $id );
+		if (! $user) {
+			return $this->jsonResponse ( 'cannot_find_user', 'User not found', Response::HTTP_BAD_REQUEST );
+		}
+		if ($this->user ()->unfollow ( $user ))
+			return $this->jsonResponse ( 'unfollow_successfully', '' );
+		else
+			return $this->jsonResponse ( 'unfollow_unsuccessfully', 'Some error occurs.', Response::HTTP_BAD_REQUEST );
+	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
+	 */
 	public function accept(Request $request, $id) {
 		$user = User::find ( $id );
 		if (! $user) {

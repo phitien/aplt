@@ -20,6 +20,7 @@ Route::group ( [
 	Route::any ( 'followers', 'IM\Controllers\AccountController@followers' );
 	Route::any ( 'following', 'IM\Controllers\AccountController@following' );
 	Route::post ( 'follow/{id}', 'IM\Controllers\AccountController@follow' );
+	Route::post ( 'unfollow/{id}', 'IM\Controllers\AccountController@unfollow' );
 	Route::post ( 'accept/{id}', 'IM\Controllers\AccountController@accept' );
 	Route::post ( 'refuse/{id}', 'IM\Controllers\AccountController@refuse' );
 	
