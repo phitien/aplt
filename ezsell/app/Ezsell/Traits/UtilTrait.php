@@ -33,4 +33,11 @@ trait UtilTrait {
 		
 		Storage::disk ( 'im' )->put ( 'Config/RolesActions.php', $contents );
 	}
+	/**
+	 *
+	 * @return string
+	 */
+	public static function getRequestBaseUrl() {
+		return (request ()->secure () ? 'https' : 'http') . '://' . request ()->server->get ( 'SERVER_NAME' );
+	}
 }

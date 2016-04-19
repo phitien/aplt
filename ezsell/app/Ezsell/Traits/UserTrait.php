@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Ezsell\Traits;
+namespace App\IM\Traits;
 
-use Illuminate\Support\Facades\Cookie;
-use App\Ezsell\Config\Config;
-use App\Ezsell\Exceptions\TokenNotFound;
-use App\Ezsell\Exceptions\UserNotFound;
+use App\IM\Config\Config;
+use JWTAuth;
+use App\IM\Exceptions\TokenNotFound;
+use App\IM\Exceptions\UserNotFound;
 use App\User;
 use Exception;
+use Illuminate\Http\Request;
 
 trait UserTrait
 {
@@ -22,7 +23,7 @@ trait UserTrait
 	 */
 	protected static function getToken() {
 		if (! static::$_token) {
-			static::$_token = Cookie::get ( Config::TOKEN_KEY, null );
+			static::$_token = request ()->header ( Config::TOKEN_KEY, null );
 		}
 		return static::$_token;
 	}

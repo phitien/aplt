@@ -8,12 +8,13 @@ use Illuminate\Http\Response;
 use Validator;
 use Hash;
 use App\Ezsell\Controllers\Traits\LoginTrait;
+use App\Ezsell\Traits\UserTrait;
 
 abstract class AuthenticableController extends Controller {
 	/**
 	 * Traits
 	 */
-	use LoginTrait;
+	use LoginTrait, UserTrait;
 	/**
 	 *
 	 * @param Request $request        	
@@ -93,6 +94,32 @@ abstract class AuthenticableController extends Controller {
 		] );
 		if ($validator->fails ()) {
 			return 'name_used';
+		}
+	}
+	/**
+	 * Validate user name
+	 *
+	 * @param array $data        	
+	 * @return string
+	 */
+	protected function validateProfileData(array $data) {
+		$email = $data ['second_email'];
+		if ($email != $this->user ()->second_email) {
+			$validator = Validator::make ( $data, [ 
+					'second_email' => 'unique:users,second_email' 
+			] );
+			if ($validator->fails ()) {
+				return 'second_email_used';
+			}
+		}
+		$mobile = $data ['mobile'];
+		if ($mobile != $this->user ()->mobile) {
+			$validator = Validator::make ( $data, [ 
+					'mobile' => 'unique:users,mobile' 
+			] );
+			if ($validator->fails ()) {
+				return 'mobile_used';
+			}
 		}
 	}
 }

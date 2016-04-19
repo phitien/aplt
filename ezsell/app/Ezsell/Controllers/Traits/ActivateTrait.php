@@ -5,7 +5,6 @@ namespace App\Ezsell\Controllers\Traits;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Ezsell\Utils;
 
 trait  ActivateTrait {
 	/**
@@ -40,12 +39,7 @@ trait  ActivateTrait {
 		$user = User::where ( 'email', '=', $email )->first ();
 		if ($user) {
 			if (! $user->isActivated ()) {
-				$url = $this->getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode ();
-				static::mailTo ( $user, 'register', 'Activation Re-send', [ 
-						'title' => 'Activation Re-send',
-						'receiver' => $user,
-						'url' => $url 
-				] );
+				$this->resendActivationEmail ( $user );
 				return $this->jsonResponse ( 'activation_code_sent', 'Please active your account at ' . $user->email );
 			} else {
 				return $this->jsonResponse ( 'user_already_activated', null, Response::HTTP_BAD_REQUEST );

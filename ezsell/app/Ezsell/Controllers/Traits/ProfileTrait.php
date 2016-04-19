@@ -4,6 +4,8 @@ namespace App\Ezsell\Controllers\Traits;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Exception;
 
 trait  ProfileTrait {
 	/**
@@ -35,14 +37,21 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	protected function saveProfile(Request $request) {
-		$data = $request->request->all (); // only get post data
-		unset ( $data ['name'] );
-		unset ( $data ['email'] );
-		unset ( $data ['password'] );
-		$this->user ()->fill ( $data );
-		$this->user ()->save ();
-		// the token is valid and we have found the user via the sub claim
-		return $this->jsonResponse ( 'update_profile_successfully', $this->user () );
+		try {
+			$data = $request->request->all (); // only get post data
+			unset ( $data ['name'] );
+			unset ( $data ['email'] );
+			unset ( $data ['password'] );
+			if ($msg = $this->validateProfileData ( $data )) {
+				return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
+			}
+			$this->user ()->fill ( $data );
+			$this->user ()->save ();
+			// the token is valid and we have found the user via the sub claim
+			return $this->jsonResponse ( 'update_profile_successfully', $this->user () );
+		} catch ( Exception $e ) {
+			return $this->jsonResponse ( 'update_profile_unsuccessfully', $e->getMessage (), Response::HTTP_BAD_REQUEST );
+		}
 	}
 	/**
 	 * Return the authenticated user

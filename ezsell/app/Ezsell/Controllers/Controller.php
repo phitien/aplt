@@ -9,15 +9,15 @@ use Route;
 use Request;
 use App\Ezsell\Config\AuthorizationMaps;
 use App\Ezsell\Traits\MailerTrait;
-use App\Ezsell\Traits\UserTrait;
 use App\Ezsell\Traits\ResponseTrait;
 use App\Ezsell\Traits\EncoderTrait;
+use App\Ezsell\Traits\UtilTrait;
 
 abstract class Controller extends BaseController implements IController {
 	/**
 	 * TRAITS
 	 */
-	use EncoderTrait, MailerTrait, UserTrait, ResponseTrait;
+	use EncoderTrait, MailerTrait, ResponseTrait, UtilTrait;
 	/**
 	 *
 	 * @var string
