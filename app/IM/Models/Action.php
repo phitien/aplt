@@ -2,15 +2,9 @@
 
 namespace App\IM\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Exception;
-use App\IM\Traits\UtilTrait;
 
 class Action extends Model {
-	/**
-	 * Traits
-	 */
-	use UtilTrait;
 	/**
 	 *
 	 * @var bool $timestamps

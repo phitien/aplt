@@ -15,17 +15,23 @@ class CreateUsersTable extends Migration {
 			$table->string ( 'password' );
 			$table->boolean ( 'active' )->nullable ();
 			$table->text ( 'activationCode' )->nullable ();
-			$table->string ( 'second_email' )->nullable ();
+			$table->string ( 'second_email' )->unique ()->nullable ();
 			$table->string ( 'first_name' )->nullable ();
 			$table->string ( 'last_name' )->nullable ();
 			$table->string ( 'middle_name' )->nullable ();
 			$table->string ( 'alias' )->nullable ();
 			$table->date ( 'birthday' )->nullable ();
-			$table->enum ( 'gender', array (
+			$table->enum ( 'gender', [ 
 					'FEMALE',
 					'MALE' 
-			) )->default ( 'MALE' )->nullable ();
-			$table->string ( 'mobile' )->unique ( 'mobile', 'user_mobile_unique' )->nullable ();
+			] )->default ( 'MALE' )->nullable ();
+			$table->enum ( 'marital_status', [ 
+					'SINGLE',
+					'MARRIED',
+					'DIVORCED',
+					'SEPARATED' 
+			] )->nullable ();
+			$table->string ( 'mobile' )->unique ()->nullable ();
 			$table->string ( 'country' )->nullable ();
 			$table->string ( 'state' )->nullable ();
 			$table->string ( 'city' )->nullable ();

@@ -9,15 +9,15 @@ use Route;
 use Request;
 use App\IM\Config\AuthorizationMaps;
 use App\IM\Traits\MailerTrait;
-use App\IM\Traits\UserTrait;
 use App\IM\Traits\ResponseTrait;
 use App\IM\Traits\EncoderTrait;
+use App\IM\Traits\UtilTrait;
 
 abstract class Controller extends BaseController implements IController {
 	/**
 	 * TRAITS
 	 */
-	use EncoderTrait, MailerTrait, UserTrait, ResponseTrait;
+	use EncoderTrait, MailerTrait, ResponseTrait, UtilTrait;
 	/**
 	 *
 	 * @var string

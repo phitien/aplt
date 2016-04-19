@@ -9,7 +9,7 @@ trait EncoderTrait
 	 * @param string $str        	
 	 * @return string
 	 */
-	protected function encode(string $str) {
+	public static function encode($str) {
 		return bcrypt ( $str );
 	}
 }

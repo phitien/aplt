@@ -55,11 +55,4 @@ trait ResponseTrait
 	public function setResponseToken($response, $token) {
 		return $response->header ( Config::TOKEN_KEY, $token, true );
 	}
-	/**
-	 *
-	 * @return string
-	 */
-	protected function getRequestBaseUrl() {
-		return (request ()->secure () ? 'https' : 'http') . '://' . request ()->server->get ( 'SERVER_NAME' );
-	}
 }

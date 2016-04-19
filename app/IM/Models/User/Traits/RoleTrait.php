@@ -12,7 +12,7 @@ trait RoleTrait
 	 *
 	 * @var User
 	 */
-	private static $_instanceGuest = null;
+	protected static $_instanceGuest = null;
 	/**
 	 *
 	 * @return User guest
@@ -71,6 +71,7 @@ trait RoleTrait
 	}
 	/**
 	 * Return the roles that belong to the user.
+	 * 
 	 * @return Roles
 	 */
 	public function roles() {

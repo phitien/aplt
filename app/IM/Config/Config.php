@@ -88,7 +88,7 @@ class Config {
 		return [ 
 				'name' => 'superadmin',
 				'email' => 'superadmin@gmail.com',
-				'password' => Hash::make ( 'superadmin' ) 
+				'password' => 'superadmin' 
 		];
 	}
 	/**
@@ -99,7 +99,7 @@ class Config {
 		return [ 
 				'name' => 'manager',
 				'email' => 'manager@gmail.com',
-				'password' => Hash::make ( 'manager' ) 
+				'password' => 'manager' 
 		];
 	}
 	/**
@@ -110,7 +110,7 @@ class Config {
 		return [ 
 				'name' => 'user',
 				'email' => 'user@gmail.com',
-				'password' => Hash::make ( 'user12' ) 
+				'password' => 'user12' 
 		];
 	}
 	/**

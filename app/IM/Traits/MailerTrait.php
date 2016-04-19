@@ -27,6 +27,39 @@ trait MailerTrait
 	}
 	/**
 	 *
+	 * @param User $user        	
+	 */
+	protected function sendActivationEmail(User $user) {
+		$this->mailTo ( $user, 'register', 'Welcome to EZSell', [ 
+				'title' => 'Welcome to EZSell',
+				'receiver' => $user,
+				'url' => static::getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode () 
+		] );
+	}
+	/**
+	 *
+	 * @param User $user        	
+	 */
+	protected function resendActivationEmail(User $user) {
+		$this->mailTo ( $user, 'register', 'Activation Re-send', [ 
+				'title' => 'Welcome to EZSell',
+				'receiver' => $user,
+				'url' => static::getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode () 
+		] );
+	}
+	/**
+	 *
+	 * @param User $user        	
+	 */
+	protected function sendEmailChangedEmail(User $user, $newEmail) {
+		$this->mailTo ( $user, 'register', 'Email changed', [ 
+				'title' => 'Email changed',
+				'receiver' => $user,
+				'email' => $newEmail 
+		] );
+	}
+	/**
+	 *
 	 * @param string $subject        	
 	 * @return string
 	 */

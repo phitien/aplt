@@ -19,18 +19,8 @@ trait  RegisterTrait {
 		if ($msg = $this->registrationValidator ( $data )) {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
-		$user = User::createUser ( [ 
-				'name' => isset ( $data ['name'] ) ? $data ['name'] : uniqid ( 'IM' ),
-				'email' => $data ['email'],
-				'password' => $this->encode ( $data ['password'] ),
-				'baseUrl' => $this->getRequestBaseUrl () 
-		] );
-		$url = $this->getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode ();
-		static::mailTo ( $user, 'register', 'Welcome to EZSell', [ 
-				'title' => 'Welcome to EZSell',
-				'receiver' => $user,
-				'url' => $url 
-		] );
+		$user = User::createUser ( $data );
+		$this->sendActivationEmail ( $user );
 		return $this->jsonResponse ( 'user_registered', 'Please active your account at ' . $user->email );
 	}
 	

@@ -2,15 +2,9 @@
 
 namespace App\IM\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\IM\Config\Config;
-use App\IM\Traits\UtilTrait;
 
 class Role extends Model {
-	/**
-	 * Traits
-	 */
-	use UtilTrait;
 	/**
 	 *
 	 * @var bool
@@ -65,7 +59,7 @@ class Role extends Model {
 	 *
 	 * @var Role
 	 */
-	private static $_supremeRole;
+	protected static $_supremeRole;
 	/**
 	 * Get supreme role
 	 *
@@ -81,7 +75,7 @@ class Role extends Model {
 	 *
 	 * @var Role
 	 */
-	private static $_managerRole;
+	protected static $_managerRole;
 	/**
 	 * Get manager role
 	 *
@@ -97,7 +91,7 @@ class Role extends Model {
 	 *
 	 * @var Role
 	 */
-	private static $_userRole;
+	protected static $_userRole;
 	/**
 	 * Get user role
 	 *
@@ -113,7 +107,7 @@ class Role extends Model {
 	 *
 	 * @var Role
 	 */
-	private static $_guestRole;
+	protected static $_guestRole;
 	/**
 	 * Get guest role
 	 *
