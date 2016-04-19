@@ -3,15 +3,15 @@
 @section('title'){{ $title }}@endsection
 
 @section('css')
-	{{ Html::style('css/im.css') }}
+@parent
 @endsection
 
 @section('script')
-	{{ Html::script('js/im.js') }}
+@parent
 @endsection
 
 @section('sidebar')
-    @parent
+@parent
 @endsection
 
 @section('content')
