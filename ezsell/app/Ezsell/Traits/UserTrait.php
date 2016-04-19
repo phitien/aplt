@@ -1,11 +1,11 @@
 <?php
 
-namespace App\IM\Traits;
+namespace App\Ezsell\Traits;
 
-use App\IM\Config\Config;
+use App\Ezsell\Config\Config;
 use JWTAuth;
-use App\IM\Exceptions\TokenNotFound;
-use App\IM\Exceptions\UserNotFound;
+use App\Ezsell\Exceptions\TokenNotFound;
+use App\Ezsell\Exceptions\UserNotFound;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;

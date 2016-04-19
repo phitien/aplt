@@ -2,9 +2,9 @@
 Route::get ( '/', function () {
 	return view ( 'welcome', [ ] );
 } );
-Route::post ( 'register', 'Ezsell\Controllers\AccountController@register' );
+Route::any ( 'register', 'Ezsell\Controllers\AccountController@register' );
 Route::any ( 'code', 'Ezsell\Controllers\AccountController@code' );
-Route::get ( 'activate/{code}', 'Ezsell\Controllers\AccountController@activate' );
+Route::any ( 'activate/{code}', 'Ezsell\Controllers\AccountController@activate' );
 Route::post ( 'deactivate', 'Ezsell\Controllers\AccountController@deactivate' );
 
 Route::any ( 'login', 'Ezsell\Controllers\AccountController@login' );
