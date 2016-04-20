@@ -3,7 +3,6 @@
 namespace App\IM\Traits;
 
 use App\IM\Config\Config;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 
@@ -16,7 +15,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function response($status = Response::HTTP_OK, array $headers = []) {
-		return response ( '', $status, $headers )->header ( Config::TOKEN_KEY, $this->token (), true );
+		return response ( '', $status, $headers );
 	}
 	/**
 	 *
@@ -30,7 +29,7 @@ trait ResponseTrait
 		return response ()->json ( [ 
 				'message' => $message,
 				'data' => $data 
-		], $status, $headers )->header ( Config::TOKEN_KEY, $this->token (), true );
+		], $status, $headers );
 	}
 	/**
 	 *
@@ -49,10 +48,9 @@ trait ResponseTrait
 	 * set the IM token to the response cookies.
 	 *
 	 * @param \Illuminate\Http\Response $response        	
-	 * @param string $cookie        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function setResponseToken($response, $token) {
-		return $response->header ( Config::TOKEN_KEY, $token, true );
+	public function setResponseToken($response) {
+		return $response->header ( Config::TOKEN_KEY, $this->token (), true );
 	}
 }

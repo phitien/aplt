@@ -88,7 +88,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 				'name' => isset ( $attributes ['name'] ) ? $attributes ['name'] : uniqid ( 'IM' ),
 				'email' => $attributes ['email'],
 				'password' => static::encode ( $attributes ['password'] ),
-				'baseUrl' => static::getRequestBaseUrl (),
+				'baseUrl' => static::getBaseUrl (),
 				'active' => 0 
 		];
 		$user = parent::create ( $attributes );

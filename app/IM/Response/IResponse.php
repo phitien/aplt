@@ -36,8 +36,7 @@ interface IResponse {
 	 * set the IM token to the response cookies.
 	 *
 	 * @param \Illuminate\Http\Response $response        	
-	 * @param string $cookie        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function setResponseToken($response, $cookie);
+	public function setResponseToken($response);
 }

@@ -33,7 +33,7 @@ trait MailerTrait
 		$this->mailTo ( $user, 'register', 'Welcome to EZSell', [ 
 				'title' => 'Welcome to EZSell',
 				'receiver' => $user,
-				'url' => static::getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode () 
+				'url' => static::getBaseUrl () . '/activate/' . $user->generateActivationCode () 
 		] );
 	}
 	/**
@@ -44,7 +44,7 @@ trait MailerTrait
 		$this->mailTo ( $user, 'register', 'Activation Re-send', [ 
 				'title' => 'Welcome to EZSell',
 				'receiver' => $user,
-				'url' => static::getRequestBaseUrl () . '/api/activate/' . $user->generateActivationCode () 
+				'url' => static::getBaseUrl () . '/activate/' . $user->generateActivationCode () 
 		] );
 	}
 	/**

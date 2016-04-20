@@ -44,12 +44,6 @@ abstract class AuthenticableController extends Controller {
 			return 'invalid_email';
 		}
 		$validator = Validator::make ( $data, [ 
-				'email' => 'unique:users,email' 
-		] );
-		if ($validator->fails ()) {
-			return 'email_used';
-		}
-		$validator = Validator::make ( $data, [ 
 				'email' => 'confirmed' 
 		] );
 		if ($validator->fails ()) {
@@ -89,12 +83,6 @@ abstract class AuthenticableController extends Controller {
 		if ($validator->fails ()) {
 			return 'invalid_name';
 		}
-		$validator = Validator::make ( $data, [ 
-				'name' => 'unique:users,name' 
-		] );
-		if ($validator->fails ()) {
-			return 'name_used';
-		}
 	}
 	/**
 	 * Validate user name
@@ -103,23 +91,5 @@ abstract class AuthenticableController extends Controller {
 	 * @return string
 	 */
 	protected function validateProfileData(array $data) {
-		$email = $data ['second_email'];
-		if ($email != $this->user ()->second_email) {
-			$validator = Validator::make ( $data, [ 
-					'second_email' => 'unique:users,second_email' 
-			] );
-			if ($validator->fails ()) {
-				return 'second_email_used';
-			}
-		}
-		$mobile = $data ['mobile'];
-		if ($mobile != $this->user ()->mobile) {
-			$validator = Validator::make ( $data, [ 
-					'mobile' => 'unique:users,mobile' 
-			] );
-			if ($validator->fails ()) {
-				return 'mobile_used';
-			}
-		}
 	}
 }

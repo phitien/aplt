@@ -7,6 +7,7 @@
 @section('css')
 	{{ Html::style('css/im.css') }}
 	{{ Html::style('js/react-15.0.1/examples/shared/css/base.css') }} @show @section('script')
+	{{ Html::script('js/jquery-2.2.3.min.js') }}
 	{{ Html::script('js/react-15.0.1/build/react.js') }}
 	{{ Html::script('js/react-15.0.1/build/react-dom.js') }}
 	{{ Html::script('js/browser.min.js') }}

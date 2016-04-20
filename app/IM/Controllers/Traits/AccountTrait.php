@@ -27,7 +27,7 @@ trait AccountTrait {
 				'email' => $this->user ()->email,
 				'password' => $this->user ()->changePassword ( $new_password ) 
 		];
-		return $this->updateJsonResponse ( $this->doLogin ( $credentials ), 'password_changed', null );
+		return $this->updateJsonResponse ( $this->setResponseToken ( $this->doLogin ( $credentials ) ), 'password_changed', null );
 	}
 	/**
 	 * Reset: send reset link to the user email
@@ -57,7 +57,7 @@ trait AccountTrait {
 		}
 		$this->sendEmailChangedEmail ( $this->user (), $email );
 		$this->sendActivationEmail ( $this->user () );
-		return $this->updateJsonResponse ( $this->doLogout (), 'user_email_changed', 'Please active your account at ' . $this->user ()->email );
+		return $this->updateJsonResponse ( $this->setResponseToken ( $this->doLogout () ), 'user_email_changed', 'Please active your account at ' . $this->user ()->email );
 	}
 	/**
 	 * Account: change user account

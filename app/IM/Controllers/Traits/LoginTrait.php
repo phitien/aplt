@@ -43,7 +43,7 @@ trait  LoginTrait {
 			return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_BAD_REQUEST );
 		}
 		$this->setToken ( $token );
-		return $this->jsonResponse ( 'login_successfully', $this->user () );
+		return $this->setResponseToken ( $this->jsonResponse ( 'login_successfully', $this->user () ) );
 	}
 	/**
 	 * Logout

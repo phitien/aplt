@@ -10,12 +10,13 @@ use App\Ezsell\Traits\MailerTrait;
 use App\Ezsell\Traits\UserTrait;
 use App\Ezsell\Traits\ResponseTrait;
 use App\Ezsell\Traits\EncoderTrait;
+use App\Ezsell\Traits\RestfulTrait;
 
 abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	/**
 	 * TRAITS
 	 */
-	use EncoderTrait, MailerTrait, UserTrait, ResponseTrait;
+	use EncoderTrait, MailerTrait, UserTrait, ResponseTrait, RestfulTrait;
 	/**
 	 *
 	 * @var array

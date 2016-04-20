@@ -22,13 +22,12 @@ trait  RegisterTrait {
 		}
 	}
 	protected function apiRegister(Request $request) {
-		$data = $request->request->all (); // only get post data
+		$data = $request->only ( 'email', 'email_confirmation', 'password', 'password_confirmation' );
+		$data ['baseUrl'] = $this->getBaseUrl ();
 		if ($msg = $this->registrationValidator ( $data )) {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
-		$user = User::createUser ( $data );
-		$this->sendActivationEmail ( $user );
-		return $this->jsonResponse ( 'user_registered', 'Please active your account at ' . $user->email );
+		$response = $this->restful_post ( '/register', $data );
 	}
 	protected function showRegister(Request $request) {
 		$data = [ ];
