@@ -81,4 +81,7 @@ trait UserTrait
 	protected function user($throwExceptionIfNotFound = false) {
 		return static::getUser ( $throwExceptionIfNotFound );
 	}
+	protected function isLoggedIn(){
+		return !$this->user()->isGuest ();
+	}
 }

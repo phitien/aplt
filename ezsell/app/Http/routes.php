@@ -1,7 +1,5 @@
 <?php
-Route::get ( '/', function () {
-	return view ( 'welcome', [ ] );
-} );
+Route::get ( '/', 'Ezsell\Controllers\HomeController@index' );
 Route::any ( 'register', 'Ezsell\Controllers\AccountController@register' );
 Route::any ( 'code', 'Ezsell\Controllers\AccountController@code' );
 Route::any ( 'activate/{code}', 'Ezsell\Controllers\AccountController@activate' );
