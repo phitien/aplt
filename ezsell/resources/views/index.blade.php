@@ -3,11 +3,20 @@
 @section('title', 'EZSell')
 
 @section('css')
-	{{ Html::style('css/im.css') }}
+@parent
 @endsection
 
 @section('script')
-	{{ Html::script('js/im.js') }}
+@parent
+<script type="text/babel" src="js/pages/register.js"></script>
+@endsection
+@section('css')
+@parent
+@endsection
+
+@section('script')
+@parent
+<script type="text/babel" src="js/pages/register.js"></script>
 @endsection
 
 @section('sidebar')
