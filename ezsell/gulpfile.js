@@ -10,6 +10,14 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-	mix.sass([ 'app.scss' ], 'public/css/im.css');
-	mix.scripts([ 'app.js' ], 'public/js/im.js');
+	var src = 'resources/assets/jsx/*.jsx';
+	var dest = 'public/react';
+	
+	mix.sass([ 'app.scss' ], 'public/css/app.css')
+
+	.browserify('libraries.js')
+
+	.copy(__dirname + '/resources/assets/js/pages',
+			__dirname + '/public/js/pages');
+
 });

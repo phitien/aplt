@@ -11,8 +11,8 @@ trait  RegisterTrait {
 	/**
 	 * Return a JWT
 	 *
-	 * @param Request $request        	
-	 * @return Response
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
 	 */
 	public function register(Request $request) {
 		$data = $request->request->all (); // only get post data
