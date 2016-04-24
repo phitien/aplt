@@ -76,6 +76,13 @@ trait UserTrait
 	}
 	/**
 	 *
+	 * @param User $user
+	 */
+	protected function setUser(User $user) {
+		static::$_user = $user;
+	}
+	/**
+	 *
 	 * @param string $throwExceptionIfNotFound        	
 	 * @return \App\User
 	 */

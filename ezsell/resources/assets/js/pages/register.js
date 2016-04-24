@@ -9,9 +9,11 @@ var RegisterForm = React.createClass({
 		var onChange = this.props.onChange;
 		return (React.createElement(//
 		'form', {
-			className : 'RegisterForm'
+			className : 'EzsellForm',
+			method : 'post'
 		}, React.createElement('input', {
 			type : 'email',
+			name : 'email',
 			placeholder : 'Email',
 			onChange : function(e) {
 				user.email = e.target.value;
@@ -19,6 +21,7 @@ var RegisterForm = React.createClass({
 			},
 		}), React.createElement('input', {
 			type : 'email',
+			name : 'email_confirmation',
 			placeholder : 'Email Confirmation',
 			onChange : function(e) {
 				user.email_confirmation = e.target.value;
@@ -26,6 +29,7 @@ var RegisterForm = React.createClass({
 			},
 		}), React.createElement('input', {
 			type : 'password',
+			name : 'password',
 			placeholder : 'Password',
 			onChange : function(e) {
 				user.password = e.target.value;
@@ -33,24 +37,14 @@ var RegisterForm = React.createClass({
 			},
 		}), React.createElement('input', {
 			type : 'password',
+			name : 'password_confirmation',
 			placeholder : 'Password Confirmation',
 			onChange : function(e) {
 				user.password_confirmation = e.target.value;
 				onChange();
 			},
 		}), React.createElement('button', {
-			type : 'button',
-			onClick : function(e) {
-				$.ajax({
-					type : 'POST',
-					url : '/register',
-					data : user
-				}).done(function(data) {
-					self.clearForm()
-				}).fail(function(jqXhr) {
-					console.log('failed to register');
-				});
-			}
+			type : 'submit'
 		}, "Register")//
 		));
 	},
@@ -61,10 +55,9 @@ var RegisterView = React.createClass({
 	render : function() {
 		return (React.createElement(//
 		'div', {
-			className : 'RegisterView'
+			className : 'EzsellView RegisterView'
 		}, React.createElement(RegisterForm, {
-			onChange : function() {
-			}
+			onChange : function() {}
 		})//
 		));
 	},

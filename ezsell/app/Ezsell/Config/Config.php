@@ -8,7 +8,8 @@ use App\Ezsell\Models\Action;
 
 class Config {
 	const IM_TOKEN_KEY = "IM-TOKEN";
-	const IM_BASE_URL = 'http://im.ezsell.com/api';
+	const IM_KEY = "IM-KEY";
+	const IM_BASE_URL = 'http://im.ezsell.com';
 	/**
 	 *
 	 * @var unknown
@@ -18,6 +19,7 @@ class Config {
 	const MAIL_SUBJECT_PREFIX = "[EZSell] ";
 	//
 	const TOKEN_KEY = "EZSELL-TOKEN";
+	const EZSELL_KEY = "EZSELL-KEY";
 	//
 	const FOLLOWER_REQUESTED = 0;
 	const FOLLOWER_REQUEST_ACCEPTED = 1;

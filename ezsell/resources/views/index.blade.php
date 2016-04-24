@@ -15,5 +15,6 @@
 @endsection
 
 @section('bottom')
+@parent
     <script type="text/javascript" src="js/pages/index.js"></script>
 @endsection

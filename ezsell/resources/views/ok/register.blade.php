@@ -12,5 +12,5 @@
 
 @section('bottom')
 @parent
-	<script type="text/javascript" src="js/pages/register.js"></script>
+	Hehe đăng ký ok rồi đấy, đăng nhập email và activate account ngay đi :).
 @endsection

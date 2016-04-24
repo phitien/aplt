@@ -12,5 +12,5 @@
 
 @section('bottom')
 @parent
-	<script type="text/javascript" src="js/pages/register.js"></script>
+	<script type="text/javascript" src="js/pages/deactivate.js"></script>
 @endsection

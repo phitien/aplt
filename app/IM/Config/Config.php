@@ -2,7 +2,6 @@
 
 namespace App\IM\Config;
 
-use Hash;
 use App\IM\Models\Role;
 use App\IM\Models\Action;
 
@@ -16,6 +15,7 @@ class Config {
 	const MAIL_SUBJECT_PREFIX = "[EZSell] ";
 	//
 	const TOKEN_KEY = "IM-TOKEN";
+	const IM_KEY = "IM-KEY";
 	//
 	const FOLLOWER_REQUESTED = 0;
 	const FOLLOWER_REQUEST_ACCEPTED = 1;

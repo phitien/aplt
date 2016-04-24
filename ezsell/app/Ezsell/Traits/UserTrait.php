@@ -9,6 +9,7 @@ use App\Ezsell\Exceptions\UserNotFound;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 trait UserTrait
 {
@@ -23,7 +24,7 @@ trait UserTrait
 	 */
 	protected static function getToken() {
 		if (! static::$_token) {
-			static::$_token = request ()->header ( Config::TOKEN_KEY, null );
+			static::$_token = request ()->header ( Config::TOKEN_KEY, Cookie::get ( Config::TOKEN_KEY, null ) );
 		}
 		return static::$_token;
 	}
@@ -75,13 +76,20 @@ trait UserTrait
 	}
 	/**
 	 *
+	 * @param User $user        	
+	 */
+	protected function setUser(User $user) {
+		static::$_user = $user;
+	}
+	/**
+	 *
 	 * @param string $throwExceptionIfNotFound        	
 	 * @return \App\User
 	 */
 	protected function user($throwExceptionIfNotFound = false) {
 		return static::getUser ( $throwExceptionIfNotFound );
 	}
-	protected function isLoggedIn(){
-		return !$this->user()->isGuest ();
+	protected function isLoggedIn() {
+		return ! $this->user ()->isGuest ();
 	}
 }

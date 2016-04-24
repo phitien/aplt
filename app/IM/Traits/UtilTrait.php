@@ -38,6 +38,6 @@ trait UtilTrait {
 	 * @return string
 	 */
 	public static function getBaseUrl() {
-		return request ()->get ( 'baseUrl', (request ()->secure () ? 'https' : 'http') . '://' . request ()->server->get ( 'SERVER_NAME' ) + '/api' );
+		return request ()->header ( 'baseUrl', (request ()->secure () ? 'https' : 'http') . '://' . request ()->server->get ( 'SERVER_NAME' ) + '/api' );
 	}
 }

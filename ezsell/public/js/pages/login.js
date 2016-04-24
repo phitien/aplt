@@ -1,7 +1,7 @@
 /*
  * Components
  */
-var RegisterForm = React.createClass({
+var LoginForm = React.createClass({
 	propTypes : {
 		onChange : React.PropTypes.func.isRequired,
 	},
@@ -20,14 +20,6 @@ var RegisterForm = React.createClass({
 				onChange();
 			},
 		}), React.createElement('input', {
-			type : 'email',
-			name : 'email_confirmation',
-			placeholder : 'Email Confirmation',
-			onChange : function(e) {
-				user.email_confirmation = e.target.value;
-				onChange();
-			},
-		}), React.createElement('input', {
 			type : 'password',
 			name : 'password',
 			placeholder : 'Password',
@@ -35,41 +27,32 @@ var RegisterForm = React.createClass({
 				user.password = e.target.value;
 				onChange();
 			},
-		}), React.createElement('input', {
-			type : 'password',
-			name : 'password_confirmation',
-			placeholder : 'Password Confirmation',
-			onChange : function(e) {
-				user.password_confirmation = e.target.value;
-				onChange();
-			},
 		}), React.createElement('button', {
 			type : 'submit'
-		}, "Register")//
+		}, "Login")//
 		));
 	},
 });
 
-var RegisterView = React.createClass({
+var LoginView = React.createClass({
 	propTypes : {},
 	render : function() {
 		return (React.createElement(//
 		'div', {
-			className : 'EzsellView RegisterView'
-		}, React.createElement(RegisterForm, {
-			onChange : function() {}
+			className : 'EzsellView LoginView'
+		}, React.createElement(LoginForm, {
+			onChange : function() {
+			}
 		})//
 		));
 	},
 });
 var user = {
 	email : "",
-	email_confirmation : "",
-	password : "",
-	password_confirmation : ""
+	password : ""
 };
 /*
  * Entry point
  */
-ReactDOM.render(React.createElement(RegisterView, {}), document
+ReactDOM.render(React.createElement(LoginView, {}), document
 		.getElementById('container'));

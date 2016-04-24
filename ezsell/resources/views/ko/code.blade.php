@@ -12,5 +12,5 @@
 
 @section('bottom')
 @parent
-	<script type="text/javascript" src="js/pages/register.js"></script>
+	Hỏng rồi, không gửi được thư kích hoạt, lý do vì {{ $data['message'] }}. Thử lại phát đi. 
 @endsection

@@ -26,23 +26,27 @@ trait  LoginTrait {
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	protected function doLogin($credentials) {
-		$user = User::where ( 'email', $credentials ['email'] )->first ();
-		if (! $user)
-			return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
-		$credentials ['active'] = 1;
 		try {
-			// verify the credentials and create a token for the user
-			if (! $token = JWTAuth::attempt ( $credentials )) {
+			if (! ($credentials instanceof User)) {
+				$user = User::where ( 'email', $credentials ['email'] )->first ();
+				$credentials ['active'] = 1;
 				if (! $user)
 					return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
-				else
+					// verify the credentials and create a token for the user
+				if (! $token = JWTAuth::attempt ( $credentials ))
 					return $this->jsonResponse ( 'user_is_not_active', null, Response::HTTP_UNAUTHORIZED );
+			} else {
+				if (! $credentials->active)
+					return $this->jsonResponse ( 'user_is_not_active', null, Response::HTTP_UNAUTHORIZED );
+				if (! $token = JWTAuth::fromUser ( $credentials ))
+					return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_UNAUTHORIZED );
 			}
 		} catch ( Exception $e ) {
 			// something went wrong
-			return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_BAD_REQUEST );
+			return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_UNAUTHORIZED );
 		}
 		$this->setToken ( $token );
+		$this->setUser ( JWTAuth::authenticate ( $token ) );
 		return $this->setResponseToken ( $this->jsonResponse ( 'login_successfully', $this->user () ) );
 	}
 	/**

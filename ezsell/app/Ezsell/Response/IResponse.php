@@ -9,11 +9,12 @@ interface IResponse {
 	/**
 	 * Build response
 	 *
+	 * @param string $content        	
 	 * @param number $status        	
 	 * @param array $headers        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function response($status = Response::HTTP_OK, array $headers = []);
+	public function response($content, $status = Response::HTTP_OK, array $headers = []);
 	/**
 	 * Build json response
 	 *

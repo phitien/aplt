@@ -24,9 +24,7 @@ trait  ActivateTrait {
 			return $this->jsonResponse ( 'invalid_activation_code', null, Response::HTTP_BAD_REQUEST );
 		if (! $user->activate ( $code ))
 			return $this->jsonResponse ( 'invalid_activation_code_expired', null, Response::HTTP_BAD_REQUEST );
-		$url = $user->baseUrl ? $user->baseUrl : '/';
-		header ( "Location: $url" );
-		exit ();
+		return $this->doLogin ( $user );
 	}
 	/**
 	 * Send activation code

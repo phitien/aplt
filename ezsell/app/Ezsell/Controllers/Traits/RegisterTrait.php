@@ -2,10 +2,10 @@
 
 namespace App\Ezsell\Controllers\Traits;
 
-use App\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use View;
 
 trait  RegisterTrait {
 	/**
@@ -23,15 +23,29 @@ trait  RegisterTrait {
 	}
 	protected function apiRegister(Request $request) {
 		$data = $request->only ( 'email', 'email_confirmation', 'password', 'password_confirmation' );
-		$data ['baseUrl'] = $this->getBaseUrl ();
 		if ($msg = $this->registrationValidator ( $data )) {
-			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
+			return $this->response ( View::make ( 'ko.register', [ 
+					'email' => $data ['email'],
+					'data' => [ 
+							'message' => $msg 
+					] 
+			] ) );
 		}
-		$response = $this->restful_post ( '/register', $data );
+		$response = $this->restful_post ( 'api/register', $data );
+		if ($response->getStatusCode () == Response::HTTP_OK) {
+			return $this->response ( View::make ( 'ok.register', [ 
+					'email' => $data ['email'],
+					'data' => json_decode ( $response->getBody (), true ) 
+			] ) );
+		} else {
+			return $this->response ( View::make ( 'ko.register', [ 
+					'email' => $data ['email'],
+					'data' => json_decode ( $response->getBody (), true ) 
+			] ) );
+		}
 	}
 	protected function showRegister(Request $request) {
-		$data = [ ];
-		return view ( 'register', $data );
+		return $this->response ( View::make ( 'register' ) );
 	}
 	/**
 	 * Get a validator for an incoming registration request.

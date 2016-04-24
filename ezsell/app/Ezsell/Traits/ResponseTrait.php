@@ -6,17 +6,21 @@ use App\Ezsell\Config\Config;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Crypt;
 
 trait ResponseTrait
 {
 	/**
 	 *
+	 * @param string $content        	
 	 * @param number $status        	
 	 * @param array $headers        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function response($status = Response::HTTP_OK, array $headers = []) {
-		return response ( '', $status, $headers )->header ( Config::TOKEN_KEY, $this->token (), true );
+	public function response($content, $status = Response::HTTP_OK, array $headers = []) {
+		$headers [Config::TOKEN_KEY] = $this->token ();
+		$headers [Config::EZSELL_KEY] = Crypt::encrypt ( ( string ) $this->user () );
+		return response ( $content, $status, $headers );
 	}
 	/**
 	 *
@@ -27,10 +31,12 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
+		$headers [Config::TOKEN_KEY] = $this->token ();
+		$headers [Config::EZSELL_KEY] = Crypt::encrypt ( ( string ) $this->user () );
 		return response ()->json ( [ 
 				'message' => $message,
 				'data' => $data 
-		], $status, $headers )->header ( Config::TOKEN_KEY, $this->token (), true );
+		], $status, $headers );
 	}
 	/**
 	 *

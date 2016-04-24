@@ -5750,40 +5750,10 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
-.RegisterView-title {
-  font-size: 24px;
-  padding: 0 24px; }
-
-.RegisterView-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid #f0f0f0; }
-
-.RegisterItem {
-  margin: 0;
-  padding: 8px 24px;
-  border-bottom: 1px solid #f0f0f0; }
-
-.RegisterItem-name {
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0; }
-
-.RegisterItem-email {
-  font-size: 14px;
-  margin-top: 4px;
-  font-style: italic;
-  color: #888; }
-
-.RegisterItem-description {
-  font-size: 14px;
-  margin-top: 4px; }
-
-.RegisterForm {
+.EzsellForm {
   padding: 8px 24px; }
 
-.RegisterForm > input, .RegisterForm > textarea {
+.EzsellForm > input, .EzsellForm > textarea {
   display: block;
   width: 240px;
   padding: 4px 8px;

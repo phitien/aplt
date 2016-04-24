@@ -10,12 +10,7 @@
 @parent
 @endsection
 
-@section('sidebar')
+@section('bottom')
 @parent
-@endsection
-
-@section('content')
-	<div class="content">
-    	<div class="title">Welcome</div>
-    </div>
+	Hỏng rồi, đăng ký không được, lý do vì {{ $data['message'] }}. Thử đăng ký lại phát đi. 
 @endsection

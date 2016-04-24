@@ -12,5 +12,5 @@
 
 @section('bottom')
 @parent
-	<script type="text/javascript" src="js/pages/register.js"></script>
+	Hỏng rồi, kích hoạt không được, lý do vì {{ $data['message'] }}. Thử cách khác xem. 
 @endsection

@@ -12,5 +12,5 @@
 
 @section('bottom')
 @parent
-	<script type="text/javascript" src="js/pages/register.js"></script>
+	Hehe kích hoạt ok rồi đấy. Lướt thôi :D
 @endsection
