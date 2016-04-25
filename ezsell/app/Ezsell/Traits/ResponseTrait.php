@@ -10,6 +10,13 @@ use Illuminate\Http\JsonResponse;
 trait ResponseTrait
 {
 	/**
+	 *
+	 * @param \Illuminate\Http\Response $response        	
+	 */
+	protected function applyCookies($response) {
+		return $response->withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )->withCookie ( Cookie::forever ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ) ), true );
+	}
+	/**
 	 * Build response
 	 *
 	 * @param string $to        	
@@ -21,7 +28,7 @@ trait ResponseTrait
 	public function redirect($to = null, $status = 302, $headers = [], $secure = null) {
 		if (! $to)
 			$to = Config::HOME_PAGE;
-		return redirect ( $to, $status, $headers, $secure )->withCookie ( Config::TOKEN_KEY, static::getToken (), true )->withCookie ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ), true );
+		return $this->applyCookies ( redirect ( $to, $status, $headers, $secure ) );
 	}
 	/**
 	 *
@@ -31,7 +38,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function response($content, $status = Response::HTTP_OK, array $headers = []) {
-		return response ( $content, $status, $headers )->withCookie ( Config::TOKEN_KEY, static::getToken (), true )->withCookie ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ), true );
+		return $this->applyCookies ( response ( $content, $status, $headers ) );
 	}
 	/**
 	 *
@@ -42,10 +49,10 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
-		return response ()->json ( [ 
+		return $this->applyCookies ( response ()->json ( [ 
 				'message' => $message,
 				'data' => $data 
-		], $status, $headers )->withCookie ( Config::TOKEN_KEY, static::getToken (), true )->withCookie ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ), true );
+		], $status, $headers ) );
 	}
 	/**
 	 *
