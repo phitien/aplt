@@ -13,11 +13,11 @@
 @section('top')
 @parent
 	<div>
-		Hỏng rồi, không login được, lý do vì {{ $data['message'] }}. Thử lại phát đi.
+		Hỏng rồi, không deactivate được, lý do vì {{ $data['message'] }}. Thử lại phát đi.
 	</div>
 @endsection
 
 @section('bottom')
 @parent
-	<script type="text/javascript" src="js/pages/login.js"></script> 
+	<script type="text/javascript" src="js/pages/deactivate.js"></script> 
 @endsection

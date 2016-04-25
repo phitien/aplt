@@ -10,7 +10,9 @@
 @parent
 @endsection
 
-@section('bottom')
+@section('top')
 @parent
-	Hỏng rồi, đăng ký không được, lý do vì {{ $data['message'] }}. Thử đăng ký lại phát đi. 
+	<div>
+		Hỏng rồi, đăng ký không được, lý do vì {{ $data['message'] }}. Thử đăng ký lại phát đi.
+	</div> 
 @endsection

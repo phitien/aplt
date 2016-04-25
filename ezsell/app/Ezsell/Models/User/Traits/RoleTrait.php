@@ -18,7 +18,8 @@ trait RoleTrait
 	public static function getGuest() {
 		if (null === static::$_instanceGuest) {
 			static::$_instanceGuest = new User ( [ 
-					'active' => 1 
+					'active' => 1,
+					'id' => - 1 
 			] );
 		}
 		return static::$_instanceGuest;
@@ -29,6 +30,14 @@ trait RoleTrait
 	 * @return boolean
 	 */
 	public function isGuest() {
-		return $this == static::getGuest ();
+		return $this->id < 0;
+	}
+	/**
+	 *
+	 * @param array $action        	
+	 * @return bool
+	 */
+	public function hasAction(array $action) {
+		return true;
 	}
 }

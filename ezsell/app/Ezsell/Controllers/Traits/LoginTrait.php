@@ -2,11 +2,12 @@
 
 namespace App\Ezsell\Controllers\Traits;
 
-use App\Ezsell\Config\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\User;
+use Illuminate\Http\JsonResponse;
 use View;
+use Illuminate\Support\Facades\Redirect;
+use App\Ezsell\Config\Config;
 
 trait  LoginTrait {
 	/**
@@ -24,12 +25,21 @@ trait  LoginTrait {
 	}
 	protected function apiLogin(Request $request) {
 		$credentials = $request->only ( 'email', 'password' );
-		return $this->doLogin ( $credentials );
+		$response = $this->doLogin ( $credentials );
+		if ($response->getStatusCode () == Response::HTTP_OK) {
+			return $this->redirect ( static::getRedirectUri () );
+		} else {
+			return $this->response ( View::make ( 'ko.login', [ 
+					'email' => $credentials ['email'],
+					'data' => json_decode ( $response->getBody (), true ) 
+			] ), $response->getStatusCode () );
+		}
 	}
 	protected function showLogin(Request $request) {
-		if ($this->token ()) {
-		} else
+		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'login' ) );
+		else
+			return $this->redirect ();
 	}
 	/**
 	 * Login
@@ -37,27 +47,23 @@ trait  LoginTrait {
 	 * @param array $credentials        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	protected function doLogin($credentials) {
-		$response = $this->restful_post ( 'api/login', $credentials );
-		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( View::make ( 'index' ) );
-		} else {
-			return $this->response ( redirect ( '/' ) );
-		}
+	protected function doLogin(array $credentials = []) {
+		return static::apiCallLogin ( $credentials );
 	}
 	/**
 	 * Logout
 	 *
-	 * @return Response
+	 * @return \Illuminate\Http\Response
 	 */
 	public function logout() {
 		return $this->doLogout ();
 	}
 	/**
 	 *
-	 * @return void
+	 * @return \Illuminate\Http\JsonResponse
 	 */
 	protected function doLogout() {
-		return $this->jsonResponse ( 'logged_out', null );
+		$response = static::apiCallLogout ();
+		return $this->redirect ();
 	}
 }

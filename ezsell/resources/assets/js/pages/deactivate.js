@@ -9,25 +9,19 @@ var DeactivateForm = React.createClass({
 		var onChange = this.props.onChange;
 		return (React.createElement(//
 		'form', {
-			className : 'EzsellForm'
-		}), React.createElement('input', {
+			className : 'EzsellForm',
+			method : 'post',
+			action : '/deactivate'
+		}, React.createElement('input', {
 			type : 'password',
+			name : 'password',
 			placeholder : 'Password',
 			onChange : function(e) {
 				user.password = e.target.value;
 				onChange();
 			},
 		}), React.createElement('button', {
-			type : 'button',
-			onClick : function(e) {
-				$.ajax({
-					type : 'POST',
-					url : '/deactivate',
-					data : user
-				}).done(function(data) {
-				}).fail(function(jqXhr) {
-				});
-			}
+			type : 'submit'
 		}, "Deactivate")//
 		));
 	},

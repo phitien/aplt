@@ -29,9 +29,9 @@ trait  RegisterTrait {
 					'data' => [ 
 							'message' => $msg 
 					] 
-			] ) );
+			] ), Response::HTTP_BAD_REQUEST );
 		}
-		$response = $this->restful_post ( 'api/register', $data );
+		$response = static::apiCallRegister ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->response ( View::make ( 'ok.register', [ 
 					'email' => $data ['email'],
@@ -41,11 +41,14 @@ trait  RegisterTrait {
 			return $this->response ( View::make ( 'ko.register', [ 
 					'email' => $data ['email'],
 					'data' => json_decode ( $response->getBody (), true ) 
-			] ) );
+			] ), $response->getStatusCode () );
 		}
 	}
 	protected function showRegister(Request $request) {
-		return $this->response ( View::make ( 'register' ) );
+		if (static::getUser ()->isGuest ())
+			return $this->response ( View::make ( 'register' ) );
+		else
+			return $this->redirect ( '/' );
 	}
 	/**
 	 * Get a validator for an incoming registration request.

@@ -9,25 +9,19 @@ var CodeForm = React.createClass({
 		var onChange = this.props.onChange;
 		return (React.createElement(//
 		'form', {
-			className : 'EzsellForm'
+			className : 'EzsellForm',
+			method : 'post',
+			action : '/code'
 		}, React.createElement('input', {
 			type : 'email',
+			name : 'email',
 			placeholder : 'Email',
 			onChange : function(e) {
 				user.email = e.target.value;
 				onChange();
 			},
 		}), React.createElement('button', {
-			type : 'button',
-			onClick : function(e) {
-				$.ajax({
-					type : 'POST',
-					url : '/code',
-					data : user
-				}).done(function(data) {
-				}).fail(function(jqXhr) {
-				});
-			}
+			type : 'submit'
 		}, "Send activation")//
 		));
 	},

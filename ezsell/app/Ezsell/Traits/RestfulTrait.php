@@ -8,7 +8,6 @@ use Illuminate\Http\Response;
 use GuzzleHttp\Exception\ClientException;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
-use Illuminate\Support\Facades\Crypt;
 use App\User;
 
 trait RestfulTrait {
@@ -18,16 +17,17 @@ trait RestfulTrait {
 	 * @param array $query        	
 	 * @param array $formParams        	
 	 * @param array $options        	
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	protected function restful_post(string $url, array $formParams = [], array $options = []) {
-		$client = $this->createClient ();
+	protected static function restful_post(string $url, array $formParams = [], array $options = []) {
+		$client = static::createClient ();
 		try {
-			$response = $client->post ( $url, array_merge ( $this->getStandardRequestParams (), [ 
+			$response = $client->post ( $url, array_merge ( static::getStandardRequestParams (), [ 
 					'form_params' => $formParams 
 			], $options ) );
-			return $this->setParamsFromResponse ( $response );
+			return static::setParamsFromResponse ( $response );
 		} catch ( ClientException $e ) {
-			return $this->setParamsFromResponse ( $e->getResponse () );
+			return static::setParamsFromResponse ( $e->getResponse () );
 		} catch ( Exception $e ) {
 			// redirect ( '/error' );
 		}
@@ -38,16 +38,17 @@ trait RestfulTrait {
 	 * @param array $query        	
 	 * @param array $formParams        	
 	 * @param array $options        	
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	protected function restful_put(string $url, array $query = [], array $formParams = [], array $options = []) {
-		$client = $this->createClient ();
+	protected static function restful_put(string $url, array $query = [], array $formParams = [], array $options = []) {
+		$client = static::createClient ();
 		try {
-			$response = $client->put ( $url, array_merge ( $this->getStandardRequestParams ( $query ), [ 
+			$response = $client->put ( $url, array_merge ( static::getStandardRequestParams ( $query ), [ 
 					'form_params' => $formParams 
 			], $options ) );
-			return $this->setParamsFromResponse ( $response );
+			return static::setParamsFromResponse ( $response );
 		} catch ( ClientException $e ) {
-			return $this->setParamsFromResponse ( $e->getResponse () );
+			return static::setParamsFromResponse ( $e->getResponse () );
 		} catch ( Exception $e ) {
 			// redirect ( '/error' );
 		}
@@ -58,16 +59,17 @@ trait RestfulTrait {
 	 * @param array $query        	
 	 * @param array $formParams        	
 	 * @param array $options        	
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	protected function restful_delete(string $url, array $query = [], array $formParams = [], array $options = []) {
-		$client = $this->createClient ();
+	protected static function restful_delete(string $url, array $query = [], array $formParams = [], array $options = []) {
+		$client = static::createClient ();
 		try {
-			$response = $client->delete ( $url, array_merge ( $this->getStandardRequestParams ( $query ), [ 
+			$response = $client->delete ( $url, array_merge ( static::getStandardRequestParams ( $query ), [ 
 					'form_params' => $formParams 
 			], $options ) );
-			return $this->setParamsFromResponse ( $response );
+			return static::setParamsFromResponse ( $response );
 		} catch ( ClientException $e ) {
-			return $this->setParamsFromResponse ( $e->getResponse () );
+			return static::setParamsFromResponse ( $e->getResponse () );
 		} catch ( Exception $e ) {
 			// redirect ( '/error' );
 		}
@@ -77,14 +79,15 @@ trait RestfulTrait {
 	 * @param string $url        	
 	 * @param array $query        	
 	 * @param array $options        	
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	protected function restful_get(string $url, array $query = [], array $options = []) {
-		$client = $this->createClient ();
+	protected static function restful_get(string $url, array $query = [], array $options = []) {
+		$client = static::createClient ();
 		try {
-			$response = $client->get ( $url, array_merge ( $this->getStandardRequestParams ( $query ), [ ], $options ) );
-			return $this->setParamsFromResponse ( $response );
+			$response = $client->get ( $url, array_merge ( static::getStandardRequestParams ( $query ), [ ], $options ) );
+			return static::setParamsFromResponse ( $response );
 		} catch ( ClientException $e ) {
-			return $this->setParamsFromResponse ( $e->getResponse () );
+			return static::setParamsFromResponse ( $e->getResponse () );
 		} catch ( Exception $e ) {
 			// redirect ( '/error' );
 		}
@@ -93,7 +96,7 @@ trait RestfulTrait {
 	 *
 	 * @return \GuzzleHttp\Client
 	 */
-	protected function createClient() {
+	protected static function createClient() {
 		$client = new Client ();
 		return $client;
 	}
@@ -102,12 +105,12 @@ trait RestfulTrait {
 	 * @param array $query        	
 	 * @return array
 	 */
-	protected function getStandardRequestParams(array $query = []) {
+	protected static function getStandardRequestParams(array $query = []) {
 		return [ 
 				'base_uri' => Config::IM_BASE_URL,
 				'headers' => [ 
-						Config::IM_TOKEN_KEY => $this->token (),
-						'baseUrl' => $this->getBaseUrl () 
+						Config::IM_TOKEN_KEY => static::getToken (),
+						'baseUrl' => static::getBaseUri () 
 				],
 				'query' => $query 
 		];
@@ -115,19 +118,18 @@ trait RestfulTrait {
 	/**
 	 *
 	 * @param ResponseInterface $response        	
-	 * @return ResponseInterface
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	protected function setParamsFromResponse(ResponseInterface $response) {
-		if ($response->getStatusCode () == Response::HTTP_OK) {
-			try {
-				$this->setToken ( $response->getHeader ( Config::IM_TOKEN_KEY ) [0] );
-			} catch ( Exception $e ) {
-			}
-			try {
-				$this->setUser ( new User ( json_decode ( Crypt::decrypt ( $response->getHeader ( Config::IM_KEY ) [0] ), true ) ) );
-			} catch ( Exception $e ) {
-				$this->setUer ( User::getGuest () );
-			}
+	protected static function setParamsFromResponse(ResponseInterface $response) {
+		try {
+			static::setToken ( $response->getHeader ( Config::IM_TOKEN_KEY ) [0] );
+		} catch ( Exception $e ) {
+			static::setToken ( Config::INVALID_TOKEN );
+		}
+		try {
+			static::setUser ( new User ( json_decode ( static::decrypt ( $response->getHeader ( Config::IM_KEY ) [0] ), true ) ) );
+		} catch ( Exception $e ) {
+			static::setUser ( User::getGuest () );
 		}
 		return $response;
 	}

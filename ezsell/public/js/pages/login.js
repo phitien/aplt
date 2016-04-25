@@ -10,7 +10,8 @@ var LoginForm = React.createClass({
 		return (React.createElement(//
 		'form', {
 			className : 'EzsellForm',
-			method : 'post'
+			method : 'post',
+			action : '/login'
 		}, React.createElement('input', {
 			type : 'email',
 			name : 'email',
@@ -27,6 +28,10 @@ var LoginForm = React.createClass({
 				user.password = e.target.value;
 				onChange();
 			},
+		}), React.createElement('input', {
+			type : 'hidden',
+			name : 'redirect',
+			value : location.href
 		}), React.createElement('button', {
 			type : 'submit'
 		}, "Login")//

@@ -3,6 +3,8 @@
 namespace App\Ezsell\Controllers\Traits;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use View;
 
 trait DeactivateTrait {
 	/**
@@ -19,22 +21,19 @@ trait DeactivateTrait {
 		}
 	}
 	protected function apiDeactivate(Request $request) {
-		$response = $this->restful_post ( 'api/deactivate', [ 
-				'email' => $email 
-		] );
+		$response = static::apiCallDeactive ( $request->get ( 'password' ) );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ()->view ( 'ok.code', [ 
-					'email' => $email,
-					'data' => json_decode ( $response->getBody (), true ) 
-			] );
+			return $this->response ( View::make ( 'index' ) );
 		} else {
-			return $this->response ()->view ( 'ko.code', [ 
-					'email' => $email,
+			return $this->response ( View::make ( 'ko.deactivate', [ 
 					'data' => json_decode ( $response->getBody (), true ) 
-			] );
+			] ), $response->getStatusCode () );
 		}
 	}
 	protected function showDeactivate(Request $request) {
-		return view ( 'deactivate' );
+		if (static::getUser ()->isGuest ())
+			return $this->response ( View::make ( 'login' ) );
+		else
+			return $this->response ( View::make ( 'deactivate' ) );
 	}
 }

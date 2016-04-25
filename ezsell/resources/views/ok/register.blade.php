@@ -10,7 +10,9 @@
 @parent
 @endsection
 
-@section('bottom')
+@section('top')
 @parent
-	Hehe đăng ký ok rồi đấy, đăng nhập email và activate account ngay đi :).
+	<div>
+		Hehe đăng ký ok rồi đấy, đăng nhập email và activate account ngay đi :).
+	</div>
 @endsection

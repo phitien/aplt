@@ -17,7 +17,7 @@ trait  ActivateTrait {
 	 * @return Response
 	 */
 	public function activate(Request $request, $code) {
-		$response = $this->restful_get ( 'api/activate/' . $code );
+		$response = static::apiCallActivate ( $code );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->response ( View::make ( 'ok.activate', [ 
 					'data' => json_decode ( $response->getBody (), true ) 
@@ -25,7 +25,7 @@ trait  ActivateTrait {
 		} else {
 			return $this->response ( View::make ( 'ko.activate', [ 
 					'data' => json_decode ( $response->getBody (), true ) 
-			] ) );
+			] ), $response->getStatusCode () );
 		}
 	}
 	/**
@@ -51,9 +51,9 @@ trait  ActivateTrait {
 					'data' => [ 
 							'message' => $msg 
 					] 
-			] ) );
+			] ), Response::HTTP_BAD_REQUEST );
 		}
-		$response = $this->restful_post ( 'api/code', [ 
+		$response = static::apiCallCode ( [ 
 				'email' => $email 
 		] );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
@@ -65,11 +65,14 @@ trait  ActivateTrait {
 			return $this->response ( View::make ( 'ko.code', [ 
 					'email' => $email,
 					'data' => json_decode ( $response->getBody (), true ) 
-			] ) );
+			] ), $response->getStatusCode () );
 		}
 	}
 	protected function showCode(Request $request) {
-		return $this->response ( View::make ( 'code' ) );
+		if (static::getUser ()->isGuest ())
+			return $this->response ( View::make ( 'code' ) );
+		else
+			return $this->redirect ( '/' );
 	}
 	protected function emailValidator(array $data) {
 		$validator = Validator::make ( $data, [ 

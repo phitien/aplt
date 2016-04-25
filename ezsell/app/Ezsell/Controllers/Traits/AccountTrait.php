@@ -20,12 +20,12 @@ trait AccountTrait {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
 		$new_password = $request->request->get ( 'password' );
-		if (Hash::check ( $new_password, $this->user ()->password )) {
+		if (Hash::check ( $new_password, static::getUser ()->password )) {
 			return $this->jsonResponse ( 'password_not_changed', null, Response::HTTP_BAD_REQUEST );
 		}
 		$credentials = [ 
-				'email' => $this->user ()->email,
-				'password' => $this->user ()->changePassword ( $new_password ) 
+				'email' => static::getUser ()->email,
+				'password' => static::getUser ()->changePassword ( $new_password ) 
 		];
 		return $this->updateJsonResponse ( $this->doLogin ( $credentials ), 'password_changed', null );
 	}
@@ -49,15 +49,15 @@ trait AccountTrait {
 			return $response;
 		}
 		$email = $request->request->get ( 'email' );
-		if ($email == $this->user ()->email) {
+		if ($email == static::getUser ()->email) {
 			return $this->jsonResponse ( 'email_not_changed', null, Response::HTTP_BAD_REQUEST );
 		}
 		if ($msg = $this->validateEmail ( $request->request->all () )) {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
-		$this->sendEmailChangedEmail ( $this->user (), $email );
-		$this->sendActivationEmail ( $this->user () );
-		return $this->updateJsonResponse ( $this->doLogout (), 'user_email_changed', 'Please active your account at ' . $this->user ()->email );
+		$this->sendEmailChangedEmail ( static::getUser (), $email );
+		$this->sendActivationEmail ( static::getUser () );
+		return $this->updateJsonResponse ( $this->doLogout (), 'user_email_changed', 'Please active your account at ' . static::getUser ()->email );
 	}
 	/**
 	 * Account: change user account
@@ -70,13 +70,13 @@ trait AccountTrait {
 			return $response;
 		}
 		$name = $request->request->get ( 'name' );
-		if ($name == $this->user ()->name) {
+		if ($name == static::getUser ()->name) {
 			return $this->jsonResponse ( 'name_not_changed', null, Response::HTTP_BAD_REQUEST );
 		}
 		if ($msg = $this->validateName ( $request->request->all () )) {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
-		$this->user ()->changeName ( $name );
+		static::getUser ()->changeName ( $name );
 		return $this->jsonResponse ( 'name_changed', null );
 	}
 }

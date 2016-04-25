@@ -10,7 +10,8 @@ var RegisterForm = React.createClass({
 		return (React.createElement(//
 		'form', {
 			className : 'EzsellForm',
-			method : 'post'
+			method : 'post',
+			action : '/register'
 		}, React.createElement('input', {
 			type : 'email',
 			name : 'email',

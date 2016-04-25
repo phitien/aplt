@@ -9,6 +9,16 @@ interface IResponse {
 	/**
 	 * Build response
 	 *
+	 * @param string $to        	
+	 * @param number $status        	
+	 * @param array $headers        	
+	 * @param bool $secure        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function redirect($to = null, $status = 302, $headers = [], $secure = null);
+	/**
+	 * Build response
+	 *
 	 * @param string $content        	
 	 * @param number $status        	
 	 * @param array $headers        	

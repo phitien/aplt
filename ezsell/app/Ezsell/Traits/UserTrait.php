@@ -3,13 +3,10 @@
 namespace App\Ezsell\Traits;
 
 use App\Ezsell\Config\Config;
-use JWTAuth;
-use App\Ezsell\Exceptions\TokenNotFound;
-use App\Ezsell\Exceptions\UserNotFound;
 use App\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Exception;
 
 trait UserTrait
 {
@@ -26,22 +23,38 @@ trait UserTrait
 		if (! static::$_token) {
 			static::$_token = request ()->header ( Config::TOKEN_KEY, Cookie::get ( Config::TOKEN_KEY, null ) );
 		}
-		return static::$_token;
-	}
-	/**
-	 *
-	 * @return string token
-	 */
-	protected function token() {
-		return static::getToken ();
+		return static::$_token == Config::INVALID_TOKEN ? null : static::$_token;
 	}
 	/**
 	 *
 	 * @param string $token        	
 	 * @return string token
 	 */
-	protected function setToken($token) {
+	protected static function setToken($token) {
 		static::$_token = $token;
+	}
+	/**
+	 *
+	 * @var string $_userInfoFromRequest
+	 */
+	protected static $_userInfoFromRequest;
+	/**
+	 *
+	 * @return string $_userInfoFromRequest
+	 */
+	protected static function getUserInfoFromRequest() {
+		if (! static::$_userInfoFromRequest) {
+			static::$_userInfoFromRequest = request ()->header ( Config::EZSELL_KEY, Cookie::get ( Config::EZSELL_KEY, null ) );
+		}
+		return static::$_userInfoFromRequest;
+	}
+	/**
+	 *
+	 * @param string $_userInfoFromRequest        	
+	 * @return string $_userInfoFromRequest
+	 */
+	protected static function setUserInfoFromRequest($userInfoFromRequest) {
+		static::$_userInfoFromRequest = $userInfoFromRequest;
 	}
 	/**
 	 *
@@ -53,24 +66,23 @@ trait UserTrait
 	 * @return \App\User
 	 */
 	protected static function getUser($throwExceptionIfNotFound = false) {
-		if (! static::$_user || $throwExceptionIfNotFound) {
-			$token = static::getToken ();
-			if ($throwExceptionIfNotFound) {
-				if (! $token) {
-					throw new TokenNotFound ();
-				} else {
-					static::$_user = JWTAuth::authenticate ( $token );
-					if (! static::$_user || static::$_user->isGuest ())
-						throw new UserNotFound ();
-				}
-			} else {
+		if (! static::$_user) {
+			if (static::getToken ()) {
 				try {
-					static::$_user = JWTAuth::authenticate ( $token );
+					// try to get user info from request
+					$userInfoFromRequest = static::getUserInfoFromRequest ();
+					if ($userInfoFromRequest)
+						static::$_user = new User ( json_decode ( static::decrypt ( $userInfoFromRequest ), true ) );
+						// try to get user info by sending get user profile api to im
+					if (static::getToken () && static::$_user && static::$_user->isGuest ()) {
+						$reponse = static::apiCallProfile ();
+					}
 				} catch ( Exception $e ) {
 				}
-				if (! static::$_user)
-					static::$_user = User::getGuest ();
 			}
+			// if no user found, set it to guest
+			if (! static::$_user)
+				static::$_user = User::getGuest ();
 		}
 		return static::$_user;
 	}
@@ -78,18 +90,10 @@ trait UserTrait
 	 *
 	 * @param User $user        	
 	 */
-	protected function setUser(User $user) {
+	protected static function setUser(User $user) {
 		static::$_user = $user;
 	}
-	/**
-	 *
-	 * @param string $throwExceptionIfNotFound        	
-	 * @return \App\User
-	 */
-	protected function user($throwExceptionIfNotFound = false) {
-		return static::getUser ( $throwExceptionIfNotFound );
-	}
-	protected function isLoggedIn() {
-		return ! $this->user ()->isGuest ();
+	protected static function isLoggedIn() {
+		return ! static::getUser ()->isGuest ();
 	}
 }

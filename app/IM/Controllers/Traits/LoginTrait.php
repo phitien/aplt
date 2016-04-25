@@ -31,10 +31,10 @@ trait  LoginTrait {
 				$user = User::where ( 'email', $credentials ['email'] )->first ();
 				$credentials ['active'] = 1;
 				if (! $user)
-					return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
+					return $this->jsonResponse ( 'user_is_not_active', null, Response::HTTP_UNAUTHORIZED );
 					// verify the credentials and create a token for the user
 				if (! $token = JWTAuth::attempt ( $credentials ))
-					return $this->jsonResponse ( 'user_is_not_active', null, Response::HTTP_UNAUTHORIZED );
+					return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
 			} else {
 				if (! $credentials->active)
 					return $this->jsonResponse ( 'user_is_not_active', null, Response::HTTP_UNAUTHORIZED );

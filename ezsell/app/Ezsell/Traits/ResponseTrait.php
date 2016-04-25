@@ -6,10 +6,23 @@ use App\Ezsell\Config\Config;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Crypt;
 
 trait ResponseTrait
 {
+	/**
+	 * Build response
+	 *
+	 * @param string $to        	
+	 * @param number $status        	
+	 * @param array $headers        	
+	 * @param bool $secure        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function redirect($to = null, $status = 302, $headers = [], $secure = null) {
+		if (! $to)
+			$to = Config::HOME_PAGE;
+		return redirect ( $to, $status, $headers, $secure )->withCookie ( Config::TOKEN_KEY, static::getToken (), true )->withCookie ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ), true );
+	}
 	/**
 	 *
 	 * @param string $content        	
@@ -18,9 +31,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function response($content, $status = Response::HTTP_OK, array $headers = []) {
-		$headers [Config::TOKEN_KEY] = $this->token ();
-		$headers [Config::EZSELL_KEY] = Crypt::encrypt ( ( string ) $this->user () );
-		return response ( $content, $status, $headers );
+		return response ( $content, $status, $headers )->withCookie ( Config::TOKEN_KEY, static::getToken (), true )->withCookie ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ), true );
 	}
 	/**
 	 *
@@ -31,12 +42,10 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
-		$headers [Config::TOKEN_KEY] = $this->token ();
-		$headers [Config::EZSELL_KEY] = Crypt::encrypt ( ( string ) $this->user () );
 		return response ()->json ( [ 
 				'message' => $message,
 				'data' => $data 
-		], $status, $headers );
+		], $status, $headers )->withCookie ( Config::TOKEN_KEY, static::getToken (), true )->withCookie ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ), true );
 	}
 	/**
 	 *
@@ -59,6 +68,6 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function setResponseToken($response, $token) {
-		return $response->header ( Config::TOKEN_KEY, $token, true );
+		return $response->withCookie ( Config::TOKEN_KEY, $token, true );
 	}
 }

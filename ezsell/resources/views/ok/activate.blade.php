@@ -10,7 +10,9 @@
 @parent
 @endsection
 
-@section('bottom')
+@section('top')
 @parent
-	Hehe kích hoạt ok rồi đấy. Lướt thôi :D
+	<div>
+		Hehe kích hoạt ok rồi đấy. Lướt thôi :D
+	</div>
 @endsection

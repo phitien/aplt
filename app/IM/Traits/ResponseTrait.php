@@ -16,8 +16,10 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function response($content = '', $status = Response::HTTP_OK, array $headers = []) {
-		$headers [Config::TOKEN_KEY] = $this->token ();
-		$headers [Config::IM_KEY] = Crypt::encrypt ( ( string ) $this->user () );
+		if (! $this->user ()->isGuest ()) {
+			$headers [Config::TOKEN_KEY] = $this->token ();
+			$headers [Config::IM_KEY] = Crypt::encrypt ( ( string ) $this->user () );
+		}
 		return response ( $content, $status, $headers );
 	}
 	/**
@@ -29,8 +31,10 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
-		$headers [Config::TOKEN_KEY] = $this->token ();
-		$headers [Config::IM_KEY] = Crypt::encrypt ( ( string ) $this->user () );
+		if (! $this->user ()->isGuest ()) {
+			$headers [Config::TOKEN_KEY] = $this->token ();
+			$headers [Config::IM_KEY] = Crypt::encrypt ( ( string ) $this->user () );
+		}
 		return response ()->json ( [ 
 				'message' => $message,
 				'data' => $data 

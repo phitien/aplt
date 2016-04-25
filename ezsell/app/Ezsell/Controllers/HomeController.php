@@ -3,6 +3,7 @@
 namespace App\Ezsell\Controllers;
 
 use Illuminate\Http\Request;
+use View;
 
 class HomeController extends AuthenticableController {
 	/**
@@ -32,8 +33,6 @@ class HomeController extends AuthenticableController {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request) {
-		return view ( 'index', [ 
-				'logged_in' => $this->isLoggedIn () 
-		] );
+		return $this->response ( View::make ( 'index' ) );
 	}
 }

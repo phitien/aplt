@@ -21,7 +21,7 @@ class Authentication extends Middleware {
 	 */
 	public function im_handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
 		try {
-			$user = $this->user ( true );
+			$user = static::getUser ( true );
 		} catch ( TokenNotFound $e ) {
 			return $this->jsonResponse ( 'token_not_found', null, Response::HTTP_BAD_REQUEST );
 		} catch ( UserNotFound $e ) {

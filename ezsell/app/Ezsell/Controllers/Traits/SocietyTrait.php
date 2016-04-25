@@ -13,7 +13,7 @@ trait SocietyTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function followers(Request $request) {
-		return $this->jsonResponse ( 'get_followers_successfully', $this->user ()->followers );
+		return $this->jsonResponse ( 'get_followers_successfully', static::getUser ()->followers );
 	}
 	/**
 	 *
@@ -21,7 +21,7 @@ trait SocietyTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function following(Request $request) {
-		return $this->jsonResponse ( 'get_following_successfully', $this->user ()->following );
+		return $this->jsonResponse ( 'get_following_successfully', static::getUser ()->following );
 	}
 	/**
 	 *
@@ -33,7 +33,7 @@ trait SocietyTrait {
 		if (! $user) {
 			return $this->jsonResponse ( 'cannot_find_user', 'User not found', Response::HTTP_BAD_REQUEST );
 		}
-		if ($this->user ()->follow ( $user ))
+		if (static::getUser ()->follow ( $user ))
 			return $this->jsonResponse ( 'follow_successfully', '' );
 		else
 			return $this->jsonResponse ( 'follow_unsuccessfully', 'Some error occurs.', Response::HTTP_BAD_REQUEST );
@@ -48,7 +48,7 @@ trait SocietyTrait {
 		if (! $user) {
 			return $this->jsonResponse ( 'cannot_find_user', 'User not found', Response::HTTP_BAD_REQUEST );
 		}
-		if ($this->user ()->unfollow ( $user ))
+		if (static::getUser ()->unfollow ( $user ))
 			return $this->jsonResponse ( 'unfollow_successfully', '' );
 		else
 			return $this->jsonResponse ( 'unfollow_unsuccessfully', 'Some error occurs.', Response::HTTP_BAD_REQUEST );
@@ -63,7 +63,7 @@ trait SocietyTrait {
 		if (! $user) {
 			return $this->jsonResponse ( 'cannot_find_user', 'User not found', Response::HTTP_BAD_REQUEST );
 		}
-		if ($this->user ()->accept ( $user ))
+		if (static::getUser ()->accept ( $user ))
 			return $this->jsonResponse ( 'accept_successfully', '' );
 		else
 			return $this->jsonResponse ( 'accept_unsuccessfully', 'Some error occurs.', Response::HTTP_BAD_REQUEST );
@@ -78,7 +78,7 @@ trait SocietyTrait {
 		if (! $user) {
 			return $this->jsonResponse ( 'cannot_find_user', 'User not found', Response::HTTP_BAD_REQUEST );
 		}
-		if ($this->user ()->refuse ( $user ))
+		if (static::getUser ()->refuse ( $user ))
 			return $this->jsonResponse ( 'refuse_successfully', '' );
 		else
 			return $this->jsonResponse ( 'refuse_unsuccessfully', 'Some error occurs.', Response::HTTP_BAD_REQUEST );
