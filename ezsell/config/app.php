@@ -155,6 +155,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Ezsell\Providers\RouteServiceProvider::class,
+    	App\Ezsell\Providers\ViewServiceProvider::class,
     	Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
     	//
 //     	Illuminate\Html\HtmlServiceProvider::class,

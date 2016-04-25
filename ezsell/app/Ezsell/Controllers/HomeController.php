@@ -14,18 +14,14 @@ class HomeController extends AuthenticableController {
 	 * @var array $_authenticationMiddlewareOptions
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
-			'except' => [ 
-					'index' 
-			] 
+			'except' => [ ] 
 	];
 	/**
 	 *
 	 * @var array $_authorizationMiddlewareOptions
 	 */
 	protected $_authorizationMiddlewareOptions = [ 
-			'except' => [ 
-					'index' 
-			] 
+			'except' => [ ] 
 	];
 	/**
 	 *

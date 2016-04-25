@@ -1,14 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'EZSell')
-
-@section('css')
-@parent
-@endsection
-
-@section('script')
-@parent
-@endsection
+@section('title', 'EZSell - Code')
 
 @section('top')
 @parent

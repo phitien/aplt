@@ -19,23 +19,13 @@ class AccountController extends AuthenticableController {
 	 * @var array $_authenticationMiddlewareOptions
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
-			'except' => [ 
-					'login',
-					'code',
-					'register',
-					'activate' 
-			] 
+			'except' => [ ] 
 	];
 	/**
 	 *
 	 * @var array $_authorizationMiddlewareOptions
 	 */
 	protected $_authorizationMiddlewareOptions = [ 
-			'except' => [ 
-					'login',
-					'code',
-					'register',
-					'activate' 
-			] 
+			'except' => [ ] 
 	];
 }

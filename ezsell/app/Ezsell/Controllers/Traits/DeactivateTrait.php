@@ -23,7 +23,7 @@ trait DeactivateTrait {
 	protected function apiDeactivate(Request $request) {
 		$response = static::apiCallDeactive ( $request->get ( 'password' ) );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( View::make ( 'index' ) );
+			return $this->doLogout ();
 		} else {
 			return $this->response ( View::make ( 'ko.deactivate', [ 
 					'data' => json_decode ( $response->getBody (), true ) 
