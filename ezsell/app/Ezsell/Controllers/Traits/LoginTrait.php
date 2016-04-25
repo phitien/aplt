@@ -7,7 +7,6 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use View;
 use Illuminate\Support\Facades\Redirect;
-use App\Ezsell\Config\Config;
 
 trait  LoginTrait {
 	/**

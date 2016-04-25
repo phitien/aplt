@@ -72,7 +72,7 @@ trait  ActivateTrait {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'code' ) );
 		else
-			return $this->redirect ( '/' );
+			return $this->redirect ();
 	}
 	protected function emailValidator(array $data) {
 		$validator = Validator::make ( $data, [ 

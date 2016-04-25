@@ -48,7 +48,7 @@ trait  RegisterTrait {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'register' ) );
 		else
-			return $this->redirect ( '/' );
+			return $this->redirect ();
 	}
 	/**
 	 * Get a validator for an incoming registration request.
