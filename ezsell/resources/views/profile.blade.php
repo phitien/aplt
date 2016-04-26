@@ -2,7 +2,7 @@
 
 @section('title', 'EZSell - Profile')
 
-@section('bottom')
+@section('bottomscripts')
 @parent
     <script type="text/javascript" src="js/pages/profile.js"></script>
 @endsection

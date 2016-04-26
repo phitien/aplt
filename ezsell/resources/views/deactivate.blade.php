@@ -2,7 +2,7 @@
 
 @section('title', 'EZSell - Deactivate')
 
-@section('bottom')
+@section('bottomscripts')
 @parent
 	<script type="text/javascript" src="js/pages/deactivate.js"></script>
 @endsection

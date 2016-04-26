@@ -9,7 +9,7 @@
 	</div>
 @endsection
 
-@section('bottom')
+@section('bottomscripts')
 @parent
 	<script type="text/javascript">
 	var user = {!! $user !!};

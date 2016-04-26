@@ -2,7 +2,7 @@
 
 @section('title', 'EZSell - Register')
 
-@section('bottom')
+@section('bottomscripts')
 @parent
 	<script type="text/javascript" src="js/pages/register.js"></script>
 @endsection

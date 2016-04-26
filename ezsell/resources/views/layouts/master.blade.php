@@ -10,27 +10,34 @@
 @section('script')
 	{{ Html::script('js/browser.min.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/libraries.js', ['type' => 'text/javascript']) }}
+	<script type="text/javascript">
+@if (!$isGuest)
+		var user = {!! $user !!};
+@endif
+	</script>
 @show
     </head>
     <body>
 @section('top')
+	<div class="container">
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="/">Home</a></li>
 @if ($isGuest)
-	<a href="/login">Login</a>
-	<a href="/register">Register</a>
-	<a href="/code">Code</a>
+			<li><a href="/login">Login</a></li>
+			<li><a href="/register">Register</a></li>
+			<li><a href="/code">Code</a></li>
 @else
-	<a href="/logout">Logout</a>
-	<a href="/profile">Profile</a>
-	<a href="/deactivate">Deactivate</a>
-	<script type="text/javascript">
-	var user = {!! $user !!};
-	</script>
+			<li><a href="/logout">Logout</a></li>
+			<li><a href="/profile">Profile</a></li>
+			<li><a href="/deactivate">Deactivate</a></li>
 @endif
+		</ul>
+	</div>
 @show
         <div class="container" id="container">
 @yield('content')
         </div>
-@section('bottom')
+@section('bottomscripts')
 @show
     </body>
 </html>
