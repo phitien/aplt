@@ -9,9 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use App\Ezsell\Models\User\Traits\ExtensionTrait;
-use App\Ezsell\Traits\EncoderTrait;
 use App\Ezsell\Models\User\Traits\RoleTrait;
-use App\Ezsell\Traits\UtilTrait;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 	/**
@@ -21,7 +19,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	/**
 	 * Traits
 	 */
-	use UtilTrait, EncoderTrait, ExtensionTrait, RoleTrait;
+	use ExtensionTrait, RoleTrait;
 	/**
 	 *
 	 * @var array

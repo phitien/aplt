@@ -93,7 +93,4 @@ trait UserTrait
 	protected static function setUser(User $user) {
 		static::$_user = $user;
 	}
-	protected static function isLoggedIn() {
-		return ! static::getUser ()->isGuest ();
-	}
 }

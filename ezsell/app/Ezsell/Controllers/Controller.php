@@ -10,7 +10,6 @@ use Request;
 use App\Ezsell\Config\AuthorizationMaps;
 use App\Ezsell\Traits\MailerTrait;
 use App\Ezsell\Traits\ResponseTrait;
-use App\Ezsell\Traits\EncoderTrait;
 use App\Ezsell\Traits\UtilTrait;
 use App\Ezsell\Traits\RestfulTrait;
 use App\Ezsell\Traits\ApiCallRestfulTrait;
@@ -19,7 +18,7 @@ abstract class Controller extends BaseController implements IController {
 	/**
 	 * TRAITS
 	 */
-	use EncoderTrait, MailerTrait, ResponseTrait, UtilTrait, RestfulTrait, ApiCallRestfulTrait;
+	use MailerTrait, ResponseTrait, UtilTrait, RestfulTrait, ApiCallRestfulTrait;
 	/**
 	 *
 	 * @var string

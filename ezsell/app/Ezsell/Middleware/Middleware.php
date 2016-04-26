@@ -9,7 +9,6 @@ use Illuminate\Http\Response;
 use App\Ezsell\Traits\MailerTrait;
 use App\Ezsell\Traits\UserTrait;
 use App\Ezsell\Traits\ResponseTrait;
-use App\Ezsell\Traits\EncoderTrait;
 use App\Ezsell\Traits\RestfulTrait;
 use App\Ezsell\Traits\ApiCallRestfulTrait;
 use App\Ezsell\Traits\UtilTrait;
@@ -18,7 +17,7 @@ abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	/**
 	 * TRAITS
 	 */
-	use UtilTrait, EncoderTrait, MailerTrait, UserTrait, ResponseTrait, RestfulTrait, ApiCallRestfulTrait;
+	use UtilTrait, MailerTrait, UserTrait, ResponseTrait, RestfulTrait, ApiCallRestfulTrait;
 	/**
 	 *
 	 * @var array

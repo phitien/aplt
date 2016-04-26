@@ -58,4 +58,11 @@ trait ApiCallRestfulTrait {
 	protected static function apiCallProfile() {
 		return static::restful_get ( 'api/profile' );
 	}
+	/**
+	 *
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	protected static function apiCallUpdateProfile(array $data = []) {
+		return static::restful_post ( 'api/profile', $data );
+	}
 }
