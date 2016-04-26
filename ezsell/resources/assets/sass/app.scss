@@ -6,12 +6,19 @@ $font-family-sans-serif: 'Lato', sans-serif;
 	padding: 8px 24px;
 }
 
-.EzsellForm>input, .EzsellForm>textarea {
-	display: block;
+.EzsellForm .ui-input {
 	width: 240px;
 	padding: 4px 8px;
 	margin-bottom: 8px;
 	border-radius: 3px;
 	border: 1px solid #888;
 	font-size: 14px;
+}
+
+.EzsellForm .ui-input_state_custom-error {
+	border-color: red;
+}
+
+.EzsellForm span.ui-hint {
+	margin-left: 8px;
 }

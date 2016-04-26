@@ -4,5 +4,5 @@
 
 @section('bottom')
 @parent
-	<script type="text/babel" src="js/pages/register.js"></script>
+	<script type="text/javascript" src="js/pages/register.js"></script>
 @endsection
