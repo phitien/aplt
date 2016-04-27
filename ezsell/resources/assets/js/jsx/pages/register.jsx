@@ -1,4 +1,4 @@
-import Input from './../form/input.jsx';
+import Input from './../components/form/input.jsx';
 //
 var RegisterForm = React.createClass({
 	getInitialState() {

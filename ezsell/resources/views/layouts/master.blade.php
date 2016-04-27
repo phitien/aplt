@@ -20,18 +20,7 @@
     <body>
 @section('top')
 	<div class="container">
-		<ul class="nav navbar-nav navbar-right">
-			<li><a href="/">Home</a></li>
-@if ($isGuest)
-			<li><a href="/login">Login</a></li>
-			<li><a href="/register">Register</a></li>
-			<li><a href="/code">Code</a></li>
-@else
-			<li><a href="/logout">Logout</a></li>
-			<li><a href="/profile">Profile</a></li>
-			<li><a href="/deactivate">Deactivate</a></li>
-@endif
-		</ul>
+		{!! $menu !!}
 	</div>
 @show
         <div class="container" id="container">
