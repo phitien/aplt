@@ -21,11 +21,11 @@ abstract class AuthenticableController extends Controller {
 	 * @return Response void
 	 */
 	protected function enterWrongPassword(Request $request) {
-		$current_password = $request->get ( 'password' );
+		$current_password = $request->get ( 'current_password' );
 		if (! $current_password) {
 			return $this->jsonResponse ( 'current_password_not_provided', null, Response::HTTP_BAD_REQUEST );
 		}
-		if (strlen ( $current_password ) > 0 && ! Hash::check ( 'phitien', $this->user ()->password )) {
+		if (strlen ( $current_password ) > 0 && ! Hash::check ( $current_password, $this->user ()->password )) {
 			return $this->jsonResponse ( 'current_password_incorrect', null, Response::HTTP_BAD_REQUEST );
 		}
 		return false;
