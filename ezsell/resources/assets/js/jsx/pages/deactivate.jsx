@@ -23,7 +23,13 @@ var DeactivateForm = React.createClass({
 		return (
 			<Formsy.Form className='EzsellForm' method='post' action='/deactivate'  
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-				<Input type='password' name='password' title='Password' validations={{ matchRegexp: /.{6,}/}} validationError='Password is required, min 6 letters' required />
+				<Input type='password' required name='password' title='Password' validations={{
+						minLength: 6,
+						maxLength: 30
+					}} validationErrors={{
+						minLength: 'Password should have at least 6 characters',
+						maxLength: 'Password should not have more than 30 characters'
+					}} />
 				<button className='btn btn-default' type='submit' disabled={!this.state.canSubmit}>Deactivate</button>
 			</Formsy.Form>
 		);

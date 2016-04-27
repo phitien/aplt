@@ -17,7 +17,7 @@ Route::post ( 'follow/{id}', 'Ezsell\Controllers\AccountController@follow' );
 Route::post ( 'accept/{id}', 'Ezsell\Controllers\AccountController@accept' );
 Route::post ( 'refuse/{id}', 'Ezsell\Controllers\AccountController@refuse' );
 
-Route::post ( 'password', 'Ezsell\Controllers\AccountController@password' );
+Route::any ( 'password', 'Ezsell\Controllers\AccountController@password' );
 Route::post ( 'email', 'Ezsell\Controllers\AccountController@email' );
 Route::post ( 'account', 'Ezsell\Controllers\AccountController@account' );
 Route::post ( 'forget', 'Ezsell\Controllers\AccountController@forget' );

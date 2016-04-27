@@ -23,7 +23,8 @@ var CodeForm = React.createClass({
 		return (
 			<Formsy.Form className='EzsellForm' method='post' action='/code'  
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-				<Input type='email' name='email' title='Email' validations='isEmail' validationError='This is not a valid email' required />
+				<Input type='email' required name='email' title='Email' validations='isEmail' 
+					validationError='This is not a valid email' />
 				<button className='btn btn-default' type='submit' disabled={!this.state.canSubmit}>Send activation</button>
 			</Formsy.Form>
 		);

@@ -65,4 +65,12 @@ trait ApiCallRestfulTrait {
 	protected static function apiCallUpdateProfile(array $data = []) {
 		return static::restful_post ( 'api/profile', $data );
 	}
+	/**
+	 *
+	 * @param array $data[current_password,password,password_confirmation]        	
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	protected static function apiCallPassword(array $data = []) {
+		return static::restful_post ( 'api/password', $data );
+	}
 }

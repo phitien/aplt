@@ -4,6 +4,7 @@ namespace App\Ezsell\Controllers\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use View;
 
 trait AccountTrait {
 	/**
@@ -13,6 +14,12 @@ trait AccountTrait {
 	 * @return Response
 	 */
 	public function password(Request $request) {
+		if ($request->isMethod ( 'post' )) {
+			return $this->apiPassword ( $request );
+		} else {
+			return $this->showPassword ( $request );
+		}
+		
 		if ($response = $this->enterWrongPassword ( $request )) {
 			return $response;
 		}
@@ -28,6 +35,26 @@ trait AccountTrait {
 				'password' => static::getUser ()->changePassword ( $new_password ) 
 		];
 		return $this->updateJsonResponse ( $this->doLogin ( $credentials ), 'password_changed', null );
+	}
+	protected function apiPassword(Request $request) {
+		$data = $request->only ( 'current_password', 'password', 'password_confirmation' );
+		$response = static::apiCallPassword ( $data );
+		if ($response->getStatusCode () == Response::HTTP_OK) {
+			return $this->response ( View::make ( 'ok.register', [ 
+					'data' => json_decode ( $response->getBody (), true ) 
+			] ) );
+		} else {
+			print_r(json_decode ( $response->getBody (), true ));
+			return $this->response ( View::make ( 'ko.register', [ 
+					'data' => json_decode ( $response->getBody (), true ) 
+			] ), $response->getStatusCode () );
+		}
+	}
+	protected function showPassword(Request $request) {
+		if (static::getUser ()->isGuest ())
+			return $this->response ( View::make ( 'login' ) );
+		else
+			return $this->response ( View::make ( 'password' ) );
 	}
 	/**
 	 * Reset: send reset link to the user email

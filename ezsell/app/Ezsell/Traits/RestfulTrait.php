@@ -29,6 +29,7 @@ trait RestfulTrait {
 		} catch ( ClientException $e ) {
 			return static::setParamsFromResponse ( $e->getResponse () );
 		} catch ( Exception $e ) {
+			echo $e->getMessage();
 			// redirect ( '/error' );
 		}
 	}

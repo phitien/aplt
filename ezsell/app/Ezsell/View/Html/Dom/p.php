@@ -2,6 +2,6 @@
 
 namespace App\Ezsell\View\Html\Dom;
 
-class div extends ElementStylable {
+class p extends ElementStylable {
 	protected $_tagName = 'p';
 }

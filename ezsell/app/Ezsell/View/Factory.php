@@ -30,6 +30,7 @@ class Factory extends BaseFactory {
 			$menu->addChild ( (new MenuItem ())->setText ( 'Code' )->setHref ( '/code' ) );
 		} else {
 			$menu->addChild ( (new MenuItem ())->setText ( 'Profile' )->setHref ( '/profile' ) );
+			$menu->addChild ( (new MenuItem ())->setText ( 'Password' )->setHref ( '/password' ) );
 			$menu->addChild ( (new MenuItem ())->setText ( 'Deactivate' )->setHref ( '/deactivate' ) );
 			$menu->addChild ( (new MenuItem ())->setText ( 'Logout' )->setHref ( '/logout' ) );
 		}
