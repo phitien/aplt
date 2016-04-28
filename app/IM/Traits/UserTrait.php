@@ -26,7 +26,7 @@ trait UserTrait
 		if (! static::$_token) {
 			static::$_token = request ()->header ( Config::TOKEN_KEY, Cookie::get ( Config::TOKEN_KEY, static::$_token = JWTAuth::getToken () ) );
 		}
-		return static::$_token;
+		return static::$_token == Config::INVALID_TOKEN ? null : static::$_token;
 	}
 	/**
 	 *

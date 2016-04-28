@@ -1,3 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Lato);
 $font-family-sans-serif: 'Lato', sans-serif;
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+span.validation-error {
+	color: red;
+} 

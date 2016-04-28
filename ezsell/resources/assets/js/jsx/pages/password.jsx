@@ -1,4 +1,5 @@
 import Input from './../components/form/input.jsx';
+import Button from './../components/form/button.jsx';
 //
 var PasswordForm = React.createClass({
 	getInitialState() {
@@ -23,25 +24,18 @@ var PasswordForm = React.createClass({
 		return (
 			<Formsy.Form className='EzsellForm' method='post' action='/password'  
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-				<Input type='password' required name='current_password' title='Current password' validations={{
-						minLength: 6,
-						maxLength: 30
-					}} validationErrors={{
-						minLength: 'Password should have at least 6 characters',
-						maxLength: 'Password should not have more than 30 characters'
-					}} />
+				<Input type='password' required name='current_password' title='Current password' 
+					validationError='Password is required' />
 				<Input type='password' required name='password' title='New password' validations={{
 						notEqualsField: 'current_password',
-						minLength: 6,
-						maxLength: 30
+						isPassword: true
 					}} validationErrors={{
 						notEqualsField: 'New password should not be the same as old one',
-						minLength: 'Password should have at least 6 characters',
-						maxLength: 'Password should not have more than 30 characters'
+						isPasword: 'Password rules: Length between 6-30, at lease 1 lowercase character, 1 uppercase character, 1 number, 1 special character (!@#0^&*()+)',
 					}} />
 				<Input type='password' name='password_confirmation' title='Password confirmation' validations='equalsField:password' 
 					validationError='Password confirmation is not matched' />
-				<button className='btn btn-default' type='submit' disabled={!this.state.canSubmit}>Change</button>
+				<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Change' />
 			</Formsy.Form>
 		);
 	}

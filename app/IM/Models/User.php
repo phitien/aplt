@@ -205,8 +205,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	public function changeEmail($email) {
 		if (! $this->isGuest ()) {
 			$this->email = $email;
-			return $this->generateActivationCode ();
+			$this->generateActivationCode ();
 		}
+		return $email;
 	}
 	/**
 	 *
@@ -216,8 +217,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 		if (! $this->isGuest ()) {
 			$this->password = static::encode ( $password );
 			$this->save ();
-			return $this->password;
 		}
+		return $password;
 	}
 	/**
 	 *

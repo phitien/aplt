@@ -83,6 +83,7 @@ abstract class AuthenticableController extends Controller {
 	 * @return string
 	 */
 	protected function validateName(array $data) {
+		$data ['name'] = strtolower ( $data ['name'] );
 		$validator = Validator::make ( $data, [ 
 				'name' => 'required|min:3|max:30|regex:/^[a-z0-9]([\._]?[a-z0-9]+)+$/' 
 		] );

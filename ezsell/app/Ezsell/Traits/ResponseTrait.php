@@ -17,6 +17,13 @@ trait ResponseTrait
 		return $response->withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )->withCookie ( Cookie::forever ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ) ), true );
 	}
 	/**
+	 *
+	 * @param \Illuminate\Http\Response $response        	
+	 */
+	protected function clearCookies($response) {
+		return $response->withCookie ( Config::TOKEN_KEY, null, true )->withCookie ( Config::EZSELL_KEY, null, true );
+	}
+	/**
 	 * Build response
 	 *
 	 * @param string $to        	

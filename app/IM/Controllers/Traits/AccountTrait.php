@@ -50,13 +50,17 @@ trait AccountTrait {
 			return $response;
 		}
 		$email = $request->request->get ( 'email' );
-		if ($email == $this->user ()->email) {
-			return $this->jsonResponse ( 'email_not_changed', null, Response::HTTP_BAD_REQUEST );
-		}
+		$oldEmail = $this->user ()->email;
 		if ($msg = $this->validateEmail ( $request->request->all () )) {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 		}
+		if ($email == $oldEmail) {
+			return $this->jsonResponse ( 'email_not_changed', null, Response::HTTP_BAD_REQUEST );
+		}
+		$this->user ()->changeEmail ( $email );
+		$this->user ()->email = $oldEmail;
 		$this->sendEmailChangedEmail ( $this->user (), $email );
+		$this->user ()->email = $email;
 		$this->sendActivationEmail ( $this->user () );
 		return $this->updateJsonResponse ( $this->setResponseToken ( $this->doLogout () ), 'user_email_changed', 'Please active your account at ' . $this->user ()->email );
 	}

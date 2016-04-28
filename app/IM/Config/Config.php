@@ -6,6 +6,7 @@ use App\IM\Models\Role;
 use App\IM\Models\Action;
 
 class Config {
+	const INVALID_TOKEN = 'INVALID_TOKEN';
 	/**
 	 *
 	 * @var unknown

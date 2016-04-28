@@ -31,6 +31,8 @@ class Factory extends BaseFactory {
 		} else {
 			$menu->addChild ( (new MenuItem ())->setText ( 'Profile' )->setHref ( '/profile' ) );
 			$menu->addChild ( (new MenuItem ())->setText ( 'Password' )->setHref ( '/password' ) );
+			$menu->addChild ( (new MenuItem ())->setText ( 'Email' )->setHref ( '/email' ) );
+			$menu->addChild ( (new MenuItem ())->setText ( 'Account' )->setHref ( '/account' ) );
 			$menu->addChild ( (new MenuItem ())->setText ( 'Deactivate' )->setHref ( '/deactivate' ) );
 			$menu->addChild ( (new MenuItem ())->setText ( 'Logout' )->setHref ( '/logout' ) );
 		}

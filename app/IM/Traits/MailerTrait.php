@@ -52,7 +52,7 @@ trait MailerTrait
 	 * @param User $user        	
 	 */
 	protected function sendEmailChangedEmail(User $user, $newEmail) {
-		$this->mailTo ( $user, 'register', 'Email changed', [ 
+		$this->mailTo ( $user, 'email', 'Email changed', [ 
 				'title' => 'Email changed',
 				'receiver' => $user,
 				'email' => $newEmail 

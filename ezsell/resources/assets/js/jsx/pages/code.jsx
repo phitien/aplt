@@ -1,4 +1,5 @@
 import Input from './../components/form/input.jsx';
+import Button from './../components/form/button.jsx';
 //
 var CodeForm = React.createClass({
 	getInitialState() {
@@ -25,7 +26,7 @@ var CodeForm = React.createClass({
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 				<Input type='email' required name='email' title='Email' validations='isEmail' 
 					validationError='This is not a valid email' />
-				<button className='btn btn-default' type='submit' disabled={!this.state.canSubmit}>Send activation</button>
+				<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Send' />
 			</Formsy.Form>
 		);
 	}

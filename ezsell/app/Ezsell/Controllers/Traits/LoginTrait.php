@@ -2,6 +2,7 @@
 
 namespace App\Ezsell\Controllers\Traits;
 
+use App\Ezsell\Config\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
@@ -63,6 +64,7 @@ trait  LoginTrait {
 	 */
 	protected function doLogout() {
 		$response = static::apiCallLogout ();
+		static::setToken ( Config::INVALID_TOKEN );
 		return $this->redirect ();
 	}
 }

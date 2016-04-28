@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use JWTAuth;
 use Exception;
 use App\User;
+use App\IM\Config\Config;
 
 trait  LoginTrait {
 	/**
@@ -63,7 +64,7 @@ trait  LoginTrait {
 	 */
 	protected function doLogout() {
 		JWTAuth::invalidate ( $this->token () );
-		$this->setToken ( null );
+		$this->setToken ( Config::INVALID_TOKEN );
 		return $this->jsonResponse ( 'logged_out', null );
 	}
 }

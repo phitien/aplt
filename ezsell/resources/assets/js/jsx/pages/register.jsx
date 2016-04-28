@@ -1,4 +1,5 @@
 import Input from './../components/form/input.jsx';
+import Button from './../components/form/button.jsx';
 //
 var RegisterForm = React.createClass({
 	getInitialState() {
@@ -26,17 +27,12 @@ var RegisterForm = React.createClass({
 				<Input type='email' required name='email' title='Email' validations='isEmail' 
 					validationError='This is not a valid email' />
 				<Input type='email' name='email_confirmation' title='Email confirmation' validations='equalsField:email' 
-					validationError='Email confirmation is not matched'/>
-				<Input type='password' required name='password' title='Password' validations={{
-						minLength: 6,
-						maxLength: 30
-					}} validationErrors={{
-						minLength: 'Password should have at least 6 characters',
-						maxLength: 'Password should not have more than 30 characters'
-					}} />
+					validationError='Email confirmation is not matched' />
+				<Input type='password' required name='password' title='Password' validations='isPassword' 
+					validationError='Password rules: Length between 6-30, at lease 1 lowercase character, 1 uppercase character, 1 number, 1 special character (!@#0^&*()+)' />
 				<Input type='password' name='password_confirmation' title='Password confirmation' validations='equalsField:password' 
 					validationError='Password confirmation is not matched' />
-				<button className='btn btn-default' type='submit' disabled={!this.state.canSubmit}>Register</button>
+				<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Register' />
 			</Formsy.Form>
 		);
 	}

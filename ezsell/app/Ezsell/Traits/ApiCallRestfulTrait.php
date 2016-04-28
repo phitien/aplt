@@ -48,7 +48,7 @@ trait ApiCallRestfulTrait {
 	 */
 	protected static function apiCallDeactive(string $password = '') {
 		return static::restful_post ( 'api/deactivate', [ 
-				'password' => $password 
+				'current_password' => $password 
 		] );
 	}
 	/**
@@ -73,4 +73,22 @@ trait ApiCallRestfulTrait {
 	protected static function apiCallPassword(array $data = []) {
 		return static::restful_post ( 'api/password', $data );
 	}
+	/**
+	 *
+	 * @param array $data[current_password,email,
+	 *        	email_confirmation]
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	protected static function apiCallEmail(array $data = []) {
+		return static::restful_post ( 'api/email', $data );
+	}
+	/**
+	 *
+	 * @param array $data[current_password,name]        	
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	protected static function apiCallAccount(array $data = []) {
+		return static::restful_post ( 'api/account', $data );
+	}
 }
+	

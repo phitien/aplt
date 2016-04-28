@@ -16,6 +16,10 @@ elixir(function(mix) {
 	
 	.browserify('jsx/pages/deactivate.jsx', 'public/js/pages')
 	
-	.browserify('jsx/pages/password.jsx', 'public/js/pages');
+	.browserify('jsx/pages/password.jsx', 'public/js/pages')
+	
+	.browserify('jsx/pages/email.jsx', 'public/js/pages')
+	
+	.browserify('jsx/pages/account.jsx', 'public/js/pages');
 
 });

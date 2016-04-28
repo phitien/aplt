@@ -2,6 +2,7 @@
 
 namespace App\Ezsell\Controllers\Traits;
 
+use App\Ezsell\Config\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use View;
@@ -21,9 +22,12 @@ trait DeactivateTrait {
 		}
 	}
 	protected function apiDeactivate(Request $request) {
-		$response = static::apiCallDeactive ( $request->get ( 'password' ) );
+		$response = static::apiCallDeactive ( $request->get ( 'current_password' ) );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->doLogout ();
+			static::setToken ( Config::INVALID_TOKEN );
+			return $this->response ( View::make ( 'ok.deactivate', [ 
+					'data' => json_decode ( $response->getBody (), true ) 
+			] ), $response->getStatusCode () );
 		} else {
 			return $this->response ( View::make ( 'ko.deactivate', [ 
 					'data' => json_decode ( $response->getBody (), true ) 

@@ -18,7 +18,7 @@ Route::post ( 'accept/{id}', 'Ezsell\Controllers\AccountController@accept' );
 Route::post ( 'refuse/{id}', 'Ezsell\Controllers\AccountController@refuse' );
 
 Route::any ( 'password', 'Ezsell\Controllers\AccountController@password' );
-Route::post ( 'email', 'Ezsell\Controllers\AccountController@email' );
-Route::post ( 'account', 'Ezsell\Controllers\AccountController@account' );
-Route::post ( 'forget', 'Ezsell\Controllers\AccountController@forget' );
-Route::post ( 'reset', 'Ezsell\Controllers\AccountController@reset' );
+Route::any ( 'email', 'Ezsell\Controllers\AccountController@email' );
+Route::any ( 'account', 'Ezsell\Controllers\AccountController@account' );
+Route::any ( 'forget', 'Ezsell\Controllers\AccountController@forget' );
+Route::any ( 'reset', 'Ezsell\Controllers\AccountController@reset' );

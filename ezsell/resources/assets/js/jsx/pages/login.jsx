@@ -1,4 +1,5 @@
 import Input from './../components/form/input.jsx';
+import Button from './../components/form/button.jsx';
 //
 var LoginForm = React.createClass({
 	getInitialState() {
@@ -25,16 +26,11 @@ var LoginForm = React.createClass({
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 				<Input type='email' required name='email' title='Email' validations='isEmail' 
 					validationError='This is not a valid email' />
-				<Input type='password' required name='password' title='Password' validations={{
-						minLength: 6,
-						maxLength: 30
-					}} validationErrors={{
-						minLength: 'Password should have at least 6 characters',
-						maxLength: 'Password should not have more than 30 characters'
-					}} />
+				<Input type='password' required name='password' title='Password' 
+					validationError='Password is required' />
 				<Input type='checkbox' name='remember' title='Remember me' />
 				<input type='hidden' name='redirect' value={location.href} />
-				<button className='btn btn-default' type='submit' disabled={!this.state.canSubmit}>Login</button>
+				<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Login' />
 			</Formsy.Form>
 		);
 	}

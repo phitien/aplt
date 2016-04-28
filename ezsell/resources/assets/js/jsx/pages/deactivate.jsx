@@ -1,4 +1,5 @@
 import Input from './../components/form/input.jsx';
+import Button from './../components/form/button.jsx';
 //
 var DeactivateForm = React.createClass({
 	getInitialState() {
@@ -23,14 +24,9 @@ var DeactivateForm = React.createClass({
 		return (
 			<Formsy.Form className='EzsellForm' method='post' action='/deactivate'  
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-				<Input type='password' required name='password' title='Password' validations={{
-						minLength: 6,
-						maxLength: 30
-					}} validationErrors={{
-						minLength: 'Password should have at least 6 characters',
-						maxLength: 'Password should not have more than 30 characters'
-					}} />
-				<button className='btn btn-default' type='submit' disabled={!this.state.canSubmit}>Deactivate</button>
+				<Input type='password' required name='current_password' title='Password' 
+					validationError='Password is required' />
+				<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Deactivate' />
 			</Formsy.Form>
 		);
 	}
