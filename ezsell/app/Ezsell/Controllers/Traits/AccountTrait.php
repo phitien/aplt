@@ -26,12 +26,13 @@ trait AccountTrait {
 		$response = static::apiCallPassword ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( View::make ( 'ok.password', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
+			return $this->response ( View::make ( 'password', [ 
+					'ezsellMessage' => "Hehe mật khẩu đổi rồi đấy, an toàn rồi :D" 
 			] ) );
 		} else {
-			return $this->response ( View::make ( 'ko.password', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
+			$data = json_decode ( $response->getBody (), true );
+			return $this->response ( View::make ( 'password', [ 
+					'ezsellMessage' => "Hỏng rồi, không đổi được mật khẩu, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -59,12 +60,13 @@ trait AccountTrait {
 		$response = static::apiCallEmail ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( View::make ( 'ok.email', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
+			return $this->response ( View::make ( 'email', [ 
+					'ezsellMessage' => "Hehe email đổi rồi đấy, đăng nhập bằng email mới đi ha :D" 
 			] ) );
 		} else {
-			return $this->response ( View::make ( 'ko.email', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
+			$data = json_decode ( $response->getBody (), true );
+			return $this->response ( View::make ( 'email', [ 
+					'ezsellMessage' => "Hỏng rồi, không đổi được email rồi, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -92,12 +94,13 @@ trait AccountTrait {
 		$response = static::apiCallAccount ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( View::make ( 'ok.account', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
+			return $this->response ( View::make ( 'account', [ 
+					'ezsellMessage' => "Hehe account đổi rồi đấy :D" 
 			] ) );
 		} else {
-			return $this->response ( View::make ( 'ko.account', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
+			$data = json_decode ( $response->getBody (), true );
+			return $this->response ( View::make ( 'account', [ 
+					'ezsellMessage' => "Hỏng rồi, không đổi được account, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}

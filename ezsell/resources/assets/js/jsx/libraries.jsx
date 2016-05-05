@@ -1,7 +1,35 @@
 window.$ = require('jquery');
+require('jquery-ui');
 window.React = require('react');
 window.ReactDOM = require('react-dom');
 window.Formsy = require('formsy-react');
+window.submitForm = function(form) {
+	$('<input>').attr({
+		type: 'hidden',
+		name: '_token',
+		value: $('meta[name="csrf-token"]').attr('content')
+	}).appendTo(form);
+	form.submit();
+}
+window.showMessageDialog = function(msg, title, btn) {
+	btn = btn ? btn : 'Ok';
+	title = title ? title : 'Message';
+	var buttons = {};
+	buttons[btn] = function() {
+		$( this ).dialog( 'close' );
+		$( this ).remove();
+	};
+ 	$('<div></div>').dialog({
+		modal: true,
+		title: title,
+		closeOnEscape: false,
+		open: function(e, ui) {
+			$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
+			$(this).html(msg);
+		},
+		buttons: buttons
+	});//end confirm dialog
+}
 Formsy.addValidationRule('notEqualsField', function (values, value, field) {
 	return value != values[field];
 });
@@ -41,4 +69,9 @@ Formsy.addValidationRule('isAccountName', function (values, value) {
 	} catch(e) {
 	}
 	return false;
+});
+$( document ).ready(function() {
+	if (ezsellMessage) {
+		showMessageDialog(ezsellMessage);
+	}
 });

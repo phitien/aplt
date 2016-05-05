@@ -3,10 +3,7 @@
 namespace App\Ezsell\Controllers;
 
 use App\Ezsell\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Validator;
-use Hash;
 use App\Ezsell\Controllers\Traits\LoginTrait;
 use App\Ezsell\Traits\UserTrait;
 
@@ -15,21 +12,6 @@ abstract class AuthenticableController extends Controller {
 	 * Traits
 	 */
 	use LoginTrait, UserTrait;
-	/**
-	 *
-	 * @param Request $request        	
-	 * @return Response void
-	 */
-	protected function enterWrongPassword(Request $request) {
-		$current_password = $request->get ( 'current_password' );
-		if (! $current_password) {
-			return $this->jsonResponse ( 'current_password_not_provided', null, Response::HTTP_BAD_REQUEST );
-		}
-		if (strlen ( $current_password ) > 0 && ! Hash::check ( $current_password, static::getUser ()->password )) {
-			return $this->jsonResponse ( 'current_password_incorrect', null, Response::HTTP_BAD_REQUEST );
-		}
-		return false;
-	}
 	/**
 	 * Validate user email
 	 *

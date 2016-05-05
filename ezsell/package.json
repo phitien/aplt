@@ -10,6 +10,7 @@
     "core-js": "^2.3.0",
     "formsy-react": "^0.18.0",
     "jquery": "^2.2.3",
+    "jquery-ui": "^1.10.5",
     "laravel-elixir": "^5.0.0",
     "react": "^15.0.1",
     "react-dom": "^15.0.1"

@@ -46,9 +46,14 @@ trait  ProfileTrait {
 		}
 		$response = static::apiCallUpdateProfile ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( View::make ( 'ok.profile' ) );
+			return $this->response ( View::make ( 'deactivate', [ 
+					'ezsellMessage' => "Hehe update ok rồi đấy :)." 
+			] ) );
 		} else {
-			return $this->response ( View::make ( 'ko.profile' ), $response->getStatusCode () );
+			$data = json_decode ( $response->getBody (), true );
+			return $this->response ( View::make ( 'deactivate', [ 
+					'ezsellMessage' => "Hỏng rồi, update có vài lỗi, lý do vì {$data['message']}. Thử lại phát đi." 
+			] ), $response->getStatusCode () );
 		}
 	}
 	/**

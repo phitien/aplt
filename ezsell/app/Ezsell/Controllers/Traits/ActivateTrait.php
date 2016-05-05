@@ -19,12 +19,13 @@ trait  ActivateTrait {
 	public function activate(Request $request, $code) {
 		$response = static::apiCallActivate ( $code );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( View::make ( 'ok.activate', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
+			return $this->response ( View::make ( 'activate', [ 
+					'ezsellMessage' => "Hehe kích hoạt ok rồi đấy. Lướt thôi :D" 
 			] ) );
 		} else {
-			return $this->response ( View::make ( 'ko.activate', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
+			$data = json_decode ( $response->getBody (), true );
+			return $this->response ( View::make ( 'activate', [ 
+					'ezsellMessage' => "Hỏng rồi, đăng ký không được, lý do vì {$data['message']}. Thử đăng ký lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -46,25 +47,21 @@ trait  ActivateTrait {
 		if ($msg = $this->emailValidator ( [ 
 				'email' => $email 
 		] )) {
-			return $this->response ( View::make ( 'ko.code', [ 
-					'email' => $email,
-					'data' => [ 
-							'message' => $msg 
-					] 
+			return $this->response ( View::make ( 'code', [ 
+					'ezsellMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$msg}. Thử lại phát đi." 
 			] ), Response::HTTP_BAD_REQUEST );
 		}
 		$response = static::apiCallCode ( [ 
 				'email' => $email 
 		] );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( View::make ( 'ok.code', [ 
-					'email' => $email,
-					'data' => json_decode ( $response->getBody (), true ) 
+			return $this->response ( View::make ( 'code', [ 
+					'ezsellMessage' => "Hehe thư kích hoạt gửi rồi đấy, đăng nhập email và kích hoạt ngay đi nhé :)." 
 			] ) );
 		} else {
-			return $this->response ( View::make ( 'ko.code', [ 
-					'email' => $email,
-					'data' => json_decode ( $response->getBody (), true ) 
+			$data = json_decode ( $response->getBody (), true );
+			return $this->response ( View::make ( 'code', [ 
+					'ezsellMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}

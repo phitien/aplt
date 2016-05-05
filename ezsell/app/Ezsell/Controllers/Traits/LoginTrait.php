@@ -29,9 +29,9 @@ trait  LoginTrait {
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->redirect ( static::getRedirectUri () );
 		} else {
-			return $this->response ( View::make ( 'ko.login', [ 
-					'email' => $credentials ['email'],
-					'data' => json_decode ( $response->getBody (), true ) 
+			$data = json_decode ( $response->getBody (), true );
+			return $this->response ( View::make ( 'login', [ 
+					'ezsellMessage' => "Hỏng rồi, không login được, lý do vì {$data['message']}. Thử lại phát đi" 
 			] ), $response->getStatusCode () );
 		}
 	}

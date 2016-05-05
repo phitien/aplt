@@ -18,7 +18,7 @@ var EmailForm = React.createClass({
 		});
 	},
 	submit(model) {
-		ReactDOM.findDOMNode(this).submit();
+		submitForm(ReactDOM.findDOMNode(this));
 	},
 	render : function() {
 		return (

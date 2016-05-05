@@ -25,12 +25,13 @@ trait DeactivateTrait {
 		$response = static::apiCallDeactive ( $request->get ( 'current_password' ) );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( View::make ( 'ok.deactivate', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
-			] ), $response->getStatusCode () );
+			return $this->response ( View::make ( 'deactivate', [ 
+					'ezsellMessage' => "Hehe, deactivate được rồi !!" 
+			] ) );
 		} else {
-			return $this->response ( View::make ( 'ko.deactivate', [ 
-					'data' => json_decode ( $response->getBody (), true ) 
+			$data = json_decode ( $response->getBody (), true );
+			return $this->response ( View::make ( 'deactivate', [ 
+					'ezsellMessage' => "Hỏng rồi, không deactivate được, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}

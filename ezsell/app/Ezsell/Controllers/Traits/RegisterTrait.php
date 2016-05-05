@@ -24,23 +24,19 @@ trait  RegisterTrait {
 	protected function apiRegister(Request $request) {
 		$data = $request->only ( 'email', 'email_confirmation', 'password', 'password_confirmation' );
 		if ($msg = $this->registrationValidator ( $data )) {
-			return $this->response ( View::make ( 'ko.register', [ 
-					'email' => $data ['email'],
-					'data' => [ 
-							'message' => $msg 
-					] 
+			return $this->response ( View::make ( 'register', [ 
+					'ezsellMessage' => "Hỏng rồi, không đăng ký được, lý do vì {$msg}. Thử lại phát đi." 
 			] ), Response::HTTP_BAD_REQUEST );
 		}
 		$response = static::apiCallRegister ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( View::make ( 'ok.register', [ 
-					'email' => $data ['email'],
-					'data' => json_decode ( $response->getBody (), true ) 
+			return $this->response ( View::make ( 'register', [ 
+					'ezsellMessage' => "Hehe đăng ký ok rồi đấy, đăng nhập email và activate account ngay đi :)." 
 			] ) );
 		} else {
-			return $this->response ( View::make ( 'ko.register', [ 
-					'email' => $data ['email'],
-					'data' => json_decode ( $response->getBody (), true ) 
+			$data = json_decode ( $response->getBody (), true );
+			return $this->response ( View::make ( 'register', [ 
+					'ezsellMessage' => "Hỏng rồi, không đăng ký được, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}
