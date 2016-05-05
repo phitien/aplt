@@ -13,7 +13,7 @@ class CreateCatsTable extends Migration {
 			$table->integer ( 'parent_id' )->unsigned ();
 			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'cats' )->onDelete ( 'cascade' );
 			$table->string ( 'title' )->unique ();
-			$table->string ( 'description' )->unique ();
+			$table->text ( 'description' )->nullable ();
 			$table->string ( 'avatar' )->nullable ();
 			$table->string ( 'cover' )->nullable ();
 			$table->string ( 'country' )->nullable ();

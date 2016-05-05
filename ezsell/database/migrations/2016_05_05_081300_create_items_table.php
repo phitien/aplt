@@ -12,7 +12,8 @@ class CreateItemsTable extends Migration {
 			$table->increments ( 'id' );
 			$table->integer ( 'user_id' )->unsigned ();
 			$table->string ( 'title' )->unique ();
-			$table->string ( 'content' )->unique ();
+			$table->text ( 'description' )->nullable ();
+			$table->double ( 'price' )->nullable ();
 			$table->text ( 'tags' )->nullable ();
 			$table->text ( 'json' )->nullable ();
 			$table->integer ( 'index' )->nullable ();

@@ -8,7 +8,7 @@
 @section('css')
 	{{ Html::style('css/jquery-ui/themes/base/jquery.ui.all.css') }}
 @if (isset($theme))
-    {{ Html::style('css/jquery-ui/themes/'.$theme.'/jquery.ui.min.css') }}
+    {{ Html::style('css/jquery-ui/themes/'.$theme.'/jquery-ui.min.css') }}
     {{ Html::style('css/jquery-ui/themes/'.$theme.'/jquery.ui.theme.css') }}
 @endif	
 	{{ Html::style('css/app.css') }}
