@@ -22,6 +22,7 @@ class Factory extends BaseFactory {
 		$isGuest = ( bool ) static::getUser ()->isGuest ();
 		$data ['isGuest'] = $isGuest;
 		$data ['user'] = static::getUser ();
+		$data ['theme'] = 'south-street';
 		if (! isset ( $data ['ezsellMessage'] ))
 			$data ['ezsellMessage'] = '';
 		$menu = (new Menu ())->setClassName ( 'nav navbar-nav navbar-right' );
