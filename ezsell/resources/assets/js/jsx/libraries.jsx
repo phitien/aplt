@@ -70,8 +70,3 @@ Formsy.addValidationRule('isAccountName', function (values, value) {
 	}
 	return false;
 });
-$( document ).ready(function() {
-	if (ezsellMessage) {
-		showMessageDialog(ezsellMessage);
-	}
-});

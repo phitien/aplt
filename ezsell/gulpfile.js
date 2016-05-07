@@ -5,6 +5,8 @@ elixir(function(mix) {
 	mix.sass([ 'app.scss' ], 'public/css/app.css')
 
 	.browserify('jsx/libraries.jsx', 'public/js')
+	
+	.browserify('jsx/app.jsx', 'public/js')
 
 	.browserify('jsx/pages/index.jsx', 'public/js/pages')
 

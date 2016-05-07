@@ -5,6 +5,7 @@ namespace App\Ezsell\Config;
 use Hash;
 use App\Ezsell\Models\Role;
 use App\Ezsell\Models\Action;
+use App\Ezsell\Models\Place;
 
 class Config {
 	const HOME_PAGE = '/';

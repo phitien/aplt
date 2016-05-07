@@ -7,6 +7,7 @@ use App\Ezsell\Traits\UserTrait;
 use App\Ezsell\Traits\UtilTrait;
 use App\Ezsell\View\Html\Menu\Menu;
 use App\Ezsell\View\Html\Menu\MenuItem;
+use App\Ezsell\Models\Cat;
 
 class Factory extends BaseFactory {
 	use UserTrait, UtilTrait;
@@ -40,6 +41,7 @@ class Factory extends BaseFactory {
 			$menu->addChild ( (new MenuItem ())->setText ( 'Logout' )->setHref ( '/logout' ) );
 		}
 		$data ['menu'] = $menu;
+		$data ['cats'] = Cat::getHierarchy ();
 		return parent::make ( $view, $data, $mergeData );
 	}
 }

@@ -14,6 +14,7 @@ class Item extends Model {
 			'active',
 			'title',
 			'description',
+			'is_selling',
 			'is_new',
 			'originalprice',
 			'saleprice',
@@ -34,13 +35,26 @@ class Item extends Model {
 	];
 	protected $casts = [ 
 			'active' => 'boolean',
+			'is_selling' => 'boolean',
 			'is_new' => 'boolean',
 			'options' => 'array' 
 	];
 	public function parent() {
-		return $this->hasOne ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
+		return $this->belongsTo ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
 	}
 	public function place() {
-		return $this->hasOne ( 'App\Ezsell\Models\Place', 'place_id', 'id' );
+		return $this->belongsTo ( 'App\Ezsell\Models\Place', 'place_id', 'id' );
+	}
+	public function images() {
+		return $this->hasMany ( 'App\Ezsell\Models\Image', 'parent_id', 'id' );
+	}
+	public function commnents() {
+		return $this->hasMany ( 'App\Ezsell\Models\Comment', 'parent_id', 'id' );
+	}
+	public function likes() {
+		return $this->hasMany ( 'App\Ezsell\Models\Like', 'parent_id', 'id' );
+	}
+	public function prices() {
+		return $this->hasMany ( 'App\Ezsell\Models\Price', 'parent_id', 'id' );
 	}
 }

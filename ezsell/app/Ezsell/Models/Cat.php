@@ -3,39 +3,50 @@
 namespace App\Ezsell\Models;
 
 class Cat extends Model {
+	public $timestamps = false;
 	protected $guarded = [ 
 			'id' 
 	];
 	protected $fillable = [ 
 			'id',
 			'parent_id',
-			'place_id',
+			'code',
 			'active',
-			'title',
-			'description',
-			'avatar',
-			'cover',
-			'tags',
-			'options',
-			'bits' 
+			'order' 
 	];
-	protected $hidden = [ ];
+	protected $hidden = [ 
+			'active',
+			'created_at',
+			'updated_at',
+			'deleted_at' 
+	];
 	protected $dates = [ 
 			'created_at',
 			'updated_at',
 			'deleted_at' 
 	];
 	protected $casts = [ 
-			'active' => 'boolean',
-			'options' => 'array' 
+			'active' => 'boolean' 
 	];
+	public function toArray() {
+		$attributes = parent::toArray ();
+		$place = Place::where ( 'countryCode', 'SG' )->first ();
+		return array_merge ( $attributes, [ 
+				'details' => $this->details ()->where ( 'place_id', $place->id )->first (),
+				'children' => $this->children 
+		] );
+	}
+	public function details() {
+		return $this->hasMany ( 'App\Ezsell\Models\CatDetail', 'parent_id', 'id' );
+	}
 	public function parent() {
-		return $this->hasOne ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
+		return $this->belongsTo ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
 	}
 	public function children() {
-		return $this->hasMany ( 'App\Ezsell\Models\Cat', 'id', 'parent_id' );
+		return $this->hasMany ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
 	}
-	public function place() {
-		return $this->hasOne ( 'App\Ezsell\Models\Place', 'place_id', 'id' );
+	public static function getHierarchy() {
+		$hierarchy = static::where ( 'parent_id', null )->get ();
+		return $hierarchy;
 	}
 }

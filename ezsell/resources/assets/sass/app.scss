@@ -5,3 +5,42 @@ $font-family-sans-serif: 'Lato', sans-serif;
 span.validation-error {
 	color: red;
 } 
+#leftmenu {
+	float : left;
+}
+#rightmenu {
+	float : right;
+}
+ul.catmenu {
+	display : block;
+	margin : 0;
+	padding : 0;
+}
+ul.catmenu li ul {
+	display : none;
+	position : absolute;
+	top : 40px;
+	left : 0;
+	margin : 0;
+	padding : 10px 0;
+}
+ul.catmenu li:hover ul {
+	display : block;
+	background-color : red; 
+}
+ul.catmenu li {
+	display : block;
+	position : relative;
+}
+ul.catmenu>li {
+}
+ul.catmenu li li {
+	min-width : 250px;
+}
+ul.catmenu li a {
+	padding-left : 15px;
+	padding-right : 15px;
+}
+ul.catmenu li:hover a {
+	background-color : red;
+}

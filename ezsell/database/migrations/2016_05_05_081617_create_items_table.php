@@ -22,6 +22,8 @@ class CreateItemsTable extends Migration {
 			$table->string ( 'title' )->unique ();
 			$table->text ( 'description' )->nullable ();
 			//
+			$table->boolean ( 'is_selling' )->nullable ()->default ( 1 );
+			//
 			$table->boolean ( 'is_new' )->nullable ();
 			//
 			$table->float ( 'originalprice' )->nullable ();
@@ -41,7 +43,16 @@ class CreateItemsTable extends Migration {
 			//
 			$table->timestamps ();
 			$table->softDeletes ();
+			//
+			$table->index ( [ 
+					'user_id',
+					'parent_id',
+					'place_id',
+					'title' 
+			], 'item_search_index' );
 		} );
+		//
+		// DB::statement ( 'ALTER TABLE items ADD FULLTEXT KEY item_fulltext_index (title,description)' );
 	}
 	
 	/**
@@ -50,6 +61,7 @@ class CreateItemsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
+		// DB::statement ( 'ALTER TABLE items DROP INDEX item_fulltext_index' );
 		Schema::table ( 'items', function (Blueprint $table) {
 			$table->dropForeign ( [ 
 					'parent_id' 
@@ -57,6 +69,7 @@ class CreateItemsTable extends Migration {
 			$table->dropForeign ( [ 
 					'place_id' 
 			] );
+			$table->dropIndex ( 'item_search_index' );
 		} );
 		Schema::dropIfExists ( 'items' );
 	}

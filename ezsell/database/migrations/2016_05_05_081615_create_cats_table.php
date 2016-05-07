@@ -11,25 +11,19 @@ class CreateCatsTable extends Migration {
 		Schema::create ( 'cats', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			$table->integer ( 'parent_id' )->unsigned ()->nullable ();
-			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'cats' );
+			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'cats' )->onDelete ( 'cascade' );
 			//
-			$table->integer ( 'place_id' )->unsigned ();
-			$table->foreign ( 'place_id' )->references ( 'id' )->on ( 'places' )->onDelete ( 'cascade' );
-			//
+			$table->string ( 'code' )->unique ();
 			$table->boolean ( 'active' )->nullable ()->default ( 0 );
 			//
-			$table->string ( 'title' )->unique ();
-			$table->text ( 'description' )->nullable ();
-			$table->text ( 'avatar' )->nullable ();
-			$table->text ( 'cover' )->nullable ();
-			//
-			$table->text ( 'tags' )->nullable ();
-			$table->text ( 'options' )->nullable ();
-			//
-			$table->integer ( 'bits' )->nullable ()->default ( 0 );
+			$table->integer ( 'order' )->unsigned ();
 			//
 			$table->timestamps ();
 			$table->softDeletes ();
+			//
+			$table->index ( [ 
+					'code' 
+			], 'cat_search_index' );
 		} );
 	}
 	
@@ -43,9 +37,7 @@ class CreateCatsTable extends Migration {
 			$table->dropForeign ( [ 
 					'parent_id' 
 			] );
-			$table->dropForeign ( [ 
-					'place_id' 
-			] );
+			$table->dropIndex ( 'cat_search_index' );
 		} );
 		Schema::dropIfExists ( 'cats' );
 	}

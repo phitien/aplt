@@ -25,6 +25,6 @@ class Price extends Model {
 			'options' => 'array' 
 	];
 	public function parent() {
-		return $this->hasOne ( 'App\Ezsell\Models\Item', 'parent_id', 'id' );
+		return $this->belongsTo ( 'App\Ezsell\Models\Item', 'parent_id', 'id' );
 	}
 }

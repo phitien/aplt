@@ -16,19 +16,24 @@
 @section('script')
 	{{ Html::script('js/browser.min.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/libraries.js', ['type' => 'text/javascript']) }}
+	{{ Html::script('js/app.js', ['type' => 'text/javascript']) }}
 	<script type="text/javascript">
 @if (!$isGuest)
 		var user = {!! $user !!};
 @endif
 		var ezsellMessage = '{{ $ezsellMessage }}';
+		var cats = {!! $cats !!};
 	</script>
 @show
     </head>
     <body>
 @section('top')
-	<div class="container">
-		{!! $menu !!}
-	</div>
+		<div class="container">
+			<div id="leftmenu"></div>
+			<div id="rightmenu">
+				{!! $menu !!}
+			</div>
+		</div>
 @show
         <div class="container" id="container">
 @yield('content')

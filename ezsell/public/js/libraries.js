@@ -45178,11 +45178,6 @@ Formsy.addValidationRule('isAccountName', function (values, value) {
 	} catch (e) {}
 	return false;
 });
-$(document).ready(function () {
-	if (ezsellMessage) {
-		showMessageDialog(ezsellMessage);
-	}
-});
 
 },{"formsy-react":4,"jquery":9,"jquery-ui":8,"react":174,"react-dom":11}]},{},[175]);
 
