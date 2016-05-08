@@ -23,6 +23,8 @@ elixir(function(mix) {
 	.browserify('jsx/pages/email.jsx', 'public/js/pages')
 
 	.browserify('jsx/pages/account.jsx', 'public/js/pages')
+	
+	.browserify('jsx/pages/location.jsx', 'public/js/pages')
 
 	.copy('node_modules/jquery-ui/themes', 'public/css/jquery-ui/themes');
 

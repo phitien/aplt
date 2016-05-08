@@ -2,7 +2,6 @@
 
 namespace App\Ezsell\Controllers;
 
-use App\Ezsell\Controllers\Controller;
 use Validator;
 use App\Ezsell\Controllers\Traits\LoginTrait;
 use App\Ezsell\Traits\UserTrait;

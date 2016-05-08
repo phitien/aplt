@@ -50,6 +50,7 @@ class Kernel extends HttpKernel {
 			'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
 			'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 			'im.authentication' => \App\Ezsell\Middleware\Authentication::class,
-			'im.authorization' => \App\Ezsell\Middleware\Authorization::class 
+			'im.authorization' => \App\Ezsell\Middleware\Authorization::class,
+			'im.location' => \App\Ezsell\Middleware\Location::class
 	];
 }

@@ -9,7 +9,7 @@ use App\Ezsell\Controllers\Traits\DeactivateTrait;
 use App\Ezsell\Controllers\Traits\ProfileTrait;
 use App\Ezsell\Controllers\Traits\SocietyTrait;
 
-class AccountController extends AuthenticableController {
+class AccountController extends BaseController {
 	/**
 	 * Traits
 	 */

@@ -1577,3 +1577,53 @@ Stack trace:
 #5 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(155): Illuminate\Session\Middleware\StartSession->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
 #6 /Users/phitien/im/public/index.php(58): Illuminate\Foundation\Http\Kernel->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
 #7 {main}  
+[2016-05-08 18:06:09] local.ERROR: ErrorException: file_put_contents(/Users/phitien/im/storage/framework/sessions/c3d381e75fa59b41f4da78fc20e0f15f839b0fc7): failed to open stream: No such file or directory in /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php:109
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'file_put_conten...', '/Users/phitien/...', 109, Array)
+#1 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(109): file_put_contents('/Users/phitien/...', 'a:3:{s:6:"_toke...', 2)
+#2 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/FileSessionHandler.php(71): Illuminate\Filesystem\Filesystem->put('/Users/phitien/...', 'a:3:{s:6:"_toke...', true)
+#3 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Store.php(262): Illuminate\Session\FileSessionHandler->write('c3d381e75fa59b4...', 'a:3:{s:6:"_toke...')
+#4 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(88): Illuminate\Session\Store->save()
+#5 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(155): Illuminate\Session\Middleware\StartSession->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#6 /Users/phitien/im/public/index.php(58): Illuminate\Foundation\Http\Kernel->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#7 {main}  
+[2016-05-08 19:45:59] local.ERROR: ErrorException: file_put_contents(/Users/phitien/im/storage/framework/sessions/c86e718f4bbdf65c4d63f9c4361214129ec6edc4): failed to open stream: No such file or directory in /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php:109
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'file_put_conten...', '/Users/phitien/...', 109, Array)
+#1 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(109): file_put_contents('/Users/phitien/...', 'a:3:{s:6:"_toke...', 2)
+#2 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/FileSessionHandler.php(71): Illuminate\Filesystem\Filesystem->put('/Users/phitien/...', 'a:3:{s:6:"_toke...', true)
+#3 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Store.php(262): Illuminate\Session\FileSessionHandler->write('c86e718f4bbdf65...', 'a:3:{s:6:"_toke...')
+#4 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(88): Illuminate\Session\Store->save()
+#5 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(155): Illuminate\Session\Middleware\StartSession->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#6 /Users/phitien/im/public/index.php(58): Illuminate\Foundation\Http\Kernel->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#7 {main}  
+[2016-05-08 19:46:28] local.ERROR: ErrorException: file_put_contents(/Users/phitien/im/storage/framework/sessions/bfa4ab087a2dc5e92bfd5dd12fc1efe45052a00b): failed to open stream: No such file or directory in /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php:109
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'file_put_conten...', '/Users/phitien/...', 109, Array)
+#1 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(109): file_put_contents('/Users/phitien/...', 'a:3:{s:6:"_toke...', 2)
+#2 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/FileSessionHandler.php(71): Illuminate\Filesystem\Filesystem->put('/Users/phitien/...', 'a:3:{s:6:"_toke...', true)
+#3 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Store.php(262): Illuminate\Session\FileSessionHandler->write('bfa4ab087a2dc5e...', 'a:3:{s:6:"_toke...')
+#4 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(88): Illuminate\Session\Store->save()
+#5 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(155): Illuminate\Session\Middleware\StartSession->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#6 /Users/phitien/im/public/index.php(58): Illuminate\Foundation\Http\Kernel->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#7 {main}  
+[2016-05-08 19:47:15] local.ERROR: ErrorException: file_put_contents(/Users/phitien/im/storage/framework/sessions/3036a956e710c3ea7259f72d38dc10f2b7be7197): failed to open stream: No such file or directory in /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php:109
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'file_put_conten...', '/Users/phitien/...', 109, Array)
+#1 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(109): file_put_contents('/Users/phitien/...', 'a:3:{s:6:"_toke...', 2)
+#2 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/FileSessionHandler.php(71): Illuminate\Filesystem\Filesystem->put('/Users/phitien/...', 'a:3:{s:6:"_toke...', true)
+#3 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Store.php(262): Illuminate\Session\FileSessionHandler->write('3036a956e710c3e...', 'a:3:{s:6:"_toke...')
+#4 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(88): Illuminate\Session\Store->save()
+#5 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(155): Illuminate\Session\Middleware\StartSession->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#6 /Users/phitien/im/public/index.php(58): Illuminate\Foundation\Http\Kernel->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#7 {main}  
+[2016-05-08 19:47:31] local.ERROR: ErrorException: file_put_contents(/Users/phitien/im/storage/framework/sessions/ff4961c9e1f3bf094e182f0734a930af3c32cd54): failed to open stream: No such file or directory in /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php:109
+Stack trace:
+#0 [internal function]: Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'file_put_conten...', '/Users/phitien/...', 109, Array)
+#1 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(109): file_put_contents('/Users/phitien/...', 'a:3:{s:6:"_toke...', 2)
+#2 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/FileSessionHandler.php(71): Illuminate\Filesystem\Filesystem->put('/Users/phitien/...', 'a:3:{s:6:"_toke...', true)
+#3 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Store.php(262): Illuminate\Session\FileSessionHandler->write('ff4961c9e1f3bf0...', 'a:3:{s:6:"_toke...')
+#4 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(88): Illuminate\Session\Store->save()
+#5 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(155): Illuminate\Session\Middleware\StartSession->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#6 /Users/phitien/im/public/index.php(58): Illuminate\Foundation\Http\Kernel->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
+#7 {main}  

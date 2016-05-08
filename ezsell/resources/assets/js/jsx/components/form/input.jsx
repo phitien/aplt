@@ -1,3 +1,6 @@
+import React from 'react';
+import Formsy from 'formsy-react';
+
 const Input = React.createClass({
 	mixins: [Formsy.Mixin],
 	changeValue(event) {

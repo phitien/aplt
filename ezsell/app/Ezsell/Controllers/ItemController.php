@@ -5,7 +5,7 @@ namespace App\Ezsell\Controllers;
 use Illuminate\Http\Request;
 use View;
 
-class ItemController extends AuthenticableController {
+class ItemController extends BaseController {
 	/**
 	 * Traits
 	 */

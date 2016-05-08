@@ -1,41 +1,16 @@
 import Input from './../components/form/input.jsx';
+import Button from './../components/form/button.jsx';
+import FormView from './../components/formview.jsx';
 //
-var IndexForm = React.createClass({
-	getInitialState() {
-		return {
-			canSubmit: false
+$( document ).ready(function() {
+	ReactDOM.render(React.createElement(FormView, {
+		className : 'EzsellView AccountView',
+		formrender() { 
+			return (
+				<Formsy.Form className='EzsellForm' method='post' action='/'  
+				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
+				</Formsy.Form>
+			); 
 		}
-	},
-	enableButton() {
-		this.setState({
-			canSubmit: true
-		});
-	},
-	disableButton() {
-		this.setState({
-			canSubmit: false
-		});
-	},
-	submit(model) {
-		ReactDOM.findDOMNode(this).submit();
-	},
-	render : function() {
-		return (
-			<Formsy.Form className='EzsellForm' method='post' action='/'  
-			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-			</Formsy.Form>
-		);
-	}
+	}), document.getElementById('container'));
 });
-
-var IndexView = React.createClass({
-	render : function() {
-		return (
-			<div className='EzsellView IndexView'>
-				<IndexForm />
-			</div>
-		);
-	},
-});
-
-ReactDOM.render(React.createElement(IndexView), document.getElementById('container'));

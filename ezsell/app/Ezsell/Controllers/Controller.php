@@ -13,12 +13,13 @@ use App\Ezsell\Traits\ResponseTrait;
 use App\Ezsell\Traits\UtilTrait;
 use App\Ezsell\Traits\RestfulTrait;
 use App\Ezsell\Traits\ApiCallRestfulTrait;
+use App\Ezsell\Traits\LocationTrait;
 
 abstract class Controller extends BaseController implements IController {
 	/**
 	 * TRAITS
 	 */
-	use MailerTrait, ResponseTrait, UtilTrait, RestfulTrait, ApiCallRestfulTrait;
+	use UtilTrait, LocationTrait, RestfulTrait, ApiCallRestfulTrait, MailerTrait, ResponseTrait;
 	/**
 	 *
 	 * @var string
@@ -35,6 +36,11 @@ abstract class Controller extends BaseController implements IController {
 	 */
 	protected $_authorizationMiddlewareOptions = [ ];
 	/**
+	 *
+	 * @var array
+	 */
+	protected $_locationMiddlewareOptions = [ ];
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
@@ -48,6 +54,7 @@ abstract class Controller extends BaseController implements IController {
 	protected function setupMiddlewares() {
 		$this->middleware ( "im.authentication:{$this->_middleware_action}", $this->getAuthenticationMiddlewareOptions () );
 		$this->middleware ( "im.authorization:{$this->_middleware_action}", $this->getAuthorizationMiddlewareOptions () );
+		$this->middleware ( "im.location:{$this->_middleware_action}", $this->getAuthorizationMiddlewareOptions () );
 	}
 	/**
 	 *
@@ -90,5 +97,14 @@ abstract class Controller extends BaseController implements IController {
 	 */
 	public function getAuthorizationMiddlewareOptions() {
 		return $this->_authorizationMiddlewareOptions;
+	}
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \App\Ezsell\Controllers\IController::getLocationMiddlewareOptions()
+	 */
+	public function getLocationMiddlewareOptions() {
+		return $this->_locationMiddlewareOptions;
 	}
 }

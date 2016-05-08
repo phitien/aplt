@@ -12,12 +12,13 @@ use App\Ezsell\Traits\ResponseTrait;
 use App\Ezsell\Traits\RestfulTrait;
 use App\Ezsell\Traits\ApiCallRestfulTrait;
 use App\Ezsell\Traits\UtilTrait;
+use App\Ezsell\Traits\LocationTrait;
 
 abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	/**
 	 * TRAITS
 	 */
-	use UtilTrait, MailerTrait, UserTrait, ResponseTrait, RestfulTrait, ApiCallRestfulTrait;
+	use UtilTrait, LocationTrait, MailerTrait, UserTrait, ResponseTrait, RestfulTrait, ApiCallRestfulTrait;
 	/**
 	 *
 	 * @var array

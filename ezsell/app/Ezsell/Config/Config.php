@@ -5,7 +5,6 @@ namespace App\Ezsell\Config;
 use Hash;
 use App\Ezsell\Models\Role;
 use App\Ezsell\Models\Action;
-use App\Ezsell\Models\Place;
 
 class Config {
 	const HOME_PAGE = '/';
@@ -13,6 +12,7 @@ class Config {
 	const IM_TOKEN_KEY = "IM-TOKEN";
 	const IM_KEY = "IM-KEY";
 	const IM_BASE_URL = 'http://im.ezsell.com';
+	const LOCATION_KEY = 'LOCATION-KEY';
 	/**
 	 *
 	 * @var unknown

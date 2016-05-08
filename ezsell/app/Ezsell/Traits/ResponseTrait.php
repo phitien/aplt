@@ -14,14 +14,24 @@ trait ResponseTrait
 	 * @param \Illuminate\Http\Response $response        	
 	 */
 	protected function applyCookies($response) {
-		return $response->withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )->withCookie ( Cookie::forever ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ) ), true );
+		return $response-> //
+
+		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )-> //
+
+		withCookie ( Cookie::forever ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ) ), true )-> //
+
+		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::getLocation () ), true );
 	}
 	/**
 	 *
 	 * @param \Illuminate\Http\Response $response        	
 	 */
 	protected function clearCookies($response) {
-		return $response->withCookie ( Config::TOKEN_KEY, null, true )->withCookie ( Config::EZSELL_KEY, null, true );
+		return $response-> //
+
+		withCookie ( Config::TOKEN_KEY, null, true )-> //
+
+		withCookie ( Config::EZSELL_KEY, null, true );
 	}
 	/**
 	 * Build response
