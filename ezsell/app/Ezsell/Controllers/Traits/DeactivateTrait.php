@@ -29,7 +29,7 @@ trait DeactivateTrait {
 					'appMessage' => "Hehe, deactivate được rồi !!" 
 			] ) );
 		} else {
-			$data = json_decode ( $response->getBody (), true );
+			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'deactivate', [ 
 					'appMessage' => "Hỏng rồi, không deactivate được, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );

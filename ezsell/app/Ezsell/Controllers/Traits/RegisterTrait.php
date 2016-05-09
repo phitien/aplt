@@ -34,7 +34,7 @@ trait  RegisterTrait {
 					'appMessage' => "Hehe đăng ký ok rồi đấy, đăng nhập email và activate account ngay đi :)." 
 			] ) );
 		} else {
-			$data = json_decode ( $response->getBody (), true );
+			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'register', [ 
 					'appMessage' => "Hỏng rồi, không đăng ký được, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );

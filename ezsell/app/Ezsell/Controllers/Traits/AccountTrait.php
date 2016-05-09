@@ -30,7 +30,7 @@ trait AccountTrait {
 					'appMessage' => "Hehe mật khẩu đổi rồi đấy, an toàn rồi :D" 
 			] ) );
 		} else {
-			$data = json_decode ( $response->getBody (), true );
+			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'password', [ 
 					'appMessage' => "Hỏng rồi, không đổi được mật khẩu, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
@@ -64,7 +64,7 @@ trait AccountTrait {
 					'appMessage' => "Hehe email đổi rồi đấy, đăng nhập bằng email mới đi ha :D" 
 			] ) );
 		} else {
-			$data = json_decode ( $response->getBody (), true );
+			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'email', [ 
 					'appMessage' => "Hỏng rồi, không đổi được email rồi, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
@@ -98,7 +98,7 @@ trait AccountTrait {
 					'appMessage' => "Hehe account đổi rồi đấy :D" 
 			] ) );
 		} else {
-			$data = json_decode ( $response->getBody (), true );
+			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'account', [ 
 					'appMessage' => "Hỏng rồi, không đổi được account, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );

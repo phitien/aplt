@@ -7,35 +7,11 @@ span.validation-error {
 } 
 #leftmenu {
 	float : left;
+	position : relative;
+	width : 100%;
 }
 #rightmenu {
 	float : right;
-}
-ul.catmenu {
-	display : block;
-	margin : 0;
-	padding : 0;
-}
-ul.catmenu li ul {
-	display : none;
-	position : absolute;
-	top : 45px;
-	left : 0;
-	margin : 0;
-	padding : 10px 0;
-}
-ul.catmenu li:hover ul {
-	display : block;
-	background-color : #ffffff; 
-}
-ul.catmenu li {
-	display : block;
-	position : relative;
-}
-ul.catmenu>li {
-}
-ul.catmenu li li {
-	min-width : 250px;
 }
 ul.catmenu li a {
 	padding-left : 15px;
@@ -44,3 +20,49 @@ ul.catmenu li a {
 ul.catmenu li:hover a {
 	background-color : #ffffff;
 }
+
+ul.catmenu {
+	position : absolute;
+	top : 0;
+	left : 0;
+	display : block;
+	margin : 0;
+	padding : 0;
+}
+ul.catmenu li {
+	display : block;
+	vertical-align : top;
+}
+ul.catmenu li ul {
+	display : block;
+	margin : 0;
+	padding : 0 0;
+}
+ul.catmenu li:hover ul {
+	display : block;
+	background-color : #ffffff; 
+}
+ul.catmenu li ul li {
+	display : inline-block;
+}
+ul.catmenu li ul li ul {
+	display : block;
+}
+ul.catmenu li ul li ul li {
+	display : block;
+}
+ul.catmenu>li>ul {
+	display : none;
+}
+ul.catmenu>li:hover>ul {
+	display : block;
+}
+
+
+#rightmenu ul {}
+#rightmenu ul li {}
+#rightmenu ul li:hover a {background-color : #ffffff;}
+#rightmenu ul>li {position : relative;}
+#rightmenu ul>li>ul {display : none; position : absolute; top : 40px; right : 0;}
+#rightmenu ul>li:hover>ul {display : block;}
+#rightmenu ul>li>ul>li {display : block;}

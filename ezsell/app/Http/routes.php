@@ -23,4 +23,5 @@ Route::any ( 'account', 'Ezsell\Controllers\AccountController@account' );
 Route::any ( 'forget', 'Ezsell\Controllers\AccountController@forget' );
 Route::any ( 'reset', 'Ezsell\Controllers\AccountController@reset' );
 
-Route::any ( 'location', 'Ezsell\Controllers\LocationController@index' );
+Route::any ( 'location', 'Ezsell\Controllers\LocationController@location' );
+Route::any ( 'searchlocation', 'Ezsell\Controllers\LocationController@searchlocation' );

@@ -44,4 +44,12 @@ trait UtilTrait {
 	protected static function getRedirectUri() {
 		return request ()->get ( 'redirect', '/' );
 	}
+	/**
+	 *
+	 * @param string $str        	
+	 */
+	public static function json_decode($json, $assoc = null, $depth = null, $options = null) {
+		$json = preg_replace ( '/[\pZ\pC]+|[\pZ\pC]+/u', '', $json );
+		return json_decode ( $json, $assoc, $depth, $options );
+	}
 }

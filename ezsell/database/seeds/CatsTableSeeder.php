@@ -16,217 +16,225 @@ class CatsTableSeeder extends Seeder {
 	 * @var array
 	 */
 	protected $_cats = [ 
-			'CLOTHING_N_ACCESSORIES' => [ 
+			'ROOT' => [ 
 					'active' => true,
-					'name' => 'Clothing & Accessories',
-					'title' => 'Clothing & Accessories',
-					'description' => 'Clothing & Accessories',
+					'name' => 'Categories',
+					'title' => 'Categories',
+					'description' => 'Categories',
 					'children' => [ 
-							'FOR_HER' => [ 
+							'CLOTHING_N_ACCESSORIES' => [ 
 									'active' => true,
-									'name' => 'For Her',
-									'title' => 'For Her',
-									'description' => 'For Her' 
+									'name' => 'Clothing & Accessories',
+									'title' => 'Clothing & Accessories',
+									'description' => 'Clothing & Accessories',
+									'children' => [ 
+											'FOR_HER' => [ 
+													'active' => true,
+													'name' => 'For Her',
+													'title' => 'For Her',
+													'description' => 'For Her' 
+											],
+											'FOR_HIM' => [ 
+													'active' => true,
+													'name' => 'For Him',
+													'title' => 'For Him',
+													'description' => 'For Him' 
+											],
+											'BABY_N_KIDS' => [ 
+													'active' => true,
+													'name' => 'Baby & Kids',
+													'title' => 'Baby & Kids',
+													'description' => 'Baby & Kids' 
+											],
+											'LUXURY' => [ 
+													'active' => true,
+													'name' => 'Luxury',
+													'title' => 'Luxury',
+													'description' => 'Luxury' 
+											],
+											'PET_ACCESSORIES' => [ 
+													'active' => true,
+													'name' => 'Pet Accessories',
+													'title' => 'Pet Accessories',
+													'description' => 'Pet Accessories' 
+											] 
+									] 
 							],
-							'FOR_HIM' => [ 
+							'HOME_N_LIFESTYLE' => [ 
 									'active' => true,
-									'name' => 'For Him',
-									'title' => 'For Him',
-									'description' => 'For Him' 
+									'name' => 'Home & Lifestyle',
+									'title' => 'Home & Lifestyle',
+									'description' => 'Home & Lifestyle',
+									'children' => [ 
+											'FURNITURE_N_HOME' => [ 
+													'active' => true,
+													'name' => 'Furniture & Home',
+													'title' => 'Furniture & Home',
+													'description' => 'Furniture & Home' 
+											],
+											'KITCHEN_N_APPLIANCES' => [ 
+													'active' => true,
+													'name' => 'Kitchen & Appliances',
+													'title' => 'Kitchen & Appliances',
+													'description' => 'Kitchen & Appliances' 
+											],
+											'VINTAGE_N_ANTIQUES' => [ 
+													'active' => true,
+													'name' => 'Vintage & Antiques',
+													'title' => 'Vintage & Antiques',
+													'description' => 'Vintage & Antiques' 
+											],
+											'BEAUTY_PRODUCTS' => [ 
+													'active' => true,
+													'name' => 'Beauty Products',
+													'title' => 'Beauty Products',
+													'description' => 'Beauty Products' 
+											],
+											'TEXTBOOKS' => [ 
+													'active' => true,
+													'name' => 'Textbooks',
+													'title' => 'Textbooks',
+													'description' => 'Textbooks' 
+											] 
+									] 
 							],
-							'BABY_N_KIDS' => [ 
+							'HOBBIES_N_GADGETS' => [ 
 									'active' => true,
-									'name' => 'Baby & Kids',
-									'title' => 'Baby & Kids',
-									'description' => 'Baby & Kids' 
+									'name' => 'Hobbies & Gadgets',
+									'title' => 'Hobbies & Gadgets',
+									'description' => 'Hobbies & Gadgets',
+									'children' => [ 
+											'LIFESTYLE_GADGETS' => [ 
+													'active' => true,
+													'name' => 'Lifestyle Gadgets',
+													'title' => 'Lifestyle Gadgets',
+													'description' => 'Lifestyle Gadgets' 
+											],
+											'DESIGN_N_CRAFT' => [ 
+													'active' => true,
+													'name' => 'Design & Craft',
+													'title' => 'Design & Craft',
+													'description' => 'Design & Craft' 
+											],
+											'MUSIC_INSTRUMENTS' => [ 
+													'active' => true,
+													'name' => 'Music Instruments',
+													'title' => 'Music Instruments',
+													'description' => 'Music Instruments' 
+											],
+											'PHOTOGRAPHY' => [ 
+													'active' => true,
+													'name' => 'Photography',
+													'title' => 'Photography',
+													'description' => 'Photography' 
+											],
+											'SPORTING_GEAR' => [ 
+													'active' => true,
+													'name' => 'Sportin Gear',
+													'title' => 'Sportin Gear',
+													'description' => 'Sportin Gear' 
+											],
+											'BOOKS' => [ 
+													'active' => true,
+													'name' => 'Books',
+													'title' => 'Books',
+													'description' => 'Books' 
+											] 
+									] 
 							],
-							'LUXURY' => [ 
+							'ENTERTAINMENT' => [ 
 									'active' => true,
-									'name' => 'Luxury',
-									'title' => 'Luxury',
-									'description' => 'Luxury' 
+									'name' => 'Entertainment',
+									'title' => 'Entertainment',
+									'description' => 'Entertainment',
+									'children' => [ 
+											'TICKETS_N_VOUCHERS' => [ 
+													'active' => true,
+													'name' => 'Tickets & Vouchers',
+													'title' => 'Tickets & Vouchers',
+													'description' => 'Tickets & Vouchers' 
+											],
+											'K_WAVE' => [ 
+													'active' => true,
+													'name' => 'K-Wave',
+													'title' => 'K-Wave',
+													'description' => 'K-Wave' 
+											],
+											'GAMES_N_TOYS' => [ 
+													'active' => true,
+													'name' => 'Games & Toys',
+													'title' => 'Games & Toys',
+													'description' => 'Games & Toys' 
+											] 
+									] 
 							],
-							'PET_ACCESSORIES' => [ 
+							'OTHER' => [ 
 									'active' => true,
-									'name' => 'Pet Accessories',
-									'title' => 'Pet Accessories',
-									'description' => 'Pet Accessories' 
-							] 
-					] 
-			],
-			'HOME_N_LIFESTYLE' => [ 
-					'active' => true,
-					'name' => 'Home & Lifestyle',
-					'title' => 'Home & Lifestyle',
-					'description' => 'Home & Lifestyle',
-					'children' => [ 
-							'FURNITURE_N_HOME' => [ 
-									'active' => true,
-									'name' => 'Furniture & Home',
-									'title' => 'Furniture & Home',
-									'description' => 'Furniture & Home' 
-							],
-							'KITCHEN_N_APPLIANCES' => [ 
-									'active' => true,
-									'name' => 'Kitchen & Appliances',
-									'title' => 'Kitchen & Appliances',
-									'description' => 'Kitchen & Appliances' 
-							],
-							'VINTAGE_N_ANTIQUES' => [ 
-									'active' => true,
-									'name' => 'Vintage & Antiques',
-									'title' => 'Vintage & Antiques',
-									'description' => 'Vintage & Antiques' 
-							],
-							'BEAUTY_PRODUCTS' => [ 
-									'active' => true,
-									'name' => 'Beauty Products',
-									'title' => 'Beauty Products',
-									'description' => 'Beauty Products' 
-							],
-							'TEXTBOOKS' => [ 
-									'active' => true,
-									'name' => 'Textbooks',
-									'title' => 'Textbooks',
-									'description' => 'Textbooks' 
-							] 
-					] 
-			],
-			'HOBBIES_N_GADGETS' => [ 
-					'active' => true,
-					'name' => 'Hobbies & Gadgets',
-					'title' => 'Hobbies & Gadgets',
-					'description' => 'Hobbies & Gadgets',
-					'children' => [ 
-							'LIFESTYLE_GADGETS' => [ 
-									'active' => true,
-									'name' => 'Lifestyle Gadgets',
-									'title' => 'Lifestyle Gadgets',
-									'description' => 'Lifestyle Gadgets' 
-							],
-							'DESIGN_N_CRAFT' => [ 
-									'active' => true,
-									'name' => 'Design & Craft',
-									'title' => 'Design & Craft',
-									'description' => 'Design & Craft' 
-							],
-							'MUSIC_INSTRUMENTS' => [ 
-									'active' => true,
-									'name' => 'Music Instruments',
-									'title' => 'Music Instruments',
-									'description' => 'Music Instruments' 
-							],
-							'PHOTOGRAPHY' => [ 
-									'active' => true,
-									'name' => 'Photography',
-									'title' => 'Photography',
-									'description' => 'Photography' 
-							],
-							'SPORTING_GEAR' => [ 
-									'active' => true,
-									'name' => 'Sportin Gear',
-									'title' => 'Sportin Gear',
-									'description' => 'Sportin Gear' 
-							],
-							'BOOKS' => [ 
-									'active' => true,
-									'name' => 'Books',
-									'title' => 'Books',
-									'description' => 'Books' 
-							] 
-					] 
-			],
-			'ENTERTAINMENT' => [ 
-					'active' => true,
-					'name' => 'Entertainment',
-					'title' => 'Entertainment',
-					'description' => 'Entertainment',
-					'children' => [ 
-							'TICKETS_N_VOUCHERS' => [ 
-									'active' => true,
-									'name' => 'Tickets & Vouchers',
-									'title' => 'Tickets & Vouchers',
-									'description' => 'Tickets & Vouchers' 
-							],
-							'K_WAVE' => [ 
-									'active' => true,
-									'name' => 'K-Wave',
-									'title' => 'K-Wave',
-									'description' => 'K-Wave' 
-							],
-							'GAMES_N_TOYS' => [ 
-									'active' => true,
-									'name' => 'Games & Toys',
-									'title' => 'Games & Toys',
-									'description' => 'Games & Toys' 
-							] 
-					] 
-			],
-			'OTHER' => [ 
-					'active' => true,
-					'name' => 'Other',
-					'title' => 'Other',
-					'description' => 'Other',
-					'children' => [ 
-							'PREORDERS' => [ 
-									'active' => true,
-									'name' => 'Preorders',
-									'title' => 'Preorders',
-									'description' => 'Preorders' 
-							],
-							'EVERYTHING_ELSE' => [ 
-									'active' => true,
-									'name' => 'Everything Else',
-									'title' => 'Everything Else',
-									'description' => 'Everything Else' 
-							],
-							'COMMUNITY' => [ 
-									'active' => true,
-									'name' => 'Community',
-									'title' => 'Community',
-									'description' => 'Community' 
-							],
-							'LOOKING_FOR' => [ 
-									'active' => true,
-									'name' => 'Looking For',
-									'title' => 'Looking For',
-									'description' => 'Looking For' 
-							],
-							'GARDENING_N_PLANTS' => [ 
-									'active' => true,
-									'name' => 'Gardening & Plants',
-									'title' => 'Gardening & Plants',
-									'description' => 'Gardening & Plants' 
-							],
-							'J_POP_N_J_CULTURE' => [ 
-									'active' => true,
-									'name' => 'J-pop & J-culture',
-									'title' => 'J-pop & J-culture',
-									'description' => 'J-pop & J-culture' 
-							],
-							'CARS' => [ 
-									'active' => true,
-									'name' => 'Cars',
-									'title' => 'Cars',
-									'description' => 'Cars' 
-							],
-							'MOTORBIKES' => [ 
-									'active' => true,
-									'name' => 'Motorbikes',
-									'title' => 'Motorbikes',
-									'description' => 'Motorbikes' 
-							],
-							'AUTO_ACCESSORIES_N_OTHERS' => [ 
-									'active' => true,
-									'name' => 'Auto Accessories & Others',
-									'title' => 'Auto Accessories & Others',
-									'description' => 'Auto Accessories & Others' 
-							],
-							'HOUSING' => [ 
-									'active' => true,
-									'name' => 'Housing',
-									'title' => 'Housing',
-									'description' => 'Housing' 
+									'name' => 'Other',
+									'title' => 'Other',
+									'description' => 'Other',
+									'children' => [ 
+											'PREORDERS' => [ 
+													'active' => true,
+													'name' => 'Preorders',
+													'title' => 'Preorders',
+													'description' => 'Preorders' 
+											],
+											'EVERYTHING_ELSE' => [ 
+													'active' => true,
+													'name' => 'Everything Else',
+													'title' => 'Everything Else',
+													'description' => 'Everything Else' 
+											],
+											'COMMUNITY' => [ 
+													'active' => true,
+													'name' => 'Community',
+													'title' => 'Community',
+													'description' => 'Community' 
+											],
+											'LOOKING_FOR' => [ 
+													'active' => true,
+													'name' => 'Looking For',
+													'title' => 'Looking For',
+													'description' => 'Looking For' 
+											],
+											'GARDENING_N_PLANTS' => [ 
+													'active' => true,
+													'name' => 'Gardening & Plants',
+													'title' => 'Gardening & Plants',
+													'description' => 'Gardening & Plants' 
+											],
+											'J_POP_N_J_CULTURE' => [ 
+													'active' => true,
+													'name' => 'J-pop & J-culture',
+													'title' => 'J-pop & J-culture',
+													'description' => 'J-pop & J-culture' 
+											],
+											'CARS' => [ 
+													'active' => true,
+													'name' => 'Cars',
+													'title' => 'Cars',
+													'description' => 'Cars' 
+											],
+											'MOTORBIKES' => [ 
+													'active' => true,
+													'name' => 'Motorbikes',
+													'title' => 'Motorbikes',
+													'description' => 'Motorbikes' 
+											],
+											'AUTO_ACCESSORIES_N_OTHERS' => [ 
+													'active' => true,
+													'name' => 'Auto Accessories & Others',
+													'title' => 'Auto Accessories & Others',
+													'description' => 'Auto Accessories & Others' 
+											],
+											'HOUSING' => [ 
+													'active' => true,
+													'name' => 'Housing',
+													'title' => 'Housing',
+													'description' => 'Housing' 
+											] 
+									] 
 							] 
 					] 
 			] 

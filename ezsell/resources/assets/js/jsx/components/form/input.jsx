@@ -3,10 +3,10 @@ const Input = React.createClass({
 	changeValue(event) {
 		const type = this.props.type;
 		if (type == 'checkbox') {
-			this.setValue(event.currentTarget['checked']);
+			this.setValue(event.currentTarget.checked);
 		}
 		else {
-			this.setValue(event.currentTarget['value']);
+			this.setValue(event.currentTarget.value);
 		}
 	},
 	render() {
@@ -21,7 +21,7 @@ const Input = React.createClass({
 		var inputText;
 		if (autocomplete) {
 			className += ' form-group autocomplete ';
-			inputText = <input type='text' data-source={source} onChange={this.changeValue} value={this.getValue()} className='form-control' />
+			inputText = <input type='text' data-source={source} onChange={this.changeValue} value={this.getValue()||''} className='form-control' />
 		}
 		else if (type == 'checkbox') {
 			className += ' checkbox ';
@@ -32,7 +32,7 @@ const Input = React.createClass({
 		}
 		else {
 			className += ' form-group ';
-			inputText = <input type={type} name={this.props.name} onChange={this.changeValue} value={this.getValue()} className='form-control' />;
+			inputText = <input type={type} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' />;
 		}
 		
 		var labelText = <label htmlFor={this.props.name}>{this.props.title}</label>;

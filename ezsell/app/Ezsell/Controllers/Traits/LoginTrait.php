@@ -29,7 +29,7 @@ trait  LoginTrait {
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->redirect ( static::getRedirectUri () );
 		} else {
-			$data = json_decode ( $response->getBody (), true );
+			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'login', [ 
 					'appMessage' => "Hỏng rồi, không login được, lý do vì {$data['message']}. Thử lại phát đi" 
 			] ), $response->getStatusCode () );

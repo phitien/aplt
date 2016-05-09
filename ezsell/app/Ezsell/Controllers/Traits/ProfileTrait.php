@@ -50,7 +50,7 @@ trait  ProfileTrait {
 					'appMessage' => "Hehe update ok rồi đấy :)." 
 			] ) );
 		} else {
-			$data = json_decode ( $response->getBody (), true );
+			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'deactivate', [ 
 					'appMessage' => "Hỏng rồi, update có vài lỗi, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );

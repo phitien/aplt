@@ -23,9 +23,9 @@ trait  ActivateTrait {
 					'appMessage' => "Hehe kích hoạt ok rồi đấy. Lướt thôi :D" 
 			] ) );
 		} else {
-			$data = json_decode ( $response->getBody (), true );
+			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'activate', [ 
-					'appMessage' => "Hỏng rồi, đăng ký không được, lý do vì {$data['message']}. Thử đăng ký lại phát đi." 
+					'appMessage' => "Hỏng rồi, không kích hoạt được, lý do vì {$data['message']}." 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -59,7 +59,7 @@ trait  ActivateTrait {
 					'appMessage' => "Hehe thư kích hoạt gửi rồi đấy, đăng nhập email và kích hoạt ngay đi nhé :)." 
 			] ) );
 		} else {
-			$data = json_decode ( $response->getBody (), true );
+			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'code', [ 
 					'appMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );

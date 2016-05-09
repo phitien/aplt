@@ -34,10 +34,11 @@ trait ResponseTrait
 		if (! $this->user ()->isGuest ()) {
 			$headers [Config::TOKEN_KEY] = $this->token ();
 			$headers [Config::IM_KEY] = Crypt::encrypt ( ( string ) $this->user () );
+			$headers ['Content-Type'] = 'application/json';
 		}
 		return response ()->json ( [ 
-				'message' => $message,
-				'data' => $data 
+				'message' => $message ? $message : '',
+				'data' => $data ? $data : [ ] 
 		], $status, $headers );
 	}
 	/**
@@ -49,8 +50,8 @@ trait ResponseTrait
 	 */
 	public function updateJsonResponse(JsonResponse $response, $message = null, $data = null) {
 		return $response->setData ( [ 
-				'message' => $message,
-				'data' => $data 
+				'message' => $message ? $message : '',
+				'data' => $data ? $data : [ ] 
 		] );
 	}
 	/**

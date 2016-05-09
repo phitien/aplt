@@ -10,9 +10,8 @@ $( document ).ready(function() {
 			return (
 				<Formsy.Form className='EzsellForm' method='post' action='/location'
 					onValidSubmit={this.submit}onValid={this.enableButton} onInvalid={this.disableButton}>
-					<Input autocomplete='true' required name='location' title='Location' source='/location' />
+					<Input type='text' autocomplete='true' required name='location' title='Location' source='/searchlocation' />
 					<input type='hidden' name='redirect' value={location.href} />
-					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Set location' />
 				</Formsy.Form>
 			); 
 		}
@@ -40,6 +39,7 @@ $( document ).ready(function() {
 				select: function (event, ui) {
 					this.setAttribute('data-value', ui.item);
 					this.nextSibling.value = ui.item.id;
+					submitForm($(this).parents('form:first'));
 				}
 			});
 		});

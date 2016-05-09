@@ -31,6 +31,37 @@ window.FormView = _formview2.default;
 window.Form = _formview2.default.Form;
 window.CatMenu = _catmenu2.default;
 //
+window.uuid = function (prefix) {
+	return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+};
+window.submitForm = function (form) {
+	$('<input>').attr({
+		type: 'hidden',
+		name: '_token',
+		value: $('meta[name="csrf-token"]').attr('content')
+	}).appendTo(form);
+	form.submit();
+};
+window.showMessageDialog = function (msg, title, btn) {
+	btn = btn ? btn : 'Ok';
+	title = title ? title : 'Message';
+	var buttons = {};
+	buttons[btn] = function () {
+		$(this).dialog('close');
+		$(this).remove();
+	};
+	$('<div></div>').dialog({
+		modal: true,
+		title: title,
+		closeOnEscape: false,
+		open: function open(e, ui) {
+			$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
+			$(this).html(msg);
+		},
+		buttons: buttons
+	}); //end confirm dialog
+};
+//
 $(document).ready(function () {
 	if (appMessage) {
 		showMessageDialog(appMessage);
@@ -135,9 +166,9 @@ var Input = React.createClass({
 	changeValue: function changeValue(event) {
 		var type = this.props.type;
 		if (type == 'checkbox') {
-			this.setValue(event.currentTarget['checked']);
+			this.setValue(event.currentTarget.checked);
 		} else {
-			this.setValue(event.currentTarget['value']);
+			this.setValue(event.currentTarget.value);
 		}
 	},
 	render: function render() {
@@ -151,7 +182,7 @@ var Input = React.createClass({
 		var inputText;
 		if (autocomplete) {
 			className += ' form-group autocomplete ';
-			inputText = React.createElement('input', { type: 'text', 'data-source': source, onChange: this.changeValue, value: this.getValue(), className: 'form-control' });
+			inputText = React.createElement('input', { type: 'text', 'data-source': source, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' });
 		} else if (type == 'checkbox') {
 			className += ' checkbox ';
 			inputText = React.createElement(
@@ -162,7 +193,7 @@ var Input = React.createClass({
 			);
 		} else {
 			className += ' form-group ';
-			inputText = React.createElement('input', { type: type, name: this.props.name, onChange: this.changeValue, value: this.getValue(), className: 'form-control' });
+			inputText = React.createElement('input', { type: type, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' });
 		}
 
 		var labelText = React.createElement(
