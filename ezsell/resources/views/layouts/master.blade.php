@@ -23,7 +23,7 @@
 @if (!$isGuest)
 		var user = {!! $user !!};
 @endif
-		var ezsellMessage = '{{ $ezsellMessage }}';
+		var appMessage = '{{ $appMessage }}';
 		var cats = {!! $cats !!};
 	</script>
 @show

@@ -26,12 +26,12 @@ trait DeactivateTrait {
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
 			return $this->response ( View::make ( 'deactivate', [ 
-					'ezsellMessage' => "Hehe, deactivate được rồi !!" 
+					'appMessage' => "Hehe, deactivate được rồi !!" 
 			] ) );
 		} else {
 			$data = json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'deactivate', [ 
-					'ezsellMessage' => "Hỏng rồi, không deactivate được, lý do vì {$data['message']}. Thử lại phát đi." 
+					'appMessage' => "Hỏng rồi, không deactivate được, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}

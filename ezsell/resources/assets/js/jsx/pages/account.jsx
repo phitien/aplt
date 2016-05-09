@@ -18,6 +18,7 @@ $( document ).ready(function() {
 							notEqualsIgnoreCase: 'New account should be different',
 							isAccountName: 'Account name is not valid'
 						}} />
+					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Change' />
 				</Formsy.Form>
 			); 

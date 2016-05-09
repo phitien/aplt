@@ -10,7 +10,7 @@ class Item extends Model {
 			'id',
 			'user_id',
 			'parent_id',
-			'place_id',
+			'location_id',
 			'active',
 			'title',
 			'description',
@@ -42,8 +42,8 @@ class Item extends Model {
 	public function parent() {
 		return $this->belongsTo ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
 	}
-	public function place() {
-		return $this->belongsTo ( 'App\Ezsell\Models\Place', 'place_id', 'id' );
+	public function location() {
+		return $this->belongsTo ( 'App\Ezsell\Models\Place', 'location_id', 'id' );
 	}
 	public function images() {
 		return $this->hasMany ( 'App\Ezsell\Models\Image', 'parent_id', 'id' );

@@ -1,8 +1,8 @@
 var Form = React.createClass({
 	getInitialState() {
-		return {
-			canSubmit: false
-		}
+		const state = this.props.initialState || {};
+		state['canSubmit'] = false;
+		return state;
 	},
 	enableButton() {
 		this.setState({

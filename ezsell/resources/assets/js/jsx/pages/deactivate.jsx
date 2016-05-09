@@ -11,6 +11,7 @@ $( document ).ready(function() {
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<Input type='password' required name='current_password' title='Password' 
 						validationError='Password is required' />
+					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Deactivate' />
 				</Formsy.Form>
 			); 

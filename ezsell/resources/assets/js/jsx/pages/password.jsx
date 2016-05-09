@@ -20,6 +20,7 @@ $( document ).ready(function() {
 						}} />
 					<Input type='password' name='password_confirmation' title='Password confirmation' validations='equalsField:password' 
 						validationError='Password confirmation is not matched' />
+					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Change' />
 				</Formsy.Form>
 			); 

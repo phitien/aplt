@@ -11,8 +11,7 @@ class CreateGroupsTable extends Migration {
 		Schema::create ( 'groups', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			//
-			$table->integer ( 'place_id' )->unsigned ();
-			$table->foreign ( 'place_id' )->references ( 'id' )->on ( 'places' )->onDelete ( 'cascade' );
+			$table->integer ( 'location_id' )->unsigned ();
 			//
 			$table->boolean ( 'active' )->nullable ()->default ( 0 );
 			//
@@ -30,7 +29,7 @@ class CreateGroupsTable extends Migration {
 			$table->softDeletes ();
 			//
 			$table->index ( [ 
-					'place_id',
+					'location_id',
 					'title' 
 			], 'group_search_index' );
 		} );
@@ -43,9 +42,6 @@ class CreateGroupsTable extends Migration {
 	 */
 	public function down() {
 		Schema::table ( 'groups', function (Blueprint $table) {
-			$table->dropForeign ( [ 
-					'place_id' 
-			] );
 			$table->dropIndex ( 'group_search_index' );
 		} );
 		Schema::dropIfExists ( 'groups' );

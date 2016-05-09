@@ -31,7 +31,7 @@ trait  LoginTrait {
 		} else {
 			$data = json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'login', [ 
-					'ezsellMessage' => "Hỏng rồi, không login được, lý do vì {$data['message']}. Thử lại phát đi" 
+					'appMessage' => "Hỏng rồi, không login được, lý do vì {$data['message']}. Thử lại phát đi" 
 			] ), $response->getStatusCode () );
 		}
 	}

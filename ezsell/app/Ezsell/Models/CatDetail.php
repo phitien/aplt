@@ -9,7 +9,7 @@ class CatDetail extends Model {
 	protected $fillable = [ 
 			'id',
 			'parent_id',
-			'place_id',
+			'location_id',
 			'active',
 			'name',
 			'title',
@@ -41,7 +41,7 @@ class CatDetail extends Model {
 	public function parent() {
 		return $this->belongsTo ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
 	}
-	public function place() {
-		return $this->belongsTo ( 'App\Ezsell\Models\Place', 'place_id', 'id' );
+	public function location() {
+		return $this->belongsTo ( 'App\Ezsell\Models\Place', 'location_id', 'id' );
 	}
 }

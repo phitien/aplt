@@ -30,11 +30,17 @@ class Cat extends Model {
 	];
 	public function toArray() {
 		$attributes = parent::toArray ();
-		$place = Place::where ( 'countryCode', 'SG' )->first ();
-		return array_merge ( $attributes, [ 
-				'details' => $this->details ()->where ( 'place_id', $place->id )->first (),
-				'children' => $this->children 
-		] );
+		$location = static::getLocation ();
+		if ($location) {
+			return array_merge ( $attributes, [ 
+					'details' => $this->details ()->where ( 'location_id', $location->id )->first (),
+					'children' => $this->children 
+			] );
+		} else {
+			return array_merge ( $attributes, [ 
+					'children' => $this->children 
+			] );
+		}
 	}
 	public function details() {
 		return $this->hasMany ( 'App\Ezsell\Models\CatDetail', 'parent_id', 'id' );

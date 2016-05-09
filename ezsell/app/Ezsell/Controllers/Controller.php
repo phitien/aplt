@@ -54,7 +54,7 @@ abstract class Controller extends BaseController implements IController {
 	protected function setupMiddlewares() {
 		$this->middleware ( "im.authentication:{$this->_middleware_action}", $this->getAuthenticationMiddlewareOptions () );
 		$this->middleware ( "im.authorization:{$this->_middleware_action}", $this->getAuthorizationMiddlewareOptions () );
-		$this->middleware ( "im.location:{$this->_middleware_action}", $this->getAuthorizationMiddlewareOptions () );
+		$this->middleware ( "im.location:{$this->_middleware_action}", $this->getLocationMiddlewareOptions () );
 	}
 	/**
 	 *

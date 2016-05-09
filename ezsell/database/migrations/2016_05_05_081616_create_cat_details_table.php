@@ -13,8 +13,7 @@ class CreateCatDetailsTable extends Migration {
 			$table->integer ( 'parent_id' )->unsigned ()->nullable ();
 			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'cats' )->onDelete ( 'cascade' );
 			//
-			$table->integer ( 'place_id' )->unsigned ();
-			$table->foreign ( 'place_id' )->references ( 'id' )->on ( 'places' )->onDelete ( 'cascade' );
+			$table->integer ( 'location_id' )->unsigned ();
 			//
 			$table->boolean ( 'active' )->nullable ()->default ( 0 );
 			//
@@ -34,7 +33,7 @@ class CreateCatDetailsTable extends Migration {
 			//
 			$table->index ( [ 
 					'parent_id',
-					'place_id',
+					'location_id',
 					'name' 
 			], 'cat_detail_search_index' );
 		} );
@@ -52,9 +51,6 @@ class CreateCatDetailsTable extends Migration {
 		Schema::table ( 'cat_details', function (Blueprint $table) {
 			$table->dropForeign ( [ 
 					'parent_id' 
-			] );
-			$table->dropForeign ( [ 
-					'place_id' 
 			] );
 			$table->dropIndex ( 'cat_detail_search_index' );
 		} );

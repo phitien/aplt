@@ -14,8 +14,7 @@ class CreateItemsTable extends Migration {
 			$table->integer ( 'parent_id' )->unsigned ();
 			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'cats' )->onDelete ( 'cascade' );
 			//
-			$table->integer ( 'place_id' )->unsigned ();
-			$table->foreign ( 'place_id' )->references ( 'id' )->on ( 'places' )->onDelete ( 'cascade' );
+			$table->integer ( 'location_id' )->unsigned ();
 			//
 			$table->boolean ( 'active' )->nullable ()->default ( 0 );
 			//
@@ -47,7 +46,7 @@ class CreateItemsTable extends Migration {
 			$table->index ( [ 
 					'user_id',
 					'parent_id',
-					'place_id',
+					'location_id',
 					'title' 
 			], 'item_search_index' );
 		} );
@@ -65,9 +64,6 @@ class CreateItemsTable extends Migration {
 		Schema::table ( 'items', function (Blueprint $table) {
 			$table->dropForeign ( [ 
 					'parent_id' 
-			] );
-			$table->dropForeign ( [ 
-					'place_id' 
 			] );
 			$table->dropIndex ( 'item_search_index' );
 		} );

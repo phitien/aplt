@@ -8,7 +8,7 @@ class Group extends Model {
 	];
 	protected $fillable = [ 
 			'id',
-			'place_id',
+			'location_id',
 			'active',
 			'title',
 			'description',
@@ -28,7 +28,7 @@ class Group extends Model {
 			'active' => 'boolean',
 			'options' => 'array' 
 	];
-	public function place() {
-		return $this->hasOne ( 'App\Ezsell\Models\Place', 'place_id', 'id' );
+	public function location() {
+		return $this->hasOne ( 'App\Ezsell\Models\Place', 'location_id', 'id' );
 	}
 }

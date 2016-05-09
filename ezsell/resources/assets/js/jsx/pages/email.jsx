@@ -20,6 +20,7 @@ $( document ).ready(function() {
 						}} />
 					<Input type='email' name='email_confirmation' title='Email confirmation' validations='equalsField:email' 
 						validationError='Email confirmation is not matched' />
+					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Change' />
 				</Formsy.Form>
 			); 

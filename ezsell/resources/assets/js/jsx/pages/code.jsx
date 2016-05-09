@@ -11,6 +11,7 @@ $( document ).ready(function() {
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<Input type='email' required name='email' title='Email' validations='isEmail' 
 						validationError='This is not a valid email' />
+					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Send' />
 				</Formsy.Form>
 			); 

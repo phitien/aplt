@@ -1,41 +1,48 @@
-import React from 'react';
-import Formsy from 'formsy-react';
-
 const Input = React.createClass({
 	mixins: [Formsy.Mixin],
 	changeValue(event) {
-		this.setValue(event.currentTarget[this.props.type === 'checkbox' ? 'checked' : 'value']);
+		const type = this.props.type;
+		if (type == 'checkbox') {
+			this.setValue(event.currentTarget['checked']);
+		}
+		else {
+			this.setValue(event.currentTarget['value']);
+		}
 	},
 	render() {
-		const className = (this.props.type === 'checkbox'?'checkbox':'form-group') + ' ' +  (this.props.className || '') + ' ' +
-			(this.showRequired() ? 'required' : this.showError() ? 'error' : '');
+		const autocomplete = this.props.autocomplete || false;
+		const type = this.props.type;
 		const errorMessage = this.getErrorMessage();
-		var inputText = <input
-					type={this.props.type || 'text'}
-					name={this.props.name}
-					onChange={this.changeValue}
-					value={this.getValue()}
-					className={(this.props.type === 'checkbox'?'checkbox':'form-control')}
-					checked={this.props.type === 'checkbox' && this.getValue() ? 'checked' : null}
-				/>;
-		var beforeText;
-		if (this.props.type === 'checkbox') {
-			inputText = <label htmlFor={this.props.name}><input
-					type={this.props.type || 'text'}
-					name={this.props.name}
-					onChange={this.changeValue}
-					value={this.getValue()}
-					className={(this.props.type === 'checkbox'?'checkbox':'form-control')}
-					checked={this.props.type === 'checkbox' && this.getValue() ? 'checked' : null}
-				/>{this.props.title}</label>;
-		} else {
-			beforeText = <label htmlFor={this.props.name}>{this.props.title}</label>;
+		const source = this.props.source ? this.props.source : null;
+		
+		var className = (this.props.className || '') + ' ' +
+			(this.showRequired() ? 'required' : this.showError() ? 'error' : ''); 
+		
+		var inputText;
+		if (autocomplete) {
+			className += ' form-group autocomplete ';
+			inputText = <input type='text' data-source={source} onChange={this.changeValue} value={this.getValue()} className='form-control' />
 		}
+		else if (type == 'checkbox') {
+			className += ' checkbox ';
+			inputText = <label htmlFor={this.props.name}>
+					<input type={type} name={this.props.name} onChange={this.changeValue} className='checkbox' checked={this.getValue() ? 'checked' : null} />
+					{this.props.title}
+				</label>;
+		}
+		else {
+			className += ' form-group ';
+			inputText = <input type={type} name={this.props.name} onChange={this.changeValue} value={this.getValue()} className='form-control' />;
+		}
+		
+		var labelText = <label htmlFor={this.props.name}>{this.props.title}</label>;
+		var hiddenText = <input type='hidden' name={this.props.name} />
 		
 		return (
 			<div className={className}>
-				{beforeText}
+				{type != 'checkbox' ? labelText : ''}
 				{inputText}
+				{autocomplete ? hiddenText : ''}
 				<span className='validation-error'>{errorMessage}</span>
 			</div>
 		);

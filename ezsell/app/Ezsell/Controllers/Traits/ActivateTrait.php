@@ -20,12 +20,12 @@ trait  ActivateTrait {
 		$response = static::apiCallActivate ( $code );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->response ( View::make ( 'activate', [ 
-					'ezsellMessage' => "Hehe kích hoạt ok rồi đấy. Lướt thôi :D" 
+					'appMessage' => "Hehe kích hoạt ok rồi đấy. Lướt thôi :D" 
 			] ) );
 		} else {
 			$data = json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'activate', [ 
-					'ezsellMessage' => "Hỏng rồi, đăng ký không được, lý do vì {$data['message']}. Thử đăng ký lại phát đi." 
+					'appMessage' => "Hỏng rồi, đăng ký không được, lý do vì {$data['message']}. Thử đăng ký lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -48,7 +48,7 @@ trait  ActivateTrait {
 				'email' => $email 
 		] )) {
 			return $this->response ( View::make ( 'code', [ 
-					'ezsellMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$msg}. Thử lại phát đi." 
+					'appMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$msg}. Thử lại phát đi." 
 			] ), Response::HTTP_BAD_REQUEST );
 		}
 		$response = static::apiCallCode ( [ 
@@ -56,12 +56,12 @@ trait  ActivateTrait {
 		] );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->response ( View::make ( 'code', [ 
-					'ezsellMessage' => "Hehe thư kích hoạt gửi rồi đấy, đăng nhập email và kích hoạt ngay đi nhé :)." 
+					'appMessage' => "Hehe thư kích hoạt gửi rồi đấy, đăng nhập email và kích hoạt ngay đi nhé :)." 
 			] ) );
 		} else {
 			$data = json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'code', [ 
-					'ezsellMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$data['message']}. Thử lại phát đi." 
+					'appMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}

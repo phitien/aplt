@@ -1,8 +1,17 @@
-window.$ = require('jquery');
+import jquery from 'jquery';
 require('jquery-ui');
-window.React = require('react');
-window.ReactDOM = require('react-dom');
-window.Formsy = require('formsy-react');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Formsy from 'formsy-react';
+//
+window.$ = jquery;
+window.React = React;
+window.ReactDOM = ReactDOM;
+window.Formsy = Formsy;
+//
+window.uuid = function (prefix) {
+  return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+}
 window.submitForm = function(form) {
 	$('<input>').attr({
 		type: 'hidden',

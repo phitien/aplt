@@ -3,14 +3,14 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\Ezsell\Models\Cat;
 use App\Ezsell\Models\CatDetail;
-use App\Ezsell\Models\Place;
+use App\Ezsell\Models\Location;
 class CatsTableSeeder extends Seeder {
 	/**
-	 * Default place
+	 * Default location
 	 *
 	 * @var Place
 	 */
-	protected $_default_place;
+	protected $_default_location;
 	/**
 	 *
 	 * @var array
@@ -237,7 +237,7 @@ class CatsTableSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		$this->_default_place = Place::getCountry ( 'SG' );
+		$this->_default_location = Location::getCountry ( 'SG' );
 		Model::unguard ();
 		$this->addCats ( $this->_cats );
 		Model::reguard ();
@@ -254,7 +254,7 @@ class CatsTableSeeder extends Seeder {
 			unset ( $options ['children'] );
 			$catDetail = new CatDetail ( $options );
 			$catDetail->parent ()->associate ( $cat );
-			$catDetail->place ()->associate ( $this->_default_place );
+			$catDetail->location ()->associate ( $this->_default_location );
 			$catDetail->save ();
 			$this->addCats ( $children, $cat );
 		}

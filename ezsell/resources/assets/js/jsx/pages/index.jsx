@@ -9,6 +9,7 @@ $( document ).ready(function() {
 			return (
 				<Formsy.Form className='EzsellForm' method='post' action='/'  
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
+					<input type='hidden' name='redirect' value={location.href} />
 				</Formsy.Form>
 			); 
 		}

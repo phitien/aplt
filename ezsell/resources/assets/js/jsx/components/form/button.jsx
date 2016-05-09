@@ -1,6 +1,3 @@
-import React from 'react';
-import Formsy from 'formsy-react';
-
 const Button = React.createClass({
 	mixins: [Formsy.Mixin],
 	render() {

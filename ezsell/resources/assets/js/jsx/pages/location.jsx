@@ -1,31 +1,47 @@
-import Input from './../components/form/input.jsx';
-import Button from './../components/form/button.jsx';
-import Select from './../components/form/select.jsx';
-import FormView from './../components/formview.jsx';
-//
 $( document ).ready(function() {
 	ReactDOM.render(React.createElement(FormView, {
 		className : 'EzsellView LocationView',
+		initialState : {
+			value: '',
+			locations: [],
+			loading: false
+		},
 		formrender() { 
 			return (
-				<Formsy.Form className='EzsellForm' method='post' action='/deactivate'
+				<Formsy.Form className='EzsellForm' method='post' action='/location'
 					onValidSubmit={this.submit}onValid={this.enableButton} onInvalid={this.disableButton}>
-					<Select
-						name={`fields[${i}]`}
-						title={field.validations ? JSON.stringify(field.validations) : 'No validations'}
-						required={field.required}
-						validations={field.validations}
-						options={[
-						{title: '123', value: '123'},
-						{title: 'some long text', value: 'some long text'},
-						{title: '`empty string`', value: ''},
-						{title: 'alpha42', value: 'alpha42'},
-						{title: 'test@mail.com', value: 'test@mail.com'}
-						]}
-						/>
-					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Location' />
+					<Input autocomplete='true' required name='location' title='Location' source='/location' />
+					<input type='hidden' name='redirect' value={location.href} />
+					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Set location' />
 				</Formsy.Form>
 			); 
 		}
-	}), document.getElementById('container'));
+	}), document.getElementById('container'), function() {
+		$('.autocomplete input:first').each(function (i,e) {
+			var source = e.getAttribute('data-source');
+			$(e).autocomplete({ 
+				source: function( request, response ) {
+					$.ajax({
+						url: source,
+						data: {
+							q: request.term
+						},
+						success: function( data ) {
+							var items = [];
+							$.each(data.data, function (i, a) {
+								a.label = a.fullname;
+								items.push(a);
+							});
+							response(items);
+						}
+					});
+				},
+				minLength: 2,
+				select: function (event, ui) {
+					this.setAttribute('data-value', ui.item);
+					this.nextSibling.value = ui.item.id;
+				}
+			});
+		});
+	});
 });

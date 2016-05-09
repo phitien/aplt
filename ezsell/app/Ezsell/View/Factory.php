@@ -24,8 +24,8 @@ class Factory extends BaseFactory {
 		$data ['isGuest'] = $isGuest;
 		$data ['user'] = static::getUser ();
 		$data ['theme'] = 'south-street';
-		if (! isset ( $data ['ezsellMessage'] ))
-			$data ['ezsellMessage'] = '';
+		if (! isset ( $data ['appMessage'] ))
+			$data ['appMessage'] = '';
 		$menu = (new Menu ())->setClassName ( 'nav navbar-nav navbar-right' );
 		$menu->addChild ( (new MenuItem ())->setText ( 'Home' )->setHref ( '/' ) );
 		if ($isGuest) {

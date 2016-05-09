@@ -17,6 +17,7 @@ $( document ).ready(function() {
 						validationError='Password rules: Length between 6-30, at lease 1 lowercase character, 1 uppercase character, 1 number, 1 special character (!@#0^&*()+)' />
 					<Input type='password' name='password_confirmation' title='Password confirmation' validations='equalsField:password' 
 						validationError='Password confirmation is not matched' />
+					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Register' />
 				</Formsy.Form>
 			); 

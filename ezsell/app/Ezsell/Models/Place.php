@@ -43,6 +43,9 @@ class Place extends Model {
 	public static function getCounty($countyId) {
 		return static::find ( $countyId );
 	}
+	public function location() {
+		return $this->hasOne ( 'App\Ezsell\Models\Location', 'id', 'id' );
+	}
 	public function parent() {
 		return $this->belongsTo ( 'App\Ezsell\Models\Place', 'parent_id', 'id' );
 	}

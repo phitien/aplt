@@ -47,12 +47,12 @@ trait  ProfileTrait {
 		$response = static::apiCallUpdateProfile ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->response ( View::make ( 'deactivate', [ 
-					'ezsellMessage' => "Hehe update ok rồi đấy :)." 
+					'appMessage' => "Hehe update ok rồi đấy :)." 
 			] ) );
 		} else {
 			$data = json_decode ( $response->getBody (), true );
 			return $this->response ( View::make ( 'deactivate', [ 
-					'ezsellMessage' => "Hỏng rồi, update có vài lỗi, lý do vì {$data['message']}. Thử lại phát đi." 
+					'appMessage' => "Hỏng rồi, update có vài lỗi, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}

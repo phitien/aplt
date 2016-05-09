@@ -5,9 +5,10 @@ var FormView = React.createClass({
 	render : function() {
 		const className = this.props.className;
 		const formrender = this.props.formrender;
+		const initialState = this.props.initialState;
 		return (
 			<div className={className}>
-				<Form formrender={formrender} />
+				<Form formrender={formrender} initialState={initialState} />
 			</div>
 		);
 	}

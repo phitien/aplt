@@ -20,7 +20,7 @@ trait ResponseTrait
 
 		withCookie ( Cookie::forever ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ) ), true )-> //
 
-		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::getLocation () ), true );
+		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::$_location ), true );
 	}
 	/**
 	 *

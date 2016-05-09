@@ -45107,11 +45107,35 @@ module.exports = require('./lib/React');
 },{"./lib/React":35}],175:[function(require,module,exports){
 'use strict';
 
-window.$ = require('jquery');
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _formsyReact = require('formsy-react');
+
+var _formsyReact2 = _interopRequireDefault(_formsyReact);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 require('jquery-ui');
-window.React = require('react');
-window.ReactDOM = require('react-dom');
-window.Formsy = require('formsy-react');
+
+//
+window.$ = _jquery2.default;
+window.React = _react2.default;
+window.ReactDOM = _reactDom2.default;
+window.Formsy = _formsyReact2.default;
+//
+window.uuid = function (prefix) {
+	return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+};
 window.submitForm = function (form) {
 	$('<input>').attr({
 		type: 'hidden',
@@ -45139,19 +45163,19 @@ window.showMessageDialog = function (msg, title, btn) {
 		buttons: buttons
 	}); //end confirm dialog
 };
-Formsy.addValidationRule('notEqualsField', function (values, value, field) {
+_formsyReact2.default.addValidationRule('notEqualsField', function (values, value, field) {
 	return value != values[field];
 });
-Formsy.addValidationRule('equalsField', function (values, value, field) {
+_formsyReact2.default.addValidationRule('equalsField', function (values, value, field) {
 	return value == values[field];
 });
-Formsy.addValidationRule('notEquals', function (values, value, eql) {
+_formsyReact2.default.addValidationRule('notEquals', function (values, value, eql) {
 	return value != eql;
 });
-Formsy.addValidationRule('notEqualsIgnoreCase', function (values, value, eql) {
+_formsyReact2.default.addValidationRule('notEqualsIgnoreCase', function (values, value, eql) {
 	return value && eql && value.toLowerCase() != eql.toLowerCase();
 });
-Formsy.addValidationRule('isPassword', function (values, value) {
+_formsyReact2.default.addValidationRule('isPassword', function (values, value) {
 	var minLength = 6,
 	    maxLength = 30;
 	var reg_at_least_1_lowercase_alphabet_character = /[a-z]+/;
@@ -45166,7 +45190,7 @@ Formsy.addValidationRule('isPassword', function (values, value) {
 	} catch (e) {}
 	return false;
 });
-Formsy.addValidationRule('isAccountName', function (values, value) {
+_formsyReact2.default.addValidationRule('isAccountName', function (values, value) {
 	var minLength = 3,
 	    maxLength = 30;
 	var reg = /^[a-z0-9]([\._]?[a-z0-9]+)+$/;
