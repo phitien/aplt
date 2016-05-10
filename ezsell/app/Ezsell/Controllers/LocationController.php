@@ -3,8 +3,8 @@
 namespace App\Ezsell\Controllers;
 
 use Illuminate\Http\Request;
-use App\Ezsell\Models\Location;
 use View;
+use App\Ezsell\Config\LocationMap;
 
 class LocationController extends BaseController {
 	/**
@@ -33,12 +33,12 @@ class LocationController extends BaseController {
 		return $this->response ( View::make ( 'location' ) );
 	}
 	protected function saveLocation(Request $request) {
-		$location = $request->get ( 'location' );
-		static::setLocationId ( $location );
+		$location_id = $request->get ( 'location' );
+		static::setLocationId ( $location_id );
 		return $this->redirect ( static::getRedirectUri () );
 	}
 	public function searchlocation(Request $request) {
-		$locations = Location::search ( $request->get ( 'q' ) );
+		$locations = LocationMap::search ( $request->get ( 'q' ) );
 		return $this->jsonResponse ( 'locations', $locations );
 	}
 }

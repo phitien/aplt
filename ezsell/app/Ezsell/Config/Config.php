@@ -12,7 +12,7 @@ class Config {
 	const IM_TOKEN_KEY = "IM-TOKEN";
 	const IM_KEY = "IM-KEY";
 	const IM_BASE_URL = 'http://im.ezsell.com';
-	const LOCATION_KEY = 'LOCATION-KEY';
+	const LOCATION_KEY = 'location';
 	/**
 	 *
 	 * @var unknown

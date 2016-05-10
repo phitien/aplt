@@ -27,9 +27,11 @@ $( document ).ready(function() {
 						},
 						success: function( data ) {
 							var items = [];
-							$.each(data.data, function (i, a) {
-								a.label = a.fullname;
-								items.push(a);
+							$.each(data.data, function (i, v) {
+								items.push({
+									id: i,
+									label: v
+								});
 							});
 							response(items);
 						}

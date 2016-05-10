@@ -44,6 +44,9 @@
 			</div>
 			<div class="clearfix"></div>
 		</div>
+		<div class="container clearfix" id="banner">
+			<div class="clearfix"></div>
+		</div>
 @show
         <div class="container clearfix" id="container">
 @yield('content')

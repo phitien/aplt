@@ -2,15 +2,18 @@
 $font-family-sans-serif: 'Lato', sans-serif;
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+$border-color: aliceblue;
+$menuitem-nonatomic-color: crimson;
+
 span.validation-error {
 	color: red;
 }
 
 .menuitem{}
 .menuitem-atomic{cursor : pointer;}
-.menuitem-nonatomic{font-style: italic;text-decoration: none !important;color : crimson;cursor : text;}
+.menuitem-nonatomic{font-style: italic;text-decoration: none !important;color : $menuitem-nonatomic-color;cursor : text;}
 
-#navigation {position : relative;border-bottom : 1px solid; border-color: aliceblue;height: 55px;}
+#navigation {position : relative;border-bottom : 1px solid; border-color: $border-color;height: 55px;}
 #navigation * {vertical-align : top;} 
 
 #leftmenu {position : absolute; top : 0; left : 0; width : 75%;padding-top: 15px;}
@@ -64,3 +67,6 @@ ul.catmenu>li>ul {
 #rightmenu ul>li {position : relative;}
 #rightmenu ul>li>ul {display : none; position : absolute; top : 60px; right : 0;text-align : right;}
 #rightmenu ul>li>ul>li {display : block;}
+
+#banner {min-height : 240px;border-bottom : 1px solid; border-color: $border-color;}
+#container {}

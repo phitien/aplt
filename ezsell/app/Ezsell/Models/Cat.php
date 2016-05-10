@@ -28,14 +28,14 @@ class Cat extends Model {
 	];
 	protected $casts = [ 
 			'active' => 'boolean',
-			'atomic' => 'boolean'
+			'atomic' => 'boolean' 
 	];
 	public function toArray() {
 		$attributes = parent::toArray ();
 		$location = static::getLocation ();
 		if ($location) {
 			return array_merge ( $attributes, [ 
-					'details' => $this->details ()->where ( 'location_id', $location->id )->first (),
+					'details' => $this->details ()->where ( 'location_id', $location ['id'] )->first (),
 					'children' => $this->children 
 			] );
 		} else {

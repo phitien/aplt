@@ -50,51 +50,52 @@ class PlacesTableSeeder extends Seeder {
 		// 3142, // United States (52)
 		// 4005, // Australia (8)
 		// 4319, // Argentina (24)
-		// 4321, // Brazil (27)
-		// ];
+		// 4321
+		// ] // Brazil (27)
+		// ;
 		
-		// foreach ($big as $id) {
+		// foreach ( $big as $id ) {
 		// $current = Place::find ( $id );
 		// foreach ( $current->children as $child ) {
 		// $child->takeMyChildren ( 4 );
 		// }
 		// }
 		
-		// disable searching for small countries
-		$small = [ 
-				1922, // Vatican City (1)
-				1904, // Monaco (1)
-				4016, // Nauru (14)
-				4020, // Tuvalu (8)
-				1912, // San Marino (9)
-				1898, // Liechtenstein (11)
-				4014, // Marshall Islands (33)
-				3133, // Saint Kitts and Nevis (14)
-				891, // Maldives (20)
-				1902, // Malta (68)
-				3120, // Grenada (7)
-				3137, // Saint Vincent and the Grenadines (6)
-				3106, // Barbados (11)
-				3103, // Antigua and Barbuda (8)
-				52, // Seychelles (25)
-				4022, // Palau (16)
-				1875, // Andorra (7)
-				3134, // Saint Lucia (11)
-				902, // Singapore (5)
-				4015, // Micronesia (4)
-				4029, // Tonga (5)
-				3116, // Dominica (10)
-				866, // Bahrain (5)
-				4013 
-		]; // Kiribati (3)
+		// // disable searching for small countries
+		// $small = [
+		// 1922, // Vatican City (1)
+		// 1904, // Monaco (1)
+		// 4016, // Nauru (14)
+		// 4020, // Tuvalu (8)
+		// 1912, // San Marino (9)
+		// 1898, // Liechtenstein (11)
+		// 4014, // Marshall Islands (33)
+		// 3133, // Saint Kitts and Nevis (14)
+		// 891, // Maldives (20)
+		// 1902, // Malta (68)
+		// 3120, // Grenada (7)
+		// 3137, // Saint Vincent and the Grenadines (6)
+		// 3106, // Barbados (11)
+		// 3103, // Antigua and Barbuda (8)
+		// 52, // Seychelles (25)
+		// 4022, // Palau (16)
+		// 1875, // Andorra (7)
+		// 3134, // Saint Lucia (11)
+		// 902, // Singapore (5)
+		// 4015, // Micronesia (4)
+		// 4029, // Tonga (5)
+		// 3116, // Dominica (10)
+		// 866, // Bahrain (5)
+		// 4013
+		// ]; // Kiribati (3)
 		
-		foreach ( $small as $id ) {
-			$current = Place::find ( $id );
-			foreach ( $current->children as $child ) {
-				$child->active = 0;
-				$child->save ();
-			}
-		}
+		// foreach ( $small as $id ) {
+		// $current = Place::find ( $id );
+		// foreach ( $current->children as $child ) {
+		// $child->active = 0;
+		// $child->save ();
+		// }
+		// }
 		
 		Model::reguard ();
 	}
