@@ -38,8 +38,9 @@
 				</ul>
 				<div class="clearfix"></div>
 			</div>
-			<div class="" id="rightmenu">
+			<div id="rightmenu">
 				{!! $menu !!}
+				<div id="form-container"></div>
 				<div class="clearfix"></div>
 			</div>
 			<div class="clearfix"></div>

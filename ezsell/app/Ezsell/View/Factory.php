@@ -34,9 +34,9 @@ class Factory extends BaseFactory {
 				$data ['appMessage'] = '';
 			$menu = (new Menu ())->setClassName ( 'nav navbar-nav navbar-right' );
 			if ($isGuest) {
-				$menu->addChild ( (new MenuItem ())->setText ( 'Login' )->setHref ( '/login' ) );
-				$menu->addChild ( (new MenuItem ())->setText ( 'Register' )->setHref ( '/register' ) );
-				$menu->addChild ( (new MenuItem ())->setText ( 'Location' )->setHref ( '/location' ) );
+				$menu->addChild ( (new MenuItem ())->setText ( 'Login' )->setAttribute ( 'onClick', 'showLoginForm(this)' ) );
+				$menu->addChild ( (new MenuItem ())->setText ( 'Register' )->setAttribute ( 'onClick', 'showRegistrationForm(this)' ) );
+				$menu->addChild ( (new MenuItem ())->setText ( 'Location' )->setAttribute ( 'onClick', 'showLocationForm(this)' ) );
 				// $menu->addChild ( (new MenuItem ())->setText ( 'Code' )->setHref ( '/code' ) );
 			} else {
 				$menu->addChild ( (new MenuItem ())->setText ( 'Post' )->setHref ( '/post' ) );

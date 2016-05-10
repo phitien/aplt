@@ -2,8 +2,11 @@
 $font-family-sans-serif: 'Lato', sans-serif;
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+$primary-color: #23527c;
 $border-color: aliceblue;
+$border-color-dark: #23527c;
 $menuitem-nonatomic-color: crimson;
+$formview-background-color: aliceblue;
 
 span.validation-error {
 	color: red;
@@ -58,6 +61,9 @@ ul.catmenu>li>ul {
 	position : absolute;
 	top : 60px;
 	left : 0;
+	overflow-y : hidden;
+	height : 224px;
+	width: 100%;
 }
 
 #rightmenu {position : absolute; top : 0; right : 0; width : 25%;}
@@ -67,6 +73,8 @@ ul.catmenu>li>ul {
 #rightmenu ul>li {position : relative;}
 #rightmenu ul>li>ul {display : none; position : absolute; top : 60px; right : 0;text-align : right;}
 #rightmenu ul>li>ul>li {display : block;}
+#form-container {display : none; position : absolute; top : 56px; right : 0; width: 100%;};
+#form-container .EzsellFormView{background-color : $formview-background-color; padding : 15px 15px; border : 1px solid; border-color : $border-color-dark;}
 
-#banner {min-height : 240px;border-bottom : 1px solid; border-color: $border-color;}
+#banner {min-height : 248px;border-bottom : 1px solid; border-color: $border-color;}
 #container {}

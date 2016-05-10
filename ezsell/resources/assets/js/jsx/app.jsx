@@ -44,6 +44,125 @@ window.showMessageDialog = function(msg, title, btn) {
 window.expandMenu = function(e) {
 	$(e).next('ul').slideToggle();
 }
+window.showLoginForm = function(e) {
+	if (!window.currentForm || window.currentForm != 'login') {
+		$('#form-container').hide();
+		window.currentForm = 'login';
+		ReactDOM.render(React.createElement(FormView, {
+			className : 'EzsellFormView',
+			formrender() { 
+				return (
+					<Formsy.Form className='EzsellForm' method='post' action='/login' autocomplete="false" 
+					onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
+						<Input type='email' required name='email' title='Email' validations='isEmail' 
+							validationError='This is not a valid email' />
+						<Input type='password' required name='password' title='Password' 
+							validationError='Password is required' />
+						<Input type='checkbox' name='remember' title='Remember me' />
+						<input type='hidden' name='redirect' value={location.href} />
+						<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Login' />
+					</Formsy.Form>
+				); 
+			}
+		}), document.getElementById('form-container'), function() {
+			toggleForm();
+		});
+	}
+	else {
+		toggleForm();
+	}
+}
+window.showRegistrationForm = function(e) {
+	if (!window.currentForm || window.currentForm != 'register') {
+		$('#form-container').hide();
+		window.currentForm = 'register';
+		ReactDOM.render(React.createElement(FormView, {
+			className : 'EzsellFormView',
+			formrender() { 
+				return (
+					<Formsy.Form className='EzsellForm' method='post' action='/register' autocomplete="false"   
+					onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
+						<Input type='email' required name='email' title='Email' validations='isEmail' 
+							validationError='This is not a valid email' />
+						<Input type='email' name='email_confirmation' title='Email confirmation' validations='equalsField:email' 
+							validationError='Email confirmation is not matched' />
+						<Input type='password' required name='password' title='Password' validations='isPassword' 
+							validationError='Password rules: Length between 6-30, at lease 1 lowercase character, 1 uppercase character, 1 number, 1 special character (!@#0^&*()+)' />
+						<Input type='password' name='password_confirmation' title='Password confirmation' validations='equalsField:password' 
+							validationError='Password confirmation is not matched' />
+						<input type='hidden' name='redirect' value={location.href} />
+						<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Register' />
+					</Formsy.Form>
+				); 
+			}
+		}), document.getElementById('form-container'), function() {
+			toggleForm();
+		});
+	}
+	else {
+		toggleForm();
+	}
+}
+window.showLocationForm = function(e) {
+	if (!window.currentForm || window.currentForm != 'location') {
+		$('#form-container').hide();
+		window.currentForm = 'location';
+		ReactDOM.render(React.createElement(FormView, {
+			className : 'EzsellFormView',
+			initialState : {
+				value: '',
+				locations: [],
+				loading: false
+			},
+			formrender() { 
+				return (
+					<Formsy.Form className='EzsellForm' method='post' action='/location' autocomplete="false" 
+						onValidSubmit={this.submit}onValid={this.enableButton} onInvalid={this.disableButton}>
+						<Input type='text' autocomplete='true' required name='location' title='Location' source='/searchlocation' />
+						<input type='hidden' name='redirect' value={location.href} />
+					</Formsy.Form>
+				); 
+			}
+		}), document.getElementById('form-container'), function() {
+			$('.autocomplete input:first').each(function (i,e) {
+				var source = e.getAttribute('data-source');
+				$(e).autocomplete({ 
+					source: function( request, response ) {
+						$.ajax({
+							url: source,
+							data: {
+								q: request.term
+							},
+							success: function( data ) {
+								var items = [];
+								$.each(data.data, function (i, v) {
+									items.push({
+										id: i,
+										label: v
+									});
+								});
+								response(items);
+							}
+						});
+					},
+					minLength: 2,
+					select: function (event, ui) {
+						this.setAttribute('data-value', ui.item);
+						this.nextSibling.value = ui.item.id;
+						submitForm($(this).parents('form:first'));
+					}
+				});
+			});
+			toggleForm();
+		});
+	}
+	else {
+		toggleForm();
+	}
+}
+window.toggleForm = function() {
+	$('#form-container').slideToggle();
+};
 //
 $( document ).ready(function() {
 	if (appMessage) {
