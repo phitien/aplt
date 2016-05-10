@@ -17,7 +17,7 @@ class LocationsTableSeeder extends Seeder {
 						NULL AS greate_grandparent_id,NULL AS greate_grandparent_name  
 				FROM places as p1 
 				JOIN places AS p2 ON p1.parent_id=p2.id
-				WHERE p1.level=2)
+				WHERE p1.level=2 AND p1.active=1)
 				UNION
 				(SELECT NULL AS countryCode,CONCAT_WS('\\\\',p2.name,p1.name) AS fullname,p1.id,p1.name,
 						p2.id AS parent_id,p2.name AS parent_name,
@@ -26,7 +26,7 @@ class LocationsTableSeeder extends Seeder {
 				FROM places as p1 
 				JOIN places AS p2 ON p1.parent_id=p2.id
 				JOIN places AS p3 ON p2.parent_id=p3.id
-				WHERE p1.level=3)
+				WHERE p1.level=3 AND p1.active=1)
 				UNION
 				(SELECT NULL AS countryCode,CONCAT_WS('\\\\',p3.name,p2.name,p1.name) AS fullname,p1.id,p1.name,
 						p2.id AS parent_id,p2.name AS parent_name,
@@ -36,7 +36,7 @@ class LocationsTableSeeder extends Seeder {
 				JOIN places AS p2 ON p1.parent_id=p2.id
 				JOIN places AS p3 ON p2.parent_id=p3.id
 				JOIN places AS p4 ON p3.parent_id=p4.id
-				WHERE p1.level=4)
+				WHERE p1.level=4 AND p1.active=1)
 				ORDER BY id");
 		Model::reguard ();
 	}

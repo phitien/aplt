@@ -24,7 +24,7 @@ class Price extends Model {
 	protected $casts = [ 
 			'options' => 'array' 
 	];
-	public function parent() {
+	public function item() {
 		return $this->belongsTo ( 'App\Ezsell\Models\Item', 'parent_id', 'id' );
 	}
 }

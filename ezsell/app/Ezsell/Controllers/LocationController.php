@@ -13,7 +13,8 @@ class LocationController extends BaseController {
 	 */
 	protected $_locationMiddlewareOptions = [ 
 			'except' => [ 
-					'index' 
+					'location',
+					'searchlocation' 
 			] 
 	];
 	/**

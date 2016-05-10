@@ -50,7 +50,7 @@ class Place extends Model {
 		return $this->belongsTo ( 'App\Ezsell\Models\Place', 'parent_id', 'id' );
 	}
 	public function children() {
-		return $this->hasMany ( 'App\Ezsell\Models\Place', 'id', 'parent_id' );
+		return $this->hasMany ( 'App\Ezsell\Models\Place', 'parent_id', 'id' );
 	}
 	public function takeMyChildren($level, $startId = null) {
 		try {
