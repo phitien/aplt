@@ -15,6 +15,7 @@ class CreateCatsTable extends Migration {
 			//
 			$table->string ( 'code' )->unique ();
 			$table->boolean ( 'active' )->nullable ()->default ( 0 );
+			$table->boolean ( 'atomic' )->nullable ()->default ( 0 );
 			//
 			$table->integer ( 'order' )->unsigned ();
 			//

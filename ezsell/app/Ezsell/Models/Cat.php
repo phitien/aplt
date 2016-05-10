@@ -12,6 +12,7 @@ class Cat extends Model {
 			'parent_id',
 			'code',
 			'active',
+			'atomic',
 			'order' 
 	];
 	protected $hidden = [ 
@@ -26,7 +27,8 @@ class Cat extends Model {
 			'deleted_at' 
 	];
 	protected $casts = [ 
-			'active' => 'boolean' 
+			'active' => 'boolean',
+			'atomic' => 'boolean'
 	];
 	public function toArray() {
 		$attributes = parent::toArray ();

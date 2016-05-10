@@ -30,17 +30,27 @@
     </head>
     <body>
 @section('top')
-		<div class="container">
-			<div id="leftmenu"></div>
-			<div id="rightmenu">
-				{!! $menu !!}
+		<div class="container clearfix" id="navigation">
+			<div id="leftmenu">
+				<ul>
+					<li><a href="/"><span>Home</span></a></li>
+					<li id="catmenu"></li>
+				</ul>
+				<div class="clearfix"></div>
 			</div>
+			<div class="" id="rightmenu">
+				{!! $menu !!}
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
 		</div>
 @show
-        <div class="container" id="container">
+        <div class="container clearfix" id="container">
 @yield('content')
+			<div class="clearfix"></div>
         </div>
 @section('bottomscripts')
 @show
+		<div class="clearfix"></div>
     </body>
 </html>

@@ -61,12 +61,15 @@ window.showMessageDialog = function (msg, title, btn) {
 		buttons: buttons
 	}); //end confirm dialog
 };
+window.expandMenu = function (e) {
+	$(e).next('ul').slideToggle();
+};
 //
 $(document).ready(function () {
 	if (appMessage) {
 		showMessageDialog(appMessage);
 	}
-	ReactDOM.render(React.createElement(_catmenu2.default, { items: cats, className: 'nav navbar-nav navbar-left' }), document.getElementById('leftmenu'));
+	ReactDOM.render(React.createElement(_catmenu2.default, { items: cats }), document.getElementById('catmenu'));
 });
 
 },{"./components/catmenu.jsx":2,"./components/form/button.jsx":4,"./components/form/input.jsx":5,"./components/form/select.jsx":6,"./components/formview.jsx":7}],2:[function(require,module,exports){
@@ -91,7 +94,13 @@ var CatMenu = React.createClass({
 			return this.details.name;
 		}
 		function getHref() {
-			return '';
+			if (!this.parent_id) {
+				return 'javascript:expandMenu(this)';
+			} else if (this.atomic) {
+				return 'cat/' + this.id;
+			} else {
+				return '';
+			}
 		}
 		var className = 'catmenu ' + (this.props.className ? this.props.className : '');
 		return React.createElement(_menu2.default, { className: className, items: this.props.items, getText: getText, getHref: getHref });
@@ -303,52 +312,90 @@ Object.defineProperty(exports, "__esModule", {
 });
 var MenuItem = React.createClass({
 	displayName: 'MenuItem',
-	render: function render() {
-		var data = this.props.data;
-		var getText = this.props.getText;
-		var getHref = this.props.getHref;
-		var getChildren = this.props.getChildren;
+	getText: function getText() {
 		try {
-			var text = getText.bind(data)();
-			var href = getHref.bind(data)();
-			var html = href ? React.createElement(
+			return this.props.getText.bind(this.props.data)();
+		} catch (e) {
+			return '';
+		}
+	},
+	getHref: function getHref() {
+		try {
+			return this.props.getHref.bind(this.props.data)();
+		} catch (e) {
+			return '';
+		}
+	},
+	getChildren: function getChildren() {
+		try {
+			return this.props.getChildren.bind(this.props.data)();
+		} catch (e) {
+			return null;
+		}
+	},
+	handleItemClick: function handleItemClick(event) {
+		var href = this.getHref().replace('javascript:', '');
+		var fn = eval('(function () {' + href + ';})');
+		fn.bind(event.currentTarget)();
+	},
+	render: function render() {
+		var text = this.getText();
+		if (!text) {
+			return React.createElement('li', null);
+		}
+		var href = this.getHref();
+		var html;
+		if (href) {
+			if (href.indexOf("javascript:") == 0) {
+				html = React.createElement(
+					'a',
+					{ className: 'menuitem menuitem-nonatomic', onClick: this.handleItemClick },
+					React.createElement(
+						'span',
+						null,
+						text
+					)
+				);
+			} else {
+				html = React.createElement(
+					'a',
+					{ className: 'menuitem menuitem-atomic', href: href },
+					React.createElement(
+						'span',
+						null,
+						text
+					)
+				);
+			}
+		} else {
+			html = React.createElement(
 				'a',
-				{ href: '{href}' },
-				React.createElement(
-					'span',
-					null,
-					text
-				)
-			) : React.createElement(
-				'a',
-				null,
+				{ className: 'menuitem menuitem-nonatomic' },
 				React.createElement(
 					'span',
 					null,
 					text
 				)
 			);
-			var children = getChildren.bind(data)();
-			if (children && children.length > 0) {
-				return React.createElement(
-					'li',
+		}
+		var children = this.getChildren();
+		if (children && children.length > 0) {
+			return React.createElement(
+				'li',
+				null,
+				html,
+				React.createElement(Menu, { items: children, getText: this.props.getText, getHref: this.props.getHref, getChildren: this.props.getChildren })
+			);
+		} else {
+			return React.createElement(
+				'li',
+				null,
+				React.createElement(
+					'span',
 					null,
-					html,
-					React.createElement(Menu, { items: children, getText: getText, getHref: getHref, getChildren: getChildren })
-				);
-			} else {
-				return React.createElement(
-					'li',
-					null,
-					React.createElement(
-						'span',
-						null,
-						html
-					)
-				);
-			}
-		} catch (e) {
-			return React.createElement('li', null);
+					html
+				)
+			);
 		}
 	}
 });

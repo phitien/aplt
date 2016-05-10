@@ -1,32 +1,66 @@
 const MenuItem = React.createClass({
-	render() {
-		const data = this.props.data;
-		const getText = this.props.getText;
-		const getHref = this.props.getHref;
-		const getChildren = this.props.getChildren;
-		try { 
-			const text = getText.bind(data) ();
-			const href = getHref.bind(data) ();
-			const html = href ? <a href='{href}'><span>{text}</span></a> : <a><span>{text}</span></a>;
-			const children = getChildren.bind(data) ();
-			if (children && children.length > 0) {
-				return (
-					<li>
-						{html}
-						<Menu items={children} getText={getText} getHref={getHref} getChildren={getChildren} />
-					</li>
-				);
-			}
-			else {
-				return (
-					<li><span>{html}</span></li>
-				);
-			}
-		} 
+	getText() {
+		try {
+			return this.props.getText.bind(this.props.data) ();
+		}
 		catch (e) {
+			return '';
+		}
+	},
+	getHref() {
+		try {
+			return this.props.getHref.bind(this.props.data) ();
+		}
+		catch (e) {
+			return '';
+		}
+	},
+	getChildren() {
+		try {
+			return this.props.getChildren.bind(this.props.data) ();
+		}
+		catch (e) {
+			return null;
+		}
+	},
+	handleItemClick(event) {
+		var href = this.getHref().replace('javascript:', '');
+		var fn = eval('(function () {'+href+';})');
+		fn.bind(event.currentTarget)();
+	},
+	render() {
+		const text = this.getText();
+		if (!text) {
 			return (
 				<li></li>
 			); 
+		}
+		var href = this.getHref();
+		var html;
+		if (href) {
+			if (href.indexOf("javascript:") == 0) {
+				html = <a className='menuitem menuitem-nonatomic' onClick={this.handleItemClick}><span>{text}</span></a>;
+			}
+			else {
+				html = <a className='menuitem menuitem-atomic' href={href}><span>{text}</span></a>;
+			}
+		}
+		else {
+			html = <a className='menuitem menuitem-nonatomic'><span>{text}</span></a>;
+		}
+		const children = this.getChildren();
+		if (children && children.length > 0) {
+			return (
+				<li>
+					{html}
+					<Menu items={children} getText={this.props.getText} getHref={this.props.getHref} getChildren={this.props.getChildren} />
+				</li>
+			);
+		}
+		else {
+			return (
+				<li><span>{html}</span></li>
+			);
 		}
 	}
 });

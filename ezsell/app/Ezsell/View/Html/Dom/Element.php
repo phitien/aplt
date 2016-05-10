@@ -69,13 +69,15 @@ class Element implements IElement {
 	public function removeAttribute(string $nameOrValue) {
 		foreach ( $this->_attributes as $i => $attribute ) {
 			if (strtolower ( $nameOrValue ) == $attribute->getName ()) {
-				array_slice ( $this->_attributes, $i, 1 );
+				unset ( $this->_attributes [$i] );
+				// array_slice ( $this->_attributes, $i, 1 );
 				return $this;
 			}
 		}
 		foreach ( $this->_attributes as $i => $attribute ) {
 			if ($nameOrValue == $attribute->getValue ()) {
-				array_slice ( $this->_attributes, $i, 1 );
+				unset ( $this->_attributes [$i] );
+				// array_slice ( $this->_attributes, $i, 1 );
 				return $this;
 			}
 		}

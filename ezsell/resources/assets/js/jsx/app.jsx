@@ -41,10 +41,13 @@ window.showMessageDialog = function(msg, title, btn) {
 		buttons: buttons
 	});//end confirm dialog
 }
+window.expandMenu = function(e) {
+	$(e).next('ul').slideToggle();
+}
 //
 $( document ).ready(function() {
 	if (appMessage) {
 		showMessageDialog(appMessage);
 	}
-	ReactDOM.render(React.createElement(CatMenu, { items : cats, className : 'nav navbar-nav navbar-left' }), document.getElementById('leftmenu'));
+	ReactDOM.render(React.createElement(CatMenu, { items : cats }), document.getElementById('catmenu'));
 });

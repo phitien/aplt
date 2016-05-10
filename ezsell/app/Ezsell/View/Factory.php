@@ -27,25 +27,24 @@ class Factory extends BaseFactory {
 		if (! isset ( $data ['appMessage'] ))
 			$data ['appMessage'] = '';
 		$menu = (new Menu ())->setClassName ( 'nav navbar-nav navbar-right' );
-		$menu->addChild ( (new MenuItem ())->setText ( 'Home' )->setHref ( '/' ) );
-		$moreMenuItem = (new MenuItem ())->setText ( 'More' )->setHref ( '#' );
-		$menu->addChild ( $moreMenuItem );
-		
-		$moreMenu = (new Menu ())->setClassName ( 'more-nav' );
-		$moreMenu->addChild ( (new MenuItem ())->setText ( 'Location' )->setHref ( '/location' ) );
 		if ($isGuest) {
-			$moreMenu->addChild ( (new MenuItem ())->setText ( 'Login' )->setHref ( '/login' ) );
-			$moreMenu->addChild ( (new MenuItem ())->setText ( 'Register' )->setHref ( '/register' ) );
-			$moreMenu->addChild ( (new MenuItem ())->setText ( 'Code' )->setHref ( '/code' ) );
+			$menu->addChild ( (new MenuItem ())->setText ( 'Login' )->setHref ( '/login' ) );
+			$menu->addChild ( (new MenuItem ())->setText ( 'Register' )->setHref ( '/register' ) );
+			$menu->addChild ( (new MenuItem ())->setText ( 'Location' )->setHref ( '/location' ) );
+			// $menu->addChild ( (new MenuItem ())->setText ( 'Code' )->setHref ( '/code' ) );
 		} else {
+			$menu->addChild ( (new MenuItem ())->setText ( 'Post' )->setHref ( '/post' ) );
+			$moreMenuItem = (new MenuItem ())->setText ( 'More' )->setAttribute ( 'onClick', 'expandMenu(this)' );
+			$menu->addChild ( $moreMenuItem );
+			$moreMenu = (new Menu ())->setClassName ( 'more-nav' );
 			$moreMenu->addChild ( (new MenuItem ())->setText ( 'Password' )->setHref ( '/password' ) );
 			$moreMenu->addChild ( (new MenuItem ())->setText ( 'Profile' )->setHref ( '/profile' ) );
 			$moreMenu->addChild ( (new MenuItem ())->setText ( 'Email' )->setHref ( '/email' ) );
 			$moreMenu->addChild ( (new MenuItem ())->setText ( 'Account' )->setHref ( '/account' ) );
 			$moreMenu->addChild ( (new MenuItem ())->setText ( 'Deactivate' )->setHref ( '/deactivate' ) );
 			$moreMenu->addChild ( (new MenuItem ())->setText ( 'Logout' )->setHref ( '/logout' ) );
+			$moreMenuItem->addChild ( $moreMenu );
 		}
-		$moreMenuItem->addChild ( $moreMenu );
 		
 		$data ['menu'] = $menu;
 		$data ['cats'] = Cat::getHierarchy ();

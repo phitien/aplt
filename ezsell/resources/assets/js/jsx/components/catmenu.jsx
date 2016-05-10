@@ -6,7 +6,15 @@ const CatMenu = React.createClass({
 			return this.details.name;
 		}
 		function getHref() {
-			return '';
+			if (!this.parent_id) {
+				return 'javascript:expandMenu(this)';
+			}
+			else if (this.atomic) {
+				return 'cat/' + this.id;
+			}
+			else {
+				return '';
+			}
 		}
 		const className = 'catmenu ' + (this.props.className?this.props.className:'');
 		return (
