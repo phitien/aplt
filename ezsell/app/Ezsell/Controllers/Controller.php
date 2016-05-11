@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller as BaseController;
 use Exception;
 use App\Ezsell\Config\Config;
 use Route;
-use Request;
+use Illuminate\Http\Request;
 use App\Ezsell\Config\AuthorizationMaps;
 use App\Ezsell\Traits\MailerTrait;
 use App\Ezsell\Traits\ResponseTrait;
@@ -14,6 +14,7 @@ use App\Ezsell\Traits\UtilTrait;
 use App\Ezsell\Traits\RestfulTrait;
 use App\Ezsell\Traits\ApiCallRestfulTrait;
 use App\Ezsell\Traits\LocationTrait;
+use Illuminate\Http\Response;
 
 abstract class Controller extends BaseController implements IController {
 	/**
@@ -64,7 +65,7 @@ abstract class Controller extends BaseController implements IController {
 		$arr = explode ( '@', Route::getCurrentRoute ()->getActionName () );
 		$controller = $arr [0];
 		$method = $arr [1];
-		$requestType = Request::method ();
+		$requestType = request ()->method ();
 		$middlewareActionMaps = AuthorizationMaps::MAPS;
 		try {
 			return ( string ) $middlewareActionMaps [$controller] [$method] [$requestType];
@@ -106,5 +107,27 @@ abstract class Controller extends BaseController implements IController {
 	 */
 	public function getLocationMiddlewareOptions() {
 		return $this->_locationMiddlewareOptions;
+	}
+	/**
+	 *
+	 * @param Request $request        	
+	 * @param unknown $action        	
+	 * @return Response
+	 */
+	protected function process($action, Request $request) {
+		$arguments = func_get_args ();
+		$action = ucfirst ( array_shift ( $arguments ) );
+		$method = "get{$action}";
+		if ($request->isMethod ( 'post' )) {
+			$method = 'post' . ucfirst ( $action );
+		} else if ($request->isMethod ( 'put' )) {
+			$method = 'put' . ucfirst ( $action );
+		} else if ($request->isMethod ( 'delete' )) {
+			$method = 'delete' . ucfirst ( $action );
+		}
+		return call_user_func_array ( array (
+				$this,
+				$method 
+		), $arguments );
 	}
 }

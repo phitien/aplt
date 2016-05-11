@@ -6,6 +6,8 @@ elixir(function(mix) {
 
 	.browserify('jsx/libraries.jsx', 'public/js')
 	
+	.browserify('jsx/common.jsx', 'public/js')
+	
 	.browserify('jsx/app.jsx', 'public/js')
 
 	.browserify('jsx/pages/index.jsx', 'public/js/pages')
@@ -25,6 +27,8 @@ elixir(function(mix) {
 	.browserify('jsx/pages/account.jsx', 'public/js/pages')
 	
 	.browserify('jsx/pages/location.jsx', 'public/js/pages')
+	
+	.browserify('jsx/pages/newitem.jsx', 'public/js/pages')
 
 	.copy('node_modules/jquery-ui/themes', 'public/css/jquery-ui/themes')
 	

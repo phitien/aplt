@@ -11,12 +11,14 @@ $formview-background-color: aliceblue;
 span.validation-error {
 	color: red;
 }
+.inline-block-list {}
+.inline-block-list div.radio,.inline-block-list div.checkbox {display : inline-block; margin : 0 15px;}
 
 .menuitem{}
 .menuitem-atomic{cursor : pointer;}
 .menuitem-nonatomic{font-style: italic;text-decoration: none !important;color : $menuitem-nonatomic-color;cursor : text;}
 
-#navigation {position : relative;border-bottom : 1px solid; border-color: $border-color;height: 55px;}
+#navigation {position : fixed;top : 0; border-bottom : 1px solid; border-color: $border-color;height: 55px; width : 100%;}
 #navigation * {vertical-align : top;} 
 
 #leftmenu {position : absolute; top : 0; left : 0; width : 75%;padding-top: 15px;}
@@ -74,13 +76,13 @@ ul.catmenu>li>ul {
 #rightmenu ul>li>ul {display : none; position : absolute; top : 60px; right : 0;text-align : right;}
 #rightmenu ul>li>ul>li {display : block;}
 #form-container {display : none; position : absolute; top : 56px; right : 0; width: 100%;};
-#form-container .EzsellFormView{background-color : $formview-background-color; padding : 15px 15px; border : 1px solid; border-color : $border-color-dark;}
+#form-container .form-view{background-color : $formview-background-color; padding : 15px 15px; border : 1px solid; border-color : $border-color-dark;}
 
 #banner {min-height : 248px;border-bottom : 1px solid; border-color: $border-color;}
 #container {}
 
 #footer {
-	position: absolute;
+	position: fixed;
     bottom: 0;
     right: 0;
     height: 30px;

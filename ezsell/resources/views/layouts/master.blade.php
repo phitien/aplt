@@ -18,6 +18,7 @@
 @section('script')
 	{{ Html::script('js/browser.min.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/libraries.js', ['type' => 'text/javascript']) }}
+	{{ Html::script('js/common.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/app.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/jquery-migrate-1.2.1.min.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
@@ -34,20 +35,22 @@
     </head>
     <body>
 @section('top')
-		<div class="container clearfix" id="navigation">
-			<div id="leftmenu">
-				<ul>
-					<li><a href="/"><span>Home</span></a></li>
-					<li id="catmenu"></li>
-				</ul>
+		<div class="container-fluid clearfix" id="navigation">
+			<div class="container clearfix">
+				<div id="leftmenu">
+					<ul>
+						<li><a href="/"><span>Home</span></a></li>
+						<li id="catmenu"></li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+				<div id="rightmenu">
+					{!! $menu !!}
+					<div id="form-container"></div>
+					<div class="clearfix"></div>
+				</div>
 				<div class="clearfix"></div>
 			</div>
-			<div id="rightmenu">
-				{!! $menu !!}
-				<div id="form-container"></div>
-				<div class="clearfix"></div>
-			</div>
-			<div class="clearfix"></div>
 		</div>
 		<div class="container clearfix" id="banner">
 			<div class="clearfix"></div>

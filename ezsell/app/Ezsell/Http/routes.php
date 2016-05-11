@@ -31,3 +31,8 @@ Route::any ( 'searchlocation', 'LocationController@searchlocation' );
  */
 Route::post ( 'sendmessage', 'SocketController@sendmessage' );
 
+/**
+ * item
+ */
+Route::any ( 'newitem', 'ItemController@newitem' );
+

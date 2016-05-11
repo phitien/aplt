@@ -31,4 +31,15 @@ class ItemController extends BaseController {
 	public function index(Request $request) {
 		return $this->response ( View::make ( 'index' ) );
 	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function newitem(Request $request) {
+		return $this->process ( 'newitem', $request );
+	}
+	protected function getNewitem(Request $request) {
+		return $this->response ( View::make ( 'newitem' ) );
+	}
 }

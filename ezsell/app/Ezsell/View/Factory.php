@@ -53,7 +53,7 @@ class Factory extends BaseFactory {
 				$menu->addChild ( (new MenuItem ())->setText ( 'Location' )->setAttribute ( 'onClick', 'showLocationForm(this)' ) );
 				// $menu->addChild ( (new MenuItem ())->setText ( 'Code' )->setHref ( '/code' ) );
 			} else {
-				$menu->addChild ( (new MenuItem ())->setText ( 'Post' )->setHref ( '/post' ) );
+				$menu->addChild ( (new MenuItem ())->setText ( 'New' )->setHref ( '/newitem' ) );
 				$moreMenuItem = (new MenuItem ())->setText ( 'More' )->setAttribute ( 'onClick', 'expandMenu(this)' );
 				$menu->addChild ( $moreMenuItem );
 				$moreMenu = (new Menu ())->setClassName ( 'more-nav' );

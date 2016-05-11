@@ -36,13 +36,9 @@ trait  ActivateTrait {
 	 * @return Response
 	 */
 	public function code(Request $request) {
-		if ($request->isMethod ( 'post' )) {
-			return $this->apiCode ( $request );
-		} else {
-			return $this->showCode ( $request );
-		}
+		return $this->process ( 'code', $request );
 	}
-	protected function apiCode(Request $request) {
+	protected function postCode(Request $request) {
 		$email = $request->get ( 'email' );
 		if ($msg = $this->emailValidator ( [ 
 				'email' => $email 
@@ -65,7 +61,7 @@ trait  ActivateTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function showCode(Request $request) {
+	protected function getCode(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'code' ) );
 		else

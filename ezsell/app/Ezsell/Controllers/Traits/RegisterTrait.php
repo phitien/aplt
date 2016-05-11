@@ -15,13 +15,9 @@ trait  RegisterTrait {
 	 * @return Response
 	 */
 	public function register(Request $request) {
-		if ($request->isMethod ( 'post' )) {
-			return $this->apiRegister ( $request );
-		} else {
-			return $this->showRegister ( $request );
-		}
+		return $this->process ( 'register', $request );
 	}
-	protected function apiRegister(Request $request) {
+	protected function postRegister(Request $request) {
 		$data = $request->only ( 'email', 'email_confirmation', 'password', 'password_confirmation' );
 		if ($msg = $this->registrationValidator ( $data )) {
 			return $this->response ( View::make ( 'register', [ 
@@ -40,7 +36,7 @@ trait  RegisterTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function showRegister(Request $request) {
+	protected function getRegister(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'register' ) );
 		else

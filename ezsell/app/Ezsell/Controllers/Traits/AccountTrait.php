@@ -15,13 +15,9 @@ trait AccountTrait {
 	 * @return Response
 	 */
 	public function password(Request $request) {
-		if ($request->isMethod ( 'post' )) {
-			return $this->apiPassword ( $request );
-		} else {
-			return $this->showPassword ( $request );
-		}
+		return $this->process ( 'password', $request );
 	}
-	protected function apiPassword(Request $request) {
+	protected function postPassword(Request $request) {
 		$data = $request->only ( 'current_password', 'password', 'password_confirmation' );
 		$response = static::apiCallPassword ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
@@ -36,7 +32,7 @@ trait AccountTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function showPassword(Request $request) {
+	protected function getPassword(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'login' ) );
 		else
@@ -49,13 +45,9 @@ trait AccountTrait {
 	 * @return Response
 	 */
 	public function email(Request $request) {
-		if ($request->isMethod ( 'post' )) {
-			return $this->apiEmail ( $request );
-		} else {
-			return $this->showEmail ( $request );
-		}
+		return $this->process ( 'email', $request );
 	}
-	protected function apiEmail(Request $request) {
+	protected function postEmail(Request $request) {
 		$data = $request->only ( 'current_password', 'email', 'email_confirmation' );
 		$response = static::apiCallEmail ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
@@ -70,7 +62,7 @@ trait AccountTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function showEmail(Request $request) {
+	protected function getEmail(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'login' ) );
 		else
@@ -83,13 +75,9 @@ trait AccountTrait {
 	 * @return Response
 	 */
 	public function account(Request $request) {
-		if ($request->isMethod ( 'post' )) {
-			return $this->apiAccount ( $request );
-		} else {
-			return $this->showAccount ( $request );
-		}
+		return $this->process ( 'account', $request );
 	}
-	protected function apiAccount(Request $request) {
+	protected function postAccount(Request $request) {
 		$data = $request->only ( 'current_password', 'name' );
 		$response = static::apiCallAccount ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
@@ -104,7 +92,7 @@ trait AccountTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function showAccount(Request $request) {
+	protected function getAccount(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'login' ) );
 		else
@@ -118,5 +106,6 @@ trait AccountTrait {
 	 */
 	public function reset(Request $request) {
 		// TODO
+		return $this->process ( 'reset', $request );
 	}
 }

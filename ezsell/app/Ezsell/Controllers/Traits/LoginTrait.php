@@ -17,13 +17,9 @@ trait  LoginTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function login(Request $request) {
-		if ($request->isMethod ( 'post' )) {
-			return $this->apiLogin ( $request );
-		} else {
-			return $this->showLogin ( $request );
-		}
+		return $this->process ( 'login', $request );
 	}
-	protected function apiLogin(Request $request) {
+	protected function postLogin(Request $request) {
 		$credentials = $request->only ( 'email', 'password' );
 		$response = $this->doLogin ( $credentials );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
@@ -35,7 +31,7 @@ trait  LoginTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function showLogin(Request $request) {
+	protected function getLogin(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'login' ) );
 		else

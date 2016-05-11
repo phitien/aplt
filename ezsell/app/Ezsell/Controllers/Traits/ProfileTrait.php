@@ -15,11 +15,7 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function profile(Request $request) {
-		if ($request->isMethod ( 'post' )) {
-			return $this->saveProfile ( $request );
-		} else {
-			return $this->showProfile ( $request );
-		}
+		return $this->process ( 'profile', $request );
 	}
 	/**
 	 * Return the authenticated user
@@ -27,7 +23,7 @@ trait  ProfileTrait {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	protected function showProfile(Request $request) {
+	protected function getProfile(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( View::make ( 'login' ) );
 		else
@@ -39,7 +35,7 @@ trait  ProfileTrait {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	protected function saveProfile(Request $request) {
+	protected function postProfile(Request $request) {
 		$data = $request->request->all (); // only get post data
 		if ($msg = $this->validateProfileData ( $data )) {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
@@ -63,11 +59,7 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function profilex(Request $request) {
-		if ($request->isMethod ( 'post' )) {
-			return $this->saveProfileEx ( $request );
-		} else {
-			return $this->getProfileEx ( $request );
-		}
+		return $this->process ( 'profilex', $request );
 	}
 	/**
 	 * Return the authenticated user
@@ -84,7 +76,7 @@ trait  ProfileTrait {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	protected function saveProfileEx(Request $request) {
+	protected function postProfileEx(Request $request) {
 		static::getUser ()->fillEx ( $request->request->all () )->save ();
 		// the token is valid and we have found the user via the sub claim
 		return $this->jsonResponse ( 'update_profile_extension_successfully', static::getUser ()->extension ()->all () );
