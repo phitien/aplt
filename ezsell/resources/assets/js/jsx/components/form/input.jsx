@@ -32,7 +32,7 @@ const Input = React.createClass({
 		}
 		else {
 			className += ' form-group ';
-			inputText = <input type={type} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' />;
+			inputText = <input type={type} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' autocomplete='off' readonly onfocus="this.removeAttribute('readonly');" />;
 		}
 		
 		var labelText = <label htmlFor={this.props.name}>{this.props.title}</label>;

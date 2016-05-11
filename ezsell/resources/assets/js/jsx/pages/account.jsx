@@ -7,7 +7,7 @@ $( document ).ready(function() {
 		className : 'EzsellView AccountView',
 		formrender() { 
 			return (
-				<Formsy.Form className='EzsellForm' method='post' action='/account'  
+				<Formsy.Form className='EzsellForm' method='post' action='/account' autocomplete='off' onkeypress='return event.keyCode != 13;'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<Input type='password' required name='current_password' title='Password' 
 						 validationError='Password is required' />
@@ -18,7 +18,6 @@ $( document ).ready(function() {
 							notEqualsIgnoreCase: 'New account should be different',
 							isAccountName: 'Account name is not valid'
 						}} />
-					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Change' />
 				</Formsy.Form>
 			); 

@@ -20,6 +20,11 @@ window.submitForm = function(form) {
 		name: '_token',
 		value: $('meta[name="csrf-token"]').attr('content')
 	}).appendTo(form);
+	$('<input>').attr({
+		type: 'hidden',
+		name: 'redirect',
+		value: location.href
+	}).appendTo(form);
 	form.submit();
 }
 window.showMessageDialog = function(msg, title, btn) {
@@ -52,7 +57,7 @@ window.showLoginForm = function(e) {
 			className : 'EzsellFormView',
 			formrender() { 
 				return (
-					<Formsy.Form className='EzsellForm' method='post' action='/login' autocomplete="false" 
+					<Formsy.Form className='EzsellForm' method='post' action='/login' autocomplete='off'  onkeypress='return event.keyCode != 13;'
 					onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 						<Input type='email' required name='email' title='Email' validations='isEmail' 
 							validationError='This is not a valid email' />
@@ -80,7 +85,7 @@ window.showRegistrationForm = function(e) {
 			className : 'EzsellFormView',
 			formrender() { 
 				return (
-					<Formsy.Form className='EzsellForm' method='post' action='/register' autocomplete="false"   
+					<Formsy.Form className='EzsellForm' method='post' action='/register' autocomplete='off'  onkeypress='return event.keyCode != 13;' 
 					onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 						<Input type='email' required name='email' title='Email' validations='isEmail' 
 							validationError='This is not a valid email' />
@@ -115,9 +120,14 @@ window.showLocationForm = function(e) {
 				loading: false
 			},
 			formrender() { 
+				var currentLocationLabel = '';
+				if (currentLocation) {
+					currentLocationLabel = <label>Current: {currentLocation.name}</label>;
+				}
 				return (
-					<Formsy.Form className='EzsellForm' method='post' action='/location' autocomplete="false" 
+					<Formsy.Form className='EzsellForm' method='post' action='/location' autocomplete='off' onkeypress='return event.keyCode != 13;' 
 						onValidSubmit={this.submit}onValid={this.enableButton} onInvalid={this.disableButton}>
+						{currentLocationLabel}
 						<Input type='text' autocomplete='true' required name='location' title='Location' source='/searchlocation' />
 						<input type='hidden' name='redirect' value={location.href} />
 					</Formsy.Form>
@@ -147,9 +157,15 @@ window.showLocationForm = function(e) {
 					},
 					minLength: 2,
 					select: function (event, ui) {
-						this.setAttribute('data-value', ui.item);
-						this.nextSibling.value = ui.item.id;
-						submitForm($(this).parents('form:first'));
+						if (ui && ui.item) {
+							this.setAttribute('data-value', ui.item);
+							const id = ui.item.id;
+							this.nextSibling.value = id;
+							if (id && id != currentLocation.id)
+								submitForm($(this).parents('form:first'));
+							else
+								toggleForm();
+						}
 					}
 				});
 			});

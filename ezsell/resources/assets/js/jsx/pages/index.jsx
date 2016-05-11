@@ -7,9 +7,8 @@ $( document ).ready(function() {
 		className : 'EzsellView AccountView',
 		formrender() { 
 			return (
-				<Formsy.Form className='EzsellForm' method='post' action='/'  
+				<Formsy.Form className='EzsellForm' method='post' action='/' autocomplete='off' onkeypress='return event.keyCode != 13;'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-					<input type='hidden' name='redirect' value={location.href} />
 				</Formsy.Form>
 			); 
 		}

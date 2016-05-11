@@ -7,11 +7,10 @@ $( document ).ready(function() {
 		className : 'EzsellView AccountView',
 		formrender() { 
 			return (
-				<Formsy.Form className='EzsellForm' method='post' action='/code'  
+				<Formsy.Form className='EzsellForm' method='post' action='/code' autocomplete='off' onkeypress='return event.keyCode != 13;'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<Input type='email' required name='email' title='Email' validations='isEmail' 
 						validationError='This is not a valid email' />
-					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Send' />
 				</Formsy.Form>
 			); 

@@ -7,11 +7,10 @@ $( document ).ready(function() {
 		className : 'EzsellView AccountView',
 		formrender() { 
 			return (
-				<Formsy.Form className='EzsellForm' method='post' action='/deactivate'  
+				<Formsy.Form className='EzsellForm' method='post' action='/deactivate' autocomplete='off' onkeypress='return event.keyCode != 13;'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<Input type='password' required name='current_password' title='Password' 
 						validationError='Password is required' />
-					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Deactivate' />
 				</Formsy.Form>
 			); 

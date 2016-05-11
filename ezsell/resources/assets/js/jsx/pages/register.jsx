@@ -7,7 +7,7 @@ $( document ).ready(function() {
 		className : 'EzsellView AccountView',
 		formrender() { 
 			return (
-				<Formsy.Form className='EzsellForm' method='post' action='/register'  
+				<Formsy.Form className='EzsellForm' method='post' action='/register' autocomplete='off' onkeypress='return event.keyCode != 13;'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<Input type='email' required name='email' title='Email' validations='isEmail' 
 						validationError='This is not a valid email' />
@@ -17,7 +17,6 @@ $( document ).ready(function() {
 						validationError='Password rules: Length between 6-30, at lease 1 lowercase character, 1 uppercase character, 1 number, 1 special character (!@#0^&*()+)' />
 					<Input type='password' name='password_confirmation' title='Password confirmation' validations='equalsField:password' 
 						validationError='Password confirmation is not matched' />
-					<input type='hidden' name='redirect' value={location.href} />
 					<Button name='submit' type='submit' disabled={!this.state.canSubmit} value='Register' />
 				</Formsy.Form>
 			); 

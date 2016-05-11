@@ -8,10 +8,9 @@ $( document ).ready(function() {
 		},
 		formrender() { 
 			return (
-				<Formsy.Form className='EzsellForm' method='post' action='/location'
+				<Formsy.Form className='EzsellForm' method='post' action='/location' autocomplete='off' onkeypress='return event.keyCode != 13;'
 					onValidSubmit={this.submit}onValid={this.enableButton} onInvalid={this.disableButton}>
 					<Input type='text' autocomplete='true' required name='location' title='Location' source='/searchlocation' />
-					<input type='hidden' name='redirect' value={location.href} />
 				</Formsy.Form>
 			); 
 		}

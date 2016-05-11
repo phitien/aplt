@@ -8,11 +8,18 @@ use App\Ezsell\Traits\UtilTrait;
 use App\Ezsell\View\Html\Menu\Menu;
 use App\Ezsell\View\Html\Menu\MenuItem;
 use App\Ezsell\Models\Cat;
-use Exception;
-use Symfony\Component\Debug\Exception\FatalErrorException;
+use App\Ezsell\Traits\LocationTrait;
 
 class Factory extends BaseFactory {
-	use UserTrait, UtilTrait;
+	/**
+	 * TRAITS
+	 */
+	use UserTrait, UtilTrait, LocationTrait;
+	/**
+	 *
+	 * @var bool
+	 */
+	public $requireOriginalRendering = false;
 	/**
 	 * Get the evaluated view contents for the given view.
 	 *
@@ -22,10 +29,17 @@ class Factory extends BaseFactory {
 	 * @return \Illuminate\Contracts\View\View
 	 */
 	public function make($view, $data = [], $mergeData = []) {
-		if (static::$__isCustom) {
-			return parent::make ( $view, $data, $mergeData );
-		}
-		try {
+		// addon to add some default options to view
+		$data = $this->preProcessData ( $data );
+		return parent::make ( $view, $data, $mergeData );
+	}
+	/**
+	 *
+	 * @param array $data        	
+	 * @return array
+	 */
+	protected function preProcessData($data = []) {
+		if (! $this->requireOriginalRendering) {
 			$isGuest = ( bool ) static::getUser ()->isGuest ();
 			$data ['isGuest'] = $isGuest;
 			$data ['user'] = static::getUser ();
@@ -53,16 +67,19 @@ class Factory extends BaseFactory {
 			}
 			$data ['menu'] = $menu;
 			$data ['cats'] = Cat::getHierarchy ();
-		} catch ( FatalErrorException $e ) {
-		} catch ( Exception $e ) {
+			$data ['location'] = static::getLocation ();
 		}
-		return parent::make ( $view, $data, $mergeData );
+		return $data;
 	}
-	private static $__isCustom = FALSE;
+	/**
+	 *
+	 * @param unknown $view        	
+	 * @param array $data        	
+	 * @param array $mergeData        	
+	 */
 	public function create($view, $data = [], $mergeData = []) {
-		static::$__isCustom = true;
-		$view = parent::make ( $view, $data, $mergeData );
-		static::$__isCustom = false;
+		$this->requireOriginalRendering = true;
+		$view = $this->make ( $view, $data, $mergeData );
 		return $view;
 	}
 }

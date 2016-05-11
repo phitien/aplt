@@ -25,6 +25,7 @@
 @endif
 		var appMessage = '{{ $appMessage }}';
 		var cats = {!! $cats !!};
+		var currentLocation = {!! $location ? json_encode($location) : '{}' !!};
 	</script>
 @show
     </head>
