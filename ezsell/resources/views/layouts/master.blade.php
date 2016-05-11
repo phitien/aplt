@@ -19,6 +19,9 @@
 	{{ Html::script('js/browser.min.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/libraries.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/app.js', ['type' => 'text/javascript']) }}
+	{{ Html::script('js/jquery-migrate-1.2.1.min.js', ['type' => 'text/javascript']) }}
+	{{ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
+
 	<script type="text/javascript">
 @if (!$isGuest)
 		var user = {!! $user !!};
@@ -54,7 +57,20 @@
 @yield('content')
 			<div class="clearfix"></div>
         </div>
+		<div class="container clearfix" id="footer">
+			<div id="messages"></div>
+			<div id="sendmessages">
+				<input type="text" name="message" onkeypress="javascript:if (event.keyCode==13) {$(this).next('input').click();}" />
+				<input type="button" value="send" onclick="sendMessage(this)"/>
+			</div>
+		</div>
 @section('bottomscripts')
+	<script type="text/javascript">
+		var socket = io.connect('http://localhost:8890');
+		socket.on('message', function (data) {
+			$( "#messages" ).append( "<p>"+data+"</p>" );
+		});
+	</script>
 @show
 		<div class="clearfix"></div>
     </body>

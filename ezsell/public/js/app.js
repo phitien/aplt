@@ -34,11 +34,14 @@ window.CatMenu = _catmenu2.default;
 window.uuid = function (prefix) {
 	return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 };
+window.token = function () {
+	return $('meta[name="csrf-token"]').attr('content');
+};
 window.submitForm = function (form) {
 	$('<input>').attr({
 		type: 'hidden',
 		name: '_token',
-		value: $('meta[name="csrf-token"]').attr('content')
+		value: token()
 	}).appendTo(form);
 	$('<input>').attr({
 		type: 'hidden',
@@ -197,6 +200,22 @@ window.showLocationForm = function (e) {
 };
 window.toggleForm = function () {
 	$('#form-container').slideToggle();
+};
+window.sendMessage = function (e) {
+	var message = $(e).prev('input').val();
+	if (message) {
+		$.ajax({
+			type: 'POST',
+			url: '/sendmessage',
+			data: {
+				'_token': token(),
+				'message': message
+			},
+			success: function success() {
+				$(e).prev('input').val('');
+			}
+		});
+	}
 };
 //
 $(document).ready(function () {

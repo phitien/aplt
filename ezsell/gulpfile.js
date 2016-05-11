@@ -26,6 +26,10 @@ elixir(function(mix) {
 	
 	.browserify('jsx/pages/location.jsx', 'public/js/pages')
 
-	.copy('node_modules/jquery-ui/themes', 'public/css/jquery-ui/themes');
-
+	.copy('node_modules/jquery-ui/themes', 'public/css/jquery-ui/themes')
+	
+	.copy('resources/assets/js/socket.io-1.3.4.js', 'public/js')
+	
+	.copy('resources/assets/js/jquery-migrate-1.2.1.min.js', 'public/js');
+	
 });

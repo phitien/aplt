@@ -12,13 +12,16 @@ window.Form = FormView.Form;
 window.CatMenu = CatMenu;
 //
 window.uuid = function (prefix) {
-  return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+	return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 }
+window.token = function() {
+	return $('meta[name="csrf-token"]').attr('content');
+} 
 window.submitForm = function(form) {
 	$('<input>').attr({
 		type: 'hidden',
 		name: '_token',
-		value: $('meta[name="csrf-token"]').attr('content')
+		value: token()
 	}).appendTo(form);
 	$('<input>').attr({
 		type: 'hidden',
@@ -57,8 +60,8 @@ window.showLoginForm = function(e) {
 			className : 'EzsellFormView',
 			formrender() { 
 				return (
-					<Formsy.Form className='EzsellForm' method='post' action='/login' autocomplete='off'  onkeypress='return event.keyCode != 13;'
-					onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
+					<Formsy.Form className='EzsellForm' method='post' action='/login' autocomplete='off' onkeypress='return event.keyCode != 13;'
+					onValidSubmit={this.submit} onValid={this.enableButton} onInvalid={this.disableButton}>
 						<Input type='email' required name='email' title='Email' validations='isEmail' 
 							validationError='This is not a valid email' />
 						<Input type='password' required name='password' title='Password' 
@@ -85,8 +88,8 @@ window.showRegistrationForm = function(e) {
 			className : 'EzsellFormView',
 			formrender() { 
 				return (
-					<Formsy.Form className='EzsellForm' method='post' action='/register' autocomplete='off'  onkeypress='return event.keyCode != 13;' 
-					onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
+					<Formsy.Form className='EzsellForm' method='post' action='/register' autocomplete='off' onkeypress='return event.keyCode != 13;' 
+					onValidSubmit={this.submit} onValid={this.enableButton} onInvalid={this.disableButton}>
 						<Input type='email' required name='email' title='Email' validations='isEmail' 
 							validationError='This is not a valid email' />
 						<Input type='email' name='email_confirmation' title='Email confirmation' validations='equalsField:email' 
@@ -178,6 +181,22 @@ window.showLocationForm = function(e) {
 }
 window.toggleForm = function() {
 	$('#form-container').slideToggle();
+};
+window.sendMessage = function(e) {
+	var message = $(e).prev('input').val();
+	if (message) {
+		$.ajax({
+			type: 'POST',
+			url: '/sendmessage',
+			data: { 
+				'_token': token(),
+				'message': message
+			},
+			success: function() {
+				$(e).prev('input').val('');
+			}
+		});
+	}
 };
 //
 $( document ).ready(function() {

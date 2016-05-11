@@ -4,7 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Formsy from 'formsy-react';
 //
-window.$ = jquery;
+window.jQuery = jquery;
+window.$ = window.jQuery;
 window.React = React;
 window.ReactDOM = ReactDOM;
 window.Formsy = Formsy;

@@ -11,7 +11,7 @@ class RouteServiceProvider extends BaseRouteServiceProvider {
 	 *
 	 * @var string $namespace
 	 */
-	protected $namespace = 'App\Ezsell';
+	protected $namespace = 'App\Ezsell\Controllers';
 	protected function mapWebRoutes(Router $router) {
 		$router->group ( [ 
 				'namespace' => $this->namespace,

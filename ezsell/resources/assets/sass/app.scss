@@ -78,3 +78,37 @@ ul.catmenu>li>ul {
 
 #banner {min-height : 248px;border-bottom : 1px solid; border-color: $border-color;}
 #container {}
+
+#footer {
+	position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 30px;
+    width: 100%;
+    border: 1px solid;
+    border-color: $border-color;
+}
+#messages {
+	position: absolute;
+    bottom: 28px;
+    right: 10px;
+	padding: 10px;
+    height: 280px;
+    width: 230px;
+    border: 1px solid;
+    border-color: $border-color;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+#sendmessages {
+	position: absolute;
+    bottom: 0x;
+    right: 10px;
+    height: 28px;
+    width: 230px;
+    border: 1px solid;
+    border-color: $border-color;
+}
+#sendmessages input[type=text] {
+	width: 180px;
+}
