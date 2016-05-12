@@ -2,6 +2,7 @@
 <html>
     <head>
     	<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     	<meta name="csrf-token" content="{{ csrf_token() }}">
     	<meta name="keywords" content="">
     	<meta name="description" content="">
@@ -17,14 +18,15 @@
 	{{ Html::style('css/theme.css') }}
 @show
 @section('script')
-	{{ Html::script('js/browser.min.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/libraries.js', ['type' => 'text/javascript']) }}
+	{{ Html::script('js/bootstrap.min.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/common.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/app.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/jquery-migrate-1.2.1.min.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
 
 	<script type="text/javascript">
+		var contentDivId = 'content';
 @if (!$isGuest)
 		var user = {!! $user !!};
 @endif
@@ -35,6 +37,26 @@
 @show
     </head>
     <body>
+		<div class="container-fluid clearfix" id="navigation-replacement"></div>
+@yield('banner')
+        <div class="container clearfix" id="container">
+        	<div class="row">
+	        	<div class="col-xs-6 col-md-3" id="left">
+	        	</div>
+				<div class="col-xs-12 col-sm-6 col-md-9" id="content">
+@yield('content')
+	        	</div>
+        	</div>
+			<div class="clearfix"></div>
+        </div>
+		<div class="container clearfix" id="footer">
+			<div id="messages"></div>
+			<div id="sendmessages">
+				<input type="text" name="message" onkeypress="javascript:if (event.keyCode==13) {$(this).next('input').click();}" />
+				<input type="button" value="send" onclick="sendMessage(this)"/>
+			</div>
+		</div>
+		
 @section('top')
 		<div class="container-fluid clearfix" id="navigation">
 			<div class="container clearfix">
@@ -53,21 +75,8 @@
 				<div class="clearfix"></div>
 			</div>
 		</div>
-		<div class="container clearfix" id="banner">
-			<div class="clearfix"></div>
-		</div>
 @show
-        <div class="container clearfix" id="container">
-@yield('content')
-			<div class="clearfix"></div>
-        </div>
-		<div class="container clearfix" id="footer">
-			<div id="messages"></div>
-			<div id="sendmessages">
-				<input type="text" name="message" onkeypress="javascript:if (event.keyCode==13) {$(this).next('input').click();}" />
-				<input type="button" value="send" onclick="sendMessage(this)"/>
-			</div>
-		</div>
+
 @section('bottomscripts')
 	<script type="text/javascript">
 		var socket = io.connect('http://localhost:8890');

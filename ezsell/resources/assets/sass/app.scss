@@ -1,5 +1,3 @@
-@import url(https://fonts.googleapis.com/css?family=Lato);
-$font-family-sans-serif: 'Lato', sans-serif;
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 $primary-color: #23527c;
@@ -18,7 +16,9 @@ $small-margin-padding: 5px;
 
 $navigation-height: 55px;
 
-span.validation-error {color: $warning-color;}
+.form {}
+.form .center-block {float: none !important;}
+.validation-error {color: $warning-color;}
 .inline-block-list {}
 .inline-block-list div.radio,.inline-block-list div.checkbox {display: inline-block;margin: 0 $margin-padding;}
 .border {border-color: $border-color;border-width : $border-width;}
@@ -47,9 +47,15 @@ span.validation-error {color: $warning-color;}
 .menuitem-atomic {cursor: pointer;}
 .menuitem-nonatomic {font-style: italic;text-decoration: none !important;color: $menuitem-nonatomic-color;cursor: text;}
 
+#navigation-replacement {
+	height: ($navigation-height + $border-width);width: 100%;
+	background-color: transparent;
+}
 #navigation {
 	@extend .border-bottom;
-	position: fixed;top: 0;height: $navigation-height;width: 100%;
+	position: fixed;top: 0;
+	width: 100%;
+	background: white;
 }
 #navigation ul,#navigation li {vertical-align: top;} 
 #navigation ul.nav {height: $navigation-height;}
@@ -76,7 +82,7 @@ ul.catmenu>li>ul>li>ul {display: block;}
 ul.catmenu>li>ul>li>ul>li {display: block;}
 
 ul.catmenu>li>a:first-child {cursor: pointer;}
-ul.catmenu li a {padding: 3px $margin-padding;}
+#catmenu ul.catmenu>li>ul a {padding: $small-margin-padding $margin-padding;}
 
 #rightmenu {position: inherit;float: right;width: 25%;height: 100%;}
 #rightmenu>ul a {padding: $margin-padding;background-color: transparent;}
@@ -106,8 +112,15 @@ ul.catmenu li a {padding: 3px $margin-padding;}
 	@extend .border-bottom;
 	min-height: 248px;
 }
-#banner {margin-top: 56px;}
+
 #container {}
+
+#left {}
+
+#content {
+	padding-top: 2*$margin-padding;
+	padding-bottom: 2*$margin-padding;
+}
 
 #footer {
 	@extend .border-top;

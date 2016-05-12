@@ -44232,8 +44232,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 require('jquery-ui');
 
 //
-window.jQuery = _jquery2.default;
-window.$ = window.jQuery;
+window.$ = window.jQuery = _jquery2.default;
 window.React = _react2.default;
 window.ReactDOM = _reactDom2.default;
 

@@ -64,7 +64,7 @@ window.showLoginForm = function(e) {
 						<FormView.Input type='password' required name='password' title='Password' 
 							validationError='Password is required' />
 						<FormView.Input type='checkbox' name='remember' title='Remember me' />
-						<FormView.Input name='btn-submit' type='submit' disabled={!this.state.canSubmit} value='Login' />
+						<FormView.Input name='btn-submit' type='submit' disabled={!this.state.canSubmit} value='Login' className='center-block' />
 					</FormView.Form>
 				); 
 			}
@@ -93,7 +93,7 @@ window.showRegistrationForm = function(e) {
 							validationError='Password rules: Length between 6-30, at lease 1 lowercase character, 1 uppercase character, 1 number, 1 special character (!@#0^&*()+)' />
 						<FormView.Input type='password' name='password_confirmation' title='Password confirmation' validations='equalsField:password' 
 							validationError='Password confirmation is not matched' />
-						<FormView.Input name='btn-submit' type='submit' disabled={!this.state.canSubmit} value='Register' />
+						<FormView.Input name='btn-submit' type='submit' disabled={!this.state.canSubmit} value='Register' className='center-block' />
 					</FormView.Form>
 				); 
 			}
@@ -121,10 +121,10 @@ window.showLocationForm = function(e) {
 					currentLocationLabel = <label>Current: {currentLocation.name}</label>;
 				}
 				return (
-					<FormView.Form className='form' method='post' action='/location' autocomplete='off' onkeypress='return event.keyCode != 13;' 
+					<FormView.Form className='form' method='post' action='/searchlocation' autocomplete='off' onkeypress='return event.keyCode != 13;' 
 						onValidSubmit={this.submit}onValid={this.enableButton} onInvalid={this.disableButton}>
 						{currentLocationLabel}
-						<FormView.Input type='autocomplete' required name='location' title='Location' source='/searchlocation' />
+						<FormView.Input type='autocomplete' name='location' title='Location' source='/searchlocation' className='center-block' />
 					</FormView.Form>
 				); 
 			}

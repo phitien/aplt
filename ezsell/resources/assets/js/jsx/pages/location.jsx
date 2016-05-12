@@ -5,16 +5,23 @@ $( document ).ready(function() {
 			locations: [],
 			loading: false
 		},
-		formrender() { 
+		formrender() {
+			var currentLocationLabel = '';
+			if (currentLocation) {
+				currentLocationLabel = <label>Current: {currentLocation.name}</label>;
+			}
 			return (
-				<FormView.Form className='form' method='post' action='/location' autocomplete='off' onkeypress='return event.keyCode != 13;'
+				<FormView.Form className='form row' method='post' action='/searchlocation' autocomplete='off' onkeypress='return event.keyCode != 13;'
 					onValidSubmit={this.submit}onValid={this.enableButton} onInvalid={this.disableButton}>
-					<FormView.Input type='text' autocomplete='true' required name='location' title='Location' source='/searchlocation' />
+					<div className="col-xs-12 col-sm-6 col-md-5 center-block">
+						{currentLocationLabel}
+						<FormView.Input type='autocomplete' name='location' title='Location' source='/searchlocation' className='center-block' />
+					</div>
 				</FormView.Form>
 			); 
 		}
-	}), document.getElementById('container'), function() {
-		$('.autocomplete input:first').each(function (i,e) {
+	}), document.getElementById(contentDivId), function() {
+		$('.autocomplete').each(function (i,e) {
 			var source = e.getAttribute('data-source');
 			$(e).autocomplete({ 
 				source: function( request, response ) {
@@ -37,9 +44,13 @@ $( document ).ready(function() {
 				},
 				minLength: 2,
 				select: function (event, ui) {
-					this.setAttribute('data-value', ui.item);
-					this.nextSibling.value = ui.item.id;
-					submitForm($(this).parents('form:first'));
+					if (ui && ui.item) {
+						this.setAttribute('data-value', ui.item);
+						const id = ui.item.id;
+						this.nextSibling.value = id;
+						if (id && id != currentLocation.id)
+							submitForm($(this).parents('form:first'));
+					}
 				}
 			});
 		});

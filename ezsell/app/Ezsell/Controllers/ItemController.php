@@ -29,7 +29,7 @@ class ItemController extends BaseController {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request) {
-		return $this->response ( View::make ( 'index' ) );
+		return $this->response ( View::make ( 'home' ) );
 	}
 	/**
 	 *

@@ -4416,7 +4416,7 @@ window.showLoginForm = function (e) {
 					React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: 'Password',
 						validationError: 'Password is required' }),
 					React.createElement(_formview2.default.Input, { type: 'checkbox', name: 'remember', title: 'Remember me' }),
-					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: 'Login' })
+					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: 'Login', className: 'center-block' })
 				);
 			}
 		}), document.getElementById('form-container'), function () {
@@ -4444,7 +4444,7 @@ window.showRegistrationForm = function (e) {
 						validationError: 'Password rules: Length between 6-30, at lease 1 lowercase character, 1 uppercase character, 1 number, 1 special character (!@#0^&*()+)' }),
 					React.createElement(_formview2.default.Input, { type: 'password', name: 'password_confirmation', title: 'Password confirmation', validations: 'equalsField:password',
 						validationError: 'Password confirmation is not matched' }),
-					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: 'Register' })
+					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: 'Register', className: 'center-block' })
 				);
 			}
 		}), document.getElementById('form-container'), function () {
@@ -4476,10 +4476,10 @@ window.showLocationForm = function (e) {
 				}
 				return React.createElement(
 					_formview2.default.Form,
-					{ className: 'form', method: 'post', action: '/location', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+					{ className: 'form', method: 'post', action: '/searchlocation', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
 						onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
 					currentLocationLabel,
-					React.createElement(_formview2.default.Input, { type: 'autocomplete', required: true, name: 'location', title: 'Location', source: '/searchlocation' })
+					React.createElement(_formview2.default.Input, { type: 'autocomplete', name: 'location', title: 'Location', source: '/searchlocation', className: 'center-block' })
 				);
 			}
 		}), document.getElementById('form-container'), function () {
@@ -4574,7 +4574,7 @@ var MenuItem = React.createClass({
 			try {
 				return this.props.data.href;
 			} catch (e) {
-				return null;
+				return '';
 			}
 		}
 	},

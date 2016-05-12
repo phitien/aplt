@@ -16,7 +16,7 @@ const MenuItem = React.createClass({
 		catch (e) {
 			try {return this.props.data.href;}
 			catch (e) {
-				return null;
+				return '';
 			}
 		}
 	},
@@ -44,7 +44,7 @@ const MenuItem = React.createClass({
 		fn.bind(event.currentTarget)();
 	},
 	render() {
-		const text = this.getText();
+		var text = this.getText();
 		if (!text) {
 			return (
 				<li></li>
