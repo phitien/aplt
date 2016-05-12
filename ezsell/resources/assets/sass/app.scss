@@ -102,7 +102,10 @@ ul.catmenu>li>a:first-child {cursor: pointer;}
 #rightmenu>ul>li>ul>li>a {padding: 0;text-decoration: none;}
 #rightmenu>ul>li>ul>li:hover {background-color: #ffffff;}
 
-#form-container {display: none;width: 100%;};
+#form-container {
+	display: none;
+	position: absolute;right: $margin-padding;width: 350px;
+}
 #form-container .form-view {
 	@extend .border-all, .border-dark;
 	background-color: $formview-background-color;padding: $margin-padding;

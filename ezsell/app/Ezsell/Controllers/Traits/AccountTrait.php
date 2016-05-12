@@ -4,7 +4,6 @@ namespace App\Ezsell\Controllers\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use View;
 use App\Ezsell\Config\Config;
 
 trait AccountTrait {
@@ -22,21 +21,21 @@ trait AccountTrait {
 		$response = static::apiCallPassword ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( View::make ( 'password', [ 
+			return $this->response ( view ( 'password', [ 
 					'appMessage' => "Hehe mật khẩu đổi rồi đấy, an toàn rồi :D" 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( View::make ( 'password', [ 
+			return $this->response ( view ( 'password', [ 
 					'appMessage' => "Hỏng rồi, không đổi được mật khẩu, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}
 	protected function getPassword(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( View::make ( 'login' ) );
+			return $this->response ( view ( 'login' ) );
 		else
-			return $this->response ( View::make ( 'password' ) );
+			return $this->response ( view ( 'password' ) );
 	}
 	/**
 	 * Email: change user email
@@ -52,21 +51,21 @@ trait AccountTrait {
 		$response = static::apiCallEmail ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( View::make ( 'email', [ 
+			return $this->response ( view ( 'email', [ 
 					'appMessage' => "Hehe email đổi rồi đấy, đăng nhập bằng email mới đi ha :D" 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( View::make ( 'email', [ 
+			return $this->response ( view ( 'email', [ 
 					'appMessage' => "Hỏng rồi, không đổi được email rồi, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}
 	protected function getEmail(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( View::make ( 'login' ) );
+			return $this->response ( view ( 'login' ) );
 		else
-			return $this->response ( View::make ( 'email' ) );
+			return $this->response ( view ( 'email' ) );
 	}
 	/**
 	 * Account: change user account
@@ -82,21 +81,21 @@ trait AccountTrait {
 		$response = static::apiCallAccount ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( View::make ( 'account', [ 
+			return $this->response ( view ( 'account', [ 
 					'appMessage' => "Hehe account đổi rồi đấy :D" 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( View::make ( 'account', [ 
+			return $this->response ( view ( 'account', [ 
 					'appMessage' => "Hỏng rồi, không đổi được account, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}
 	protected function getAccount(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( View::make ( 'login' ) );
+			return $this->response ( view ( 'login' ) );
 		else
-			return $this->response ( View::make ( 'account' ) );
+			return $this->response ( view ( 'account' ) );
 	}
 	/**
 	 * Reset: send reset link to the user email

@@ -1,12 +1,20 @@
 import CatMenu from './components/catmenu.jsx';
 import FormView from './components/formview.jsx';
+import ItemDetail from './components/itemdetail.jsx';
+import ItemList from './components/itemlist.jsx';
 //
-window.FormView = FormView;
 window.CatMenu = CatMenu;
+window.FormView = FormView;
+window.ItemDetail = ItemDetail;
+window.ItemList = ItemList;
 /**
  * Some common functions
  */
 //
+window.currency = function (v) {
+	var n = parseFloat(v) != NaN ? parseFloat(v) : 0; 
+	return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+}
 window.uuid = function (prefix) {
 	return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 }
@@ -115,14 +123,14 @@ window.showLocationForm = function(e) {
 				locations: [],
 				loading: false
 			},
+			onValidSubmit(model) {},
 			formrender() { 
 				var currentLocationLabel = '';
 				if (currentLocation) {
 					currentLocationLabel = <label>Current: {currentLocation.name}</label>;
 				}
 				return (
-					<FormView.Form className='form' method='post' action='/searchlocation' autocomplete='off' onkeypress='return event.keyCode != 13;' 
-						onValidSubmit={this.submit}onValid={this.enableButton} onInvalid={this.disableButton}>
+					<FormView.Form className='form' method='post' action='/location'>
 						{currentLocationLabel}
 						<FormView.Input type='autocomplete' name='location' title='Location' source='/searchlocation' className='center-block' />
 					</FormView.Form>

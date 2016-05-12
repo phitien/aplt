@@ -4,7 +4,6 @@ namespace App\Ezsell\Middleware;
 
 use Closure;
 use App\Ezsell\Config\Config;
-use View;
 
 class Location extends Middleware {
 	/**
@@ -17,7 +16,7 @@ class Location extends Middleware {
 	public function im_handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
 		$location = static::getLocation ();
 		if (! $location) {
-			return $this->response ( View::make ( 'location' ) );
+			return $this->response ( view ( 'location' ) );
 		}
 		return $next ( $request );
 	}

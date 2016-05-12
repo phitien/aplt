@@ -6,7 +6,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
-use View;
 
 trait  ActivateTrait {
 	/**
@@ -19,12 +18,12 @@ trait  ActivateTrait {
 	public function activate(Request $request, $code) {
 		$response = static::apiCallActivate ( $code );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( View::make ( 'activate', [ 
+			return $this->response ( view ( 'activate', [ 
 					'appMessage' => "Hehe kích hoạt ok rồi đấy. Lướt thôi :D" 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( View::make ( 'activate', [ 
+			return $this->response ( view ( 'activate', [ 
 					'appMessage' => "Hỏng rồi, không kích hoạt được, lý do vì {$data['message']}." 
 			] ), $response->getStatusCode () );
 		}
@@ -43,7 +42,7 @@ trait  ActivateTrait {
 		if ($msg = $this->emailValidator ( [ 
 				'email' => $email 
 		] )) {
-			return $this->response ( View::make ( 'code', [ 
+			return $this->response ( view ( 'code', [ 
 					'appMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$msg}. Thử lại phát đi." 
 			] ), Response::HTTP_BAD_REQUEST );
 		}
@@ -51,19 +50,19 @@ trait  ActivateTrait {
 				'email' => $email 
 		] );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( View::make ( 'code', [ 
+			return $this->response ( view ( 'code', [ 
 					'appMessage' => "Hehe thư kích hoạt gửi rồi đấy, đăng nhập email và kích hoạt ngay đi nhé :)." 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( View::make ( 'code', [ 
+			return $this->response ( view ( 'code', [ 
 					'appMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}
 	}
 	protected function getCode(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( View::make ( 'code' ) );
+			return $this->response ( view ( 'code' ) );
 		else
 			return $this->redirect ();
 	}

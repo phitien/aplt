@@ -5,7 +5,6 @@ namespace App\Ezsell\Controllers\Traits;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use View;
 
 trait  ProfileTrait {
 	/**
@@ -25,9 +24,9 @@ trait  ProfileTrait {
 	 */
 	protected function getProfile(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( View::make ( 'login' ) );
+			return $this->response ( view ( 'login' ) );
 		else
-			return $this->response ( View::make ( 'profile' ) );
+			return $this->response ( view ( 'profile' ) );
 	}
 	/**
 	 * Return the authenticated user
@@ -42,12 +41,12 @@ trait  ProfileTrait {
 		}
 		$response = static::apiCallUpdateProfile ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( View::make ( 'deactivate', [ 
+			return $this->response ( view ( 'deactivate', [ 
 					'appMessage' => "Hehe update ok rồi đấy :)." 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( View::make ( 'deactivate', [ 
+			return $this->response ( view ( 'deactivate', [ 
 					'appMessage' => "Hỏng rồi, update có vài lỗi, lý do vì {$data['message']}. Thử lại phát đi." 
 			] ), $response->getStatusCode () );
 		}

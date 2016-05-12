@@ -8,3 +8,37 @@
 .ui-autocomplete .ui-menu-item .ui-state-focus {
 	background-color: #23527c !important;
 }
+
+.item-detail-wrapper {}
+.item-detail {}
+.item-title {}
+.item-prices {}
+.item-inline-prices .item-price {display: inline-block; margin: 15px 15px 15px 0;}
+.item-block-prices .item-price {display: block; margin: 7px 0 7px 0;}
+.item-prices label {text-decoration: initial;font-weight: normal;}
+
+.originalprice {color: black;}
+.item-originalprice span.currency-sign {
+	@extend .originalprice; 
+}
+.item-originalprice span.currency-value {
+	@extend .originalprice;
+	text-decoration: line-through;
+}
+.currency-sign {margin-right: 3px;}
+.saleprice {color: blue;}
+.item-saleprice span.currency-sign {
+	@extend .saleprice;
+}
+.item-saleprice span.currency-value {
+	@extend .saleprice;
+	text-decoration: line-through;
+}
+.nowprice {color: red;}
+.item-nowprice span.currency-sign {
+	@extend .nowprice;
+}
+.item-nowprice span.currency-value {
+	@extend .nowprice;
+	text-decoration: blink;
+}

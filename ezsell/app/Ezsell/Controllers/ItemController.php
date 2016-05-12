@@ -3,7 +3,9 @@
 namespace App\Ezsell\Controllers;
 
 use Illuminate\Http\Request;
-use View;
+use App\Ezsell\Models\Item;
+use App\Ezsell\Exceptions\ItemNotFound;
+use App\Ezsell\Models\Cat;
 
 class ItemController extends BaseController {
 	/**
@@ -14,7 +16,9 @@ class ItemController extends BaseController {
 	 * @var array $_authenticationMiddlewareOptions
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
-			'except' => [ ] 
+			'except' => [ 
+					'index' 
+			] 
 	];
 	/**
 	 *
@@ -29,7 +33,26 @@ class ItemController extends BaseController {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request) {
-		return $this->response ( View::make ( 'home' ) );
+		return $this->response ( view ( 'home' ) );
+	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function cat(Request $request, $id) {
+		return $this->process ( 'cat', $request, $id );
+	}
+	protected function getCat(Request $request, $id) {
+		$cat = Cat::find ( $id );
+		if ($cat) {
+			return $this->response ( view ( 'item.items', [ 
+					'cat' => $cat,
+					'items' => $cat->items ()->get () 
+			] ) );
+		} else {
+			throw new ItemNotFound ();
+		}
 	}
 	/**
 	 *
@@ -40,6 +63,45 @@ class ItemController extends BaseController {
 		return $this->process ( 'newitem', $request );
 	}
 	protected function getNewitem(Request $request) {
-		return $this->response ( View::make ( 'newitem' ) );
+		return $this->response ( view ( 'item.newitem' ) );
+	}
+	protected function postNewitem(Request $request) {
+		$data = $request->only ( [ 
+				'parent_id',
+				'location_id',
+				'title',
+				'description',
+				'is_selling',
+				'is_new',
+				'originalprice',
+				'saleprice',
+				'nowprice',
+				'meetup_at',
+				'meetup_details',
+				'mailing_details',
+				'groups' 
+		] );
+		$data ['user_id'] = static::getUser ()->id;
+		$data ['location_id'] = static::getLocation ()->id;
+		$item = Item::create ( $data );
+		return $this->redirect ( "/item/{$item->id}" );
+	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function item(Request $request, $id) {
+		return $this->process ( 'item', $request, $id );
+	}
+	protected function getItem(Request $request, $id) {
+		$item = Item::find ( $id );
+		if ($item) {
+			return $this->response ( view ( 'item.detail', [ 
+					'item' => $item 
+			] ) );
+		} else {
+			throw new ItemNotFound ();
+		}
 	}
 }

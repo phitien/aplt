@@ -37,6 +37,10 @@ elixir(function(mix) {
 	.browserify('jsx/pages/location.jsx', 'public/js/pages')
 	
 	.browserify('jsx/pages/newitem.jsx', 'public/js/pages')
+	
+	.browserify('jsx/pages/item.jsx', 'public/js/pages')
+	
+	.browserify('jsx/pages/items.jsx', 'public/js/pages')
 
 	.copy('node_modules/jquery-ui/themes', 'public/css/jquery-ui/themes')
 	

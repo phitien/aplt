@@ -28,7 +28,8 @@ class Kernel extends BaseKernel {
 					\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
 					\Illuminate\Session\Middleware\StartSession::class,
 					\Illuminate\View\Middleware\ShareErrorsFromSession::class,
-					\App\Ezsell\Middleware\VerifyCsrfToken::class 
+					\App\Ezsell\Middleware\VerifyCsrfToken::class,
+					\App\Ezsell\Middleware\Prehandle::class 
 			],
 			
 			'api' => [ 

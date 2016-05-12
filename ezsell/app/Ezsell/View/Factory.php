@@ -44,6 +44,10 @@ class Factory extends BaseFactory {
 			$data ['isGuest'] = $isGuest;
 			$data ['user'] = static::getUser ();
 			$data ['theme'] = 'south-street';
+			$data ['cats'] = Cat::getHierarchy ();
+			$data ['location'] = static::getLocation ();
+			$data ['currencySign'] = '$';
+			
 			if (! isset ( $data ['appMessage'] ))
 				$data ['appMessage'] = '';
 			$menu = (new Menu ())->setClassName ( 'nav' );
@@ -67,8 +71,6 @@ class Factory extends BaseFactory {
 				$moreMenuItem->addChild ( $moreMenu );
 			}
 			$data ['menu'] = $menu;
-			$data ['cats'] = Cat::getHierarchy ();
-			$data ['location'] = static::getLocation ();
 		}
 		return $data;
 	}

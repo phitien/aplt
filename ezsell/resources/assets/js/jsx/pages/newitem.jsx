@@ -15,23 +15,25 @@ $( document ).ready(function() {
 			var conditions = [{
 				label: 'New',
 				value: true,
-				checked: true
+				checked: 1
 			},{
 				label: 'Used',
-				value: false
+				value: 0
 			}];
 			return (
-				<FormView.Form className='form row' method='post' action='/login' autocomplete='off' onkeypress='return event.keyCode != 13;'
+				<FormView.Form className='form row' method='post' action='/newitem' 
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-					<FormView.Input type='text' required name='title' title='Title' />
-					<FormView.Input type='select' required name='parent_id' title='Category' 
-						options={catoptions} placeholder='Select a category' />
+					<div className="row">
+						<FormView.Input type='text' required name='title' title='Title' className='col-xs-6 col-md-8' />
+						<FormView.Input type='select' required name='parent_id' title='Category' className='col-xs-6 col-md-4'  
+							options={catoptions} placeholder='Select a category' />
+					</div>
 					<div className="row">
 						<FormView.Input type='number' name='originalprice' title='Original price' className='col-xs-6 col-md-4' step='0.1' min='0' placeholder='1.0' />
 						<FormView.Input type='number' name='saleprice' title='Sale price' className='col-xs-6 col-md-4' step='0.1' min='0' placeholder='1.0' />
 						<FormView.Input type='number' name='nowprice' title='Now price' className='col-xs-6 col-md-4' step='0.1' min='0' placeholder='1.0' />
 					</div>
-					<FormView.Input type='radiolist' name='condition' title='Condition' options={conditions} className='inline-block-list' />
+					<FormView.Input type='radiolist' name='is_new' title='Condition' options={conditions} className='inline-block-list' />
 					<FormView.Input type='textarea' name='description' title='Description' cols='10' rows='5' />
 					<FormView.Input type='submit' name='btn-submit' disabled={!this.state.canSubmit} value='Create' className='center-block' />
 				</FormView.Form>

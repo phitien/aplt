@@ -46,7 +46,7 @@ trait UtilTrait {
 	 * @return string
 	 */
 	protected static function getRedirectUri() {
-		return request ()->get ( 'redirect', '/' );
+		return request ()->session ()->get ( 'redirect', '/' );
 	}
 	/**
 	 *

@@ -2,7 +2,7 @@
 
 @section('title', 'EZSell - Chat')
 
-@section('script')
+@section('scripts')
 @parent
 	<script src="js/jquery-migrate-1.2.1.min.js"></script>
 	<script src="js/socket.io-1.3.4.js"></script>

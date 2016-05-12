@@ -3,10 +3,19 @@
 namespace App\Ezsell\Controllers;
 
 use Illuminate\Http\Request;
-use View;
 use App\Ezsell\Config\LocationMap;
 
 class LocationController extends BaseController {
+	/**
+	 *
+	 * @var array $_authenticationMiddlewareOptions
+	 */
+	protected $_authenticationMiddlewareOptions = [ 
+			'except' => [ 
+					'location',
+					'searchlocation' 
+			] 
+	];
 	/**
 	 *
 	 * @var array $_locationMiddlewareOptions
@@ -30,7 +39,7 @@ class LocationController extends BaseController {
 		}
 	}
 	protected function showLocation(Request $request) {
-		return $this->response ( View::make ( 'location' ) );
+		return $this->response ( view ( 'location' ) );
 	}
 	protected function saveLocation(Request $request) {
 		$location_id = $request->get ( 'location' );

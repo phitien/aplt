@@ -18782,7 +18782,7 @@ class LocationMap {
 	 * @return  array
 	 */
 	public static function get($id) {
-		return isset ( static::$maps [$id] ) ? [ 
+		return isset ( static::$maps [$id] ) ? (object) [ 
 			'id' => $id,
 			'name' => static::$maps [$id] 
 		] : null;

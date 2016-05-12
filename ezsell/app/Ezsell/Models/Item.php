@@ -57,4 +57,8 @@ class Item extends Model {
 	public function prices() {
 		return $this->hasMany ( 'App\Ezsell\Models\Price', 'parent_id', 'id' );
 	}
+	public static function create(array $attributes = []) {
+		$model = parent::create ( $attributes );
+		return $model;
+	}
 }

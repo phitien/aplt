@@ -900,6 +900,9 @@ var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
     draining = false;
     if (currentQueue.length) {
         queue = currentQueue.concat(queue);
@@ -4349,15 +4352,29 @@ var _formview = require('./components/formview.jsx');
 
 var _formview2 = _interopRequireDefault(_formview);
 
+var _itemdetail = require('./components/itemdetail.jsx');
+
+var _itemdetail2 = _interopRequireDefault(_itemdetail);
+
+var _itemlist = require('./components/itemlist.jsx');
+
+var _itemlist2 = _interopRequireDefault(_itemlist);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //
-window.FormView = _formview2.default;
 window.CatMenu = _catmenu2.default;
+window.FormView = _formview2.default;
+window.ItemDetail = _itemdetail2.default;
+window.ItemList = _itemlist2.default;
 /**
  * Some common functions
  */
 //
+window.currency = function (v) {
+	var n = parseFloat(v) != NaN ? parseFloat(v) : 0;
+	return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+};
 window.uuid = function (prefix) {
 	return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 };
@@ -4464,6 +4481,7 @@ window.showLocationForm = function (e) {
 				locations: [],
 				loading: false
 			},
+			onValidSubmit: function onValidSubmit(model) {},
 			formrender: function formrender() {
 				var currentLocationLabel = '';
 				if (currentLocation) {
@@ -4476,8 +4494,7 @@ window.showLocationForm = function (e) {
 				}
 				return React.createElement(
 					_formview2.default.Form,
-					{ className: 'form', method: 'post', action: '/searchlocation', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
-						onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+					{ className: 'form', method: 'post', action: '/location' },
 					currentLocationLabel,
 					React.createElement(_formview2.default.Input, { type: 'autocomplete', name: 'location', title: 'Location', source: '/searchlocation', className: 'center-block' })
 				);
@@ -4545,7 +4562,7 @@ window.sendMessage = function (e) {
 	}
 };
 
-},{"./components/catmenu.jsx":40,"./components/formview.jsx":41}],40:[function(require,module,exports){
+},{"./components/catmenu.jsx":40,"./components/formview.jsx":41,"./components/itemdetail.jsx":42,"./components/itemlist.jsx":43}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5029,6 +5046,300 @@ FormView.Form = _formsyReact2.default.Form;
 
 exports.default = FormView;
 
-},{"formsy-react":4}]},{},[39]);
+},{"formsy-react":4}],42:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * ItemDetail defination
+ */
+var ItemDetail = React.createClass({
+	displayName: 'ItemDetail',
+
+	render: function render() {
+		var className = 'item-detail-wrapper ' + (this.props.className ? this.props.className : '');
+		var item = this.props.item;
+		return React.createElement(
+			'div',
+			{ className: className },
+			React.createElement(
+				'div',
+				{ className: 'item-detail' },
+				React.createElement(
+					'div',
+					{ className: 'item-title' },
+					React.createElement(
+						'a',
+						null,
+						React.createElement(
+							'span',
+							null,
+							item.title
+						)
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'item-prices' },
+					React.createElement(
+						'div',
+						{ className: 'item-price item-originalprice' },
+						React.createElement(
+							'span',
+							{ className: 'currency-sign' },
+							currencySign
+						),
+						React.createElement(
+							'span',
+							{ className: 'currency-value' },
+							currency(item.originalprice)
+						),
+						' ',
+						React.createElement(
+							'label',
+							null,
+							'Original'
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'item-price item-saleprice' },
+						React.createElement(
+							'span',
+							{ className: 'currency-sign' },
+							currencySign
+						),
+						React.createElement(
+							'span',
+							{ className: 'currency-value' },
+							currency(item.saleprice)
+						),
+						' ',
+						React.createElement(
+							'label',
+							null,
+							'Sale'
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'item-price item-nowprice' },
+						React.createElement(
+							'span',
+							{ className: 'currency-sign' },
+							currencySign
+						),
+						React.createElement(
+							'span',
+							{ className: 'currency-value' },
+							currency(item.nowprice)
+						),
+						' ',
+						React.createElement(
+							'label',
+							null,
+							'Now'
+						)
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'item-description' },
+					React.createElement(
+						'p',
+						null,
+						item.description
+					)
+				)
+			)
+		);
+	}
+});
+
+exports.default = ItemDetail;
+
+},{}],43:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _itemsummary = require('./itemsummary.jsx');
+
+var _itemsummary2 = _interopRequireDefault(_itemsummary);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * ItemList defination
+ */
+var ItemList = React.createClass({
+	displayName: 'ItemList',
+
+	render: function render() {
+		var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
+		var items = this.props.items;
+		var id = this.props.id ? this.props.id : uuid('item-list');
+		return React.createElement(
+			'div',
+			{ className: className, id: id },
+			React.createElement(
+				'div',
+				{ className: 'cat-detail' },
+				React.createElement(
+					'div',
+					{ className: 'cat-name' },
+					React.createElement(
+						'label',
+						null,
+						cat.details.name
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'cat-title' },
+					React.createElement(
+						'label',
+						null,
+						cat.details.title
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'cat-description' },
+					React.createElement(
+						'p',
+						null,
+						cat.details.description
+					)
+				)
+			),
+			React.createElement(
+				'div',
+				{ className: 'item-list' },
+				items.map(function (item, i) {
+					return React.createElement(_itemsummary2.default, { item: item, key: i });
+				})
+			)
+		);
+	}
+});
+
+exports.default = ItemList;
+
+},{"./itemsummary.jsx":44}],44:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * ItemSummary defination
+ */
+var ItemSummary = React.createClass({
+	displayName: 'ItemSummary',
+
+	render: function render() {
+		var item = this.props.item;
+		var href = '/item/' + item.id;
+		return React.createElement(
+			'div',
+			{ className: 'item-summary' },
+			React.createElement(
+				'div',
+				{ className: 'item-title' },
+				React.createElement(
+					'a',
+					{ href: href },
+					React.createElement(
+						'span',
+						null,
+						item.title
+					)
+				)
+			),
+			React.createElement(
+				'div',
+				{ className: 'item-prices' },
+				React.createElement(
+					'div',
+					{ className: 'item-price item-originalprice' },
+					React.createElement(
+						'span',
+						{ className: 'currency-sign' },
+						currencySign
+					),
+					React.createElement(
+						'span',
+						{ className: 'currency-value' },
+						currency(item.originalprice)
+					),
+					' ',
+					React.createElement(
+						'label',
+						null,
+						'Original'
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'item-price item-saleprice' },
+					React.createElement(
+						'span',
+						{ className: 'currency-sign' },
+						currencySign
+					),
+					React.createElement(
+						'span',
+						{ className: 'currency-value' },
+						currency(item.saleprice)
+					),
+					' ',
+					React.createElement(
+						'label',
+						null,
+						'Sale'
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'item-price item-nowprice' },
+					React.createElement(
+						'span',
+						{ className: 'currency-sign' },
+						currencySign
+					),
+					React.createElement(
+						'span',
+						{ className: 'currency-value' },
+						currency(item.nowprice)
+					),
+					' ',
+					React.createElement(
+						'label',
+						null,
+						'Now'
+					)
+				)
+			),
+			React.createElement(
+				'div',
+				{ className: 'item-description' },
+				React.createElement(
+					'p',
+					null,
+					item.description
+				)
+			)
+		);
+	}
+});
+
+exports.default = ItemSummary;
+
+},{}]},{},[39]);
 
 //# sourceMappingURL=common.js.map

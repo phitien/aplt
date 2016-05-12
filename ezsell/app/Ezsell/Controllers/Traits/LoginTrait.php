@@ -6,7 +6,6 @@ use App\Ezsell\Config\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use View;
 use Illuminate\Support\Facades\Redirect;
 
 trait  LoginTrait {
@@ -26,14 +25,14 @@ trait  LoginTrait {
 			return $this->redirect ( static::getRedirectUri () );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( View::make ( 'login', [ 
+			return $this->response ( view ( 'login', [ 
 					'appMessage' => "Hỏng rồi, không login được, lý do vì {$data['message']}. Thử lại phát đi" 
 			] ), $response->getStatusCode () );
 		}
 	}
 	protected function getLogin(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( View::make ( 'login' ) );
+			return $this->response ( view ( 'login' ) );
 		else
 			return $this->redirect ();
 	}

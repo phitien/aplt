@@ -35,7 +35,7 @@ class Cat extends Model {
 		$location = static::getLocation ();
 		if ($location) {
 			return array_merge ( $attributes, [ 
-					'details' => $this->details ()->where ( 'location_id', $location ['id'] )->first (),
+					'details' => $this->details ()->where ( 'location_id', $location->id )->first (),
 					'children' => $this->children 
 			] );
 		} else {
@@ -43,6 +43,7 @@ class Cat extends Model {
 					'children' => $this->children 
 			] );
 		}
+		return $attributes;
 	}
 	public function details() {
 		return $this->hasMany ( 'App\Ezsell\Models\CatDetail', 'parent_id', 'id' );
@@ -52,6 +53,9 @@ class Cat extends Model {
 	}
 	public function children() {
 		return $this->hasMany ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
+	}
+	public function items() {
+		return $this->hasMany ( 'App\Ezsell\Models\Item', 'parent_id', 'id' );
 	}
 	public static function getHierarchy() {
 		$hierarchy = static::where ( 'parent_id', null )->get ();
