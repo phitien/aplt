@@ -3,6 +3,8 @@ var elixir = require('laravel-elixir');
 elixir(function(mix) {
 
 	mix.sass([ 'app.scss' ], 'public/css/app.css')
+	
+	.sass([ 'theme.scss' ], 'public/css/theme.css')
 
 	.browserify('jsx/libraries.jsx', 'public/js')
 	

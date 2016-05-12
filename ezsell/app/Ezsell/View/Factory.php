@@ -46,7 +46,7 @@ class Factory extends BaseFactory {
 			$data ['theme'] = 'south-street';
 			if (! isset ( $data ['appMessage'] ))
 				$data ['appMessage'] = '';
-			$menu = (new Menu ())->setClassName ( 'nav navbar-nav navbar-right' );
+			$menu = (new Menu ())->setClassName ( 'nav' );
 			if ($isGuest) {
 				$menu->addChild ( (new MenuItem ())->setText ( 'Login' )->setAttribute ( 'onClick', 'showLoginForm(this)' ) );
 				$menu->addChild ( (new MenuItem ())->setText ( 'Register' )->setAttribute ( 'onClick', 'showRegistrationForm(this)' ) );
@@ -54,7 +54,7 @@ class Factory extends BaseFactory {
 				// $menu->addChild ( (new MenuItem ())->setText ( 'Code' )->setHref ( '/code' ) );
 			} else {
 				$menu->addChild ( (new MenuItem ())->setText ( 'New' )->setHref ( '/newitem' ) );
-				$moreMenuItem = (new MenuItem ())->setText ( 'More' )->setAttribute ( 'onClick', 'expandMenu(this)' );
+				$moreMenuItem = (new MenuItem ())->setText ( 'More' )->setAttribute ( 'onClick', 'expandMenu(this, "menu-toggle")' );
 				$menu->addChild ( $moreMenuItem );
 				$moreMenu = (new Menu ())->setClassName ( 'more-nav' );
 				$moreMenu->addChild ( (new MenuItem ())->setText ( 'Password' )->setHref ( '/password' ) );

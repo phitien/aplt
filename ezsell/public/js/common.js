@@ -900,9 +900,6 @@ var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
     draining = false;
     if (currentQueue.length) {
         queue = currentQueue.concat(queue);
@@ -4399,8 +4396,10 @@ window.showMessageDialog = function (msg, title, btn) {
 		buttons: buttons
 	}); //end confirm dialog
 };
-window.expandMenu = function (e) {
-	$(e).next('ul').slideToggle();
+window.expandMenu = function (e, classNameToHide) {
+	var menu = $(e).next('ul');
+	hideClassName(classNameToHide, menu);
+	menu.slideToggle();
 };
 window.showLoginForm = function (e) {
 	if (!window.currentForm || window.currentForm != 'login') {
@@ -4421,10 +4420,10 @@ window.showLoginForm = function (e) {
 				);
 			}
 		}), document.getElementById('form-container'), function () {
-			toggleForm();
+			toggleForm('menu-toggle');
 		});
 	} else {
-		toggleForm();
+		toggleForm('menu-toggle');
 	}
 };
 window.showRegistrationForm = function (e) {
@@ -4449,10 +4448,10 @@ window.showRegistrationForm = function (e) {
 				);
 			}
 		}), document.getElementById('form-container'), function () {
-			toggleForm();
+			toggleForm('menu-toggle');
 		});
 	} else {
-		toggleForm();
+		toggleForm('menu-toggle');
 	}
 };
 window.showLocationForm = function (e) {
@@ -4480,11 +4479,11 @@ window.showLocationForm = function (e) {
 					{ className: 'form', method: 'post', action: '/location', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
 						onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
 					currentLocationLabel,
-					React.createElement(_formview2.default.Input, { type: 'text', autocomplete: 'true', required: true, name: 'location', title: 'Location', source: '/searchlocation' })
+					React.createElement(_formview2.default.Input, { type: 'autocomplete', required: true, name: 'location', title: 'Location', source: '/searchlocation' })
 				);
 			}
 		}), document.getElementById('form-container'), function () {
-			$('.autocomplete input:first').each(function (i, e) {
+			$('.autocomplete').each(function (i, e) {
 				var _source = e.getAttribute('data-source');
 				$(e).autocomplete({
 					source: function source(request, response) {
@@ -4511,19 +4510,23 @@ window.showLocationForm = function (e) {
 							this.setAttribute('data-value', ui.item);
 							var id = ui.item.id;
 							this.nextSibling.value = id;
-							if (id && id != currentLocation.id) submitForm($(this).parents('form:first'));else toggleForm();
+							if (id && id != currentLocation.id) submitForm($(this).parents('form:first'));else toggleForm('menu-toggle');
 						}
 					}
 				});
 			});
-			toggleForm();
+			toggleForm('menu-toggle');
 		});
 	} else {
-		toggleForm();
+		toggleForm('menu-toggle');
 	}
 };
-window.toggleForm = function () {
+window.toggleForm = function (classNameToHide) {
+	hideClassName(classNameToHide, $('#form-container'));
 	$('#form-container').slideToggle();
+};
+window.hideClassName = function (classNameToHide, exceptions) {
+	$('.' + classNameToHide).not(exceptions).hide();
 };
 window.sendMessage = function (e) {
 	var message = $(e).prev('input').val();
@@ -4557,21 +4560,44 @@ var MenuItem = React.createClass({
 		try {
 			return this.props.getText.bind(this.props.data)();
 		} catch (e) {
-			return '';
+			try {
+				return this.props.data.text;
+			} catch (e) {
+				return '';
+			}
 		}
 	},
 	getHref: function getHref() {
 		try {
 			return this.props.getHref.bind(this.props.data)();
 		} catch (e) {
-			return '';
+			try {
+				return this.props.data.href;
+			} catch (e) {
+				return null;
+			}
 		}
 	},
 	getChildren: function getChildren() {
 		try {
 			return this.props.getChildren.bind(this.props.data)();
 		} catch (e) {
-			return null;
+			try {
+				return this.props.data.children;
+			} catch (e) {
+				return [];
+			}
+		}
+	},
+	getSubMenuClassName: function getSubMenuClassName() {
+		try {
+			return this.props.getSubMenuClassName.bind(this.props.data)();
+		} catch (e) {
+			try {
+				return this.props.data.subMenuClassName;
+			} catch (e) {
+				return '';
+			}
 		}
 	},
 	handleItemClick: function handleItemClick(event) {
@@ -4620,12 +4646,17 @@ var MenuItem = React.createClass({
 			);
 		}
 		var children = this.getChildren();
+		var subMenuClassName = this.getSubMenuClassName();
 		if (children && children.length > 0) {
 			return React.createElement(
 				'li',
 				null,
 				html,
-				React.createElement(Menu, { items: children, getText: this.props.getText, getHref: this.props.getHref, getChildren: this.props.getChildren })
+				React.createElement(Menu, { className: subMenuClassName, items: children,
+					getText: this.props.getText,
+					getHref: this.props.getHref,
+					getChildren: this.props.getChildren,
+					getSubMenuClassName: this.props.getSubMenuClassName })
 			);
 		} else {
 			return React.createElement(
@@ -4647,20 +4678,16 @@ var Menu = React.createClass({
 	displayName: 'Menu',
 	render: function render() {
 		var className = this.props.className ? this.props.className : '';
-		var getText = this.props.getText ? this.props.getText : function () {
-			return this.text;
-		};
-		var getHref = this.props.getHref ? this.props.getHref : function () {
-			return this.href;
-		};
-		var getChildren = this.props.getChildren ? this.props.getChildren : function () {
-			return this.children;
-		};
+		var me = this;
 		return React.createElement(
 			'ul',
 			{ className: className },
 			this.props.items.map(function (item, i) {
-				return React.createElement(MenuItem, { data: item, getText: getText, getHref: getHref, getChildren: getChildren, key: i });
+				return React.createElement(MenuItem, { data: item, key: i,
+					getText: me.props.getText,
+					getHref: me.props.getHref,
+					getChildren: me.props.getChildren,
+					getSubMenuClassName: me.props.getSubMenuClassName });
 			})
 		);
 	}
@@ -4677,15 +4704,24 @@ var CatMenu = React.createClass({
 		}
 		function getHref() {
 			if (!this.parent_id) {
-				return 'javascript:expandMenu(this)';
+				return 'javascript:expandMenu(this, "menu-toggle")';
 			} else if (this.atomic) {
 				return 'cat/' + this.id;
 			} else {
 				return '';
 			}
 		}
+		function getSubMenuClassName() {
+			if (!this.parent_id) {
+				return 'menu-toggle';
+			}
+			return '';
+		}
 		var className = 'catmenu ' + (this.props.className ? this.props.className : '');
-		return React.createElement(Menu, { className: className, items: this.props.items, getText: getText, getHref: getHref });
+		return React.createElement(Menu, { className: className, items: this.props.items,
+			getText: getText,
+			getHref: getHref,
+			getSubMenuClassName: getSubMenuClassName });
 	}
 });
 //

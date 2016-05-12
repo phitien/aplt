@@ -45,8 +45,10 @@ window.showMessageDialog = function(msg, title, btn) {
 		buttons: buttons
 	});//end confirm dialog
 }
-window.expandMenu = function(e) {
-	$(e).next('ul').slideToggle();
+window.expandMenu = function(e, classNameToHide) {
+	var menu = $(e).next('ul');
+	hideClassName(classNameToHide, menu);
+	menu.slideToggle();
 }
 window.showLoginForm = function(e) {
 	if (!window.currentForm || window.currentForm != 'login') {
@@ -67,11 +69,11 @@ window.showLoginForm = function(e) {
 				); 
 			}
 		}), document.getElementById('form-container'), function() {
-			toggleForm();
+			toggleForm('menu-toggle');
 		});
 	}
 	else {
-		toggleForm();
+		toggleForm('menu-toggle');
 	}
 }
 window.showRegistrationForm = function(e) {
@@ -96,11 +98,11 @@ window.showRegistrationForm = function(e) {
 				); 
 			}
 		}), document.getElementById('form-container'), function() {
-			toggleForm();
+			toggleForm('menu-toggle');
 		});
 	}
 	else {
-		toggleForm();
+		toggleForm('menu-toggle');
 	}
 }
 window.showLocationForm = function(e) {
@@ -122,12 +124,12 @@ window.showLocationForm = function(e) {
 					<FormView.Form className='form' method='post' action='/location' autocomplete='off' onkeypress='return event.keyCode != 13;' 
 						onValidSubmit={this.submit}onValid={this.enableButton} onInvalid={this.disableButton}>
 						{currentLocationLabel}
-						<FormView.Input type='text' autocomplete='true' required name='location' title='Location' source='/searchlocation' />
+						<FormView.Input type='autocomplete' required name='location' title='Location' source='/searchlocation' />
 					</FormView.Form>
 				); 
 			}
 		}), document.getElementById('form-container'), function() {
-			$('.autocomplete input:first').each(function (i,e) {
+			$('.autocomplete').each(function (i,e) {
 				var source = e.getAttribute('data-source');
 				$(e).autocomplete({ 
 					source: function( request, response ) {
@@ -157,21 +159,25 @@ window.showLocationForm = function(e) {
 							if (id && id != currentLocation.id)
 								submitForm($(this).parents('form:first'));
 							else
-								toggleForm();
+								toggleForm('menu-toggle');
 						}
 					}
 				});
 			});
-			toggleForm();
+			toggleForm('menu-toggle');
 		});
 	}
 	else {
-		toggleForm();
+		toggleForm('menu-toggle');
 	}
 }
-window.toggleForm = function() {
+window.toggleForm = function(classNameToHide) {
+	hideClassName(classNameToHide, $('#form-container'));
 	$('#form-container').slideToggle();
 };
+window.hideClassName = function(classNameToHide, exceptions) {
+	$('.' + classNameToHide).not(exceptions).hide();
+}
 window.sendMessage = function(e) {
 	var message = $(e).prev('input').val();
 	if (message) {

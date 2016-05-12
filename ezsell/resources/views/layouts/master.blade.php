@@ -14,6 +14,7 @@
     {{ Html::style('css/jquery-ui/themes/'.$theme.'/jquery.ui.theme.css') }}
 @endif	
 	{{ Html::style('css/app.css') }}
+	{{ Html::style('css/theme.css') }}
 @show
 @section('script')
 	{{ Html::script('js/browser.min.js', ['type' => 'text/javascript']) }}
@@ -38,7 +39,7 @@
 		<div class="container-fluid clearfix" id="navigation">
 			<div class="container clearfix">
 				<div id="leftmenu">
-					<ul>
+					<ul class="nav">
 						<li><a href="/"><span>Home</span></a></li>
 						<li id="catmenu"></li>
 					</ul>
@@ -46,7 +47,7 @@
 				</div>
 				<div id="rightmenu">
 					{!! $menu !!}
-					<div id="form-container"></div>
+					<div class="menu-toggle" id="form-container"></div>
 					<div class="clearfix"></div>
 				</div>
 				<div class="clearfix"></div>

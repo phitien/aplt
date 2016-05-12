@@ -1,0 +1,14 @@
+@import url(https://fonts.googleapis.com/css?family=Lato);
+$font-family-sans-serif: 'Lato', sans-serif;
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.ui-autocomplete {
+}
+
+.ui-autocomplete .ui-menu-item .ui-corner-all {
+   background-color: aliceblue;
+}
+
+.ui-autocomplete .ui-menu-item .ui-state-focus {
+	background-color: #23527c !important;
+}

@@ -3,27 +3,39 @@
  */
 const MenuItem = React.createClass({
 	getText() {
-		try {
-			return this.props.getText.bind(this.props.data) ();
-		}
+		try {return this.props.getText.bind(this.props.data) ();}
 		catch (e) {
-			return '';
+			try {return this.props.data.text;}
+			catch (e) {
+				return '';
+			}
 		}
 	},
 	getHref() {
-		try {
-			return this.props.getHref.bind(this.props.data) ();
-		}
+		try {return this.props.getHref.bind(this.props.data) ();}
 		catch (e) {
-			return '';
+			try {return this.props.data.href;}
+			catch (e) {
+				return null;
+			}
 		}
 	},
 	getChildren() {
-		try {
-			return this.props.getChildren.bind(this.props.data) ();
-		}
+		try {return this.props.getChildren.bind(this.props.data) ();}
 		catch (e) {
-			return null;
+			try {return this.props.data.children;}
+			catch (e) {
+				return [];
+			}
+		}
+	},
+	getSubMenuClassName() {
+		try {return this.props.getSubMenuClassName.bind(this.props.data) ();}
+		catch (e) {
+			try {return this.props.data.subMenuClassName;}
+			catch (e) {
+				return '';
+			}
 		}
 	},
 	handleItemClick(event) {
@@ -52,11 +64,16 @@ const MenuItem = React.createClass({
 			html = <a className='menuitem menuitem-nonatomic'><span>{text}</span></a>;
 		}
 		const children = this.getChildren();
+		var subMenuClassName = this.getSubMenuClassName(); 
 		if (children && children.length > 0) {
 			return (
 				<li>
 					{html}
-					<Menu items={children} getText={this.props.getText} getHref={this.props.getHref} getChildren={this.props.getChildren} />
+					<Menu className={subMenuClassName} items={children} 
+						getText={this.props.getText} 
+						getHref={this.props.getHref} 
+						getChildren={this.props.getChildren}
+						getSubMenuClassName={this.props.getSubMenuClassName} />
 				</li>
 			);
 		}
@@ -73,13 +90,15 @@ const MenuItem = React.createClass({
 const Menu = React.createClass({
 	render() {
 		const className = this.props.className ? this.props.className : '';
-		const getText = this.props.getText ? this.props.getText : function() { return this.text; };
-		const getHref = this.props.getHref ? this.props.getHref : function() { return this.href; };
-		const getChildren = this.props.getChildren ? this.props.getChildren : function() { return this.children; };
+		const me = this;
 		return (
 			<ul className={className}>
 				{this.props.items.map(function(item, i) {
-					return <MenuItem data={item} getText={getText} getHref={getHref} getChildren={getChildren} key={i} />
+					return <MenuItem data={item} key={i}
+						getText={me.props.getText} 
+						getHref={me.props.getHref} 
+						getChildren={me.props.getChildren} 
+						getSubMenuClassName={me.props.getSubMenuClassName} />
 				})}
 			</ul>
 		);
@@ -95,7 +114,7 @@ const CatMenu = React.createClass({
 		}
 		function getHref() {
 			if (!this.parent_id) {
-				return 'javascript:expandMenu(this)';
+				return 'javascript:expandMenu(this, "menu-toggle")';
 			}
 			else if (this.atomic) {
 				return 'cat/' + this.id;
@@ -104,9 +123,18 @@ const CatMenu = React.createClass({
 				return '';
 			}
 		}
+		function getSubMenuClassName() {
+			if (!this.parent_id) {
+				return 'menu-toggle';
+			}
+			return '';
+		}
 		const className = 'catmenu ' + (this.props.className?this.props.className:'');
 		return (
-			<Menu className={className} items={this.props.items} getText={getText} getHref={getHref} />
+			<Menu className={className} items={this.props.items} 
+				getText={getText} 
+				getHref={getHref} 
+				getSubMenuClassName={getSubMenuClassName} />
 		);
 	}
 });
