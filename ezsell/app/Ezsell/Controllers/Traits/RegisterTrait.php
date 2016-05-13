@@ -14,7 +14,7 @@ trait  RegisterTrait {
 	 * @return Response
 	 */
 	public function register(Request $request) {
-		return $this->process ( 'register', $request );
+		return $this->process ( 'register', func_get_args () );
 	}
 	protected function postRegister(Request $request) {
 		$data = $request->only ( 'email', 'email_confirmation', 'password', 'password_confirmation' );

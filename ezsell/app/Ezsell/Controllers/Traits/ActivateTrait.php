@@ -35,7 +35,7 @@ trait  ActivateTrait {
 	 * @return Response
 	 */
 	public function code(Request $request) {
-		return $this->process ( 'code', $request );
+		return $this->process ( 'code', func_get_args () );
 	}
 	protected function postCode(Request $request) {
 		$email = $request->get ( 'email' );

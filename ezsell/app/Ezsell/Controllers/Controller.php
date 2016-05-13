@@ -110,20 +110,19 @@ abstract class Controller extends BaseController implements IController {
 	}
 	/**
 	 *
-	 * @param Request $request        	
-	 * @param unknown $action        	
+	 * @param array $arguments
+	 * @param string $action        	
 	 * @return Response
 	 */
-	protected function process($action, Request $request) {
-		$arguments = func_get_args ();
-		$action = ucfirst ( array_shift ( $arguments ) );
+	protected function process($action, array $arguments) {
+		$action = ucfirst ( $action );
 		$method = "get{$action}";
-		if ($request->isMethod ( 'post' )) {
-			$method = 'post' . ucfirst ( $action );
-		} else if ($request->isMethod ( 'put' )) {
-			$method = 'put' . ucfirst ( $action );
-		} else if ($request->isMethod ( 'delete' )) {
-			$method = 'delete' . ucfirst ( $action );
+		if (request ()->isMethod ( 'post' )) {
+			$method = "post{$action}";
+		} else if (request ()->isMethod ( 'put' )) {
+			$method = "put{$action}";
+		} else if (request ()->isMethod ( 'delete' )) {
+			$method = "delete{$action}";
 		}
 		return call_user_func_array ( array (
 				$this,

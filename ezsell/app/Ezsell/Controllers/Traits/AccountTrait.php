@@ -14,7 +14,7 @@ trait AccountTrait {
 	 * @return Response
 	 */
 	public function password(Request $request) {
-		return $this->process ( 'password', $request );
+		return $this->process ( 'password', func_get_args () );
 	}
 	protected function postPassword(Request $request) {
 		$data = $request->only ( 'current_password', 'password', 'password_confirmation' );
@@ -44,7 +44,7 @@ trait AccountTrait {
 	 * @return Response
 	 */
 	public function email(Request $request) {
-		return $this->process ( 'email', $request );
+		return $this->process ( 'email', func_get_args () );
 	}
 	protected function postEmail(Request $request) {
 		$data = $request->only ( 'current_password', 'email', 'email_confirmation' );
@@ -74,7 +74,7 @@ trait AccountTrait {
 	 * @return Response
 	 */
 	public function account(Request $request) {
-		return $this->process ( 'account', $request );
+		return $this->process ( 'account', func_get_args () );
 	}
 	protected function postAccount(Request $request) {
 		$data = $request->only ( 'current_password', 'name' );
@@ -105,6 +105,6 @@ trait AccountTrait {
 	 */
 	public function reset(Request $request) {
 		// TODO
-		return $this->process ( 'reset', $request );
+		return $this->process ( 'reset', func_get_args () );
 	}
 }

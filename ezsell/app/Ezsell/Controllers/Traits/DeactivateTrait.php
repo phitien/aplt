@@ -14,7 +14,7 @@ trait DeactivateTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function deactivate(Request $request) {
-		return $this->process ( 'deactivate', $request );
+		return $this->process ( 'deactivate', func_get_args () );
 	}
 	protected function postDeactivate(Request $request) {
 		$response = static::apiCallDeactive ( $request->get ( 'current_password' ) );

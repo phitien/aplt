@@ -14,7 +14,7 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function profile(Request $request) {
-		return $this->process ( 'profile', $request );
+		return $this->process ( 'profile', func_get_args () );
 	}
 	/**
 	 * Return the authenticated user
@@ -58,7 +58,7 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function profilex(Request $request) {
-		return $this->process ( 'profilex', $request );
+		return $this->process ( 'profilex', func_get_args () );
 	}
 	/**
 	 * Return the authenticated user

@@ -16,7 +16,7 @@ trait  LoginTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function login(Request $request) {
-		return $this->process ( 'login', $request );
+		return $this->process ( 'login', func_get_args () );
 	}
 	protected function postLogin(Request $request) {
 		$credentials = $request->only ( 'email', 'password' );

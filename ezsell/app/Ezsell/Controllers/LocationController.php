@@ -32,16 +32,12 @@ class LocationController extends BaseController {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function location(Request $request) {
-		if ($request->isMethod ( 'post' )) {
-			return $this->saveLocation ( $request );
-		} else {
-			return $this->showLocation ( $request );
-		}
+		return $this->process ( 'location', func_get_args () );
 	}
-	protected function showLocation(Request $request) {
+	protected function getLocation(Request $request) {
 		return $this->response ( view ( 'location' ) );
 	}
-	protected function saveLocation(Request $request) {
+	protected function postLocation(Request $request) {
 		$location_id = $request->get ( 'location' );
 		static::setLocationId ( $location_id );
 		return $this->redirect ( static::getRedirectUri () );

@@ -1,0 +1,141 @@
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+$primary-color: #23527c;
+$warning-color: red;
+$border-color: aliceblue;
+$border-width: 1px;
+$border-style: solid;
+$border-color-dark: #23527c;
+$menuitem-nonatomic-color: crimson;
+$formview-background-color: aliceblue;
+$leftmenu-background-color: #ffffff;
+$rightmenu-background-color: azure;
+
+$margin-padding: 15px;
+$small-margin-padding: 5px;
+
+$navigation-height: 55px;
+
+.form {}
+.form .center-block {float: none !important;}
+.validation-error {color: $warning-color;}
+.inline-block-list {}
+.inline-block-list div.radio,.inline-block-list div.checkbox {display: inline-block;margin: 0 $margin-padding;}
+.border {border-color: $border-color;border-width : $border-width;}
+.border-dark {border-color: $border-color-dark;}
+.border-top {
+	@extend .border;
+	border-top-style: $border-style;
+}
+.border-right {
+	@extend .border;
+	border-right-style: $border-style;
+}
+.border-bottom {
+	@extend .border;
+	border-bottom-style: $border-style;
+}
+.border-left {
+	@extend .border;
+	border-left-style: $border-style;
+}
+.border-all {
+	@extend .border-top, .border-right, .border-bottom, .border-left;
+}
+
+.menuitem {}
+.menuitem-atomic {cursor: pointer;}
+.menuitem-nonatomic {font-style: italic;text-decoration: none !important;color: $menuitem-nonatomic-color;cursor: text;}
+
+#navigation-replacement {
+	height: ($navigation-height + $border-width);width: 100%;
+	background-color: transparent;
+}
+#navigation {
+	@extend .border-bottom;
+	position: fixed;top: 0;
+	width: 100%;
+	background: white;
+}
+#navigation ul,#navigation li {vertical-align: top;} 
+#navigation ul.nav {height: $navigation-height;}
+#leftmenu {position: inherit;float: left;width: 75%;height: 100%;}
+#leftmenu>ul {width: 100%;margin: 0;padding: 0;}
+#leftmenu>ul>li {display: inline-block;}
+#leftmenu>ul a {padding: $margin-padding;background-color: #transparent;}
+#leftmenu>ul a:hover {background-color: #transparent;}
+
+#catmenu {margin-top: $margin-padding;position: inherit;}
+ul.catmenu,ul.catmenu ul {margin: 0;padding: 0;}
+ul.catmenu li {margin: 0;padding: 0;}
+ul.catmenu {text-align: left;}
+ul.catmenu>li {display: inline-block;}
+ul.catmenu>li>ul {
+	@extend .border-bottom;
+	top: ($navigation-height);
+	padding: $margin-padding 0;
+	background: $leftmenu-background-color;
+	left: 0;display: none;position: absolute;overflow-y: hidden;width: 100%;
+}
+ul.catmenu>li>ul>li {display: block;float: left;}
+ul.catmenu>li>ul>li>ul {display: block;}
+ul.catmenu>li>ul>li>ul>li {display: block;}
+
+ul.catmenu>li>a:first-child {cursor: pointer;}
+#catmenu ul.catmenu>li>ul a {padding: $small-margin-padding $margin-padding;}
+
+#rightmenu {position: inherit;float: right;width: 25%;height: 100%;}
+#rightmenu>ul a {padding: $margin-padding;background-color: transparent;}
+#rightmenu>ul a:hover {background-color: transparent;}
+
+#rightmenu ul {margin: 0;padding: 0;}
+#rightmenu li {margin: 0;padding: 0;position: inherit;}
+#rightmenu>ul {text-align: right;}
+#rightmenu>ul>li {display: inline-block;}
+#rightmenu>ul>li>ul {
+	@extend .border-all;
+	top: ($navigation-height);
+	display: none;position: absolute;right: 0;
+	background-color: $rightmenu-background-color;
+}
+#rightmenu>ul>li>ul>li {display: inline-block;position: relative;padding: $small-margin-padding $margin-padding;}
+#rightmenu>ul>li>ul>li>a {padding: 0;text-decoration: none;}
+#rightmenu>ul>li>ul>li:hover {background-color: #ffffff;}
+
+#form-container {
+	display: none;
+	position: absolute;right: $margin-padding;width: 350px;
+}
+#form-container .form-view {
+	@extend .border-all, .border-dark;
+	background-color: $formview-background-color;padding: $margin-padding;
+}
+
+#banner {
+	@extend .border-bottom;
+	min-height: 248px;
+}
+
+#container {}
+
+#left {}
+
+#content {
+	padding-top: 2*$margin-padding;
+	padding-bottom: 2*$margin-padding;
+}
+
+#footer {
+	@extend .border-top;
+	position: fixed;bottom: 0;right: 0;height: 30px;width: 100%;
+}
+#messages {
+	@extend .border-all;
+	display: none;
+	position: absolute;bottom: 28px;right: 10px;padding: 10px;height: 280px;width: 230px;overflow-y: auto;overflow-x: auto;
+}
+#sendmessages {
+	@extend .border-all;
+	position: absolute;bottom: 0x;right: 10px;height: 28px;width: 230px;
+}
+#sendmessages input[type=text] {width: 180px;}
