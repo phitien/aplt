@@ -38,10 +38,12 @@ class Cat extends Model {
 		if ($location) {
 			$ids = LocationMap::tree ( $location, false );
 			foreach ( $ids as $id ) {
-				$details = $this->details ()->where ( 'location_id', $id )->first ();
-				if ($details && ! $details->active) {
-					$details = null;
-					break;
+				if ($id) {
+					$details = $this->details ()->where ( 'location_id', $id )->first ();
+					if ($details && ! $details->active) {
+						$details = null;
+						break;
+					}
 				}
 			}
 			return array_merge ( $attributes, [ 
