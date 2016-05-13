@@ -39,8 +39,8 @@ class ItemController extends BaseController {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function cat(Request $request, $id) {
-		return $this->process ( 'cat', $request, $id );
+	public function cat(Request $request) {
+		return $this->process ( 'cat', func_get_args () );
 	}
 	protected function getCat(Request $request, $id) {
 		$cat = Cat::find ( $id );
@@ -59,7 +59,7 @@ class ItemController extends BaseController {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function newitem(Request $request) {
-		return $this->process ( 'newitem', $request );
+		return $this->process ( 'newitem', func_get_args () );
 	}
 	protected function getNewitem(Request $request) {
 		return $this->response ( view ( 'item.newitem' ) );
@@ -90,8 +90,8 @@ class ItemController extends BaseController {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function item(Request $request, $id) {
-		return $this->process ( 'item', $request, $id );
+	public function item(Request $request) {
+		return $this->process ( 'item', func_get_args () );
 	}
 	protected function getItem(Request $request, $id) {
 		$item = Item::find ( $id );

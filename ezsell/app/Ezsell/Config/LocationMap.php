@@ -1,27 +1,34 @@
 <?php
 
-namespace App\Ezsell\Config;
-
+namespace  App\Ezsell\Config ;
+ 
 use App\Ezsell\Config\LocationMapTrait;
 
-class LocationMap {
-	
+ class   LocationMap  {
+
 	/**
 	 * TRAITS
 	 */
 	use LocationMapTrait;
-	
+
+
+
+
+
+
+
+
 	/**
 	 *
-	 * @return object
+	 * @return  object
 	 */
 	public static function earth() {
 		return ( object ) static::$maps ['EARTH'];
 	}
 	/**
 	 *
-	 * @param string $id        	
-	 * @return array
+	 * @param  string $id        	
+	 * @return  array
 	 */
 	public static function tree($location, $desc = true) {
 		if ($location) {
@@ -46,8 +53,8 @@ class LocationMap {
 	}
 	/**
 	 *
-	 * @param string $id        	
-	 * @return array
+	 * @param  string $id        	
+	 * @return  array
 	 */
 	public static function find($id) {
 		if ($id == 'EARTH' || $id == 1)
@@ -56,12 +63,13 @@ class LocationMap {
 	}
 	/**
 	 *
-	 * @param string $q        	
-	 * @return array
+	 * @param  string $q        	
+	 * @return  array
 	 */
 	public static function search($q) {
 		return array_filter ( static::$maps, function ($item, $id) use ($q) {
 			return strpos ( $item ['fullname'], $q ) !== false || strpos ( $item ['countryCode'], $q ) !== false;
 		}, ARRAY_FILTER_USE_BOTH );
 	}
+
 }

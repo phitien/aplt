@@ -61,7 +61,7 @@ class Place extends Model {
 		$earth->geonameId = 6295630;
 		$earth->name = 'Earth';
 		$earth->toponymName = 'Earth';
-		$earth->countryCode = 'EARTH';
+		$earth->countryCode = '';
 		$earth->save ();
 	}
 	public function takeMyChildren($level, $startId = null) {

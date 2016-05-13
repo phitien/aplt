@@ -6,6 +6,7 @@ use App\Media\Config\Config;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Intervention\Image\Image;
 
 trait ResponseTrait
 {
@@ -93,5 +94,13 @@ trait ResponseTrait
 	 */
 	public function setResponseToken($response, $token) {
 		return $response->withCookie ( Config::TOKEN_KEY, $token, true );
+	}
+	/**
+	 *
+	 * @param \Intervention\Image\Image $image        	
+	 */
+	public function pumpImage(Image $image) {
+		header ( 'Content-Type: image/png' );
+		die ( $image->encode ( $image->mime () ) );
 	}
 }

@@ -67,6 +67,11 @@ return [
    			'root' => app_path('/Media')
    		],
     		
+   		'repo' => [
+   			'driver' => 'local',
+   			'root' => app_path('../repo')
+   		],
+    		
     ],
 
 ];

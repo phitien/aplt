@@ -3,6 +3,7 @@
 namespace App\Media\Controllers;
 
 use Illuminate\Http\Request;
+use Image;
 
 class MediaController extends BaseController {
 	/**
@@ -25,6 +26,6 @@ class MediaController extends BaseController {
 		$this->process ( 'media', func_get_args () );
 	}
 	public function getMedia(Request $request, $code) {
-		echo $code;
+		$this->pumpImage ( Image::make ( '../repo/images/not-found.jpg' ) );
 	}
 }
