@@ -45,8 +45,8 @@ trait LocationTrait
 	protected static function getLocation() {
 		$location_id = static::getLocationId ();
 		if (! static::$_location) {
-			static::$_location = LocationMap::get ( $location_id );
+			static::$_location = LocationMap::find ( $location_id );
 		}
-		return static::$_location;
+		return static::$_location ? static::$_location : LocationMap::earth ();
 	}
 }

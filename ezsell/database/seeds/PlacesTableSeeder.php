@@ -11,14 +11,7 @@ class PlacesTableSeeder extends Seeder {
 	public function run() {
 		Model::unguard ();
 		// clone places info from http://www.geonames.org/childrenJSON?geonameId=6295630
-		// $world = new Place ();
-		// $world->level = 0;
-		// $world->active = true;
-		// $world->geonameId = 6295630;
-		// $world->name = 'Earth';
-		// $world->toponymName = 'Earth';
-		// $world->save ();
-		// $world->takeMyChildren ( 1 );
+		// Place::earth ()->takeMyChildren ( 1 );
 		// //Africa (58 children)
 		// $current = Place::find ( 2 );
 		// $current->takeMyChildren ( 3 );

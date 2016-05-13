@@ -9,15 +9,14 @@ use App\Ezsell\Models\Cat;
 
 class ItemController extends BaseController {
 	/**
-	 * Traits
-	 */
-	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
 			'except' => [ 
-					'index' 
+					'index',
+					'cat',
+					'item' 
 			] 
 	];
 	/**

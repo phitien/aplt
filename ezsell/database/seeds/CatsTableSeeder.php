@@ -6,12 +6,6 @@ use App\Ezsell\Models\CatDetail;
 use App\Ezsell\Models\Location;
 class CatsTableSeeder extends Seeder {
 	/**
-	 * Default location
-	 *
-	 * @var Place
-	 */
-	protected $_default_location;
-	/**
 	 *
 	 * @var array
 	 */
@@ -274,18 +268,22 @@ class CatsTableSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		$this->_default_location = Location::getCountry ( 'SG' );
 		Model::unguard ();
-		$this->addCats ( $this->_cats );
+		
+		$this->addCats ( $this->_cats, null, [ 
+				Location::earth (),
+				Location::getCountry ( 'SG' ) 
+		] );
+		
 		Model::reguard ();
 	}
-	protected function addCats(array $cats = [], Cat $parent = null) {
+	protected function addCats(array $cats = [], Cat $parent = null, array $locations = []) {
 		foreach ( $cats as $code => $options ) {
 			$atomic = isset ( $options ['atomic'] ) ? $options ['atomic'] : false;
 			$children = isset ( $options ['children'] ) ? $options ['children'] : [ ];
 			unset ( $options ['children'] );
 			unset ( $options ['atomic'] );
-				
+			
 			$cat = new Cat ();
 			$cat->code = $code;
 			$cat->active = true;
@@ -294,11 +292,14 @@ class CatsTableSeeder extends Seeder {
 			$cat->atomic = $atomic;
 			$cat->save ();
 			
-			$catDetail = new CatDetail ( $options );
-			$catDetail->parent ()->associate ( $cat );
-			$catDetail->location ()->associate ( $this->_default_location );
-			$catDetail->save ();
-			$this->addCats ( $children, $cat );
+			foreach ( $locations as $location ) {
+				$catDetail = new CatDetail ( $options );
+				$catDetail->parent ()->associate ( $cat );
+				$catDetail->location ()->associate ( $location );
+				$catDetail->save ();
+			}
+			
+			$this->addCats ( $children, $cat, $locations );
 		}
 	}
 }

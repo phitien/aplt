@@ -52,6 +52,18 @@ class Place extends Model {
 	public function children() {
 		return $this->hasMany ( 'App\Ezsell\Models\Place', 'parent_id', 'id' );
 	}
+	public static function earth() {
+		$earth = static::firstOrCreate ( [ 
+				'fcode' => 'EARTH' 
+		] );
+		$earth->level = 0;
+		$earth->active = true;
+		$earth->geonameId = 6295630;
+		$earth->name = 'Earth';
+		$earth->toponymName = 'Earth';
+		$earth->countryCode = 'EARTH';
+		$earth->save ();
+	}
 	public function takeMyChildren($level, $startId = null) {
 		try {
 			if ($this->level < $level) {

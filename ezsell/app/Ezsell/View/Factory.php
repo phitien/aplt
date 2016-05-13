@@ -46,7 +46,7 @@ class Factory extends BaseFactory {
 			$data ['theme'] = 'south-street';
 			$data ['cats'] = Cat::getHierarchy ();
 			$data ['location'] = static::getLocation ();
-			$data ['currencySign'] = '$';
+			$data ['currencySign'] = $data ['location']['currency'];
 			
 			if (! isset ( $data ['appMessage'] ))
 				$data ['appMessage'] = '';

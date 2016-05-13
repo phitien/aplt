@@ -17,8 +17,8 @@ class CreateCatDetailsTable extends Migration {
 			//
 			$table->boolean ( 'active' )->nullable ()->default ( 0 );
 			//
-			$table->string ( 'name' )->unique ();
-			$table->string ( 'title' )->unique ();
+			$table->string ( 'name' );
+			$table->string ( 'title' )->nullable ();
 			$table->text ( 'description' )->nullable ();
 			$table->text ( 'avatar' )->nullable ();
 			$table->text ( 'cover' )->nullable ();
@@ -30,6 +30,12 @@ class CreateCatDetailsTable extends Migration {
 			//
 			$table->timestamps ();
 			$table->softDeletes ();
+			//
+			$table->unique ( [ 
+					'parent_id',
+					'location_id',
+					'name' 
+			] );
 			//
 			$table->index ( [ 
 					'parent_id',

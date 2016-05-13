@@ -65,22 +65,43 @@ trait UtilTrait {
 		$items = [ ];
 		$locations = Location::all ();
 		foreach ( $locations as $location ) {
-			$i = json_decode ( ( string ) $location, true );
-			$items ["{$location->id}"] = addslashes ( $i ['fullname'] );
+			$json = json_decode ( ( string ) $location, true );
+			$pairs = [ ];
+			foreach ( $json as $k => $v ) {
+				$v = addslashes ( $v );
+				array_push ( $pairs, "'{$k}'=>'{$v}'" );
+			}
+			$text = implode ( ',', $pairs );
+			if ($location->fcode == 'EARTH')
+				$items ["EARTH"] = "[{$text}]";
+			else
+				$items ["l{$location->id}"] = "[{$text}]";
 		}
 		$className = 'LocationMap';
 		$maps = [ ];
 		foreach ( $items as $k => $v ) {
-			array_push ( $maps, "'{$k}'=>'{$v}'\n" );
+			array_push ( $maps, "'{$k}'=>{$v}\n" );
 		}
-		$contents = Html::decode ( View::create ( 'classgenerator.locationmap.class', [ 
-				'php' => '<?php',
-				'namespace' => 'App\Ezsell\Config',
-				'classname' => $className,
+		$text = implode ( ',', $maps );
+		static::renderTrait ( "Config/{$className}Trait", [ 
 				'public_static_vars' => [ 
-						'maps' => "[" . implode ( ",", $maps ) . "]" 
+						'maps' => "[{$text}]" 
 				] 
-		], [ ], true )->render () );
-		Storage::disk ( 'ezsell' )->put ( "Config/{$className}.php", $contents );
+		] );
+		static::renderClass ( "Config/{$className}" );
+	}
+	public static function renderTrait($filePath, $data = []) {
+		$data = array_merge ( [ 
+				'php' => '<?php' 
+		], $data );
+		$contents = Html::decode ( View::create ( 'classgenerator.locationmap.trait', $data )->render () );
+		Storage::disk ( 'ezsell' )->put ( "{$filePath}.php", $contents );
+	}
+	public static function renderClass($filePath, $data = []) {
+		$data = array_merge ( [ 
+				'php' => '<?php' 
+		], $data );
+		$contents = Html::decode ( View::create ( 'classgenerator.locationmap.class', $data )->render () );
+		Storage::disk ( 'ezsell' )->put ( "{$filePath}.php", $contents );
 	}
 }

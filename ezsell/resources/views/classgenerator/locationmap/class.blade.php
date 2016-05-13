@@ -1,24 +1,73 @@
-@extends('classgenerator.template')
+@extends('classgenerator.class')
+
+@section('namespace') App\Ezsell\Config @endsection
+
+@section('uses')
+use App\Ezsell\Config\LocationMapTrait;
+@endsection
+
+@section('name') LocationMap @endsection
+
+@section('traits')
+	/**
+	 * TRAITS
+	 */
+	use LocationMapTrait;
+@endsection
 
 @section('functions')
 	/**
 	 *
-	 * @param string $id
-	 * @return string
+	 * @return object
 	 */
-	public static function getName($id) {
-		return isset ( static::$maps [$id] ) ? static::$maps [$id] : '';
+	public static function earth() {
+		return static::$maps['EARTH'];
 	}
 	/**
 	 *
 	 * @param string $id
 	 * @return array
 	 */
-	public static function get($id) {
-		return isset ( static::$maps [$id] ) ? (object) [ 
-			'id' => $id,
-			'name' => static::$maps [$id] 
-		] : null;
+	public static function tree($location) {
+		if ($location) {
+			$rs = [ 
+					( int ) $location ['id'] 
+			];
+			if ($location ['parent_id']) {
+				array_push ( $rs, ( int ) $location ['parent_id'] );
+				if ($location ['grandparent_id']) {
+					array_push ( $rs, ( int ) $location ['grandparent_id'] );
+					if ($location ['great_grandparent_id']) {
+						array_push ( $rs, ( int ) $location ['great_grandparent_id'] );
+						if ($location ['great_great_grandparent_id']) {
+							array_push ( $rs, ( int ) $location ['great_great_grandparent_id'] );
+						}
+					}
+				}
+			}
+			return $rs;
+		}
+		return [ ];
+	}
+	/**
+	 *
+	 * @param string $id
+	 * @return string
+	 */
+	public static function getName($id) {
+		if ($id == 'EARTH' || $id == 1)
+			return static::earth () ['fullname'];
+		return static::$maps ["l$id"] ? static::$maps ["l$id"] ['fullname'] : '';
+	}
+	/**
+	 *
+	 * @param string $id
+	 * @return array
+	 */
+	public static function find($id) {
+		if ($id == 'EARTH' || $id == 1)
+			return static::earth ();
+		return static::$maps ["l$id"];
 	}
 	/**
 	 *
@@ -26,8 +75,8 @@
 	 * @return array
 	 */
 	public static function search($q) {
-		return array_filter(static::$maps, function($v, $k) use ($q) {
-		    return strpos($v, $q) !== false || strpos($k, $q) !== false;
+		return array_filter(static::$maps, function($location, $id) use ($q) {
+		    return strpos( $location['fullname'], $q ) !== false || strpos( $location['countryCode'], $q ) !== false;
 		}, ARRAY_FILTER_USE_BOTH);
 	}
 @endsection

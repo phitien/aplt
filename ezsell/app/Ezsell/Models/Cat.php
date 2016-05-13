@@ -2,6 +2,8 @@
 
 namespace App\Ezsell\Models;
 
+use App\Ezsell\Config\LocationMap;
+
 class Cat extends Model {
 	public $timestamps = false;
 	protected $guarded = [ 
@@ -35,7 +37,7 @@ class Cat extends Model {
 		$location = static::getLocation ();
 		if ($location) {
 			return array_merge ( $attributes, [ 
-					'details' => $this->details ()->where ( 'location_id', $location->id )->first (),
+					'details' => $this->details ()->whereIn ( 'location_id', LocationMap::tree ( $location ) )->orderBy ( 'location_id', 'desc' )->first (),
 					'children' => $this->children 
 			] );
 		} else {
