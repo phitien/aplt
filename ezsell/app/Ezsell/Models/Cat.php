@@ -36,8 +36,16 @@ class Cat extends Model {
 		$attributes = parent::toArray ();
 		$location = static::getLocation ();
 		if ($location) {
+			$ids = LocationMap::tree ( $location, false );
+			foreach ( $ids as $id ) {
+				$details = $this->details ()->where ( 'location_id', $id )->first ();
+				if ($details && ! $details->active) {
+					$details = null;
+					break;
+				}
+			}
 			return array_merge ( $attributes, [ 
-					'details' => $this->details ()->whereIn ( 'location_id', LocationMap::tree ( $location ) )->orderBy ( 'location_id', 'desc' )->first (),
+					'details' => $details,
 					'children' => $this->children 
 			] );
 		} else {
@@ -60,7 +68,7 @@ class Cat extends Model {
 		return $this->hasMany ( 'App\Ezsell\Models\Item', 'parent_id', 'id' );
 	}
 	public static function getHierarchy() {
-		$hierarchy = static::where ( 'parent_id', null )->get ();
+		$hierarchy = static::where ( 'parent_id', null )->where ( 'active', 1 )->get ();
 		return $hierarchy;
 	}
 }

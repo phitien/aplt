@@ -35,7 +35,7 @@ class LocationsTableSeeder extends Seeder {
 				JOIN places AS p2 ON p1.parent_id=p2.id
 				WHERE p1.level=1 AND p1.active=1)
 				UNION
-				(SELECT p1.fcode,p1.countryCode,CONCAT_WS(', ',p1.name,p2.name) AS fullname,p1.id,p1.name,
+				(SELECT p1.fcode,p1.countryCode,p1.name AS fullname,p1.id,p1.name,
 						p2.id AS parent_id,p2.name AS parent_name,
 						p3.id AS grandparent_id,p3.name AS grandparent_name,
 						NULL AS great_grandparent_id,NULL AS great_grandparent_name,
@@ -46,7 +46,7 @@ class LocationsTableSeeder extends Seeder {
 				JOIN places AS p3 ON p2.parent_id=p3.id
 				WHERE p1.level=2 AND p1.active=1)
 				UNION
-				(SELECT p1.fcode,NULL AS countryCode,CONCAT_WS(', ',p1.name,p2.name,p3.name) AS fullname,p1.id,p1.name,
+				(SELECT p1.fcode,NULL AS countryCode,CONCAT_WS(', ',p1.name,p2.name) AS fullname,p1.id,p1.name,
 						p2.id AS parent_id,p2.name AS parent_name,
 						p3.id AS grandparent_id,p3.name AS grandparent_name,
 						p4.id AS great_grandparent_id,p4.name AS great_grandparent_name,

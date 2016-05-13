@@ -1,36 +1,29 @@
 <?php
 
-namespace  App\Ezsell\Config ;
- 
+namespace App\Ezsell\Config;
+
 use App\Ezsell\Config\LocationMapTrait;
 
- class   LocationMap  {
-
+class LocationMap {
+	
 	/**
 	 * TRAITS
 	 */
 	use LocationMapTrait;
-
-
-
-
-
-
-
-
+	
 	/**
 	 *
-	 * @return  object
+	 * @return object
 	 */
 	public static function earth() {
-		return static::$maps['EARTH'];
+		return static::$maps ['EARTH'];
 	}
 	/**
 	 *
-	 * @param  string $id
-	 * @return  array
+	 * @param string $id        	
+	 * @return array
 	 */
-	public static function tree($location) {
+	public static function tree($location, $desc = true) {
 		if ($location) {
 			$rs = [ 
 					( int ) $location ['id'] 
@@ -47,14 +40,14 @@ use App\Ezsell\Config\LocationMapTrait;
 					}
 				}
 			}
-			return $rs;
+			return $desc ? $rs : array_reverse ( $rs );
 		}
 		return [ ];
 	}
 	/**
 	 *
-	 * @param  string $id
-	 * @return  string
+	 * @param string $id        	
+	 * @return string
 	 */
 	public static function getName($id) {
 		if ($id == 'EARTH' || $id == 1)
@@ -63,8 +56,8 @@ use App\Ezsell\Config\LocationMapTrait;
 	}
 	/**
 	 *
-	 * @param  string $id
-	 * @return  array
+	 * @param string $id        	
+	 * @return array
 	 */
 	public static function find($id) {
 		if ($id == 'EARTH' || $id == 1)
@@ -73,13 +66,12 @@ use App\Ezsell\Config\LocationMapTrait;
 	}
 	/**
 	 *
-	 * @param  string $q
-	 * @return  array
+	 * @param string $q        	
+	 * @return array
 	 */
 	public static function search($q) {
-		return array_filter(static::$maps, function($location, $id) use ($q) {
-		    return strpos( $location['fullname'], $q ) !== false || strpos( $location['countryCode'], $q ) !== false;
-		}, ARRAY_FILTER_USE_BOTH);
+		return array_filter ( static::$maps, function ($location, $id) use ($q) {
+			return strpos ( $location ['fullname'], $q ) !== false || strpos ( $location ['countryCode'], $q ) !== false;
+		}, ARRAY_FILTER_USE_BOTH );
 	}
-
 }

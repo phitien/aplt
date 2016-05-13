@@ -110,7 +110,7 @@ const Menu = React.createClass({
 const CatMenu = React.createClass({
 	render: function() {
 		function getText() {
-			return this.details.name;
+			return this.details ? this.details.name : '';
 		}
 		function getHref() {
 			if (!this.parent_id) {

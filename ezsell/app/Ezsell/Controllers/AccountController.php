@@ -19,7 +19,8 @@ class AccountController extends BaseController {
 	 * @var array $_authenticationMiddlewareOptions
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
-			'except' => [ 
+			'except' => [
+					'code',
 					'login',
 					'register'
 			] 

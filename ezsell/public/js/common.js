@@ -4510,8 +4510,8 @@ window.showLocationForm = function (e) {
 								var items = [];
 								$.each(data.data, function (i, v) {
 									items.push({
-										id: i,
-										label: v
+										id: v.id,
+										label: v.fullname
 									});
 								});
 								response(items);
@@ -4714,7 +4714,7 @@ var CatMenu = React.createClass({
 
 	render: function render() {
 		function getText() {
-			return this.details.name;
+			return this.details ? this.details.name : '';
 		}
 		function getHref() {
 			if (!this.parent_id) {
@@ -5192,7 +5192,7 @@ var ItemList = React.createClass({
 					React.createElement(
 						'label',
 						null,
-						cat.details.name
+						cat && cat.details ? cat.details.name : ''
 					)
 				),
 				React.createElement(
@@ -5201,7 +5201,7 @@ var ItemList = React.createClass({
 					React.createElement(
 						'label',
 						null,
-						cat.details.title
+						cat && cat.details ? cat.details.title : ''
 					)
 				),
 				React.createElement(
@@ -5210,7 +5210,7 @@ var ItemList = React.createClass({
 					React.createElement(
 						'p',
 						null,
-						cat.details.description
+						cat && cat.details ? cat.details.description : ''
 					)
 				)
 			),

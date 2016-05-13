@@ -11,13 +11,13 @@ var ItemList = React.createClass({
 			<div className={className} id={id}>
 				<div className='cat-detail'>
 					<div className='cat-name'>
-						<label>{cat.details.name}</label>
+						<label>{cat && cat.details ? cat.details.name : ''}</label>
 					</div>
 					<div className='cat-title'>
-						<label>{cat.details.title}</label>
+						<label>{cat && cat.details ? cat.details.title : ''}</label>
 					</div>
 					<div className='cat-description'>
-						<p>{cat.details.description}</p>
+						<p>{cat && cat.details ? cat.details.description : ''}</p>
 					</div>
 				</div>
 				<div className='item-list'>

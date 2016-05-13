@@ -26,9 +26,10 @@ use App\Ezsell\Config\LocationMapTrait;
 	/**
 	 *
 	 * @param string $id
+	 * @param bool $desc
 	 * @return array
 	 */
-	public static function tree($location) {
+	public static function tree($location, $desc = true) {
 		if ($location) {
 			$rs = [ 
 					( int ) $location ['id'] 
@@ -45,7 +46,7 @@ use App\Ezsell\Config\LocationMapTrait;
 					}
 				}
 			}
-			return $rs;
+			return $desc ? $rs : array_reverse ( $rs );
 		}
 		return [ ];
 	}

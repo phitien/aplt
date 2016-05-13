@@ -150,8 +150,8 @@ window.showLocationForm = function(e) {
 								var items = [];
 								$.each(data.data, function (i, v) {
 									items.push({
-										id: i,
-										label: v
+										id: v.id,
+										label: v.fullname
 									});
 								});
 								response(items);
