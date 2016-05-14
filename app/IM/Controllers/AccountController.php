@@ -8,12 +8,13 @@ use App\IM\Controllers\Traits\DeactivateTrait;
 use App\IM\Controllers\Traits\ProfileTrait;
 use App\IM\Controllers\Traits\SocietyTrait;
 use App\IM\Controllers\Traits\AccountTrait;
+use App\IM\Controllers\Traits\LoginTrait;
 
-class AccountController extends AuthenticableController {
+class AccountController extends Controller {
 	/**
 	 * Traits
 	 */
-	use AccountTrait, RegisterTrait, ActivateTrait, DeactivateTrait, ProfileTrait, SocietyTrait;
+	use LoginTrait, AccountTrait, RegisterTrait, ActivateTrait, DeactivateTrait, ProfileTrait, SocietyTrait;
 	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions

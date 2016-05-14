@@ -8,13 +8,13 @@ use App\Ezsell\Traits\UtilTrait;
 use App\Ezsell\View\Html\Menu\Menu;
 use App\Ezsell\View\Html\Menu\MenuItem;
 use App\Ezsell\Models\Cat;
-use App\Ezsell\Traits\LocationTrait;
+use App\Ezsell\Traits\AllTrait;
 
 class Factory extends BaseFactory {
 	/**
 	 * TRAITS
 	 */
-	use UserTrait, UtilTrait, LocationTrait;
+	use AllTrait;
 	/**
 	 *
 	 * @var bool

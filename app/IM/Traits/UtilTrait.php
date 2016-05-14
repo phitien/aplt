@@ -10,28 +10,65 @@ use App\IM\Config\Config;
 
 trait UtilTrait {
 	/**
+	 *
+	 * @param string $str        	
+	 * @return string
+	 */
+	public static function encode($str) {
+		return bcrypt ( $str );
+	}
+	/**
+	 *
+	 * @param string $str        	
+	 * @return string
+	 */
+	public static function encrypt($str) {
+		return encrypt ( $str );
+	}
+	
+	/**
+	 *
+	 * @param string $str        	
+	 * @return string
+	 */
+	public static function decrypt($str) {
+		return decrypt ( $str );
+	}
+	/**
 	 * Build App\IM\RolesActions class
 	 *
 	 * @return void
 	 */
 	public function buildRolesActions() {
+		$className = 'RolesActions';
+		
 		$items = [ ];
 		$roles = Role::all ();
 		foreach ( $roles as $role ) {
 			$items [$role->code] = $role->getActions ();
 		}
-		$contents = Html::decode ( View::make ( 'IM.classgenerator.RolesActions.class', [ 
-				'php' => '<?php',
-				'namespace' => 'App\IM\Config',
-				'classname' => 'RolesActions',
-				'constants' => [ 
-						'MAPS' => Html::decode ( View::make ( 'IM.classgenerator.RolesActions.maps', [ 
+		static::renderTrait ( "Config/{$className}Trait", [ 
+				'private_static_vars' => [ 
+						'__maps' => Html::decode ( View::make ( 'classgenerator.rolesactions.maps', [ 
 								'roles' => $items 
 						] )->render () ) 
 				] 
-		] )->render () );
-		
-		Storage::disk ( 'im' )->put ( 'Config/RolesActions.php', $contents );
+		] );
+		static::renderClass ( "Config/{$className}" );
+	}
+	public static function renderTrait($filePath, $data = []) {
+		$data = array_merge ( [ 
+				'php' => '<?php' 
+		], $data );
+		$contents = Html::decode ( View::make ( 'classgenerator.rolesactions.trait', $data )->render () );
+		Storage::disk ( 'app' )->put ( "{$filePath}.php", $contents );
+	}
+	public static function renderClass($filePath, $data = []) {
+		$data = array_merge ( [ 
+				'php' => '<?php' 
+		], $data );
+		$contents = Html::decode ( View::make ( 'classgenerator.rolesactions.class', $data )->render () );
+		Storage::disk ( 'app' )->put ( "{$filePath}.php", $contents );
 	}
 	/**
 	 *

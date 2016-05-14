@@ -18,7 +18,7 @@ trait  LoginTrait {
 	public function login(Request $request) {
 		return $this->process ( 'login', func_get_args () );
 	}
-	protected function postLogin(Request $request) {
+	protected function ppostLogin(Request $request) {
 		$credentials = $request->only ( 'email', 'password' );
 		$response = $this->doLogin ( $credentials );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
@@ -30,7 +30,7 @@ trait  LoginTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function getLogin(Request $request) {
+	protected function pgetLogin(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( view ( 'login' ) );
 		else
@@ -50,14 +50,14 @@ trait  LoginTrait {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function logout() {
-		return $this->doLogout ();
+	public function logout(Request $request) {
+		return $this->doLogout ( $request );
 	}
 	/**
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	protected function doLogout() {
+	protected function doLogout(Request $request) {
 		$response = static::apiCallLogout ();
 		static::setToken ( Config::INVALID_TOKEN );
 		return $this->redirect ();

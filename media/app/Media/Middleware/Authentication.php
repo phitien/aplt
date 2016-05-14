@@ -16,7 +16,7 @@ class Authentication extends Middleware {
 	 */
 	public function im_handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
 		if (static::getUser ()->isGuest ()) {
-			return $this->jsonResponse ( 'unauthorised', null, Response::HTTP_UNAUTHORIZED );
+			$this->pumpUnauthenticated ();
 		}
 		return $next ( $request );
 	}

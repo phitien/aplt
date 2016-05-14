@@ -30,15 +30,17 @@ trait  LoginTrait {
 		try {
 			if (! ($credentials instanceof User)) {
 				$user = User::where ( 'email', $credentials ['email'] )->first ();
-				$credentials ['active'] = 1;
 				if (! $user)
-					return $this->jsonResponse ( 'user_is_not_active', null, Response::HTTP_UNAUTHORIZED );
-					// verify the credentials and create a token for the user
+					return $this->jsonResponse ( 'user_not_found', null, Response::HTTP_UNAUTHORIZED );
+				if ($user && ! $user->active)
+					return $this->jsonResponse ( 'user_is_not_activated', null, Response::HTTP_UNAUTHORIZED );
+				$credentials ['active'] = 1;
+				// verify the credentials and create a token for the user
 				if (! $token = JWTAuth::attempt ( $credentials ))
-					return $this->jsonResponse ( 'invalid_credentials', null, Response::HTTP_UNAUTHORIZED );
+					return $this->jsonResponse ( 'invalid_password', null, Response::HTTP_UNAUTHORIZED );
 			} else {
 				if (! $credentials->active)
-					return $this->jsonResponse ( 'user_is_not_active', null, Response::HTTP_UNAUTHORIZED );
+					return $this->jsonResponse ( 'user_is_not_activated', null, Response::HTTP_UNAUTHORIZED );
 				if (! $token = JWTAuth::fromUser ( $credentials ))
 					return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_UNAUTHORIZED );
 			}

@@ -158,7 +158,7 @@ return [
     	App\Media\Providers\HtmlServiceProvider::class,
     	App\Media\Providers\ViewServiceProvider::class,
     	App\Media\Providers\JWTAuthServiceProvider::class,
-    		
+    	//
 		Intervention\Image\ImageServiceProvider::class,
     		
     ],
@@ -216,7 +216,6 @@ return [
     	//
 		'Image' => Intervention\Image\Facades\Image::class,
 
-    		
     ],
 
 ];

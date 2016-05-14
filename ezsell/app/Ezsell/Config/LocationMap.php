@@ -4,20 +4,11 @@ namespace  App\Ezsell\Config ;
  
 use App\Ezsell\Config\LocationMapTrait;
 
- class   LocationMap  {
-
+class  LocationMap {
 	/**
 	 * TRAITS
 	 */
 	use LocationMapTrait;
-
-
-
-
-
-
-
-
 	/**
 	 *
 	 * @return  object
@@ -57,7 +48,7 @@ use App\Ezsell\Config\LocationMapTrait;
 	 * @return  array
 	 */
 	public static function find($id) {
-		if ($id == 'EARTH' || $id == 1)
+		if ($id == 'EARTH' || $id == 1 || ! $id)
 			return static::earth ();
 		return ( object ) static::$maps ["l$id"];
 	}
@@ -71,5 +62,4 @@ use App\Ezsell\Config\LocationMapTrait;
 			return strpos ( $item ['fullname'], $q ) !== false || strpos ( $item ['countryCode'], $q ) !== false;
 		}, ARRAY_FILTER_USE_BOTH );
 	}
-
 }

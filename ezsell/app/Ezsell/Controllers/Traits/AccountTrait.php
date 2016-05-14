@@ -16,7 +16,7 @@ trait AccountTrait {
 	public function password(Request $request) {
 		return $this->process ( 'password', func_get_args () );
 	}
-	protected function postPassword(Request $request) {
+	protected function ppostPassword(Request $request) {
 		$data = $request->only ( 'current_password', 'password', 'password_confirmation' );
 		$response = static::apiCallPassword ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
@@ -31,7 +31,7 @@ trait AccountTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function getPassword(Request $request) {
+	protected function pgetPassword(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( view ( 'login' ) );
 		else
@@ -46,7 +46,7 @@ trait AccountTrait {
 	public function email(Request $request) {
 		return $this->process ( 'email', func_get_args () );
 	}
-	protected function postEmail(Request $request) {
+	protected function ppostEmail(Request $request) {
 		$data = $request->only ( 'current_password', 'email', 'email_confirmation' );
 		$response = static::apiCallEmail ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
@@ -61,7 +61,7 @@ trait AccountTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function getEmail(Request $request) {
+	protected function pgetEmail(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( view ( 'login' ) );
 		else
@@ -76,7 +76,7 @@ trait AccountTrait {
 	public function account(Request $request) {
 		return $this->process ( 'account', func_get_args () );
 	}
-	protected function postAccount(Request $request) {
+	protected function ppostAccount(Request $request) {
 		$data = $request->only ( 'current_password', 'name' );
 		$response = static::apiCallAccount ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
@@ -91,7 +91,7 @@ trait AccountTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function getAccount(Request $request) {
+	protected function pgetAccount(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( view ( 'login' ) );
 		else

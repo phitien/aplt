@@ -62,7 +62,7 @@ return [
             'bucket' => 'your-bucket',
         ],
 
-   		'media' => [
+   		'app' => [
    			'driver' => 'local',
    			'root' => app_path('/Media')
    		],

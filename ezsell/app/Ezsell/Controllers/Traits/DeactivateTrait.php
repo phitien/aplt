@@ -16,7 +16,7 @@ trait DeactivateTrait {
 	public function deactivate(Request $request) {
 		return $this->process ( 'deactivate', func_get_args () );
 	}
-	protected function postDeactivate(Request $request) {
+	protected function ppostDeactivate(Request $request) {
 		$response = static::apiCallDeactive ( $request->get ( 'current_password' ) );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
@@ -30,7 +30,7 @@ trait DeactivateTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function getDeactivate(Request $request) {
+	protected function pgetDeactivate(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( view ( 'login' ) );
 		else

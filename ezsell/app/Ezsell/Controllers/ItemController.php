@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Ezsell\Models\Item;
 use App\Ezsell\Exceptions\ItemNotFound;
 use App\Ezsell\Models\Cat;
+use Image;
 
-class ItemController extends BaseController {
+class ItemController extends Controller {
 	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions
@@ -42,7 +43,7 @@ class ItemController extends BaseController {
 	public function cat(Request $request) {
 		return $this->process ( 'cat', func_get_args () );
 	}
-	protected function getCat(Request $request, $id) {
+	protected function pgetCat(Request $request, $id) {
 		$cat = Cat::find ( $id );
 		if ($cat) {
 			return $this->response ( view ( 'item.items', [ 
@@ -61,10 +62,10 @@ class ItemController extends BaseController {
 	public function newitem(Request $request) {
 		return $this->process ( 'newitem', func_get_args () );
 	}
-	protected function getNewitem(Request $request) {
+	protected function pgetNewitem(Request $request) {
 		return $this->response ( view ( 'item.newitem' ) );
 	}
-	protected function postNewitem(Request $request) {
+	protected function ppostNewitem(Request $request) {
 		$data = $request->only ( [ 
 				'parent_id',
 				'location_id',
@@ -93,7 +94,7 @@ class ItemController extends BaseController {
 	public function item(Request $request) {
 		return $this->process ( 'item', func_get_args () );
 	}
-	protected function getItem(Request $request, $id) {
+	protected function pgetItem(Request $request, $id) {
 		$item = Item::find ( $id );
 		if ($item) {
 			return $this->response ( view ( 'item.detail', [ 

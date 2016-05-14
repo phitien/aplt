@@ -9,10 +9,5 @@ interface IController extends IResponse {
 	 *
 	 * @return array
 	 */
-	public function getAuthenticationMiddlewareOptions();
-	/**
-	 *
-	 * @return array
-	 */
-	public function getAuthorizationMiddlewareOptions();
+	public function getMiddlewareOptions($middleware);
 }

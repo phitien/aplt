@@ -5,7 +5,7 @@ namespace App\Ezsell\Controllers;
 use Illuminate\Http\Request;
 use App\Ezsell\Config\LocationMap;
 
-class LocationController extends BaseController {
+class LocationController extends Controller {
 	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions
@@ -34,10 +34,10 @@ class LocationController extends BaseController {
 	public function location(Request $request) {
 		return $this->process ( 'location', func_get_args () );
 	}
-	protected function getLocation(Request $request) {
+	protected function pgetLocation(Request $request) {
 		return $this->response ( view ( 'location' ) );
 	}
-	protected function postLocation(Request $request) {
+	protected function ppostLocation(Request $request) {
 		$location_id = $request->get ( 'location' );
 		static::setLocationId ( $location_id );
 		return $this->redirect ( static::getRedirectUri () );

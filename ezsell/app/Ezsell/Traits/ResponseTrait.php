@@ -6,9 +6,11 @@ use App\Ezsell\Config\Config;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Image;
 
 trait ResponseTrait
 {
+	use RequestTrait;
 	/**
 	 *
 	 * @param \Illuminate\Http\Response $response        	
@@ -18,7 +20,7 @@ trait ResponseTrait
 
 		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )-> //
 
-		withCookie ( Cookie::forever ( Config::EZSELL_KEY, static::encrypt ( ( string ) static::getUser () ) ), true )-> //
+		withCookie ( Cookie::forever ( Config::SESSION_KEY, static::encrypt ( ( string ) static::getUser () ) ), true )-> //
 
 		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::getLocationId () ), true );
 	}
@@ -31,7 +33,7 @@ trait ResponseTrait
 
 		withCookie ( Config::TOKEN_KEY, null, true )-> //
 
-		withCookie ( Config::EZSELL_KEY, null, true );
+		withCookie ( Config::SESSION_KEY, null, true );
 	}
 	/**
 	 * Build response
@@ -93,5 +95,26 @@ trait ResponseTrait
 	 */
 	public function setResponseToken($response, $token) {
 		return $response->withCookie ( Config::TOKEN_KEY, $token, true );
+	}
+	/**
+	 *
+	 * @param string $path        	
+	 */
+	public function pumpImagePath($path = '') {
+		if ($path)
+			$this->pumpImage ( Image::make ( $path ) );
+	}
+	/**
+	 *
+	 * @param Image $image        	
+	 */
+	public function pumpImage($image) {
+		header ( "Content-Type: $image->mime ()" );
+		die ( $image->encode () );
+	}
+	/**
+	 */
+	public function pumpNoImage() {
+		$this->pumpImagePath ( '../repo/not-found.jpg' );
 	}
 }

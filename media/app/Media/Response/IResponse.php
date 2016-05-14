@@ -4,7 +4,6 @@ namespace App\Media\Response;
 
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Intervention\Image\Image;
 
 interface IResponse {
 	/**
@@ -54,7 +53,21 @@ interface IResponse {
 	public function setResponseToken($response, $cookie);
 	/**
 	 *
-	 * @param \Intervention\Image\Image $image        	
+	 * @param string $path        	
 	 */
-	public function pumpImage(Image $image);
+	public function pumpImagePath($path = '');
+	/**
+	 *
+	 * @param Image $image        	
+	 */
+	public function pumpImage($image);
+	/**
+	 */
+	public function pumpNoImage();
+	/**
+	 */
+	public function pumpUnauthenticated();
+	/**
+	 */
+	public function pumpUnauthorized();
 }

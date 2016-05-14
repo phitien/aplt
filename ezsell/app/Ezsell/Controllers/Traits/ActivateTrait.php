@@ -37,7 +37,7 @@ trait  ActivateTrait {
 	public function code(Request $request) {
 		return $this->process ( 'code', func_get_args () );
 	}
-	protected function postCode(Request $request) {
+	protected function ppostCode(Request $request) {
 		$email = $request->get ( 'email' );
 		if ($msg = $this->emailValidator ( [ 
 				'email' => $email 
@@ -60,7 +60,7 @@ trait  ActivateTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function getCode(Request $request) {
+	protected function pgetCode(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( view ( 'code' ) );
 		else

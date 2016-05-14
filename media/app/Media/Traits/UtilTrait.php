@@ -2,7 +2,6 @@
 
 namespace App\Media\Traits;
 
-use Illuminate\Support\Facades\Crypt;
 use App\Media\Models\Location;
 use Illuminate\Support\Facades\Storage;
 use View;
@@ -23,7 +22,7 @@ trait UtilTrait {
 	 * @return string
 	 */
 	public static function encrypt($str) {
-		return Crypt::encrypt ( $str );
+		return encrypt ( $str );
 	}
 	
 	/**
@@ -32,7 +31,7 @@ trait UtilTrait {
 	 * @return string
 	 */
 	public static function decrypt($str) {
-		return Crypt::decrypt ( $str );
+		return decrypt ( $str );
 	}
 	/**
 	 *

@@ -6,10 +6,11 @@ use App\Media\Config\Config;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Intervention\Image\Image;
+use Image;
 
 trait ResponseTrait
 {
+	use RequestTrait;
 	/**
 	 *
 	 * @param \Illuminate\Http\Response $response        	
@@ -19,9 +20,7 @@ trait ResponseTrait
 
 		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )-> //
 
-		withCookie ( Cookie::forever ( Config::MEDIA_KEY, static::encrypt ( ( string ) static::getUser () ) ), true )-> //
-
-		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::getLocationId () ), true );
+		withCookie ( Cookie::forever ( Config::SESSION_KEY, static::encrypt ( ( string ) static::getUser () ) ), true );
 	}
 	/**
 	 *
@@ -32,7 +31,7 @@ trait ResponseTrait
 
 		withCookie ( Config::TOKEN_KEY, null, true )-> //
 
-		withCookie ( Config::MEDIA_KEY, null, true );
+		withCookie ( Config::SESSION_KEY, null, true );
 	}
 	/**
 	 * Build response
@@ -97,10 +96,33 @@ trait ResponseTrait
 	}
 	/**
 	 *
-	 * @param \Intervention\Image\Image $image        	
+	 * @param string $path        	
 	 */
-	public function pumpImage(Image $image) {
-		header ( 'Content-Type: image/png' );
-		die ( $image->encode ( $image->mime () ) );
+	public function pumpImagePath($path = '') {
+		if ($path)
+			$this->pumpImage ( Image::make ( $path ) );
+	}
+	/**
+	 *
+	 * @param Image $image        	
+	 */
+	public function pumpImage($image) {
+		header ( "Content-Type: $image->mime ()" );
+		die ( $image->encode () );
+	}
+	/**
+	 */
+	public function pumpNoImage() {
+		$this->pumpImagePath ( '../repo/not-found.jpg' );
+	}
+	/**
+	 */
+	public function pumpUnauthenticated() {
+		$this->pumpImagePath ( '../repo/unauthenticated.jpg' );
+	}
+	/**
+	 */
+	public function pumpUnauthorized() {
+		$this->pumpImagePath ( '../repo/unauthorized.jpg' );
 	}
 }

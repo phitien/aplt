@@ -1,78 +1,37 @@
 <?php
 
-namespace App\IM\Config;
+namespace App\IM\Config ;
+ 
+use App\IM\Config\RolesActionsTrait;
 
 class RolesActions {
 	/**
-	 * Constants
+	 * TRAITS
 	 */
- 	const MAPS = [ 
-		'SUPREME' => [
-			'GOD_ACT', 
-		],
-		'MANAGER' => [
-			'MANAGER_ACT', 
-			'OWN_ACT', 
-			'CREATE_USER', 
-			'ACCESS_USER', 
-			'CREATE_ROLE', 
-			'ACCESS_ROLE', 
-			'CREATE_ACTION', 
-			'ACCESS_ACTION', 
-		],
-		'USER' => [
-			'OWN_ACT', 
-		],
-		'GUEST' => [
-			'GUEST_ACT', 
-		],
- 
-	];
- 	/**
-	 * Private static variables
-	 */
-	/**
-	 * Protected static variables
-	 */
-	/**
-	 * Public static variables
-	 */
-	/**
-	 * Private variables
-	 */
-	/**
-	 * Protected variables
-	 */
-	/**
-	 * Public variables
-	 */
-	/**
-	 * Others (Functions...)
-	 */
+	use RolesActionsTrait;
 	/**
 	 *
-	 * @param  string $role        	
-	 * @return  array
+	 * @param    string $role        	
+	 * @return    array
 	 */
 	public static function getActions($role) {
-		return isset ( static::MAPS [$role] ) ? static::MAPS [$role] : [ ];
+		return isset ( static::$__maps [$role] ) ? static::$__maps [$role] : [ ];
 	}
 	/**
 	 *
-	 * @param  string $role        	
-	 * @return  string
+	 * @param    string $role        	
+	 * @return    string
 	 */
 	public static function getStringActions($role) {
 		return implode ( '|', static::getActions ( $role ) );
 	}
 	/**
 	 *
-	 * @param  string $role        	
-	 * @param  string $action        	
-	 * @return  bool
+	 * @param    string $role        	
+	 * @param    string $action        	
+	 * @return    bool
 	 */
 	public static function hasAction($role, $action) {
 		return in_array ( $action, static::getActions ( $role ) );
 	}
-	
 }

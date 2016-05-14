@@ -4,6 +4,7 @@ namespace App\Ezsell\Middleware;
 
 use Closure;
 use App\Ezsell\Config\Config;
+use App\Ezsell\Config\LocationMap;
 
 class Location extends Middleware {
 	/**
@@ -15,7 +16,7 @@ class Location extends Middleware {
 	 */
 	public function im_handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
 		$location = static::getLocation ();
-		if (! $location) {
+		if (! $location || $location == LocationMap::earth ()) {
 			return $this->response ( view ( 'location' ) );
 		}
 		return $next ( $request );

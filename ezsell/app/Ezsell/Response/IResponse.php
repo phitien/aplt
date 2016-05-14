@@ -51,4 +51,17 @@ interface IResponse {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function setResponseToken($response, $cookie);
+	/**
+	 *
+	 * @param string $path        	
+	 */
+	public function pumpImagePath($path = '');
+	/**
+	 *
+	 * @param Image $image        	
+	 */
+	public function pumpImage($image);
+	/**
+	 */
+	public function pumpNoImage();
 }

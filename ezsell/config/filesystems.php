@@ -62,7 +62,7 @@ return [
             'bucket' => 'your-bucket',
         ],
 
-   		'ezsell' => [
+   		'app' => [
    			'driver' => 'local',
    			'root' => app_path('/Ezsell')
    		],

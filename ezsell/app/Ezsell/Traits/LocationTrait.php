@@ -3,12 +3,11 @@
 namespace App\Ezsell\Traits;
 
 use App\Ezsell\Config\Config;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 use App\Ezsell\Config\LocationMap;
 
 trait LocationTrait
 {
+	use ResponseTrait;
 	/**
 	 *
 	 * @var string
@@ -25,7 +24,7 @@ trait LocationTrait
 	 */
 	protected static function getLocationId() {
 		if (! static::$_location_id) {
-			static::$_location_id = request ()->get ( Config::LOCATION_KEY, request ()->header ( Config::LOCATION_KEY, Cookie::get ( Config::LOCATION_KEY, null ) ) );
+			static::$_location_id = static::param ( Config::LOCATION_KEY );
 		}
 		return static::$_location_id;
 	}

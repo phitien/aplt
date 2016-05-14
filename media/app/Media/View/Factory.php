@@ -3,15 +3,13 @@
 namespace App\Media\View;
 
 use Illuminate\View\Factory as BaseFactory;
-use App\Media\Traits\UserTrait;
-use App\Media\Traits\UtilTrait;
-use App\Media\Traits\LocationTrait;
+use App\Media\Traits\AllTrait;
 
 class Factory extends BaseFactory {
 	/**
 	 * TRAITS
 	 */
-	use UserTrait, UtilTrait, LocationTrait;
+	use AllTrait;
 	/**
 	 *
 	 * @var bool

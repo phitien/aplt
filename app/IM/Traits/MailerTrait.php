@@ -9,6 +9,7 @@ use App\IM\Config\Config;
 
 trait MailerTrait
 {
+	use UserTrait;
 	/**
 	 *
 	 * @param User $receiver        	
@@ -33,7 +34,7 @@ trait MailerTrait
 		$this->mailTo ( $user, 'register', 'Welcome to EZSell', [ 
 				'title' => 'Welcome to EZSell',
 				'receiver' => $user,
-				'url' => static::getBaseUrl () . '/activate/' . $user->generateActivationCode () 
+				'url' => $user->baseUrl . '/activate/' . $user->generateActivationCode () 
 		] );
 	}
 	/**
@@ -44,7 +45,7 @@ trait MailerTrait
 		$this->mailTo ( $user, 'register', 'Activation Re-send', [ 
 				'title' => 'Welcome to EZSell',
 				'receiver' => $user,
-				'url' => static::getBaseUrl () . '/activate/' . $user->generateActivationCode () 
+				'url' => $user->baseUrl . '/activate/' . $user->generateActivationCode () 
 		] );
 	}
 	/**

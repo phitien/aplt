@@ -8,11 +8,10 @@ use App\IM\Exceptions\TokenNotFound;
 use App\IM\Exceptions\UserNotFound;
 use App\User;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 
 trait UserTrait
 {
+	use ResponseTrait;
 	/**
 	 *
 	 * @var string
@@ -24,7 +23,7 @@ trait UserTrait
 	 */
 	protected static function getToken() {
 		if (! static::$_token) {
-			static::$_token = request ()->header ( Config::TOKEN_KEY, Cookie::get ( Config::TOKEN_KEY, static::$_token = JWTAuth::getToken () ) );
+			static::$_token = static::param ( Config::TOKEN_KEY, JWTAuth::getToken () );
 		}
 		return static::$_token == Config::INVALID_TOKEN ? null : static::$_token;
 	}
@@ -76,7 +75,7 @@ trait UserTrait
 	}
 	/**
 	 *
-	 * @param User $user
+	 * @param User $user        	
 	 */
 	protected function setUser(User $user) {
 		static::$_user = $user;

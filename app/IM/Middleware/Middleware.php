@@ -6,16 +6,13 @@ use Tymon\JWTAuth\Middleware\BaseMiddleware;
 use Closure;
 use App\IM\Config\Config;
 use Illuminate\Http\Response;
-use App\IM\Traits\MailerTrait;
-use App\IM\Traits\UserTrait;
-use App\IM\Traits\ResponseTrait;
-use App\IM\Traits\EncoderTrait;
+use App\IM\Traits\AllTrait;
 
 abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	/**
 	 * TRAITS
 	 */
-	use EncoderTrait, MailerTrait, UserTrait, ResponseTrait;
+	use AllTrait;
 	/**
 	 *
 	 * @var array

@@ -55,7 +55,7 @@ use App\Ezsell\Config\LocationMapTrait;
 	 * @return array
 	 */
 	public static function find($id) {
-		if ($id == 'EARTH' || $id == 1)
+		if ($id == 'EARTH' || $id == 1 || ! $id)
 			return static::earth ();
 		return ( object ) static::$maps ["l$id"];
 	}

@@ -2,7 +2,6 @@
 
 namespace App\Ezsell\Traits;
 
-use Illuminate\Support\Facades\Crypt;
 use App\Ezsell\Models\Location;
 use Illuminate\Support\Facades\Storage;
 use View;
@@ -23,7 +22,7 @@ trait UtilTrait {
 	 * @return string
 	 */
 	public static function encrypt($str) {
-		return Crypt::encrypt ( $str );
+		return encrypt ( $str );
 	}
 	
 	/**
@@ -32,7 +31,7 @@ trait UtilTrait {
 	 * @return string
 	 */
 	public static function decrypt($str) {
-		return Crypt::decrypt ( $str );
+		return decrypt ( $str );
 	}
 	/**
 	 *
@@ -62,6 +61,7 @@ trait UtilTrait {
 	 * @return void
 	 */
 	public static function buildLocationMap() {
+		$className = 'LocationMap';
 		$items = [ ];
 		$locations = Location::all ();
 		foreach ( $locations as $location ) {
@@ -77,7 +77,6 @@ trait UtilTrait {
 			else
 				$items ["l{$location->id}"] = "[{$text}]";
 		}
-		$className = 'LocationMap';
 		$maps = [ ];
 		foreach ( $items as $k => $v ) {
 			array_push ( $maps, "'{$k}'=>{$v}\n" );
@@ -95,13 +94,13 @@ trait UtilTrait {
 				'php' => '<?php' 
 		], $data );
 		$contents = Html::decode ( View::create ( 'classgenerator.locationmap.trait', $data )->render () );
-		Storage::disk ( 'ezsell' )->put ( "{$filePath}.php", $contents );
+		Storage::disk ( 'app' )->put ( "{$filePath}.php", $contents );
 	}
 	public static function renderClass($filePath, $data = []) {
 		$data = array_merge ( [ 
 				'php' => '<?php' 
 		], $data );
 		$contents = Html::decode ( View::create ( 'classgenerator.locationmap.class', $data )->render () );
-		Storage::disk ( 'ezsell' )->put ( "{$filePath}.php", $contents );
+		Storage::disk ( 'app' )->put ( "{$filePath}.php", $contents );
 	}
 }

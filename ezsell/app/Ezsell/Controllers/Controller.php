@@ -3,126 +3,97 @@
 namespace App\Ezsell\Controllers;
 
 use App\Http\Controllers\Controller as BaseController;
-use Exception;
-use App\Ezsell\Config\Config;
-use Route;
-use Illuminate\Http\Request;
-use App\Ezsell\Config\AuthorizationMaps;
-use App\Ezsell\Traits\MailerTrait;
-use App\Ezsell\Traits\ResponseTrait;
-use App\Ezsell\Traits\UtilTrait;
-use App\Ezsell\Traits\RestfulTrait;
-use App\Ezsell\Traits\ApiCallRestfulTrait;
-use App\Ezsell\Traits\LocationTrait;
 use Illuminate\Http\Response;
+use App\Ezsell\Controllers\Traits\MiddlewareTrait;
 
 abstract class Controller extends BaseController implements IController {
 	/**
 	 * TRAITS
 	 */
-	use UtilTrait, LocationTrait, RestfulTrait, ApiCallRestfulTrait, MailerTrait, ResponseTrait;
-	/**
-	 *
-	 * @var string
-	 */
-	protected $_middleware_action = Config::ACTION_GUEST_ACT;
-	/**
-	 *
-	 * @var array
-	 */
-	protected $_authenticationMiddlewareOptions = [ ];
-	/**
-	 *
-	 * @var array
-	 */
-	protected $_authorizationMiddlewareOptions = [ ];
-	/**
-	 *
-	 * @var array
-	 */
-	protected $_locationMiddlewareOptions = [ ];
+	use MiddlewareTrait;
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->_middleware_action = $this->getMiddlewareAction ();
 		$this->setupMiddlewares ();
 	}
 	/**
+	 * Validate user email
 	 *
-	 * @return void
+	 * @param array $data        	
+	 * @return string
 	 */
-	protected function setupMiddlewares() {
-		$this->middleware ( "im.authentication:{$this->_middleware_action}", $this->getAuthenticationMiddlewareOptions () );
-		$this->middleware ( "im.authorization:{$this->_middleware_action}", $this->getAuthorizationMiddlewareOptions () );
-		$this->middleware ( "im.location:{$this->_middleware_action}", $this->getLocationMiddlewareOptions () );
-	}
-	/**
-	 *
-	 * @return string|string|string[]|string
-	 */
-	protected function getMiddlewareAction() {
-		$arr = explode ( '@', Route::getCurrentRoute ()->getActionName () );
-		$controller = $arr [0];
-		$method = $arr [1];
-		$requestType = request ()->method ();
-		$middlewareActionMaps = AuthorizationMaps::MAPS;
-		try {
-			return ( string ) $middlewareActionMaps [$controller] [$method] [$requestType];
-		} catch ( Exception $e ) {
-			try {
-				return ( string ) $middlewareActionMaps [$controller] [$method];
-			} catch ( Exception $e ) {
-				try {
-					return ( string ) $middlewareActionMaps [$controller];
-				} catch ( Exception $e ) {
-				}
-			}
+	protected function validateEmail(array $data) {
+		$validator = Validator::make ( $data, [ 
+				'email' => 'required|email|max:255' 
+		] );
+		if ($validator->fails ()) {
+			return 'invalid_email';
 		}
-		return Config::ACTION_GUEST_ACT;
+		$validator = Validator::make ( $data, [ 
+				'email' => 'confirmed' 
+		] );
+		if ($validator->fails ()) {
+			return 'email_confirmation_not_matched';
+		}
 	}
 	/**
+	 * Validate user password
 	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \App\Ezsell\Controllers\IController::getAuthenticationMiddlewareOptions()
+	 * @param array $data        	
+	 * @return string
 	 */
-	public function getAuthenticationMiddlewareOptions() {
-		return $this->_authenticationMiddlewareOptions;
+	protected function validatePassword(array $data) {
+		$validator = Validator::make ( $data, [ 
+				'password' => 'required|min:6' 
+		] );
+		if ($validator->fails ()) {
+			return 'invalid_password';
+		}
+		$validator = Validator::make ( $data, [ 
+				'password' => 'confirmed' 
+		] );
+		if ($validator->fails ()) {
+			return 'password_confirmation_not_matched';
+		}
 	}
 	/**
+	 * Validate user name
 	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \App\Ezsell\Controllers\IController::getAuthorizationMiddlewareOptions()
+	 * @param array $data        	
+	 * @return string
 	 */
-	public function getAuthorizationMiddlewareOptions() {
-		return $this->_authorizationMiddlewareOptions;
+	protected function validateName(array $data) {
+		$validator = Validator::make ( $data, [ 
+				'name' => 'required|min:3|max:30|regex:/^[a-z0-9]([\._]?[a-z0-9]+)+$/' 
+		] );
+		if ($validator->fails ()) {
+			return 'invalid_name';
+		}
 	}
 	/**
+	 * Validate user name
 	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \App\Ezsell\Controllers\IController::getLocationMiddlewareOptions()
+	 * @param array $data        	
+	 * @return string
 	 */
-	public function getLocationMiddlewareOptions() {
-		return $this->_locationMiddlewareOptions;
+	protected function validateProfileData(array $data) {
 	}
 	/**
 	 *
-	 * @param array $arguments
+	 * @param array $arguments        	
 	 * @param string $action        	
 	 * @return Response
 	 */
 	protected function process($action, array $arguments) {
 		$action = ucfirst ( $action );
-		$method = "get{$action}";
+		$method = "pget{$action}";
 		if (request ()->isMethod ( 'post' )) {
-			$method = "post{$action}";
+			$method = "ppost{$action}";
 		} else if (request ()->isMethod ( 'put' )) {
-			$method = "put{$action}";
+			$method = "pput{$action}";
 		} else if (request ()->isMethod ( 'delete' )) {
-			$method = "delete{$action}";
+			$method = "pdelete{$action}";
 		}
 		return call_user_func_array ( array (
 				$this,

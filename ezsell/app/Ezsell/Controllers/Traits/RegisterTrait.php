@@ -16,7 +16,7 @@ trait  RegisterTrait {
 	public function register(Request $request) {
 		return $this->process ( 'register', func_get_args () );
 	}
-	protected function postRegister(Request $request) {
+	protected function ppostRegister(Request $request) {
 		$data = $request->only ( 'email', 'email_confirmation', 'password', 'password_confirmation' );
 		if ($msg = $this->registrationValidator ( $data )) {
 			return $this->response ( view ( 'register', [ 
@@ -35,7 +35,7 @@ trait  RegisterTrait {
 			] ), $response->getStatusCode () );
 		}
 	}
-	protected function getRegister(Request $request) {
+	protected function pgetRegister(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( view ( 'register' ) );
 		else

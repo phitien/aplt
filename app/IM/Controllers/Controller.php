@@ -3,91 +3,151 @@
 namespace App\IM\Controllers;
 
 use App\Http\Controllers\Controller as BaseController;
-use Exception;
-use App\IM\Config\Config;
-use Route;
-use Request;
-use App\IM\Config\AuthorizationMaps;
-use App\IM\Traits\MailerTrait;
-use App\IM\Traits\ResponseTrait;
-use App\IM\Traits\EncoderTrait;
-use App\IM\Traits\UtilTrait;
+use App\IM\Controllers\Traits\MiddlewareTrait;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Validator;
+use Hash;
 
 abstract class Controller extends BaseController implements IController {
 	/**
 	 * TRAITS
 	 */
-	use EncoderTrait, MailerTrait, ResponseTrait, UtilTrait;
-	/**
-	 *
-	 * @var string
-	 */
-	protected $_middleware_action = Config::ACTION_GUEST_ACT;
-	/**
-	 *
-	 * @var array
-	 */
-	protected $_authenticationMiddlewareOptions = [ ];
-	/**
-	 *
-	 * @var array
-	 */
-	protected $_authorizationMiddlewareOptions = [ ];
+	use MiddlewareTrait;
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->_middleware_action = $this->getMiddlewareAction ();
 		$this->setupMiddlewares ();
 	}
 	/**
 	 *
-	 * @return void
+	 * @param Request $request        	
+	 * @return Response void
 	 */
-	protected function setupMiddlewares() {
-		$this->middleware ( "im.authentication:{$this->_middleware_action}", $this->getAuthenticationMiddlewareOptions () );
-		$this->middleware ( "im.authorization:{$this->_middleware_action}", $this->getAuthorizationMiddlewareOptions () );
+	protected function enterWrongPassword(Request $request) {
+		$current_password = $request->get ( 'current_password' );
+		if (! $current_password) {
+			return $this->jsonResponse ( 'current_password_not_provided', null, Response::HTTP_BAD_REQUEST );
+		}
+		if (strlen ( $current_password ) > 0 && ! Hash::check ( $current_password, $this->user ()->password )) {
+			return $this->jsonResponse ( 'current_password_incorrect', null, Response::HTTP_BAD_REQUEST );
+		}
+		return false;
 	}
 	/**
+	 * Validate user email
 	 *
-	 * @return string|string|string[]|string
+	 * @param array $data        	
+	 * @return string
 	 */
-	protected function getMiddlewareAction() {
-		$arr = explode ( '@', Route::getCurrentRoute ()->getActionName () );
-		$controller = $arr [0];
-		$method = $arr [1];
-		$requestType = Request::method ();
-		$middlewareActionMaps = AuthorizationMaps::MAPS;
-		try {
-			return ( string ) $middlewareActionMaps [$controller] [$method] [$requestType];
-		} catch ( Exception $e ) {
-			try {
-				return ( string ) $middlewareActionMaps [$controller] [$method];
-			} catch ( Exception $e ) {
-				try {
-					return ( string ) $middlewareActionMaps [$controller];
-				} catch ( Exception $e ) {
-				}
+	protected function validateEmail(array $data) {
+		$validator = Validator::make ( $data, [ 
+				'email' => 'required|email|max:255' 
+		] );
+		if ($validator->fails ()) {
+			return 'invalid_email';
+		}
+		$validator = Validator::make ( $data, [ 
+				'email' => 'unique:users,email' 
+		] );
+		if ($validator->fails ()) {
+			return 'email_used';
+		}
+		$validator = Validator::make ( $data, [ 
+				'email' => 'confirmed' 
+		] );
+		if ($validator->fails ()) {
+			return 'email_confirmation_not_matched';
+		}
+	}
+	/**
+	 * Validate user password
+	 *
+	 * @param array $data        	
+	 * @return string
+	 */
+	protected function validatePassword(array $data) {
+		$validator = Validator::make ( $data, [ 
+				'password' => 'required|min:6' 
+		] );
+		if ($validator->fails ()) {
+			return 'invalid_password';
+		}
+		$validator = Validator::make ( $data, [ 
+				'password' => 'confirmed' 
+		] );
+		if ($validator->fails ()) {
+			return 'password_confirmation_not_matched';
+		}
+	}
+	/**
+	 * Validate user name
+	 *
+	 * @param array $data        	
+	 * @return string
+	 */
+	protected function validateName(array $data) {
+		$data ['name'] = strtolower ( $data ['name'] );
+		$validator = Validator::make ( $data, [ 
+				'name' => 'required|min:3|max:30|regex:/^[a-z0-9]([\._]?[a-z0-9]+)+$/' 
+		] );
+		if ($validator->fails ()) {
+			return 'invalid_name';
+		}
+		$validator = Validator::make ( $data, [ 
+				'name' => 'unique:users,name' 
+		] );
+		if ($validator->fails ()) {
+			return 'name_used';
+		}
+	}
+	/**
+	 * Validate user name
+	 *
+	 * @param array $data        	
+	 * @return string
+	 */
+	protected function validateProfileData(array $data) {
+		$email = $data ['second_email'];
+		if ($email != $this->user ()->second_email) {
+			$validator = Validator::make ( $data, [ 
+					'second_email' => 'unique:users,second_email' 
+			] );
+			if ($validator->fails ()) {
+				return 'second_email_used';
 			}
 		}
-		return Config::ACTION_GUEST_ACT;
+		$mobile = $data ['mobile'];
+		if ($mobile != $this->user ()->mobile) {
+			$validator = Validator::make ( $data, [ 
+					'mobile' => 'unique:users,mobile' 
+			] );
+			if ($validator->fails ()) {
+				return 'mobile_used';
+			}
+		}
 	}
+	
 	/**
 	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \App\IM\Controllers\IController::getAuthenticationMiddlewareOptions()
+	 * @param array $arguments        	
+	 * @param string $action        	
+	 * @return Response
 	 */
-	public function getAuthenticationMiddlewareOptions() {
-		return $this->_authenticationMiddlewareOptions;
-	}
-	/**
-	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \App\IM\Controllers\IController::getAuthorizationMiddlewareOptions()
-	 */
-	public function getAuthorizationMiddlewareOptions() {
-		return $this->_authorizationMiddlewareOptions;
+	protected function process($action, array $arguments) {
+		$action = ucfirst ( $action );
+		$method = "pget{$action}";
+		if (request ()->isMethod ( 'post' )) {
+			$method = "ppost{$action}";
+		} else if (request ()->isMethod ( 'put' )) {
+			$method = "pput{$action}";
+		} else if (request ()->isMethod ( 'delete' )) {
+			$method = "pdelete{$action}";
+		}
+		return call_user_func_array ( array (
+				$this,
+				$method 
+		), $arguments );
 	}
 }

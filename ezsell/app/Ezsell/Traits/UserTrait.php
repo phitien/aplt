@@ -5,11 +5,11 @@ namespace App\Ezsell\Traits;
 use App\Ezsell\Config\Config;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 use Exception;
 
 trait UserTrait
 {
+	use LocationTrait;
 	/**
 	 *
 	 * @var string
@@ -21,7 +21,7 @@ trait UserTrait
 	 */
 	protected static function getToken() {
 		if (! static::$_token) {
-			static::$_token = request ()->header ( Config::TOKEN_KEY, Cookie::get ( Config::TOKEN_KEY, null ) );
+			static::$_token = static::param ( Config::TOKEN_KEY );
 		}
 		return static::$_token == Config::INVALID_TOKEN ? null : static::$_token;
 	}
@@ -44,7 +44,7 @@ trait UserTrait
 	 */
 	protected static function getUserInfoFromRequest() {
 		if (! static::$_userInfoFromRequest) {
-			static::$_userInfoFromRequest = request ()->header ( Config::EZSELL_KEY, Cookie::get ( Config::EZSELL_KEY, null ) );
+			static::$_userInfoFromRequest = static::param ( Config::SESSION_KEY );
 		}
 		return static::$_userInfoFromRequest;
 	}

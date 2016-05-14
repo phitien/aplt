@@ -21,7 +21,7 @@ $( document ).ready(function() {
 				value: 0
 			}];
 			return (
-				<FormView.Form className='form row' method='post' action='/newitem' 
+				<FormView.Form className='form row' method='post' action='/newitem' encType='multipart/form-data'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<div className="row">
 						<FormView.Input type='text' required name='title' title='Title' className='col-xs-6 col-md-8' />
@@ -34,6 +34,7 @@ $( document ).ready(function() {
 						<FormView.Input type='number' name='nowprice' title='Now price' className='col-xs-6 col-md-4' step='0.1' min='0' placeholder='1.0' />
 					</div>
 					<FormView.Input type='radiolist' name='is_new' title='Condition' options={conditions} className='inline-block-list' />
+					<FormView.Input type='file' name='image' title='Image' />
 					<FormView.Input type='textarea' name='description' title='Description' cols='10' rows='5' />
 					<FormView.Input type='submit' name='btn-submit' disabled={!this.state.canSubmit} value='Create' className='center-block' />
 				</FormView.Form>

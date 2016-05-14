@@ -6,19 +6,13 @@ use Tymon\JWTAuth\Middleware\BaseMiddleware;
 use Closure;
 use App\Ezsell\Config\Config;
 use Illuminate\Http\Response;
-use App\Ezsell\Traits\MailerTrait;
-use App\Ezsell\Traits\UserTrait;
-use App\Ezsell\Traits\ResponseTrait;
-use App\Ezsell\Traits\RestfulTrait;
-use App\Ezsell\Traits\ApiCallRestfulTrait;
-use App\Ezsell\Traits\UtilTrait;
-use App\Ezsell\Traits\LocationTrait;
+use App\Ezsell\Traits\AllTrait;
 
 abstract class Middleware extends BaseMiddleware implements IMiddleware {
 	/**
 	 * TRAITS
 	 */
-	use UtilTrait, LocationTrait, MailerTrait, UserTrait, ResponseTrait, RestfulTrait, ApiCallRestfulTrait;
+	use AllTrait;
 	/**
 	 *
 	 * @var array

@@ -9,7 +9,7 @@ use App\Ezsell\Controllers\Traits\DeactivateTrait;
 use App\Ezsell\Controllers\Traits\ProfileTrait;
 use App\Ezsell\Controllers\Traits\SocietyTrait;
 
-class AccountController extends BaseController {
+class AccountController extends Controller {
 	/**
 	 * Traits
 	 */
@@ -19,10 +19,12 @@ class AccountController extends BaseController {
 	 * @var array $_authenticationMiddlewareOptions
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
-			'except' => [
+			'except' => [ 
 					'code',
 					'login',
-					'register'
+					'logout',
+					'register',
+					'activate' 
 			] 
 	];
 	/**

@@ -5,7 +5,7 @@ namespace App\Ezsell\Controllers;
 use Illuminate\Http\Request;
 use LRedis;
 
-class SocketController extends BaseController {
+class SocketController extends Controller {
 	/**
 	 *
 	 * @var array $_locationMiddlewareOptions

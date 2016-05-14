@@ -9,6 +9,7 @@ use App\Ezsell\Config\Config;
 
 trait MailerTrait
 {
+	use ApiCallRestfulTrait;
 	/**
 	 *
 	 * @param User $receiver        	

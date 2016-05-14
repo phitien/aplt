@@ -3,6 +3,7 @@
 namespace App\Ezsell\Traits;
 
 trait ApiCallRestfulTrait {
+	use RestfulTrait;
 	/**
 	 *
 	 * @param array $data[email,email_confirmation,password,password_confirmation]        	

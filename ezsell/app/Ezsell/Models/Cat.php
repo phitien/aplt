@@ -37,12 +37,17 @@ class Cat extends Model {
 		$location = static::getLocation ();
 		if ($location) {
 			$ids = LocationMap::tree ( $location, false );
+			$details = null;
 			foreach ( $ids as $id ) {
 				if ($id) {
-					$details = $this->details ()->where ( 'location_id', $id )->first ();
-					if ($details && ! $details->active) {
-						$details = null;
-						break;
+					$p = $this->details ()->where ( 'location_id', $id )->first ();
+					if ($p) {
+						if ($p && ! $p->active) {
+							$details = null;
+							break;
+						} else {
+							$details = $p;
+						}
 					}
 				}
 			}

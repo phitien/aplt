@@ -13,10 +13,12 @@ class CreateResourcesTable extends Migration {
 			$table->increments ( 'id' );
 			//
 			$table->integer ( 'user_id' )->nullable ();
+			$table->string ( 'domain' );
 			$table->string ( 'code' );
 			$table->text ( 'path' );
 			$table->unique ( [ 
 					'user_id',
+					'domain',
 					'code' 
 			] );
 			//

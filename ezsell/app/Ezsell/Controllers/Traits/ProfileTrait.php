@@ -22,7 +22,7 @@ trait  ProfileTrait {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	protected function getProfile(Request $request) {
+	protected function pgetProfile(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->response ( view ( 'login' ) );
 		else
@@ -34,7 +34,7 @@ trait  ProfileTrait {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	protected function postProfile(Request $request) {
+	protected function ppostProfile(Request $request) {
 		$data = $request->request->all (); // only get post data
 		if ($msg = $this->validateProfileData ( $data )) {
 			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
@@ -66,7 +66,7 @@ trait  ProfileTrait {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	protected function getProfileEx(Request $request) {
+	protected function pgetProfileEx(Request $request) {
 		return $this->jsonResponse ( 'profile_extension', static::getUser ()->extension ()->all () );
 	}
 	/**
@@ -75,7 +75,7 @@ trait  ProfileTrait {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	protected function postProfileEx(Request $request) {
+	protected function ppostProfileEx(Request $request) {
 		static::getUser ()->fillEx ( $request->request->all () )->save ();
 		// the token is valid and we have found the user via the sub claim
 		return $this->jsonResponse ( 'update_profile_extension_successfully', static::getUser ()->extension ()->all () );
