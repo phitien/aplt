@@ -14,7 +14,9 @@ class MediaController extends Controller {
 	 * @var array $_authenticationMiddlewareOptions
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
-			'except' => [ ] 
+			'except' => [ 
+					'media' 
+			] 
 	];
 	/**
 	 *
@@ -38,13 +40,16 @@ class MediaController extends Controller {
 		$file = $request->file ( 'image' );
 		if ($file->isValid ()) {
 			if ($code = $this->saveImage ( $request, $file )) {
-				return $this->jsonResponse ( 'uploaded', $code );
+				return $this->jsonResponse ( 'uploaded', $this->buildImagePath ( $code ) );
 			} else {
 				return $this->jsonResponse ( 'upload_failed', null, Response::HTTP_BAD_REQUEST );
 			}
 		} else {
 			return $this->jsonResponse ( 'upload_failed', null, Response::HTTP_BAD_REQUEST );
 		}
+	}
+	protected function buildImagePath($code) {
+		return static::getBaseUri () . "/media/{$code}";
 	}
 	/**
 	 */

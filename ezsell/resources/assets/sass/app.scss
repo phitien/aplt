@@ -1,4 +1,5 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "node_modules/react-image-gallery/src/image-gallery";
 
 $primary-color: #23527c;
 $warning-color: red;
@@ -41,6 +42,25 @@ $navigation-height: 55px;
 }
 .border-all {
 	@extend .border-top, .border-right, .border-bottom, .border-left;
+}
+.image-preview {
+	@extend .border-all;
+	display: none;
+}
+.image-preview img {
+	width: 100%;
+	margin: 3px 0;
+}
+.image-preview .image-preview-item {
+	margin: $margin-padding 0;
+}
+.image-preview .image-info {
+	float: left;
+	margin-top: 10px;
+}
+.image-preview .image-remove {
+	float: right;
+	margin-top: 3px;
 }
 
 .menuitem {}

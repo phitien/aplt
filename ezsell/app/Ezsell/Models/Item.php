@@ -39,6 +39,18 @@ class Item extends Model {
 			'is_new' => 'boolean',
 			'options' => 'array' 
 	];
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \Illuminate\Database\Eloquent\Model::toArray()
+	 */
+	public function toArray() {
+		$attributes = parent::toArray ();
+		return array_merge ( $attributes, [ 
+				'images' => $this->images 
+		] );
+	}
 	public function parent() {
 		return $this->belongsTo ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
 	}

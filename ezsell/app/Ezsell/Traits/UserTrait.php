@@ -69,14 +69,8 @@ trait UserTrait
 		if (! static::$_user) {
 			if (static::getToken ()) {
 				try {
-					// try to get user info from request
-					$userInfoFromRequest = static::getUserInfoFromRequest ();
-					if ($userInfoFromRequest)
-						static::$_user = new User ( ( array ) static::json_decode ( static::decrypt ( $userInfoFromRequest ), true ) );
-						// try to get user info by sending get user profile api to im
-					if (static::getToken () && static::$_user && static::$_user->isGuest ()) {
-						$reponse = static::apiCallProfile ();
-					}
+					// try to get user info by sending get user profile api to im
+					$reponse = static::apiCallProfile ();
 				} catch ( Exception $e ) {
 				}
 			}

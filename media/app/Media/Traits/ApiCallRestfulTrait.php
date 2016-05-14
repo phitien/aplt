@@ -17,7 +17,7 @@ trait ApiCallRestfulTrait {
 	 * @param string $code        	
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	protected static function apiCallActivate(string $code = '') {
+	protected static function apiCallActivate(string $code) {
 		return static::restful_get ( 'api/activate/' . $code );
 	}
 	/**
@@ -47,7 +47,7 @@ trait ApiCallRestfulTrait {
 	 *
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	protected static function apiCallDeactive(string $password = '') {
+	protected static function apiCallDeactive(string $password) {
 		return static::restful_post ( 'api/deactivate', [ 
 				'current_password' => $password 
 		] );

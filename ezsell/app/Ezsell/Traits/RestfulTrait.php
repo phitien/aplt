@@ -135,4 +135,33 @@ trait RestfulTrait {
 			// redirect ( '/error' );
 		}
 	}
+	/**
+	 *
+	 * @param string $url        	
+	 * @param array $query        	
+	 * @param array $options        	
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	protected static function restful_upload($file) {
+		$client = static::createClient ();
+		try {
+			$response = $client->request ( 'POST', '/media', [ 
+					'base_uri' => Config::MEDIA_BASE_URL,
+					'headers' => [ 
+							Config::TOKEN_KEY => static::getToken (),
+							'DOMAIN' => request ()->server->get ( 'SERVER_NAME' ) 
+					],
+					'multipart' => [ 
+							[ 
+									'name' => 'image',
+									'contents' => fopen ( $file->getRealPath (), 'r' ) 
+							] 
+					] 
+			] );
+			$json = static::json_decode ( $response->getBody (), true );
+			return $json ['data'];
+		} catch ( Exception $e ) {
+			// redirect ( '/error' );
+		}
+	}
 }

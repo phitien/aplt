@@ -57,6 +57,18 @@ const Input = React.createClass({
 		else if (type == 'textarea') {
 			value = event.currentTarget.value;
 		}
+		else if (type == 'image') {
+			var max = this.props.max ? this.props.max : 20;
+			var min = this.props.min ? this.props.min : 1;
+			if (event.currentTarget.files.length < min || event.currentTarget.files.length > max) {
+				event.currentTarget.value = null;
+				showMessageDialog('You should select at least ' + min + ' file, and no more than ' + max + ' files');
+			}
+			else {
+				FormView.showImagesPreview(event.currentTarget);
+			}
+			value = event.currentTarget.value;
+		}
 		else {
 			value = event.currentTarget.value;
 		}
@@ -87,6 +99,10 @@ const Input = React.createClass({
 				return this.renderTextarea();
 			case 'select':
 				return this.renderSelect();
+			case 'file':
+				return this.renderFile();
+			case 'image':
+				return this.renderImage();
 			case 'text':
 			default:
 				return this.renderText();
@@ -192,6 +208,28 @@ const Input = React.createClass({
 				<span className='validation-error'>{this.getErrorMessage()}</span>
 			</div>
 		);
+	},
+	renderFile() {
+		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
+		return (
+			<div className={this.className}>
+				<label htmlFor={this.props.name}>{this.props.title}</label>
+				<input {...this.props} id={this.id} type={this.type} name={name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' />
+				<span className='validation-error'>{this.getErrorMessage()}</span>
+			</div>
+		);
+	},
+	renderImage() {
+		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
+		return (
+			<div className={this.className}>
+				<label htmlFor={this.props.name}>{this.props.title}</label>
+				<input {...this.props} id={this.id} type='file' name={name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' 
+					accept='image/*' />
+				<span className='validation-error'>{this.getErrorMessage()}</span>
+				<div className='row image-preview'></div>
+			</div>
+		);
 	}
 });
 /**
@@ -229,6 +267,49 @@ var FormView = React.createClass({
 	}
 });
 
+FormView.showImagesPreview = function (input) {
+	if (input.files && input.files.length > 0) {
+		var cols = parseInt($(input).attr('cols')) != NaN ? parseInt($(input).attr('cols')) : 4;
+		var cls = 1;
+		if (cols==2||cols==3||cols==4||cols==6) {
+			cls = 12/cols;
+		}
+		var name = input.name.replace('[]', '');
+		var previewDiv = $(input).parent().find('.image-preview');
+		previewDiv.html('');
+		var count = 0;
+		for (var i in input.files) {
+			var image = input.files[i];
+			if (image instanceof Blob) {
+		        var reader = new FileReader();
+		        reader.onload = function (e) {
+		        	var img = new Image();
+		        	img.onload = function (e) {
+						var html = "<div class='image-preview-item col-xs-6 col-md-" + cls + "'>" + 
+										"<input type='text' name='" + name + "-title[" + image.name + "]' placeholder='Caption' class='form-control' />" +
+										"<img src='"+this.src+"' />" + 
+										"<textarea name='" + name + "-description[" + image.name + "]' placeholder='Description' class='form-control' row='6'></textarea>" +
+										"<div class='image-info'>(" + this.width +" x " + this.height + ")</div>" + 
+										"<input class='btn btn-default image-remove' type='button' value='Remove' onclick='FormView.removeImagePreview(this)' />" +
+										"<input type='hidden' name='" + name + "-selected[" + image.name + "]' value='" + image.name + "' />" + 
+									"</div>";		
+				        if (count>0 && (count%cols==(cols-1))) {
+				        	html += "<div class='clearfix'></div>";
+				        }
+				        previewDiv.append(html); 
+			        	previewDiv.show();
+			        	count++;
+		        	};
+		        	$(img).attr('src', this.result);
+		        };
+				reader.readAsDataURL(image);
+			}
+		}
+    }
+},
+FormView.removeImagePreview = function(e) {
+	$(e).parent().remove();
+};
 FormView.Input = Input;
 FormView.Form = Formsy.Form;
 

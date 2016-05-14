@@ -34,13 +34,16 @@ window.submitForm = function(form) {
 	}).appendTo(form);
 	form.submit();
 }
-window.showMessageDialog = function(msg, title, btn) {
+window.showMessageDialog = function(msg, title, btn, callback) {
 	btn = btn ? btn : 'Ok';
 	title = title ? title : 'Message';
 	var buttons = {};
 	buttons[btn] = function() {
 		$( this ).dialog( 'close' );
 		$( this ).remove();
+		if (callback) {
+			callback();
+		}
 	};
  	$('<div></div>').dialog({
 		modal: true,

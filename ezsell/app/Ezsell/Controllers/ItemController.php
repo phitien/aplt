@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Ezsell\Models\Item;
 use App\Ezsell\Exceptions\ItemNotFound;
 use App\Ezsell\Models\Cat;
-use Image;
+use App\Ezsell\Models\Image;
 
 class ItemController extends Controller {
 	/**
@@ -83,8 +83,31 @@ class ItemController extends Controller {
 		] );
 		$data ['user_id'] = static::getUser ()->id;
 		$data ['location_id'] = static::getLocation ()->id;
-		$item = Item::create ( $data );
-		return $this->redirect ( "/item/{$item->id}" );
+		if ($item = Item::create ( $data )) {
+			$selectedFiles = $request->get ( 'files-selected' );
+			if ($selectedFiles) {
+				$titles = $request->get ( 'files-title' );
+				$descriptions = $request->get ( 'files-description' );
+				foreach ( $request->file ( 'files' ) as $file ) {
+					if ($file->isValid ()) {
+						$name = $file->getClientOriginalName ();
+						$url = $this->restful_upload ( $file );
+						$image = new Image ( [ 
+								'title' => $titles [$name],
+								'description' => $descriptions [$name],
+								'url' => $url 
+						] );
+						$image->item ()->associate ( $item );
+						$image->save ();
+					}
+				}
+			}
+			return $this->redirect ( "/item/{$item->id}" );
+		} else {
+			return $this->response ( view ( 'item.newitem', [ 
+					'appMessage' => 'Không hiểu sao ko tạo được :(, sorry nha' 
+			] ) );
+		}
 	}
 	/**
 	 *

@@ -24,6 +24,10 @@ $( document ).ready(function() {
 				<FormView.Form className='form row' method='post' action='/newitem' encType='multipart/form-data'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<div className="row">
+						<FormView.Input type='submit' name='btn-submit' disabled={!this.state.canSubmit} value='Create' className='col-xs-6 col-md-1 pull-right' />
+						<FormView.Input type='radiolist' name='is_new' title='Condition' options={conditions} className='col-xs-6 inline-block-list' />
+					</div>
+					<div className="row">
 						<FormView.Input type='text' required name='title' title='Title' className='col-xs-6 col-md-8' />
 						<FormView.Input type='select' required name='parent_id' title='Category' className='col-xs-6 col-md-4'  
 							options={catoptions} placeholder='Select a category' />
@@ -33,10 +37,8 @@ $( document ).ready(function() {
 						<FormView.Input type='number' name='saleprice' title='Sale price' className='col-xs-6 col-md-4' step='0.1' min='0' placeholder='1.0' />
 						<FormView.Input type='number' name='nowprice' title='Now price' className='col-xs-6 col-md-4' step='0.1' min='0' placeholder='1.0' />
 					</div>
-					<FormView.Input type='radiolist' name='is_new' title='Condition' options={conditions} className='inline-block-list' />
-					<FormView.Input type='file' name='image' title='Image' />
 					<FormView.Input type='textarea' name='description' title='Description' cols='10' rows='5' />
-					<FormView.Input type='submit' name='btn-submit' disabled={!this.state.canSubmit} value='Create' className='center-block' />
+					<FormView.Input type='image' name='files' title='Image' cols='4' multiple min='1' max='12' />
 				</FormView.Form>
 			); 
 		}

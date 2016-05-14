@@ -13,10 +13,10 @@ class CreateImagesTable extends Migration {
 			$table->integer ( 'parent_id' )->unsigned ();
 			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'items' )->onDelete ( 'cascade' );
 			//
-			$table->string ( 'title' )->unique ();
+			$table->string ( 'title' )->nullable ();
 			$table->text ( 'description' )->nullable ();
 			//
-			$table->text ( 'url' )->nullable ();
+			$table->string ( 'url' )->unique ()->nullable ();
 			$table->text ( 'options' )->nullable ();
 			$table->timestamps ();
 		} );

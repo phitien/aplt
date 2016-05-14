@@ -3,8 +3,6 @@
 namespace App\Ezsell\View;
 
 use Illuminate\View\Factory as BaseFactory;
-use App\Ezsell\Traits\UserTrait;
-use App\Ezsell\Traits\UtilTrait;
 use App\Ezsell\View\Html\Menu\Menu;
 use App\Ezsell\View\Html\Menu\MenuItem;
 use App\Ezsell\Models\Cat;
