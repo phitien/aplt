@@ -65,7 +65,7 @@ class Role extends Model {
 	 *
 	 * @return Role
 	 */
-	public static function getSupreme() {
+	public static function getSupremeRole() {
 		if (null === static::$_supremeRole) {
 			static::$_supremeRole = static::where ( 'code', '=', Config::ROLE_SUPREME )->first ();
 		}
@@ -81,7 +81,7 @@ class Role extends Model {
 	 *
 	 * @return Role
 	 */
-	public static function getManager() {
+	public static function getManagerRole() {
 		if (null === static::$_managerRole) {
 			static::$_managerRole = static::where ( 'code', '=', Config::ROLE_MANAGER )->first ();
 		}
@@ -97,7 +97,7 @@ class Role extends Model {
 	 *
 	 * @return Role
 	 */
-	public static function getUser() {
+	public static function getUserRole() {
 		if (null === static::$_userRole) {
 			static::$_userRole = static::where ( 'code', '=', Config::ROLE_USER )->first ();
 		}
@@ -113,7 +113,7 @@ class Role extends Model {
 	 *
 	 * @return Role
 	 */
-	public static function getGuest() {
+	public static function getGuestRole() {
 		if (null === static::$_guestRole) {
 			static::$_guestRole = static::where ( 'code', '=', Config::ROLE_GUEST )->first ();
 		}

@@ -18,9 +18,7 @@ trait ResponseTrait
 	protected function applyCookies($response) {
 		return $response-> //
 
-		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )-> //
-
-		withCookie ( Cookie::forever ( Config::SESSION_KEY, static::encrypt ( ( string ) static::getUser () ) ), true );
+		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true );
 	}
 	/**
 	 *
@@ -29,9 +27,7 @@ trait ResponseTrait
 	protected function clearCookies($response) {
 		return $response-> //
 
-		withCookie ( Config::TOKEN_KEY, null, true )-> //
-
-		withCookie ( Config::SESSION_KEY, null, true );
+		withCookie ( Config::TOKEN_KEY, null, true );
 	}
 	/**
 	 * Build response

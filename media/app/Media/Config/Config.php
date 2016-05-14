@@ -10,21 +10,9 @@ class Config {
 	const HOME_PAGE = '/';
 	const INVALID_TOKEN = 'INVALID_TOKEN';
 	const IM_BASE_URL = 'http://im.ezsell.com';
-	const LOCATION_KEY = 'location';
-	/**
-	 *
-	 * @var unknown
-	 */
-	const TOKEN_EXPIRING_TIME = 7200; // 60 * 120
-	                                  //
-	const MAIL_SUBJECT_PREFIX = "[EZSell] ";
 	//
 	const TOKEN_KEY = "TOKEN-KEY";
 	const SESSION_KEY = "SESSION-KEY";
-	//
-	const FOLLOWER_REQUESTED = 0;
-	const FOLLOWER_REQUEST_ACCEPTED = 1;
-	const FOLLOWER_REQUEST_REFUSED = 2;
 	//
 	const ACTION_GUEST_ACT = 'GUEST_ACT';
 	const ACTION_GOD_ACT = 'GOD_ACT';

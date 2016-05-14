@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Ezsell\Traits;
+namespace App\Media\Traits;
 
 use GuzzleHttp\Client;
-use App\Ezsell\Config\Config;
+use App\Media\Config\Config;
 use Illuminate\Http\Response;
 use GuzzleHttp\Exception\ClientException;
 use Exception;

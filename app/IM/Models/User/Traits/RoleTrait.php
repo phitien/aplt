@@ -42,7 +42,7 @@ trait RoleTrait
 	public static function createSuperadmin(array $attributes) {
 		unset ( $attributes ['active'] );
 		$user = static::create ( $attributes );
-		$user->roles ()->attach ( Role::getSupreme () );
+		$user->roles ()->attach ( Role::getSupremeRole() );
 		return $user;
 	}
 	/**
@@ -54,7 +54,7 @@ trait RoleTrait
 	public static function createManager(array $attributes) {
 		unset ( $attributes ['active'] );
 		$user = static::create ( $attributes );
-		$user->roles ()->attach ( Role::getManager () );
+		$user->roles ()->attach ( Role::getManagerRole() );
 		return $user;
 	}
 	/**
@@ -66,7 +66,7 @@ trait RoleTrait
 	public static function createUser(array $attributes) {
 		unset ( $attributes ['active'] );
 		$user = static::create ( $attributes );
-		$user->roles ()->attach ( Role::getUser () );
+		$user->roles ()->attach ( Role::getUserRole() );
 		return $user;
 	}
 	/**

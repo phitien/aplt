@@ -39,23 +39,23 @@ class DatabaseSeeder extends Seeder {
 		
 		// add relationship
 		// Supreme role's actions
-		foreach ( Config::getRoleCoreActions ( Role::getSupreme () ) as $code ) {
-			Role::getSupreme ()->addAction ( $code );
+		foreach ( Config::getRoleCoreActions ( Role::getSupremeRole () ) as $code ) {
+			Role::getSupremeRole ()->addAction ( $code );
 		}
 		
 		// Manager role's actions
-		foreach ( Config::getRoleCoreActions ( Role::getManager () ) as $code ) {
-			Role::getManager ()->addAction ( $code );
+		foreach ( Config::getRoleCoreActions ( Role::getManagerRole () ) as $code ) {
+			Role::getManagerRole ()->addAction ( $code );
 		}
 		
 		// User role's actions
-		foreach ( Config::getRoleCoreActions ( Role::getUser () ) as $code ) {
-			Role::getUser ()->addAction ( $code );
+		foreach ( Config::getRoleCoreActions ( Role::getUserRole () ) as $code ) {
+			Role::getUserRole ()->addAction ( $code );
 		}
 		
 		// Guest role's actions
-		foreach ( Config::getRoleCoreActions ( Role::getGuest () ) as $code ) {
-			Role::getGuest ()->addAction ( $code );
+		foreach ( Config::getRoleCoreActions ( Role::getGuestRole () ) as $code ) {
+			Role::getGuestRole ()->addAction ( $code );
 		}
 		
 		/**
