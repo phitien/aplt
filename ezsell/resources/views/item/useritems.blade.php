@@ -1,11 +1,11 @@
 @extends('layouts.master')
 
-@section('title', 'EZSell - Details')
+@section('title', 'EZSell - User items')
 
 @section('scripts')
 @parent
 	<script type="text/javascript">
-		var user = {!! $user !!};
+		var user = {!! $user ? $user : '{}' !!};
 		var items = {!! $items !!};
 	</script>
 @endsection

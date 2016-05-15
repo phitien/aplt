@@ -57,7 +57,8 @@ class ItemController extends Controller {
 
 			whereRaw ( "(items.deleted_at IS NULL OR items.deleted_at > '{$now}')" );
 			
-			$items = $query->get ();
+			$pagination = $query->paginate ( Config::PAGE_SIZE );
+			$items = $pagination->getCollection ();
 			$user_ids = [ ];
 			foreach ( $items as $item ) {
 				array_push ( $user_ids, $item->user_id );
@@ -193,7 +194,8 @@ class ItemController extends Controller {
 		] );
 		$user = static::json_decode ( $response->getBody (), true ) ['data'];
 		if ($user) {
-			$items = Item::where ( 'user_id', $user ['id'] )->get ();
+			$pagination = Item::where ( 'user_id', $user ['id'] )->paginate ( Config::PAGE_SIZE );
+			$items = $pagination->getCollection ();
 			for($i = 0; $i < count ( $items ); $i ++) {
 				$items [$i] ['user'] = $user;
 			}

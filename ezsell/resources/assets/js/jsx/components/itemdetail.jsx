@@ -17,7 +17,7 @@ var ItemDetail = React.createClass({
 		const item = this.props.item;
 		const showThumbnails = true;
 		const slideOnThumbnailHover = true;
-		const showNav = false;
+		const showNav = true;
 		var images = [];
 		if (item.images) {
 			item.images.map(function (o, i) {

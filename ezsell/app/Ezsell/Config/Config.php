@@ -7,6 +7,7 @@ use App\Ezsell\Models\Role;
 use App\Ezsell\Models\Action;
 
 class Config {
+	const PAGE_SIZE = 18;
 	const USE_CODE = true;
 	const HOME_PAGE = '/';
 	const INVALID_TOKEN = 'INVALID_TOKEN';

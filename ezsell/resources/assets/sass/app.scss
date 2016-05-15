@@ -29,6 +29,7 @@
 .menuitem {}
 .menuitem-atomic {cursor: pointer;}
 .menuitem-nonatomic {font-style: italic;text-decoration: none !important;color: $menuitem-nonatomic-color;cursor: text;}
+.overlay-menu {display: none;position: absolute;overflow-y: hidden;width: 100%;height: 5000px;background: white;top: ($navigation-height + 1px);}
 
 #navigation-replacement {
 	height: ($navigation-height + $border-width);width: 100%;
@@ -54,11 +55,9 @@ ul.catmenu li {margin: 0;padding: 0;}
 ul.catmenu {text-align: left;}
 ul.catmenu>li {display: inline-block;}
 ul.catmenu>li>ul {
-	@extend .border-bottom;
-	top: ($navigation-height);
+	@extend .border-bottom,.overlay-menu;
 	padding: $sbig 0;
-	background: $leftmenu-background-color;
-	left: 0;display: none;position: absolute;overflow-y: hidden;width: 100%;
+	left: 0;
 }
 ul.catmenu>li>ul>li {display: block;float: left;}
 ul.catmenu>li>ul>li>ul {display: block;}
@@ -76,10 +75,9 @@ ul.catmenu>li>a:first-child {cursor: pointer;}
 #rightmenu>ul {text-align: right;}
 #rightmenu>ul>li {display: inline-block;}
 #rightmenu>ul>li>ul {
-	@extend .border-all;
+	@extend .border-all,.overlay-menu;
 	top: ($navigation-height);
-	display: none;position: absolute;right: 0;
-	background-color: $rightmenu-background-color;
+	right: 0;
 }
 #rightmenu>ul>li>ul>li {display: inline-block;position: relative;padding: $ssmall $sbig;}
 #rightmenu>ul>li>ul>li>a {padding: 0;text-decoration: none;}

@@ -4,7 +4,7 @@ $( document ).ready(function() {
 	ReactDOM.render(React.createElement(ItemList, {
 		cat: cat,
 		items: items,
-		className: 'item-inline-prices'
+		className: 'item-block-prices'
 	}), document.getElementById(contentDivId), function () {
 		$('.datetimeformat').each(function () {
 			var me = $(this);

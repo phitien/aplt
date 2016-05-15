@@ -71,14 +71,13 @@ a:hover {text-decoration: none !important;}
 .item-summary .item-title {}
 .item-summary .label {display: none;}
 .item-summary .new,.item-summary .used {
+	@extend .grounded-s;
 	display: inline-block;
-    margin-right: 15px;
+    margin-right: $sbig;
     border: 1px solid;
-    padding: 2px 10px;
+    padding: 2px $smedium;
     font-size: $fsmall;
     margin-top: $ssmall;
-    border-radius: 5px;
-    
 }
 .item-summary .new {
 	border-color: $primary-color-opp;
@@ -109,14 +108,14 @@ a:hover {text-decoration: none !important;}
 	margin-bottom: $ssmall;
 }
 .item-firstimage-wrapper {
-	@extend .border-all;
-	border-radius: 10px;
+	@extend .border-all,.grounded-m;
 	height: 150px;
 	width: 150px;
 	overflow: hidden;
 	margin: auto;
 }
 .item-firstimage-wrapper img {
+	@extend .grounded-m;
 	width: 150px;
 }
 
@@ -143,6 +142,8 @@ a:hover {text-decoration: none !important;}
 	border-color: $primary-color;
 }
 
+.btn-buy a:hover span, .btn-sell a:hover span,.btn-more a:hover span {background-color: $btn-hover-bg-color;}
+
 .form-radio-label,.form-checkbox-label {
 	display: block;
 }
@@ -156,3 +157,6 @@ a:hover {text-decoration: none !important;}
 .userbox img {@extend .grounded-b; width: 40px;margin-right: $ssmall;}
 .userbox a {}
 .userbox a span {font-size: $fsmall;}
+
+.image-gallery-slide img {@extend .grounded-s;max-height: 311px;width: auto;margin: auto;display: block;}
+.image-gallery-thumbnail img{@extend .grounded-s;max-height: 80px;}
