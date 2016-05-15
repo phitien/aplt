@@ -23,6 +23,7 @@
 	{{ Html::script('js/common.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/app.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/jquery-migrate-1.2.1.min.js', ['type' => 'text/javascript']) }}
+	{{ Html::script('js/jquery-dateFormat.min.js', ['type' => 'text/javascript']) }}
 	{{ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
 
 	<script type="text/javascript">
@@ -32,8 +33,6 @@
 @endif
 		const appMessage = '{{ $appMessage }}';
 		const cats = {!! $cats ? $cats : [] !!};
-		const currencySign = '{{ $currencySign }}';
-
 		var currentLocation = {!! $location ? json_encode($location) : '{}' !!};
 
 		var socket = io.connect('http://localhost:8890');
@@ -47,7 +46,7 @@
     <body>
 		<div class="container-fluid clearfix" id="navigation-replacement"></div>
 @yield('banner')
-        <div class="container clearfix" id="container">
+        <div class="container-fluid clearfix" id="container">
         	<div class="row">
 	        	<div class="col-xs-6 col-md-3" id="left">
 	        	</div>
@@ -57,7 +56,7 @@
         	</div>
 			<div class="clearfix"></div>
         </div>
-		<div class="container clearfix" id="footer">
+		<div class="container-fluid clearfix" id="footer">
 			<div id="messages"></div>
 			<div id="sendmessages">
 				<input type="text" name="message" onkeypress="javascript:if (event.keyCode==13) {$(this).next('input').click();}" />

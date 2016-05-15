@@ -35,7 +35,8 @@ Route::post ( 'sendmessage', 'SocketController@sendmessage' );
  * item
  */
 Route::any ( 'cat/{id}', 'ItemController@cat' );
-Route::any ( 'newitem', 'ItemController@newitem' );
+Route::any ( 'buyitem', 'ItemController@buyitem' );
+Route::any ( 'sellitem', 'ItemController@sellitem' );
 Route::any ( 'item/{id}', 'ItemController@item' );
 
 

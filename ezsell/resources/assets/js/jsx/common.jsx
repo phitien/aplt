@@ -2,18 +2,34 @@ import CatMenu from './components/catmenu.jsx';
 import FormView from './components/formview.jsx';
 import ItemDetail from './components/itemdetail.jsx';
 import ItemList from './components/itemlist.jsx';
+import UserBox from './components/userbox.jsx';
 //
 window.CatMenu = CatMenu;
 window.FormView = FormView;
 window.ItemDetail = ItemDetail;
 window.ItemList = ItemList;
+window.UserBox = UserBox;
 /**
  * Some common functions
  */
 //
-window.currency = function (v) {
-	var n = parseFloat(v) != NaN ? parseFloat(v) : 0; 
-	return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+window.format = {
+	currency: function (v) {
+		var n = parseFloat(v) != NaN ? parseFloat(v) : 0; 
+		return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+	},
+	time: function (v) {
+		return $.format.date(v, currentLocation.timeformat);
+	},
+	date: function (v) {
+		return $.format.date(v, currentLocation.dateformat);
+	},
+	datetime: function (v) {
+		return $.format.date(v, currentLocation.datetimeformat);
+	},
+	prettyDate: function (v) {
+		return $.format.prettyDate(v);
+	}
 }
 window.uuid = function (prefix) {
 	return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
@@ -59,7 +75,34 @@ window.showMessageDialog = function(msg, title, btn, callback) {
 window.expandMenu = function(e, classNameToHide) {
 	var menu = $(e).next('ul');
 	hideClassName(classNameToHide, menu);
-	menu.slideToggle();
+	toggleElement(menu);
+}
+window.hideMenus = function() {
+	slideUp($('.menu-toggle'));
+};
+window.toggleElement = function(e) {
+	if ( e.css('display') == 'none' ) {
+		slideDown(e);
+	} else {
+		slideUp(e);
+	}
+}
+window.slideDown = function(e) {
+	$('input,select,textarea,img,.sensitive').not(e.find('input,img')).css('visibility', 'hidden');
+	e.slideDown();
+}
+window.slideUp = function(e) {
+	e.slideUp(function () {
+		$('input,select,textarea,img,.sensitive').not(e.find('input,img')).css('visibility', 'visible');
+	});
+}
+window.toggleForm = function(classNameToHide) {
+	var form = $('#form-container');
+	hideClassName(classNameToHide, form);
+	toggleElement(form);
+};
+window.hideClassName = function(classNameToHide, exceptions) {
+	$('.' + classNameToHide).not(exceptions).hide();
 }
 window.showLoginForm = function(e) {
 	if (!window.currentForm || window.currentForm != 'login') {
@@ -181,13 +224,6 @@ window.showLocationForm = function(e) {
 	else {
 		toggleForm('menu-toggle');
 	}
-}
-window.toggleForm = function(classNameToHide) {
-	hideClassName(classNameToHide, $('#form-container'));
-	$('#form-container').slideToggle();
-};
-window.hideClassName = function(classNameToHide, exceptions) {
-	$('.' + classNameToHide).not(exceptions).hide();
 }
 window.sendMessage = function(e) {
 	var message = $(e).prev('input').val();

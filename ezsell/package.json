@@ -12,6 +12,7 @@
     "express": "^4.13.4",
     "formsy-react": "^0.18.0",
     "jquery": "^2.2.3",
+    "jquery-dateformat": "^1.0.3",
     "jquery-ui": "^1.10.5",
     "laravel-elixir": "^5.0.0",
     "rc-menu": "^4.12.0",

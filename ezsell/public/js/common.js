@@ -6644,6 +6644,10 @@ var _itemlist = require('./components/itemlist.jsx');
 
 var _itemlist2 = _interopRequireDefault(_itemlist);
 
+var _userbox = require('./components/userbox.jsx');
+
+var _userbox2 = _interopRequireDefault(_userbox);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //
@@ -6651,13 +6655,28 @@ window.CatMenu = _catmenu2.default;
 window.FormView = _formview2.default;
 window.ItemDetail = _itemdetail2.default;
 window.ItemList = _itemlist2.default;
+window.UserBox = _userbox2.default;
 /**
  * Some common functions
  */
 //
-window.currency = function (v) {
-	var n = parseFloat(v) != NaN ? parseFloat(v) : 0;
-	return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+window.format = {
+	currency: function currency(v) {
+		var n = parseFloat(v) != NaN ? parseFloat(v) : 0;
+		return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+	},
+	time: function time(v) {
+		return $.format.date(v, currentLocation.timeformat);
+	},
+	date: function date(v) {
+		return $.format.date(v, currentLocation.dateformat);
+	},
+	datetime: function datetime(v) {
+		return $.format.date(v, currentLocation.datetimeformat);
+	},
+	prettyDate: function prettyDate(v) {
+		return $.format.prettyDate(v);
+	}
 };
 window.uuid = function (prefix) {
 	return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
@@ -6703,7 +6722,34 @@ window.showMessageDialog = function (msg, title, btn, callback) {
 window.expandMenu = function (e, classNameToHide) {
 	var menu = $(e).next('ul');
 	hideClassName(classNameToHide, menu);
-	menu.slideToggle();
+	toggleElement(menu);
+};
+window.hideMenus = function () {
+	slideUp($('.menu-toggle'));
+};
+window.toggleElement = function (e) {
+	if (e.css('display') == 'none') {
+		slideDown(e);
+	} else {
+		slideUp(e);
+	}
+};
+window.slideDown = function (e) {
+	$('input,select,textarea,img,.sensitive').not(e.find('input,img')).css('visibility', 'hidden');
+	e.slideDown();
+};
+window.slideUp = function (e) {
+	e.slideUp(function () {
+		$('input,select,textarea,img,.sensitive').not(e.find('input,img')).css('visibility', 'visible');
+	});
+};
+window.toggleForm = function (classNameToHide) {
+	var form = $('#form-container');
+	hideClassName(classNameToHide, form);
+	toggleElement(form);
+};
+window.hideClassName = function (classNameToHide, exceptions) {
+	$('.' + classNameToHide).not(exceptions).hide();
 };
 window.showLoginForm = function (e) {
 	if (!window.currentForm || window.currentForm != 'login') {
@@ -6825,13 +6871,6 @@ window.showLocationForm = function (e) {
 		toggleForm('menu-toggle');
 	}
 };
-window.toggleForm = function (classNameToHide) {
-	hideClassName(classNameToHide, $('#form-container'));
-	$('#form-container').slideToggle();
-};
-window.hideClassName = function (classNameToHide, exceptions) {
-	$('.' + classNameToHide).not(exceptions).hide();
-};
 window.sendMessage = function (e) {
 	var message = $(e).prev('input').val();
 	if (message) {
@@ -6849,7 +6888,7 @@ window.sendMessage = function (e) {
 	}
 };
 
-},{"./components/catmenu.jsx":133,"./components/formview.jsx":134,"./components/itemdetail.jsx":135,"./components/itemlist.jsx":136}],133:[function(require,module,exports){
+},{"./components/catmenu.jsx":133,"./components/formview.jsx":134,"./components/itemdetail.jsx":135,"./components/itemlist.jsx":136,"./components/userbox.jsx":138}],133:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7112,7 +7151,7 @@ var Input = React.createClass({
 				event.currentTarget.value = null;
 				showMessageDialog('You should select at least ' + min + ' file, and no more than ' + max + ' files');
 			} else {
-				FormView.showImagesPreview(event.currentTarget);
+				FormView.showImagesPreview(event.currentTarget, this.props.previewContainer);
 			}
 			value = event.currentTarget.value;
 		} else {
@@ -7124,7 +7163,7 @@ var Input = React.createClass({
 	render: function render() {
 		this.className = 'form-group ' + (this.props.className || '') + ' ' + (this.showRequired() ? 'required' : this.showError() ? 'error' : '');
 		this.type = this.props.type ? this.props.type.toLowerCase() : 'text';
-		this.id = this.props.id ? this.props.id : uuid(this.type + '_');
+		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid(this.type + '_');
 
 		switch (this.type) {
 			case 'hidden':
@@ -7196,12 +7235,13 @@ var Input = React.createClass({
 	renderCheckboxRadio: function renderCheckboxRadio() {
 		var name = this.props.name ? this.props.name : uuid('radiolist_');
 		this.className += ' ' + this.type;
+		var labelClassName = 'form-' + this.type + '-label';
 		return React.createElement(
 			'div',
 			{ className: this.className },
 			React.createElement(
 				'label',
-				{ htmlFor: name },
+				{ className: labelClassName, htmlFor: name },
 				React.createElement('input', _extends({}, this.props, { id: this.id, type: this.type, name: name, onChange: this.changeValue, className: this.type })),
 				this.props.title
 			)
@@ -7212,24 +7252,27 @@ var Input = React.createClass({
 		var type = this.type == 'checkboxlist' ? 'checkbox' : 'radio';
 		var props = this.props;
 		this.className += ' ' + this.type;
+		var changeValue = this.changeValue;
+		var labelClassName = 'form-' + type + '-label';
 		return React.createElement(
 			'div',
 			{ className: this.className },
 			React.createElement(
 				'label',
-				null,
+				{ className: labelClassName },
 				this.props.title
 			),
-			this.props.options.map(function (item, index) {
-				var itemname = name + '[' + index + ']';
+			this.props.options.map(function (item, i) {
+				var itemname = name + '[' + i + ']';
 				var value = item.value;
+				var itemClassName = type + (i == 0 ? ' first-' + type : '');
 				return React.createElement(
 					'div',
-					{ className: type, key: index },
+					{ className: itemClassName, key: i },
 					React.createElement(
 						'label',
 						{ htmlFor: itemname },
-						React.createElement('input', _extends({}, props, { type: type, name: name, id: itemname, value: value, className: type })),
+						React.createElement('input', _extends({}, props, { type: type, name: name, id: itemname, value: value, className: type, onChange: changeValue })),
 						item.label
 					)
 				);
@@ -7286,13 +7329,13 @@ var Input = React.createClass({
 				'select',
 				_extends({}, this.props, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control', disabled: this.props.disabled }),
 				placeholder,
-				this.props.options.map(function (item, index) {
+				this.props.options.map(function (item, i) {
 					var label = optionLabel.bind(item)();
 					var value = optionValue.bind(item)();
 					var props = optionAttrs.bind(item)();
 					return React.createElement(
 						'option',
-						_extends({ key: index }, props, { value: value }),
+						_extends({ key: i }, props, { value: value }),
 						label
 					);
 				})
@@ -7380,7 +7423,7 @@ var FormView = React.createClass({
 	}
 });
 
-FormView.showImagesPreview = function (input) {
+FormView.showImagesPreview = function (input, previewContainer) {
 	if (input.files && input.files.length > 0) {
 		var cols = parseInt($(input).attr('cols')) != NaN ? parseInt($(input).attr('cols')) : 4;
 		var cls = 1;
@@ -7388,17 +7431,20 @@ FormView.showImagesPreview = function (input) {
 			cls = 12 / cols;
 		}
 		var name = input.name.replace('[]', '');
-		var previewDiv = $(input).parent().find('.image-preview');
+		var previewDiv = previewContainer ? $(input).parents('form').find(previewContainer) : $(input).parent().find('.image-preview');
+		previewDiv.attr('data-file-id', input.id);
 		previewDiv.html('');
 		var count = 0;
 		for (var i in input.files) {
-			var image = input.files[i];
-			if (image instanceof Blob) {
+			var item = input.files[i];
+			if (item instanceof Blob) {
 				var reader = new FileReader();
+				reader.image = item;
 				reader.onload = function (e) {
 					var img = new Image();
+					img.image = this.image;
 					img.onload = function (e) {
-						var html = "<div class='image-preview-item col-xs-6 col-md-" + cls + "'>" + "<input type='text' name='" + name + "-title[" + image.name + "]' placeholder='Caption' class='form-control' />" + "<img src='" + this.src + "' />" + "<textarea name='" + name + "-description[" + image.name + "]' placeholder='Description' class='form-control' row='6'></textarea>" + "<div class='image-info'>(" + this.width + " x " + this.height + ")</div>" + "<input class='btn btn-default image-remove' type='button' value='Remove' onclick='FormView.removeImagePreview(this)' />" + "<input type='hidden' name='" + name + "-selected[" + image.name + "]' value='" + image.name + "' />" + "</div>";
+						var html = "<div class='image-preview-item col-xs-6 col-md-" + cls + "'>" + "<input type='text' name='" + name + "-title[" + this.image.name + "]' placeholder='Caption' class='form-control' />" + "<img src='" + this.src + "' />" + "<textarea name='" + name + "-description[" + this.image.name + "]' placeholder='Description' class='form-control' row='6'></textarea>" + "<div class='image-info'>(" + this.width + " x " + this.height + ")</div>" + "<input class='btn btn-default image-remove' type='button' value='Remove' onclick='FormView.removeImagePreview(this)' />" + "</div>";
 						if (count > 0 && count % cols == cols - 1) {
 							html += "<div class='clearfix'></div>";
 						}
@@ -7408,12 +7454,16 @@ FormView.showImagesPreview = function (input) {
 					};
 					$(img).attr('src', this.result);
 				};
-				reader.readAsDataURL(image);
+				reader.readAsDataURL(item);
 			}
 		}
 	}
 }, FormView.removeImagePreview = function (e) {
+	var container = $(e).parent().parent();
 	$(e).parent().remove();
+	if (!container.find('.image-preview-item').length) {
+		$('#' + container.attr('data-file-id')).val('');
+	}
 };
 FormView.Input = Input;
 FormView.Form = _formsyReact2.default.Form;
@@ -7426,6 +7476,10 @@ exports.default = FormView;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _itemsummary = require('./itemsummary.jsx');
+
+var _itemsummary2 = _interopRequireDefault(_itemsummary);
 
 var _reactImageGallery = require('react-image-gallery');
 
@@ -7452,6 +7506,8 @@ var ItemDetail = React.createClass({
 		var className = 'item-detail-wrapper ' + (this.props.className ? this.props.className : '');
 		var item = this.props.item;
 		var showThumbnails = true;
+		var slideOnThumbnailHover = true;
+		var showNav = false;
 		var images = [];
 		if (item.images) {
 			item.images.map(function (o, i) {
@@ -7463,6 +7519,70 @@ var ItemDetail = React.createClass({
 				});
 			});
 		}
+		var posted_at = React.createElement(
+			'div',
+			{ className: 'item-created' },
+			React.createElement(
+				'a',
+				null,
+				React.createElement(
+					'span',
+					null,
+					'Posted:'
+				),
+				React.createElement(
+					'span',
+					{ className: 'datetimeformat' },
+					item.created_at
+				)
+			)
+		);
+
+		var created = new Date(item.created_at);
+		var updated = new Date(item.updated_at);
+		if (+updated !== +created) {
+			posted_at = React.createElement(
+				'div',
+				{ className: 'item-date item-updated' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						null,
+						'Edited:'
+					),
+					React.createElement(
+						'span',
+						{ className: 'datetimeformat' },
+						item.updated_at
+					)
+				)
+			);
+		}
+		var expired_at = '';
+		if (item.deleted_at) {
+			expired_at = React.createElement(
+				'div',
+				{ className: 'item-date item-expired' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						null,
+						'Expire:'
+					),
+					React.createElement(
+						'span',
+						{ className: 'datetimeformat' },
+						item.deleted_at
+					)
+				)
+			);
+		}
+		var showLink = false;
+		var lines = item.description.split('\n');
 		return React.createElement(
 			'div',
 			{ className: className },
@@ -7472,96 +7592,22 @@ var ItemDetail = React.createClass({
 				React.createElement(
 					'div',
 					{ className: 'col-xs-6 col-md-7' },
-					React.createElement(
-						'div',
-						{ className: 'item-title' },
-						React.createElement(
-							'a',
-							null,
-							React.createElement(
-								'span',
-								null,
-								item.title
-							)
-						)
-					),
-					React.createElement(
-						'div',
-						{ className: 'item-prices' },
-						React.createElement(
-							'div',
-							{ className: 'item-price item-originalprice' },
-							React.createElement(
-								'span',
-								{ className: 'currency-sign' },
-								currencySign
-							),
-							React.createElement(
-								'span',
-								{ className: 'currency-value' },
-								currency(item.originalprice)
-							),
-							' ',
-							React.createElement(
-								'label',
-								null,
-								'Original'
-							)
-						),
-						React.createElement(
-							'div',
-							{ className: 'item-price item-saleprice' },
-							React.createElement(
-								'span',
-								{ className: 'currency-sign' },
-								currencySign
-							),
-							React.createElement(
-								'span',
-								{ className: 'currency-value' },
-								currency(item.saleprice)
-							),
-							' ',
-							React.createElement(
-								'label',
-								null,
-								'Sale'
-							)
-						),
-						React.createElement(
-							'div',
-							{ className: 'item-price item-nowprice' },
-							React.createElement(
-								'span',
-								{ className: 'currency-sign' },
-								currencySign
-							),
-							React.createElement(
-								'span',
-								{ className: 'currency-value' },
-								currency(item.nowprice)
-							),
-							' ',
-							React.createElement(
-								'label',
-								null,
-								'Now'
-							)
-						)
-					),
+					React.createElement(_itemsummary2.default, { item: item, showLink: showLink, prices: 'original,now' }),
 					React.createElement(
 						'div',
 						{ className: 'item-description' },
-						React.createElement(
-							'p',
-							null,
-							item.description
-						)
+						lines.map(function (o, i) {
+							return React.createElement(
+								'p',
+								{ key: i },
+								o
+							);
+						})
 					)
 				),
 				React.createElement(
 					'div',
-					{ className: 'col-xs-6 col-md-5 item-gallery' },
+					{ className: 'col-xs-6 col-md-5 item-gallery sensitive' },
 					React.createElement(_reactImageGallery2.default, {
 						ref: function ref(i) {
 							return _this._imageGallery = i;
@@ -7569,7 +7615,9 @@ var ItemDetail = React.createClass({
 						items: images,
 						slideInterval: 3000,
 						handleImageLoad: this.handleImageLoad,
-						showThumbnails: showThumbnails })
+						showThumbnails: showThumbnails,
+						slideOnThumbnailHover: slideOnThumbnailHover,
+						showNav: showNav })
 				)
 			)
 		);
@@ -7578,7 +7626,7 @@ var ItemDetail = React.createClass({
 
 exports.default = ItemDetail;
 
-},{"react-image-gallery":99}],136:[function(require,module,exports){
+},{"./itemsummary.jsx":137,"react-image-gallery":99}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7637,9 +7685,24 @@ var ItemList = React.createClass({
 			),
 			React.createElement(
 				'div',
-				{ className: 'item-list' },
+				{ className: 'row item-list' },
 				items.map(function (item, i) {
-					return React.createElement(_itemsummary2.default, { item: item, key: i });
+					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
+					return React.createElement(
+						'div',
+						{ className: itemClassName, key: i },
+						React.createElement(
+							'div',
+							{ className: 'item-firstimage' },
+							React.createElement(
+								'div',
+								{ className: 'item-firstimage-wrapper' },
+								React.createElement('img', { src: item.images[0].url })
+							)
+						),
+						React.createElement(_itemsummary2.default, { item: item, key: i, prices: 'original,now' }),
+						React.createElement(UserBox, { user: item.user })
+					);
 				})
 			)
 		);
@@ -7661,11 +7724,103 @@ var ItemSummary = React.createClass({
 	displayName: 'ItemSummary',
 
 	render: function render() {
+		var className = 'item-summary ' + (this.props.className ? this.props.className : '');
 		var item = this.props.item;
-		var href = '/item/' + item.id;
+		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
+		var href = showLink ? '/item/' + item.id : 'javascript:void(0);';
+		var posted_at = React.createElement(
+			'div',
+			{ className: 'item-created' },
+			React.createElement(
+				'a',
+				null,
+				React.createElement(
+					'span',
+					{ className: 'label' },
+					'Posted:'
+				),
+				React.createElement(
+					'span',
+					{ className: 'datetimeformat' },
+					item.created_at
+				)
+			)
+		);
+
+		var created = new Date(item.created_at);
+		var updated = new Date(item.updated_at);
+		if (+updated !== +created) {
+			posted_at = React.createElement(
+				'div',
+				{ className: 'item-date item-updated' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						{ className: 'label' },
+						'Edited:'
+					),
+					React.createElement(
+						'span',
+						{ className: 'datetimeformat' },
+						item.updated_at
+					)
+				)
+			);
+		}
+		var expired_at = '';
+		if (item.deleted_at) {
+			expired_at = React.createElement(
+				'div',
+				{ className: 'item-date item-expired' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						{ className: 'label' },
+						'Expire:'
+					),
+					React.createElement(
+						'span',
+						{ className: 'datetimeformat' },
+						item.deleted_at
+					)
+				)
+			);
+		}
+		var prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original', 'sale', 'now'];
+		var price_list = React.createElement(
+			'div',
+			{ className: 'item-prices' },
+			prices.map(function (o, i) {
+				var pclassName = 'item-price item-' + o + 'price';
+				var pvalue = item[o + 'price'];
+				return React.createElement(
+					'div',
+					{ className: pclassName, key: i },
+					React.createElement(
+						'span',
+						{ className: 'currency-sign' },
+						currentLocation.currency
+					),
+					React.createElement(
+						'span',
+						{ className: 'currency-value' },
+						pvalue
+					),
+					React.createElement(
+						'span',
+						{ className: 'label' },
+						o[0].toUpperCase() + o.slice(1)
+					)
+				);
+			})
+		);
 		return React.createElement(
 			'div',
-			{ className: 'item-summary' },
+			{ className: className },
 			React.createElement(
 				'div',
 				{ className: 'item-title' },
@@ -7679,84 +7834,40 @@ var ItemSummary = React.createClass({
 					)
 				)
 			),
+			posted_at,
+			expired_at,
 			React.createElement(
 				'div',
-				{ className: 'item-prices' },
-				React.createElement(
-					'div',
-					{ className: 'item-price item-originalprice' },
-					React.createElement(
-						'span',
-						{ className: 'currency-sign' },
-						currencySign
-					),
-					React.createElement(
-						'span',
-						{ className: 'currency-value' },
-						currency(item.originalprice)
-					),
-					' ',
-					React.createElement(
-						'label',
-						null,
-						'Original'
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'item-price item-saleprice' },
-					React.createElement(
-						'span',
-						{ className: 'currency-sign' },
-						currencySign
-					),
-					React.createElement(
-						'span',
-						{ className: 'currency-value' },
-						currency(item.saleprice)
-					),
-					' ',
-					React.createElement(
-						'label',
-						null,
-						'Sale'
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'item-price item-nowprice' },
-					React.createElement(
-						'span',
-						{ className: 'currency-sign' },
-						currencySign
-					),
-					React.createElement(
-						'span',
-						{ className: 'currency-value' },
-						currency(item.nowprice)
-					),
-					' ',
-					React.createElement(
-						'label',
-						null,
-						'Now'
-					)
-				)
+				{ className: item.is_new ? 'new' : 'used' },
+				item.is_new ? 'New' : 'Used'
 			),
-			React.createElement(
-				'div',
-				{ className: 'item-description' },
-				React.createElement(
-					'p',
-					null,
-					item.description
-				)
-			)
+			price_list
 		);
 	}
 });
 
 exports.default = ItemSummary;
+
+},{}],138:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * UserBox defination
+ */
+var UserBox = React.createClass({
+	displayName: 'UserBox',
+
+	render: function render() {
+		var className = 'userbox ' + (this.props.className ? this.props.className : '');
+		var user = this.props.user;
+		return React.createElement('div', { className: className });
+	}
+});
+
+exports.default = UserBox;
 
 },{}]},{},[132]);
 

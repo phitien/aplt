@@ -25,15 +25,15 @@ class CatsTableSeeder extends Seeder {
 											'FOR_HER' => [ 
 													'active' => true,
 													'name' => 'For Her',
-													'title' => 'For Her',
-													'description' => 'For Her',
+													'title' => 'Buy and Sell Womens\' Apparels, Bags, Shoes & More',
+													'description' => 'Are you bored of your wardrobe? Or hoarding dresses & accessories in your closet that you no longer wear? Snap, list, and sell your preloved outfits, and declutter to make space for new ones. Browse & shop great bargains for dresses, heels, wedges, bags, accessories and more from top brands & styles.',
 													'atomic' => true 
 											],
 											'FOR_HIM' => [ 
 													'active' => true,
 													'name' => 'For Him',
-													'title' => 'For Him',
-													'description' => 'For Him',
+													'title' => 'Buy and Sell Mens\' Apparels, Bags & Accessories',
+													'description' => 'Are you bored of your wardrobe? Or hoarding shoes & outfits you no longer wear? Snap, list, and sell your preloved clothes, and declutter to make space for new ones! Discover & shop great bargains for shirts, sneakers, bags, accessories and more from top brands & styles.',
 													'atomic' => true 
 											],
 											'BABY_N_KIDS' => [ 

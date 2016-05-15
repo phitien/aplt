@@ -1,48 +1,10 @@
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-@import "node_modules/react-image-gallery/src/image-gallery";
-
-$primary-color: #23527c;
-$warning-color: red;
-$border-color: aliceblue;
-$border-width: 1px;
-$border-style: solid;
-$border-color-dark: #23527c;
-$menuitem-nonatomic-color: crimson;
-$formview-background-color: aliceblue;
-$leftmenu-background-color: #ffffff;
-$rightmenu-background-color: azure;
-
-$margin-padding: 15px;
-$small-margin-padding: 5px;
-
-$navigation-height: 55px;
+@import "theme";
 
 .form {}
 .form .center-block {float: none !important;}
 .validation-error {color: $warning-color;}
 .inline-block-list {}
-.inline-block-list div.radio,.inline-block-list div.checkbox {display: inline-block;margin: 0 $margin-padding;}
-.border {border-color: $border-color;border-width : $border-width;}
-.border-dark {border-color: $border-color-dark;}
-.border-top {
-	@extend .border;
-	border-top-style: $border-style;
-}
-.border-right {
-	@extend .border;
-	border-right-style: $border-style;
-}
-.border-bottom {
-	@extend .border;
-	border-bottom-style: $border-style;
-}
-.border-left {
-	@extend .border;
-	border-left-style: $border-style;
-}
-.border-all {
-	@extend .border-top, .border-right, .border-bottom, .border-left;
-}
+.inline-block-list div.radio,.inline-block-list div.checkbox {display: inline-block;margin: 0 $sbig;}
 .image-preview {
 	@extend .border-all;
 	display: none;
@@ -52,7 +14,7 @@ $navigation-height: 55px;
 	margin: 3px 0;
 }
 .image-preview .image-preview-item {
-	margin: $margin-padding 0;
+	margin: $sbig 0;
 }
 .image-preview .image-info {
 	float: left;
@@ -62,6 +24,7 @@ $navigation-height: 55px;
 	float: right;
 	margin-top: 3px;
 }
+.btn-fixed-right {position: fixed; top: ($navigation-height + $sbig); right: $sbig;}
 
 .menuitem {}
 .menuitem-atomic {cursor: pointer;}
@@ -82,10 +45,10 @@ $navigation-height: 55px;
 #leftmenu {position: inherit;float: left;width: 75%;height: 100%;}
 #leftmenu>ul {width: 100%;margin: 0;padding: 0;}
 #leftmenu>ul>li {display: inline-block;}
-#leftmenu>ul a {padding: $margin-padding;background-color: #transparent;}
+#leftmenu>ul a {padding: $sbig;background-color: #transparent;}
 #leftmenu>ul a:hover {background-color: #transparent;}
 
-#catmenu {margin-top: $margin-padding;position: inherit;}
+#catmenu {margin-top: $sbig;position: inherit;}
 ul.catmenu,ul.catmenu ul {margin: 0;padding: 0;}
 ul.catmenu li {margin: 0;padding: 0;}
 ul.catmenu {text-align: left;}
@@ -93,7 +56,7 @@ ul.catmenu>li {display: inline-block;}
 ul.catmenu>li>ul {
 	@extend .border-bottom;
 	top: ($navigation-height);
-	padding: $margin-padding 0;
+	padding: $sbig 0;
 	background: $leftmenu-background-color;
 	left: 0;display: none;position: absolute;overflow-y: hidden;width: 100%;
 }
@@ -102,10 +65,10 @@ ul.catmenu>li>ul>li>ul {display: block;}
 ul.catmenu>li>ul>li>ul>li {display: block;}
 
 ul.catmenu>li>a:first-child {cursor: pointer;}
-#catmenu ul.catmenu>li>ul a {padding: $small-margin-padding $margin-padding;}
+#catmenu ul.catmenu>li>ul a {padding: $ssmall $sbig;}
 
 #rightmenu {position: inherit;float: right;width: 25%;height: 100%;}
-#rightmenu>ul a {padding: $margin-padding;background-color: transparent;}
+#rightmenu>ul a {padding: $smedium;background-color: transparent;}
 #rightmenu>ul a:hover {background-color: transparent;}
 
 #rightmenu ul {margin: 0;padding: 0;}
@@ -118,17 +81,17 @@ ul.catmenu>li>a:first-child {cursor: pointer;}
 	display: none;position: absolute;right: 0;
 	background-color: $rightmenu-background-color;
 }
-#rightmenu>ul>li>ul>li {display: inline-block;position: relative;padding: $small-margin-padding $margin-padding;}
+#rightmenu>ul>li>ul>li {display: inline-block;position: relative;padding: $ssmall $sbig;}
 #rightmenu>ul>li>ul>li>a {padding: 0;text-decoration: none;}
 #rightmenu>ul>li>ul>li:hover {background-color: #ffffff;}
 
 #form-container {
 	display: none;
-	position: absolute;right: $margin-padding;width: 350px;
+	position: absolute;right: $sbig;width: 350px;
 }
 #form-container .form-view {
 	@extend .border-all, .border-dark;
-	background-color: $formview-background-color;padding: $margin-padding;
+	background-color: $formview-background-color;padding: $sbig;
 }
 
 #banner {
@@ -141,13 +104,14 @@ ul.catmenu>li>a:first-child {cursor: pointer;}
 #left {}
 
 #content {
-	padding-top: 2*$margin-padding;
-	padding-bottom: 2*$margin-padding;
+	padding-top: 2*$sbig;
+	padding-bottom: 3*$sbig;
 }
 
 #footer {
 	@extend .border-top;
 	position: fixed;bottom: 0;right: 0;height: 30px;width: 100%;
+	background-color: $border-color;
 }
 #messages {
 	@extend .border-all;

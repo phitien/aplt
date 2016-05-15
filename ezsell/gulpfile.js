@@ -36,7 +36,9 @@ elixir(function(mix) {
 	
 	.browserify('jsx/pages/location.jsx', 'public/js/pages')
 	
-	.browserify('jsx/pages/newitem.jsx', 'public/js/pages')
+	.browserify('jsx/pages/sellitem.jsx', 'public/js/pages')
+	
+	.browserify('jsx/pages/buyitem.jsx', 'public/js/pages')
 	
 	.browserify('jsx/pages/item.jsx', 'public/js/pages')
 	
@@ -46,6 +48,8 @@ elixir(function(mix) {
 	
 	.copy('resources/assets/js/socket.io-1.3.4.js', 'public/js')
 	
-	.copy('resources/assets/js/jquery-migrate-1.2.1.min.js', 'public/js');
+	.copy('resources/assets/js/jquery-migrate-1.2.1.min.js', 'public/js')
+	
+	.copy('node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js', 'public/js');
 	
 });

@@ -65,7 +65,7 @@ const Input = React.createClass({
 				showMessageDialog('You should select at least ' + min + ' file, and no more than ' + max + ' files');
 			}
 			else {
-				FormView.showImagesPreview(event.currentTarget);
+				FormView.showImagesPreview(event.currentTarget, this.props.previewContainer);
 			}
 			value = event.currentTarget.value;
 		}
@@ -79,7 +79,7 @@ const Input = React.createClass({
 	render() {
 		this.className = 'form-group ' + (this.props.className || '') + ' ' + (this.showRequired() ? 'required' : this.showError() ? 'error' : '');
 		this.type = this.props.type ? this.props.type.toLowerCase() : 'text';
-		this.id = this.props.id ? this.props.id : uuid(this.type + '_');
+		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid(this.type + '_');
 		
 		switch(this.type) {
 			case 'hidden':
@@ -137,9 +137,10 @@ const Input = React.createClass({
 	renderCheckboxRadio() {
 		var name = this.props.name ? this.props.name : uuid('radiolist_');
 		this.className += ' ' + this.type;
+		var labelClassName = 'form-' + this.type + '-label';
 		return (
 			<div className={this.className}>
-				<label htmlFor={name}>
+				<label className={labelClassName} htmlFor={name}>
 					<input {...this.props} id={this.id} type={this.type} name={name} onChange={this.changeValue} className={this.type} />
 					{this.props.title}
 				</label>
@@ -151,16 +152,19 @@ const Input = React.createClass({
 		var type = this.type == 'checkboxlist' ? 'checkbox' : 'radio';
 		var props = this.props;
 		this.className += ' ' + this.type;
+		var changeValue = this.changeValue;
+		var labelClassName = 'form-' + type + '-label';
 		return (
 			<div className={this.className}>
-				<label>{this.props.title}</label>
-				{this.props.options.map(function(item, index) {
-					var itemname = name + '['+index+']';
+				<label className={labelClassName}>{this.props.title}</label>
+				{this.props.options.map(function(item, i) {
+					var itemname = name + '['+i+']';
 					var value = item.value;
+					var itemClassName = type + (i==0 ? ' first-' + type : '');
 					return (
-						<div className={type} key={index}>
+						<div className={itemClassName} key={i}>
 							<label htmlFor={itemname}>
-								<input {...props} type={type} name={name} id={itemname} value={value} className={type} />
+								<input {...props} type={type} name={name} id={itemname} value={value} className={type} onChange={changeValue} />
 								{item.label}
 							</label>
 						</div>
@@ -196,12 +200,12 @@ const Input = React.createClass({
 				<label htmlFor={this.props.name}>{this.props.title}</label>
 				<select {...this.props} id={this.id} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className="form-control" disabled={this.props.disabled}>
 					{placeholder}
-					{this.props.options.map(function(item, index) {
+					{this.props.options.map(function(item, i) {
 						var label = optionLabel.bind(item)();
 						var value = optionValue.bind(item)();
 						var props = optionAttrs.bind(item)();
 						return (
-							<option key={index} {...props} value={value}>{label}</option>
+							<option key={i} {...props} value={value}>{label}</option>
 						);
 					})}
 				</select>
@@ -267,7 +271,7 @@ var FormView = React.createClass({
 	}
 });
 
-FormView.showImagesPreview = function (input) {
+FormView.showImagesPreview = function (input, previewContainer) {
 	if (input.files && input.files.length > 0) {
 		var cols = parseInt($(input).attr('cols')) != NaN ? parseInt($(input).attr('cols')) : 4;
 		var cls = 1;
@@ -275,23 +279,25 @@ FormView.showImagesPreview = function (input) {
 			cls = 12/cols;
 		}
 		var name = input.name.replace('[]', '');
-		var previewDiv = $(input).parent().find('.image-preview');
+		var previewDiv = previewContainer ? $(input).parents('form').find(previewContainer) : $(input).parent().find('.image-preview');
+		previewDiv.attr('data-file-id', input.id);
 		previewDiv.html('');
 		var count = 0;
 		for (var i in input.files) {
-			var image = input.files[i];
-			if (image instanceof Blob) {
+			var item = input.files[i];
+			if (item instanceof Blob) {
 		        var reader = new FileReader();
+		        reader.image = item;
 		        reader.onload = function (e) {
 		        	var img = new Image();
+		        	img.image = this.image;
 		        	img.onload = function (e) {
 						var html = "<div class='image-preview-item col-xs-6 col-md-" + cls + "'>" + 
-										"<input type='text' name='" + name + "-title[" + image.name + "]' placeholder='Caption' class='form-control' />" +
+										"<input type='text' name='" + name + "-title[" + this.image.name + "]' placeholder='Caption' class='form-control' />" +
 										"<img src='"+this.src+"' />" + 
-										"<textarea name='" + name + "-description[" + image.name + "]' placeholder='Description' class='form-control' row='6'></textarea>" +
+										"<textarea name='" + name + "-description[" + this.image.name + "]' placeholder='Description' class='form-control' row='6'></textarea>" +
 										"<div class='image-info'>(" + this.width +" x " + this.height + ")</div>" + 
 										"<input class='btn btn-default image-remove' type='button' value='Remove' onclick='FormView.removeImagePreview(this)' />" +
-										"<input type='hidden' name='" + name + "-selected[" + image.name + "]' value='" + image.name + "' />" + 
 									"</div>";		
 				        if (count>0 && (count%cols==(cols-1))) {
 				        	html += "<div class='clearfix'></div>";
@@ -302,13 +308,17 @@ FormView.showImagesPreview = function (input) {
 		        	};
 		        	$(img).attr('src', this.result);
 		        };
-				reader.readAsDataURL(image);
+				reader.readAsDataURL(item);
 			}
 		}
     }
 },
 FormView.removeImagePreview = function(e) {
+	var container = $(e).parent().parent();
 	$(e).parent().remove();
+	if (!container.find('.image-preview-item').length) {
+		$('#' + container.attr('data-file-id')).val('');
+	}
 };
 FormView.Input = Input;
 FormView.Form = Formsy.Form;

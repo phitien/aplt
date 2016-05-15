@@ -51,7 +51,7 @@ class Item extends Model {
 				'images' => $this->images 
 		] );
 	}
-	public function parent() {
+	public function cat() {
 		return $this->belongsTo ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );
 	}
 	public function location() {

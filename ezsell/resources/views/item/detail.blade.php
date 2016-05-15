@@ -6,6 +6,7 @@
 @parent
 	<script type="text/javascript">
 		var item = {!! $item ? $item : null !!};
+		var cat = {!! $item ? $item->cat : null !!};
 	</script>
 @endsection
 

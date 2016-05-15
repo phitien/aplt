@@ -1,27 +1,33 @@
+@import "variables";
+
+.border {border-color: $border-color;border-width : $border-width;}
+.border-dark {border-color: $border-color-dark;}
+.border-top {@extend .border;border-top-style: $border-style;}
+.border-right {@extend .border;border-right-style: $border-style;}
+.border-bottom {@extend .border;border-bottom-style: $border-style;}
+.border-left {@extend .border;border-left-style: $border-style;}
+.border-all {@extend .border-top, .border-right, .border-bottom, .border-left;}
+
+.grounded-s {border-radius: $ssmall;}
+.grounded-m {border-radius: $smedium;}
+.grounded-b {border-radius: $sbig;}
+
 a {}
-a:hover {
-	text-decoration: none !important;
-}
-.ui-autocomplete {
-}
+a:hover {text-decoration: none !important;}
 
-.ui-autocomplete .ui-menu-item .ui-corner-all {
-   background-color: aliceblue;
-}
-
-.ui-autocomplete .ui-menu-item .ui-state-focus {
-	background-color: #23527c !important;
-}
+.ui-autocomplete {}
+.ui-autocomplete .ui-menu-item .ui-corner-all {background-color: aliceblue;}
+.ui-autocomplete .ui-menu-item .ui-state-focus {background-color: #23527c !important;}
 
 .item-detail-wrapper {}
 .item-detail {}
 .item-title {}
-.item-prices {}
-.item-inline-prices .item-price {display: inline-block; margin: 15px 15px 15px 0;}
+.item-prices {font-size: 12px;}
+.item-inline-prices .item-price {display: inline-block; margin: $ssmall $sbig 0 0;}
 .item-block-prices .item-price {display: block; margin: 7px 0 7px 0;}
-.item-prices label {text-decoration: initial;font-weight: normal;}
+.item-prices label {text-decoration: initial;font-weight: normal;margin-left: $ssmall;}
 
-.originalprice {color: black;}
+.originalprice {color: $primary-color;}
 .item-originalprice span.currency-sign {
 	@extend .originalprice; 
 }
@@ -30,7 +36,7 @@ a:hover {
 	text-decoration: line-through;
 }
 .currency-sign {margin-right: 3px;}
-.saleprice {color: blue;}
+.saleprice {color: violet;}
 .item-saleprice span.currency-sign {
 	@extend .saleprice;
 }
@@ -38,11 +44,108 @@ a:hover {
 	@extend .saleprice;
 	text-decoration: line-through;
 }
-.nowprice {color: red;}
+.nowprice {color: $primary-color-opp;}
 .item-nowprice span.currency-sign {
 	@extend .nowprice;
 }
 .item-nowprice span.currency-value {
 	@extend .nowprice;
 	text-decoration: blink;
+}
+
+.item-date {
+	padding: 3px 0;
+}
+.item-created, .item-created, .item-created {
+	@extend .item-date;
+}
+.item-date span {
+	font-style: italic;
+	font-size: 12px;
+	color: gainsboro !important;
+}
+.item-date .datetimeformat {
+	margin-left: 3px; 
+}
+.item-summary {}
+.item-summary .item-title {}
+.item-summary .label {display: none;}
+.item-summary .new,.item-summary .used {
+	display: inline-block;
+    margin-right: 15px;
+    border: 1px solid;
+    padding: 2px 10px;
+    font-size: 12px;
+    margin-top: $ssmall;
+    border-radius: 5px;
+    
+}
+.item-summary .new {
+	border-color: $primary-color-opp;
+	color: $primary-color-opp;
+}
+.item-summary .used {
+	border-color: $primary-color;
+	color: $primary-color;
+}
+.item-summary .item-prices {
+	clear: both;
+}
+
+.item-list {
+	@extend .border-top,.border-left;
+	margin-top: $sbig;
+}
+.item {
+	@extend .border-bottom,.border-right;
+	padding: 0 $ssmall;
+}
+.item-first {
+	@extend .item;
+}
+.item-firstimage {
+	@extend .border-bottom;
+	padding: $sbig;
+	margin-bottom: $ssmall;
+}
+.item-firstimage-wrapper {
+	@extend .border-all;
+	border-radius: 10px;
+	height: 150px;
+	width: 150px;
+	overflow: hidden;
+	margin: auto;
+}
+.item-firstimage-wrapper img {
+	width: 150px;
+}
+
+.btn-buy span, .btn-sell span,.btn-more span {
+	@extend .border-all;
+	display: inline-block;
+	padding: $ssmall;
+	cursor: pointer;
+}
+.btn-buy span {
+	border-radius: $sbig $ssmall;
+	color: $primary-color-opp2;
+	border-color: $primary-color-opp2;
+	padding: $ssmall $sbig;
+}
+.btn-sell span {
+	@extend .grounded-b;
+	color: $primary-color;
+	border-color: $primary-color-opp;
+}
+.btn-more span {
+	@extend .grounded-s;
+	color: $primary-color-opp;
+	border-color: $primary-color;
+}
+
+.form-radio-label,.form-checkbox-label {
+	display: block;
+}
+.first-checkbox,.first-radio {
+	margin-left: 3px !important;
 }

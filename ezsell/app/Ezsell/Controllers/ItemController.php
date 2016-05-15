@@ -7,6 +7,7 @@ use App\Ezsell\Models\Item;
 use App\Ezsell\Exceptions\ItemNotFound;
 use App\Ezsell\Models\Cat;
 use App\Ezsell\Models\Image;
+use Carbon\Carbon;
 
 class ItemController extends Controller {
 	/**
@@ -46,67 +47,19 @@ class ItemController extends Controller {
 	protected function pgetCat(Request $request, $id) {
 		$cat = Cat::find ( $id );
 		if ($cat) {
+			$now = Carbon::now ();
 			return $this->response ( view ( 'item.items', [ 
 					'cat' => $cat,
-					'items' => $cat->items ()->get () 
+					'items' => $cat->items ()->
+
+					where ( 'location_id', static::getLocationId () )->
+
+					whereRaw ( "(items.deleted_at IS NULL OR items.deleted_at > '{$now}')" )->
+
+					get () 
 			] ) );
 		} else {
 			throw new ItemNotFound ();
-		}
-	}
-	/**
-	 *
-	 * @param \Illuminate\Http\Request $request        	
-	 * @return \Illuminate\Http\Response
-	 */
-	public function newitem(Request $request) {
-		return $this->process ( 'newitem', func_get_args () );
-	}
-	protected function pgetNewitem(Request $request) {
-		return $this->response ( view ( 'item.newitem' ) );
-	}
-	protected function ppostNewitem(Request $request) {
-		$data = $request->only ( [ 
-				'parent_id',
-				'location_id',
-				'title',
-				'description',
-				'is_selling',
-				'is_new',
-				'originalprice',
-				'saleprice',
-				'nowprice',
-				'meetup_at',
-				'meetup_details',
-				'mailing_details',
-				'groups' 
-		] );
-		$data ['user_id'] = static::getUser ()->id;
-		$data ['location_id'] = static::getLocation ()->id;
-		if ($item = Item::create ( $data )) {
-			$selectedFiles = $request->get ( 'files-selected' );
-			if ($selectedFiles) {
-				$titles = $request->get ( 'files-title' );
-				$descriptions = $request->get ( 'files-description' );
-				foreach ( $request->file ( 'files' ) as $file ) {
-					if ($file->isValid ()) {
-						$name = $file->getClientOriginalName ();
-						$url = $this->restful_upload ( $file );
-						$image = new Image ( [ 
-								'title' => $titles [$name],
-								'description' => $descriptions [$name],
-								'url' => $url 
-						] );
-						$image->item ()->associate ( $item );
-						$image->save ();
-					}
-				}
-			}
-			return $this->redirect ( "/item/{$item->id}" );
-		} else {
-			return $this->response ( view ( 'item.newitem', [ 
-					'appMessage' => 'Không hiểu sao ko tạo được :(, sorry nha' 
-			] ) );
 		}
 	}
 	/**
@@ -124,7 +77,80 @@ class ItemController extends Controller {
 					'item' => $item 
 			] ) );
 		} else {
-			throw new ItemNotFound ();
+			return $this->redirect ( '/' );
+		}
+	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function sellitem(Request $request) {
+		return $this->process ( 'sellitem', func_get_args () );
+	}
+	protected function pgetSellitem(Request $request) {
+		return $this->response ( view ( 'item.sellitem' ) );
+	}
+	protected function ppostSellitem(Request $request) {
+		$this->createItem ( $request, 'item.sellitem' );
+	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function buyitem(Request $request) {
+		return $this->process ( 'buyitem', func_get_args () );
+	}
+	protected function pgetBuyitem(Request $request) {
+		return $this->response ( view ( 'item.buyitem' ) );
+	}
+	protected function ppostBuyitem(Request $request) {
+		$this->createItem ( $request, 'item.buyitem' );
+	}
+	protected function createItem(Request $request, $view) {
+		$data = $request->only ( [ 
+				'parent_id',
+				'location_id',
+				'title',
+				'description',
+				'is_selling',
+				'is_new',
+				'originalprice',
+				'saleprice',
+				'nowprice',
+				'meetup_at',
+				'meetup_details',
+				'mailing_details',
+				'groups' 
+		] );
+		$data ['is_new'] = $data ['is_new'] ? true : false;
+		$data ['is_selling'] = $data ['is_selling'] ? true : false;
+		$data ['user_id'] = static::getUser ()->id;
+		$data ['location_id'] = static::getLocation ()->id;
+		if ($item = Item::create ( $data )) {
+			$titles = $request->get ( 'files-title' );
+			$descriptions = $request->get ( 'files-description' );
+			foreach ( $request->file ( 'files' ) as $file ) {
+				if ($file->isValid ()) {
+					$name = $file->getClientOriginalName ();
+					if (isset ( $titles [$name] )) {
+						$url = $this->restful_upload ( $file );
+						$image = new Image ( [ 
+								'title' => $titles [$name],
+								'description' => $descriptions [$name],
+								'url' => $url 
+						] );
+						$image->item ()->associate ( $item );
+						$image->save ();
+					}
+				}
+			}
+			return $this->redirect ( "/item/{$item->id}" );
+		} else {
+			return $this->response ( view ( $view, [ 
+					'appMessage' => 'Không hiểu sao ko tạo được :(, sorry nha' 
+			] ) );
 		}
 	}
 }

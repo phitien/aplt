@@ -20,10 +20,19 @@ var ItemList = React.createClass({
 						<p>{cat && cat.details ? cat.details.description : ''}</p>
 					</div>
 				</div>
-				<div className='item-list'>
+				<div className='row item-list'>
 					{items.map(function (item, i) {
+						var itemClassName = 'col-xs-6 col-md-2 item ' + (i==0?'item-first':'');
 						return (
-							<ItemSummary item={item} key={i}/>
+							<div className={itemClassName} key={i}>
+								<div className='item-firstimage'>
+									<div className='item-firstimage-wrapper'>
+										<img src={item.images[0].url}/>
+									</div>
+								</div>
+								<ItemSummary item={item} key={i} prices='original,now' />
+								<UserBox user={item.user} />
+							</div>
 						);
 					})}
 				</div>

@@ -3,5 +3,16 @@ $( document ).ready(function() {
 		cat: cat,
 		items: items,
 		className: 'item-inline-prices'
-	}), document.getElementById(contentDivId));
+	}), document.getElementById(contentDivId), function () {
+		$('.datetimeformat').each(function () {
+			var me = $(this);
+			var text = me.text().trim();
+			me.text(format.prettyDate(text) + ' (' + format.datetime(text) + ')');
+		});
+		$('.currency-value').each(function () {
+			var me = $(this);
+			var text = me.text().trim();
+			me.text(format.currency(text));
+		});
+	});
 });

@@ -44,7 +44,6 @@ class Factory extends BaseFactory {
 			$data ['theme'] = 'south-street';
 			$data ['cats'] = Cat::getHierarchy ();
 			$data ['location'] = static::getLocation ();
-			$data ['currencySign'] = $data ['location']->currency;
 			
 			if (! isset ( $data ['appMessage'] ))
 				$data ['appMessage'] = '';
@@ -55,8 +54,9 @@ class Factory extends BaseFactory {
 				$menu->addChild ( (new MenuItem ())->setText ( 'Location' )->setAttribute ( 'onClick', 'showLocationForm(this)' ) );
 				// $menu->addChild ( (new MenuItem ())->setText ( 'Code' )->setHref ( '/code' ) );
 			} else {
-				$menu->addChild ( (new MenuItem ())->setText ( 'New' )->setHref ( '/newitem' ) );
-				$moreMenuItem = (new MenuItem ())->setText ( 'More' )->setAttribute ( 'onClick', 'expandMenu(this, "menu-toggle")' );
+				$menu->addChild ( (new MenuItem ())->setText ( 'Buy' )->setClassName ( 'btn-buy' )->setHref ( '/buyitem' ) );
+				$menu->addChild ( (new MenuItem ())->setText ( 'Sell' )->setClassName ( 'btn-sell' )->setHref ( '/sellitem' ) );
+				$moreMenuItem = (new MenuItem ())->setText ( 'More' )->setClassName ( 'btn-more' )->setAttribute ( 'onClick', 'expandMenu(this, "menu-toggle")' );
 				$menu->addChild ( $moreMenuItem );
 				$moreMenu = (new Menu ())->setClassName ( 'menu-toggle more-nav' );
 				$moreMenu->addChild ( (new MenuItem ())->setText ( 'Password' )->setHref ( '/password' ) );

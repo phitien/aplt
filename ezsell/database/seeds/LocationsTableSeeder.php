@@ -21,7 +21,10 @@ class LocationsTableSeeder extends Seeder {
 						NULL AS grandparent_id,NULL AS grandparent_name,
 						NULL AS great_grandparent_id,NULL AS great_grandparent_name,
 						NULL AS great_great_grandparent_id,NULL AS great_great_grandparent_name,
-						'$' AS currency
+						'$' AS currency,
+						'dd MMM yyyy hh:mm' AS datetimeformat,
+						'dd MMM yyyy' AS dateformat,
+						'hh:mm' AS timeformat
 				FROM places as p1 
 				WHERE p1.level=0 AND p1.fcode='EARTH')
 				UNION
@@ -30,7 +33,10 @@ class LocationsTableSeeder extends Seeder {
 						NULL AS grandparent_id,NULL AS grandparent_name,
 						NULL AS great_grandparent_id,NULL AS great_grandparent_name,
 						NULL AS great_great_grandparent_id,NULL AS great_great_grandparent_name,
-						'$' AS currency  
+						'$' AS currency,
+						'dd MMM yyyy hh:mm' AS datetimeformat,
+						'dd MMM yyyy' AS dateformat,
+						'hh:mm' AS timeformat
 				FROM places as p1 
 				JOIN places AS p2 ON p1.parent_id=p2.id
 				WHERE p1.level=1 AND p1.active=1)
@@ -40,7 +46,10 @@ class LocationsTableSeeder extends Seeder {
 						p3.id AS grandparent_id,p3.name AS grandparent_name,
 						NULL AS great_grandparent_id,NULL AS great_grandparent_name,
 						NULL AS great_great_grandparent_id,NULL AS great_great_grandparent_name,
-						'$' AS currency  
+						'$' AS currency,
+						'dd MMM yyyy hh:mm' AS datetimeformat,
+						'dd MMM yyyy' AS dateformat,
+						'hh:mm' AS timeformat
 				FROM places as p1 
 				JOIN places AS p2 ON p1.parent_id=p2.id
 				JOIN places AS p3 ON p2.parent_id=p3.id
@@ -51,7 +60,10 @@ class LocationsTableSeeder extends Seeder {
 						p3.id AS grandparent_id,p3.name AS grandparent_name,
 						p4.id AS great_grandparent_id,p4.name AS great_grandparent_name,
 						NULL AS great_great_grandparent_id,NULL AS great_great_grandparent_name,
-						'$' AS currency  
+						'$' AS currency,
+						'dd MMM yyyy hh:mm' AS datetimeformat,
+						'dd MMM yyyy' AS dateformat,
+						'hh:mm' AS timeformat  
 				FROM places as p1 
 				JOIN places AS p2 ON p1.parent_id=p2.id
 				JOIN places AS p3 ON p2.parent_id=p3.id
@@ -63,7 +75,10 @@ class LocationsTableSeeder extends Seeder {
 						p3.id AS grandparent_id,p3.name AS grandparent_name,
 						p4.id AS great_grandparent_id,p4.name AS great_grandparent_name,
 						p5.id AS great_great_grandparent_id,p5.name AS great_great_grandparent_name,
-						'$' AS currency  
+						'$' AS currency,
+						'dd MMM yyyy hh:mm' AS datetimeformat,
+						'dd MMM yyyy' AS dateformat,
+						'hh:mm' AS timeformat
 				FROM places as p1 
 				JOIN places AS p2 ON p1.parent_id=p2.id
 				JOIN places AS p3 ON p2.parent_id=p3.id

@@ -1,3 +1,4 @@
+import ItemSummary from './itemsummary.jsx';
 import ImageGallery from 'react-image-gallery';
 /**
  * ItemDetail defination
@@ -15,6 +16,8 @@ var ItemDetail = React.createClass({
 		const className = 'item-detail-wrapper ' + (this.props.className?this.props.className:'');
 		const item = this.props.item;
 		const showThumbnails = true;
+		const slideOnThumbnailHover = true;
+		const showNav = false;
 		var images = [];
 		if (item.images) {
 			item.images.map(function (o, i) {
@@ -26,29 +29,47 @@ var ItemDetail = React.createClass({
 				});
 			});
 		}
+		var posted_at = <div className='item-created'>
+							<a><span>Posted:</span><span className='datetimeformat'>{item.created_at}</span></a>
+						</div>;
+						
+		var created = new Date(item.created_at);
+		var updated = new Date(item.updated_at);
+		if (+updated !== +created) {
+			posted_at = <div className='item-date item-updated'>
+							<a><span>Edited:</span><span className='datetimeformat'>{item.updated_at}</span></a>
+						</div>;
+		}
+		var expired_at = '';
+		if (item.deleted_at) {
+			expired_at = <div className='item-date item-expired'>
+							<a><span>Expire:</span><span className='datetimeformat'>{item.deleted_at}</span></a>
+						</div>;
+		}
+		var showLink = false;
+		var lines = item.description.split('\n'); 
 		return (
 			<div className={className}>
 				<div className='row item-detail'>
 					<div className='col-xs-6 col-md-7'>
-						<div className='item-title'>
-							<a><span>{item.title}</span></a>
-						</div>
-						<div className='item-prices'>
-							<div className='item-price item-originalprice'><span className='currency-sign'>{currencySign}</span><span className='currency-value'>{currency(item.originalprice)}</span> <label>Original</label></div>
-							<div className='item-price item-saleprice'><span className='currency-sign'>{currencySign}</span><span className='currency-value'>{currency(item.saleprice)}</span> <label>Sale</label></div>
-							<div className='item-price item-nowprice'><span className='currency-sign'>{currencySign}</span><span className='currency-value'>{currency(item.nowprice)}</span> <label>Now</label></div>
-						</div>
+						<ItemSummary item={item} showLink={showLink} prices='original,now' />
 						<div className='item-description'>
-							<p>{item.description}</p>
+							{lines.map(function (o, i) {
+								return (
+									<p key={i}>{o}</p>
+								);
+							})}
 						</div>
 					</div>
-					<div className='col-xs-6 col-md-5 item-gallery'>
+					<div className='col-xs-6 col-md-5 item-gallery sensitive'>
 						<ImageGallery
 							ref={i => this._imageGallery = i}
 							items={images}
 							slideInterval={3000}
 							handleImageLoad={this.handleImageLoad} 
-							showThumbnails={showThumbnails} />
+							showThumbnails={showThumbnails}
+							slideOnThumbnailHover={slideOnThumbnailHover} 
+							showNav={showNav} />
 					</div>
 				</div>
 			</div>
