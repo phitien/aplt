@@ -9,6 +9,14 @@ trait ApiCallRestfulTrait {
 	 * @param array $data[email,email_confirmation,password,password_confirmation]        	
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
+	protected static function apiCallInfo(array $data = []) {
+		return static::restful_post ( 'api/info', $data );
+	}
+	/**
+	 *
+	 * @param array $data[email,email_confirmation,password,password_confirmation]        	
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
 	protected static function apiCallRegister(array $data = []) {
 		return static::restful_post ( 'api/register', $data );
 	}

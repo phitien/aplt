@@ -22,7 +22,7 @@ a:hover {text-decoration: none !important;}
 .item-detail-wrapper {}
 .item-detail {}
 .item-title {}
-.item-prices {font-size: 12px;}
+.item-prices {font-size: $fsmall;}
 .item-inline-prices .item-price {display: inline-block; margin: $ssmall $sbig 0 0;}
 .item-block-prices .item-price {display: block; margin: 7px 0 7px 0;}
 .item-prices label {text-decoration: initial;font-weight: normal;margin-left: $ssmall;}
@@ -61,7 +61,7 @@ a:hover {text-decoration: none !important;}
 }
 .item-date span {
 	font-style: italic;
-	font-size: 12px;
+	font-size: $fsmall;
 	color: gainsboro !important;
 }
 .item-date .datetimeformat {
@@ -75,7 +75,7 @@ a:hover {text-decoration: none !important;}
     margin-right: 15px;
     border: 1px solid;
     padding: 2px 10px;
-    font-size: 12px;
+    font-size: $fsmall;
     margin-top: $ssmall;
     border-radius: 5px;
     
@@ -149,3 +149,10 @@ a:hover {text-decoration: none !important;}
 .first-checkbox,.first-radio {
 	margin-left: 3px !important;
 }
+
+.cat-detail .cat-name {display: none;}
+
+.userbox {@extend .border-top;padding: $smedium 0 $sbig;}
+.userbox img {@extend .grounded-b; width: 40px;margin-right: $ssmall;}
+.userbox a {}
+.userbox a span {font-size: $fsmall;}

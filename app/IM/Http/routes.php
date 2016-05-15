@@ -2,6 +2,7 @@
 Route::group ( [ 
 		'prefix' => 'api' 
 ], function () {
+	Route::post ( 'info', 'AccountController@info' );
 	Route::post ( 'register', 'AccountController@register' );
 	Route::any ( 'code', 'AccountController@code' );
 	Route::get ( 'activate/{code}', 'AccountController@activate' );

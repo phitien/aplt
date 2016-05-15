@@ -9,18 +9,20 @@ use App\IM\Controllers\Traits\ProfileTrait;
 use App\IM\Controllers\Traits\SocietyTrait;
 use App\IM\Controllers\Traits\AccountTrait;
 use App\IM\Controllers\Traits\LoginTrait;
+use App\IM\Controllers\Traits\InfoTrait;
 
 class AccountController extends Controller {
 	/**
 	 * Traits
 	 */
-	use LoginTrait, AccountTrait, RegisterTrait, ActivateTrait, DeactivateTrait, ProfileTrait, SocietyTrait;
+	use InfoTrait, LoginTrait, AccountTrait, RegisterTrait, ActivateTrait, DeactivateTrait, ProfileTrait, SocietyTrait;
 	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
 			'except' => [ 
+					'info',
 					'login',
 					'code',
 					'register',
@@ -33,6 +35,7 @@ class AccountController extends Controller {
 	 */
 	protected $_authorizationMiddlewareOptions = [ 
 			'except' => [ 
+					'info',
 					'login',
 					'code',
 					'register',

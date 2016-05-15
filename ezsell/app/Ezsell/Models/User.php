@@ -82,8 +82,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	public function toArray() {
 		$attributes = parent::toArray ();
 		return array_merge ( $attributes, [ 
-				'extension' => $this->extension ()->all () 
+				'extension' => $this->extension ()->all (),
+				'displayname' => $this->getDisplayName () 
 		] );
+	}
+	protected function getDisplayName() {
+		return $this->alias ? $this->alias : 
+
+		($this->first_name ? $this->first_name . $this->last_name ? " {$this->last_name}" : '' : $this->name);
 	}
 	/**
 	 * Override save function to avoid save user data, the saving will be done via rest service

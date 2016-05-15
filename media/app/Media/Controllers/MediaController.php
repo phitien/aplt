@@ -15,7 +15,9 @@ class MediaController extends Controller {
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
 			'except' => [ 
-					'media' 
+					'media',
+					'noavatarman',
+					'noavatarwoman' 
 			] 
 	];
 	/**
@@ -25,6 +27,12 @@ class MediaController extends Controller {
 	protected $_authorizationMiddlewareOptions = [ 
 			'except' => [ ] 
 	];
+	public function noavatarman(Request $request) {
+		$this->pumpImagePath ( '../repo/no_avatar_man.jpg' );
+	}
+	public function noavatarwoman(Request $request) {
+		$this->pumpImagePath ( '../repo/no_avatar_woman.jpg' );
+	}
 	public function media(Request $request) {
 		return $this->process ( 'media', func_get_args () );
 	}

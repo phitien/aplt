@@ -48,8 +48,12 @@ class Item extends Model {
 	public function toArray() {
 		$attributes = parent::toArray ();
 		return array_merge ( $attributes, [ 
+				'code' => $this->code (),
 				'images' => $this->images 
 		] );
+	}
+	public function code() {
+		return static::encrypt ( $this->id );
 	}
 	public function cat() {
 		return $this->belongsTo ( 'App\Ezsell\Models\Cat', 'parent_id', 'id' );

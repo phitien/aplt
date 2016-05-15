@@ -38,5 +38,6 @@ Route::any ( 'cat/{id}', 'ItemController@cat' );
 Route::any ( 'buyitem', 'ItemController@buyitem' );
 Route::any ( 'sellitem', 'ItemController@sellitem' );
 Route::any ( 'item/{id}', 'ItemController@item' );
+Route::any ( '/{username}', 'ItemController@user' );
 
 

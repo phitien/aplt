@@ -34,6 +34,7 @@
 		const appMessage = '{{ $appMessage }}';
 		const cats = {!! $cats ? $cats : [] !!};
 		var currentLocation = {!! $location ? json_encode($location) : '{}' !!};
+		const usecode = {!! $usecode ? 'true' : 'false' !!};
 
 		var socket = io.connect('http://localhost:8890');
 		socket.on('message', function (data) {

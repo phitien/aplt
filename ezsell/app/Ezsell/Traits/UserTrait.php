@@ -4,7 +4,6 @@ namespace App\Ezsell\Traits;
 
 use App\Ezsell\Config\Config;
 use App\User;
-use Illuminate\Http\Request;
 use Exception;
 
 trait UserTrait

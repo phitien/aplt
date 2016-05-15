@@ -8,6 +8,7 @@ use App\Ezsell\Exceptions\ItemNotFound;
 use App\Ezsell\Models\Cat;
 use App\Ezsell\Models\Image;
 use Carbon\Carbon;
+use App\Ezsell\Config\Config;
 
 class ItemController extends Controller {
 	/**
@@ -45,18 +46,36 @@ class ItemController extends Controller {
 		return $this->process ( 'cat', func_get_args () );
 	}
 	protected function pgetCat(Request $request, $id) {
-		$cat = Cat::find ( $id );
+		if (Config::USE_CODE) {
+			$cat = Cat::where ( 'code', strtoupper ( $id ) )->first ();
+		} else {
+			$cat = Cat::find ( $id );
+		}
 		if ($cat) {
 			$now = Carbon::now ();
+			$query = $cat->items ()->where ( 'location_id', static::getLocationId () )->
+
+			whereRaw ( "(items.deleted_at IS NULL OR items.deleted_at > '{$now}')" );
+			
+			$items = $query->get ();
+			$user_ids = [ ];
+			foreach ( $items as $item ) {
+				array_push ( $user_ids, $item->user_id );
+			}
+			$response = $this->apiCallInfo ( [ 
+					'ids' => implode ( ',', array_unique ( $user_ids ) ) 
+			] );
+			
+			$users = static::json_decode ( $response->getBody (), true ) ['data'];
+			for($i = 0; $i < count ( $items ); $i ++) {
+				if (isset ( $users [$items [$i]->user_id] ))
+					$items [$i] ['user'] = $users [$items [$i]->user_id];
+				else
+					$items [$i] ['user'] = [ ];
+			}
 			return $this->response ( view ( 'item.items', [ 
 					'cat' => $cat,
-					'items' => $cat->items ()->
-
-					where ( 'location_id', static::getLocationId () )->
-
-					whereRaw ( "(items.deleted_at IS NULL OR items.deleted_at > '{$now}')" )->
-
-					get () 
+					'items' => $items 
 			] ) );
 		} else {
 			throw new ItemNotFound ();
@@ -71,13 +90,16 @@ class ItemController extends Controller {
 		return $this->process ( 'item', func_get_args () );
 	}
 	protected function pgetItem(Request $request, $id) {
+		if (Config::USE_CODE) {
+			$id = static::decrypt ( $id );
+		}
 		$item = Item::find ( $id );
 		if ($item) {
 			return $this->response ( view ( 'item.detail', [ 
 					'item' => $item 
 			] ) );
 		} else {
-			return $this->redirect ( '/' );
+			return $this->redirect ( Config::HOME_PAGE );
 		}
 	}
 	/**
@@ -146,11 +168,41 @@ class ItemController extends Controller {
 					}
 				}
 			}
-			return $this->redirect ( "/item/{$item->id}" );
+			if (Config::USE_CODE) {
+				return $this->redirect ( "/item/{$item->code()}" );
+			} else {
+				return $this->redirect ( "/item/{$item->id}" );
+			}
 		} else {
 			return $this->response ( view ( $view, [ 
 					'appMessage' => 'Không hiểu sao ko tạo được :(, sorry nha' 
 			] ) );
+		}
+	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Request $request        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function user(Request $request) {
+		return $this->process ( 'user', func_get_args () );
+	}
+	protected function pgetUser(Request $request, $username) {
+		$response = $this->apiCallInfo ( [ 
+				'code' => $username 
+		] );
+		$user = static::json_decode ( $response->getBody (), true ) ['data'];
+		if ($user) {
+			$items = Item::where ( 'user_id', $user ['id'] )->get ();
+			for($i = 0; $i < count ( $items ); $i ++) {
+				$items [$i] ['user'] = $user;
+			}
+			return $this->response ( view ( 'item.useritems', [ 
+					'user' => $user,
+					'items' => $items 
+			] ) );
+		} else {
+			return $this->redirect ( Config::HOME_PAGE );
 		}
 	}
 }

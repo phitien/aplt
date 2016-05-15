@@ -7,6 +7,7 @@ use App\Ezsell\View\Html\Menu\Menu;
 use App\Ezsell\View\Html\Menu\MenuItem;
 use App\Ezsell\Models\Cat;
 use App\Ezsell\Traits\AllTrait;
+use App\Ezsell\Config\Config;
 
 class Factory extends BaseFactory {
 	/**
@@ -44,6 +45,7 @@ class Factory extends BaseFactory {
 			$data ['theme'] = 'south-street';
 			$data ['cats'] = Cat::getHierarchy ();
 			$data ['location'] = static::getLocation ();
+			$data ['usecode'] = Config::USE_CODE;
 			
 			if (! isset ( $data ['appMessage'] ))
 				$data ['appMessage'] = '';

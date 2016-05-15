@@ -7,6 +7,7 @@ use App\Ezsell\Models\Role;
 use App\Ezsell\Models\Action;
 
 class Config {
+	const USE_CODE = true;
 	const HOME_PAGE = '/';
 	const INVALID_TOKEN = 'INVALID_TOKEN';
 	const IM_BASE_URL = 'http://im.ezsell.com';

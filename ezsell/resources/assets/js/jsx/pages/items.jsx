@@ -1,3 +1,5 @@
+import ItemList from '../components/itemlist.jsx';
+//
 $( document ).ready(function() {
 	ReactDOM.render(React.createElement(ItemList, {
 		cat: cat,

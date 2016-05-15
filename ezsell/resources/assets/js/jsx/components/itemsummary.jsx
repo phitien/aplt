@@ -6,7 +6,7 @@ var ItemSummary = React.createClass({
 		const className = 'item-summary ' + (this.props.className?this.props.className:'');
 		const item = this.props.item;
 		const showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-		const href = showLink ? '/item/' + item.id : 'javascript:void(0);';
+		const href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
 		var posted_at = <div className='item-created'>
 							<a><span className='label'>Posted:</span><span className='datetimeformat'>{item.created_at}</span></a>
 						</div>;

@@ -1,1224 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports = { "default": require("core-js/library/fn/object/assign"), __esModule: true };
-},{"core-js/library/fn/object/assign":13}],2:[function(require,module,exports){
-module.exports = { "default": require("core-js/library/fn/object/create"), __esModule: true };
-},{"core-js/library/fn/object/create":14}],3:[function(require,module,exports){
-module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
-},{"core-js/library/fn/object/define-property":15}],4:[function(require,module,exports){
-module.exports = { "default": require("core-js/library/fn/object/get-prototype-of"), __esModule: true };
-},{"core-js/library/fn/object/get-prototype-of":16}],5:[function(require,module,exports){
-module.exports = { "default": require("core-js/library/fn/object/set-prototype-of"), __esModule: true };
-},{"core-js/library/fn/object/set-prototype-of":17}],6:[function(require,module,exports){
-module.exports = { "default": require("core-js/library/fn/symbol"), __esModule: true };
-},{"core-js/library/fn/symbol":18}],7:[function(require,module,exports){
-module.exports = { "default": require("core-js/library/fn/symbol/iterator"), __esModule: true };
-},{"core-js/library/fn/symbol/iterator":19}],8:[function(require,module,exports){
-"use strict";
-
-exports.__esModule = true;
-
-exports.default = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-},{}],9:[function(require,module,exports){
-"use strict";
-
-exports.__esModule = true;
-
-var _defineProperty = require("babel-runtime/core-js/object/define-property");
-
-var _defineProperty2 = _interopRequireDefault(_defineProperty);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-},{"babel-runtime/core-js/object/define-property":3}],10:[function(require,module,exports){
-"use strict";
-
-exports.__esModule = true;
-
-var _setPrototypeOf = require("babel-runtime/core-js/object/set-prototype-of");
-
-var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
-
-var _create = require("babel-runtime/core-js/object/create");
-
-var _create2 = _interopRequireDefault(_create);
-
-var _typeof2 = require("babel-runtime/helpers/typeof");
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
-  }
-
-  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
-};
-},{"babel-runtime/core-js/object/create":2,"babel-runtime/core-js/object/set-prototype-of":5,"babel-runtime/helpers/typeof":12}],11:[function(require,module,exports){
-"use strict";
-
-exports.__esModule = true;
-
-var _typeof2 = require("babel-runtime/helpers/typeof");
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
-};
-},{"babel-runtime/helpers/typeof":12}],12:[function(require,module,exports){
-"use strict";
-
-exports.__esModule = true;
-
-var _iterator = require("babel-runtime/core-js/symbol/iterator");
-
-var _iterator2 = _interopRequireDefault(_iterator);
-
-var _symbol = require("babel-runtime/core-js/symbol");
-
-var _symbol2 = _interopRequireDefault(_symbol);
-
-var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
-  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
-} : function (obj) {
-  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
-};
-},{"babel-runtime/core-js/symbol":6,"babel-runtime/core-js/symbol/iterator":7}],13:[function(require,module,exports){
-require('../../modules/es6.object.assign');
-module.exports = require('../../modules/_core').Object.assign;
-},{"../../modules/_core":25,"../../modules/es6.object.assign":80}],14:[function(require,module,exports){
-require('../../modules/es6.object.create');
-var $Object = require('../../modules/_core').Object;
-module.exports = function create(P, D){
-  return $Object.create(P, D);
-};
-},{"../../modules/_core":25,"../../modules/es6.object.create":81}],15:[function(require,module,exports){
-require('../../modules/es6.object.define-property');
-var $Object = require('../../modules/_core').Object;
-module.exports = function defineProperty(it, key, desc){
-  return $Object.defineProperty(it, key, desc);
-};
-},{"../../modules/_core":25,"../../modules/es6.object.define-property":82}],16:[function(require,module,exports){
-require('../../modules/es6.object.get-prototype-of');
-module.exports = require('../../modules/_core').Object.getPrototypeOf;
-},{"../../modules/_core":25,"../../modules/es6.object.get-prototype-of":83}],17:[function(require,module,exports){
-require('../../modules/es6.object.set-prototype-of');
-module.exports = require('../../modules/_core').Object.setPrototypeOf;
-},{"../../modules/_core":25,"../../modules/es6.object.set-prototype-of":84}],18:[function(require,module,exports){
-require('../../modules/es6.symbol');
-require('../../modules/es6.object.to-string');
-require('../../modules/es7.symbol.async-iterator');
-require('../../modules/es7.symbol.observable');
-module.exports = require('../../modules/_core').Symbol;
-},{"../../modules/_core":25,"../../modules/es6.object.to-string":85,"../../modules/es6.symbol":87,"../../modules/es7.symbol.async-iterator":88,"../../modules/es7.symbol.observable":89}],19:[function(require,module,exports){
-require('../../modules/es6.string.iterator');
-require('../../modules/web.dom.iterable');
-module.exports = require('../../modules/_wks-ext').f('iterator');
-},{"../../modules/_wks-ext":77,"../../modules/es6.string.iterator":86,"../../modules/web.dom.iterable":90}],20:[function(require,module,exports){
-module.exports = function(it){
-  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
-  return it;
-};
-},{}],21:[function(require,module,exports){
-module.exports = function(){ /* empty */ };
-},{}],22:[function(require,module,exports){
-var isObject = require('./_is-object');
-module.exports = function(it){
-  if(!isObject(it))throw TypeError(it + ' is not an object!');
-  return it;
-};
-},{"./_is-object":41}],23:[function(require,module,exports){
-// false -> Array#indexOf
-// true  -> Array#includes
-var toIObject = require('./_to-iobject')
-  , toLength  = require('./_to-length')
-  , toIndex   = require('./_to-index');
-module.exports = function(IS_INCLUDES){
-  return function($this, el, fromIndex){
-    var O      = toIObject($this)
-      , length = toLength(O.length)
-      , index  = toIndex(fromIndex, length)
-      , value;
-    // Array#includes uses SameValueZero equality algorithm
-    if(IS_INCLUDES && el != el)while(length > index){
-      value = O[index++];
-      if(value != value)return true;
-    // Array#toIndex ignores holes, Array#includes - not
-    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
-      if(O[index] === el)return IS_INCLUDES || index || 0;
-    } return !IS_INCLUDES && -1;
-  };
-};
-},{"./_to-index":69,"./_to-iobject":71,"./_to-length":72}],24:[function(require,module,exports){
-var toString = {}.toString;
-
-module.exports = function(it){
-  return toString.call(it).slice(8, -1);
-};
-},{}],25:[function(require,module,exports){
-var core = module.exports = {version: '2.3.0'};
-if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-},{}],26:[function(require,module,exports){
-// optional / simple context binding
-var aFunction = require('./_a-function');
-module.exports = function(fn, that, length){
-  aFunction(fn);
-  if(that === undefined)return fn;
-  switch(length){
-    case 1: return function(a){
-      return fn.call(that, a);
-    };
-    case 2: return function(a, b){
-      return fn.call(that, a, b);
-    };
-    case 3: return function(a, b, c){
-      return fn.call(that, a, b, c);
-    };
-  }
-  return function(/* ...args */){
-    return fn.apply(that, arguments);
-  };
-};
-},{"./_a-function":20}],27:[function(require,module,exports){
-// 7.2.1 RequireObjectCoercible(argument)
-module.exports = function(it){
-  if(it == undefined)throw TypeError("Can't call method on  " + it);
-  return it;
-};
-},{}],28:[function(require,module,exports){
-// Thank's IE8 for his funny defineProperty
-module.exports = !require('./_fails')(function(){
-  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
-});
-},{"./_fails":33}],29:[function(require,module,exports){
-var isObject = require('./_is-object')
-  , document = require('./_global').document
-  // in old IE typeof document.createElement is 'object'
-  , is = isObject(document) && isObject(document.createElement);
-module.exports = function(it){
-  return is ? document.createElement(it) : {};
-};
-},{"./_global":34,"./_is-object":41}],30:[function(require,module,exports){
-// IE 8- don't enum bug keys
-module.exports = (
-  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
-).split(',');
-},{}],31:[function(require,module,exports){
-// all enumerable object keys, includes symbols
-var getKeys = require('./_object-keys')
-  , gOPS    = require('./_object-gops')
-  , pIE     = require('./_object-pie');
-module.exports = function(it){
-  var result     = getKeys(it)
-    , getSymbols = gOPS.f;
-  if(getSymbols){
-    var symbols = getSymbols(it)
-      , isEnum  = pIE.f
-      , i       = 0
-      , key;
-    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
-  } return result;
-};
-},{"./_object-gops":56,"./_object-keys":59,"./_object-pie":60}],32:[function(require,module,exports){
-var global    = require('./_global')
-  , core      = require('./_core')
-  , ctx       = require('./_ctx')
-  , hide      = require('./_hide')
-  , PROTOTYPE = 'prototype';
-
-var $export = function(type, name, source){
-  var IS_FORCED = type & $export.F
-    , IS_GLOBAL = type & $export.G
-    , IS_STATIC = type & $export.S
-    , IS_PROTO  = type & $export.P
-    , IS_BIND   = type & $export.B
-    , IS_WRAP   = type & $export.W
-    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
-    , expProto  = exports[PROTOTYPE]
-    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
-    , key, own, out;
-  if(IS_GLOBAL)source = name;
-  for(key in source){
-    // contains in native
-    own = !IS_FORCED && target && target[key] !== undefined;
-    if(own && key in exports)continue;
-    // export native or passed
-    out = own ? target[key] : source[key];
-    // prevent global pollution for namespaces
-    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
-    // bind timers to global for call from export context
-    : IS_BIND && own ? ctx(out, global)
-    // wrap global constructors for prevent change them in library
-    : IS_WRAP && target[key] == out ? (function(C){
-      var F = function(a, b, c){
-        if(this instanceof C){
-          switch(arguments.length){
-            case 0: return new C;
-            case 1: return new C(a);
-            case 2: return new C(a, b);
-          } return new C(a, b, c);
-        } return C.apply(this, arguments);
-      };
-      F[PROTOTYPE] = C[PROTOTYPE];
-      return F;
-    // make static versions for prototype methods
-    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
-    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
-    if(IS_PROTO){
-      (exports.virtual || (exports.virtual = {}))[key] = out;
-      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
-      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
-    }
-  }
-};
-// type bitmap
-$export.F = 1;   // forced
-$export.G = 2;   // global
-$export.S = 4;   // static
-$export.P = 8;   // proto
-$export.B = 16;  // bind
-$export.W = 32;  // wrap
-$export.U = 64;  // safe
-$export.R = 128; // real proto method for `library` 
-module.exports = $export;
-},{"./_core":25,"./_ctx":26,"./_global":34,"./_hide":36}],33:[function(require,module,exports){
-module.exports = function(exec){
-  try {
-    return !!exec();
-  } catch(e){
-    return true;
-  }
-};
-},{}],34:[function(require,module,exports){
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-var global = module.exports = typeof window != 'undefined' && window.Math == Math
-  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
-if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
-},{}],35:[function(require,module,exports){
-var hasOwnProperty = {}.hasOwnProperty;
-module.exports = function(it, key){
-  return hasOwnProperty.call(it, key);
-};
-},{}],36:[function(require,module,exports){
-var dP         = require('./_object-dp')
-  , createDesc = require('./_property-desc');
-module.exports = require('./_descriptors') ? function(object, key, value){
-  return dP.f(object, key, createDesc(1, value));
-} : function(object, key, value){
-  object[key] = value;
-  return object;
-};
-},{"./_descriptors":28,"./_object-dp":51,"./_property-desc":62}],37:[function(require,module,exports){
-module.exports = require('./_global').document && document.documentElement;
-},{"./_global":34}],38:[function(require,module,exports){
-module.exports = !require('./_descriptors') && !require('./_fails')(function(){
-  return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
-});
-},{"./_descriptors":28,"./_dom-create":29,"./_fails":33}],39:[function(require,module,exports){
-// fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = require('./_cof');
-module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
-  return cof(it) == 'String' ? it.split('') : Object(it);
-};
-},{"./_cof":24}],40:[function(require,module,exports){
-// 7.2.2 IsArray(argument)
-var cof = require('./_cof');
-module.exports = Array.isArray || function isArray(arg){
-  return cof(arg) == 'Array';
-};
-},{"./_cof":24}],41:[function(require,module,exports){
-module.exports = function(it){
-  return typeof it === 'object' ? it !== null : typeof it === 'function';
-};
-},{}],42:[function(require,module,exports){
-'use strict';
-var create         = require('./_object-create')
-  , descriptor     = require('./_property-desc')
-  , setToStringTag = require('./_set-to-string-tag')
-  , IteratorPrototype = {};
-
-// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-require('./_hide')(IteratorPrototype, require('./_wks')('iterator'), function(){ return this; });
-
-module.exports = function(Constructor, NAME, next){
-  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
-  setToStringTag(Constructor, NAME + ' Iterator');
-};
-},{"./_hide":36,"./_object-create":50,"./_property-desc":62,"./_set-to-string-tag":65,"./_wks":78}],43:[function(require,module,exports){
-'use strict';
-var LIBRARY        = require('./_library')
-  , $export        = require('./_export')
-  , redefine       = require('./_redefine')
-  , hide           = require('./_hide')
-  , has            = require('./_has')
-  , Iterators      = require('./_iterators')
-  , $iterCreate    = require('./_iter-create')
-  , setToStringTag = require('./_set-to-string-tag')
-  , getPrototypeOf = require('./_object-gpo')
-  , ITERATOR       = require('./_wks')('iterator')
-  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
-  , FF_ITERATOR    = '@@iterator'
-  , KEYS           = 'keys'
-  , VALUES         = 'values';
-
-var returnThis = function(){ return this; };
-
-module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
-  $iterCreate(Constructor, NAME, next);
-  var getMethod = function(kind){
-    if(!BUGGY && kind in proto)return proto[kind];
-    switch(kind){
-      case KEYS: return function keys(){ return new Constructor(this, kind); };
-      case VALUES: return function values(){ return new Constructor(this, kind); };
-    } return function entries(){ return new Constructor(this, kind); };
-  };
-  var TAG        = NAME + ' Iterator'
-    , DEF_VALUES = DEFAULT == VALUES
-    , VALUES_BUG = false
-    , proto      = Base.prototype
-    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
-    , $default   = $native || getMethod(DEFAULT)
-    , $entries   = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined
-    , $anyNative = NAME == 'Array' ? proto.entries || $native : $native
-    , methods, key, IteratorPrototype;
-  // Fix native
-  if($anyNative){
-    IteratorPrototype = getPrototypeOf($anyNative.call(new Base));
-    if(IteratorPrototype !== Object.prototype){
-      // Set @@toStringTag to native iterators
-      setToStringTag(IteratorPrototype, TAG, true);
-      // fix for some old engines
-      if(!LIBRARY && !has(IteratorPrototype, ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
-    }
-  }
-  // fix Array#{values, @@iterator}.name in V8 / FF
-  if(DEF_VALUES && $native && $native.name !== VALUES){
-    VALUES_BUG = true;
-    $default = function values(){ return $native.call(this); };
-  }
-  // Define iterator
-  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
-    hide(proto, ITERATOR, $default);
-  }
-  // Plug for library
-  Iterators[NAME] = $default;
-  Iterators[TAG]  = returnThis;
-  if(DEFAULT){
-    methods = {
-      values:  DEF_VALUES ? $default : getMethod(VALUES),
-      keys:    IS_SET     ? $default : getMethod(KEYS),
-      entries: $entries
-    };
-    if(FORCED)for(key in methods){
-      if(!(key in proto))redefine(proto, key, methods[key]);
-    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
-  }
-  return methods;
-};
-},{"./_export":32,"./_has":35,"./_hide":36,"./_iter-create":42,"./_iterators":45,"./_library":47,"./_object-gpo":57,"./_redefine":63,"./_set-to-string-tag":65,"./_wks":78}],44:[function(require,module,exports){
-module.exports = function(done, value){
-  return {value: value, done: !!done};
-};
-},{}],45:[function(require,module,exports){
-module.exports = {};
-},{}],46:[function(require,module,exports){
-var getKeys   = require('./_object-keys')
-  , toIObject = require('./_to-iobject');
-module.exports = function(object, el){
-  var O      = toIObject(object)
-    , keys   = getKeys(O)
-    , length = keys.length
-    , index  = 0
-    , key;
-  while(length > index)if(O[key = keys[index++]] === el)return key;
-};
-},{"./_object-keys":59,"./_to-iobject":71}],47:[function(require,module,exports){
-module.exports = true;
-},{}],48:[function(require,module,exports){
-var META     = require('./_uid')('meta')
-  , isObject = require('./_is-object')
-  , has      = require('./_has')
-  , setDesc  = require('./_object-dp').f
-  , id       = 0;
-var isExtensible = Object.isExtensible || function(){
-  return true;
-};
-var FREEZE = !require('./_fails')(function(){
-  return isExtensible(Object.preventExtensions({}));
-});
-var setMeta = function(it){
-  setDesc(it, META, {value: {
-    i: 'O' + ++id, // object ID
-    w: {}          // weak collections IDs
-  }});
-};
-var fastKey = function(it, create){
-  // return primitive with prefix
-  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-  if(!has(it, META)){
-    // can't set metadata to uncaught frozen object
-    if(!isExtensible(it))return 'F';
-    // not necessary to add metadata
-    if(!create)return 'E';
-    // add missing metadata
-    setMeta(it);
-  // return object ID
-  } return it[META].i;
-};
-var getWeak = function(it, create){
-  if(!has(it, META)){
-    // can't set metadata to uncaught frozen object
-    if(!isExtensible(it))return true;
-    // not necessary to add metadata
-    if(!create)return false;
-    // add missing metadata
-    setMeta(it);
-  // return hash weak collections IDs
-  } return it[META].w;
-};
-// add metadata on freeze-family methods calling
-var onFreeze = function(it){
-  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
-  return it;
-};
-var meta = module.exports = {
-  KEY:      META,
-  NEED:     false,
-  fastKey:  fastKey,
-  getWeak:  getWeak,
-  onFreeze: onFreeze
-};
-},{"./_fails":33,"./_has":35,"./_is-object":41,"./_object-dp":51,"./_uid":75}],49:[function(require,module,exports){
-'use strict';
-// 19.1.2.1 Object.assign(target, source, ...)
-var getKeys  = require('./_object-keys')
-  , gOPS     = require('./_object-gops')
-  , pIE      = require('./_object-pie')
-  , toObject = require('./_to-object')
-  , IObject  = require('./_iobject')
-  , $assign  = Object.assign;
-
-// should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || require('./_fails')(function(){
-  var A = {}
-    , B = {}
-    , S = Symbol()
-    , K = 'abcdefghijklmnopqrst';
-  A[S] = 7;
-  K.split('').forEach(function(k){ B[k] = k; });
-  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
-  var T     = toObject(target)
-    , aLen  = arguments.length
-    , index = 1
-    , getSymbols = gOPS.f
-    , isEnum     = pIE.f;
-  while(aLen > index){
-    var S      = IObject(arguments[index++])
-      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
-      , length = keys.length
-      , j      = 0
-      , key;
-    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
-  } return T;
-} : $assign;
-},{"./_fails":33,"./_iobject":39,"./_object-gops":56,"./_object-keys":59,"./_object-pie":60,"./_to-object":73}],50:[function(require,module,exports){
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject    = require('./_an-object')
-  , dPs         = require('./_object-dps')
-  , enumBugKeys = require('./_enum-bug-keys')
-  , IE_PROTO    = require('./_shared-key')('IE_PROTO')
-  , Empty       = function(){ /* empty */ }
-  , PROTOTYPE   = 'prototype';
-
-// Create object with fake `null` prototype: use iframe Object with cleared prototype
-var createDict = function(){
-  // Thrash, waste and sodomy: IE GC bug
-  var iframe = require('./_dom-create')('iframe')
-    , i      = enumBugKeys.length
-    , gt     = '>'
-    , iframeDocument;
-  iframe.style.display = 'none';
-  require('./_html').appendChild(iframe);
-  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-  // createDict = iframe.contentWindow.Object;
-  // html.removeChild(iframe);
-  iframeDocument = iframe.contentWindow.document;
-  iframeDocument.open();
-  iframeDocument.write('<script>document.F=Object</script' + gt);
-  iframeDocument.close();
-  createDict = iframeDocument.F;
-  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
-  return createDict();
-};
-
-module.exports = Object.create || function create(O, Properties){
-  var result;
-  if(O !== null){
-    Empty[PROTOTYPE] = anObject(O);
-    result = new Empty;
-    Empty[PROTOTYPE] = null;
-    // add "__proto__" for Object.getPrototypeOf polyfill
-    result[IE_PROTO] = O;
-  } else result = createDict();
-  return Properties === undefined ? result : dPs(result, Properties);
-};
-},{"./_an-object":22,"./_dom-create":29,"./_enum-bug-keys":30,"./_html":37,"./_object-dps":52,"./_shared-key":66}],51:[function(require,module,exports){
-var anObject       = require('./_an-object')
-  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
-  , toPrimitive    = require('./_to-primitive')
-  , dP             = Object.defineProperty;
-
-exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes){
-  anObject(O);
-  P = toPrimitive(P, true);
-  anObject(Attributes);
-  if(IE8_DOM_DEFINE)try {
-    return dP(O, P, Attributes);
-  } catch(e){ /* empty */ }
-  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
-  if('value' in Attributes)O[P] = Attributes.value;
-  return O;
-};
-},{"./_an-object":22,"./_descriptors":28,"./_ie8-dom-define":38,"./_to-primitive":74}],52:[function(require,module,exports){
-var dP       = require('./_object-dp')
-  , anObject = require('./_an-object')
-  , getKeys  = require('./_object-keys');
-
-module.exports = require('./_descriptors') ? Object.defineProperties : function defineProperties(O, Properties){
-  anObject(O);
-  var keys   = getKeys(Properties)
-    , length = keys.length
-    , i = 0
-    , P;
-  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
-  return O;
-};
-},{"./_an-object":22,"./_descriptors":28,"./_object-dp":51,"./_object-keys":59}],53:[function(require,module,exports){
-var pIE            = require('./_object-pie')
-  , createDesc     = require('./_property-desc')
-  , toIObject      = require('./_to-iobject')
-  , toPrimitive    = require('./_to-primitive')
-  , has            = require('./_has')
-  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
-  , gOPD           = Object.getOwnPropertyDescriptor;
-
-exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor(O, P){
-  O = toIObject(O);
-  P = toPrimitive(P, true);
-  if(IE8_DOM_DEFINE)try {
-    return gOPD(O, P);
-  } catch(e){ /* empty */ }
-  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
-};
-},{"./_descriptors":28,"./_has":35,"./_ie8-dom-define":38,"./_object-pie":60,"./_property-desc":62,"./_to-iobject":71,"./_to-primitive":74}],54:[function(require,module,exports){
-// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = require('./_to-iobject')
-  , gOPN      = require('./_object-gopn').f
-  , toString  = {}.toString;
-
-var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
-  ? Object.getOwnPropertyNames(window) : [];
-
-var getWindowNames = function(it){
-  try {
-    return gOPN(it);
-  } catch(e){
-    return windowNames.slice();
-  }
-};
-
-module.exports.f = function getOwnPropertyNames(it){
-  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
-};
-
-},{"./_object-gopn":55,"./_to-iobject":71}],55:[function(require,module,exports){
-// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys      = require('./_object-keys-internal')
-  , hiddenKeys = require('./_enum-bug-keys').concat('length', 'prototype');
-
-exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
-  return $keys(O, hiddenKeys);
-};
-},{"./_enum-bug-keys":30,"./_object-keys-internal":58}],56:[function(require,module,exports){
-exports.f = Object.getOwnPropertySymbols;
-},{}],57:[function(require,module,exports){
-// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has         = require('./_has')
-  , toObject    = require('./_to-object')
-  , IE_PROTO    = require('./_shared-key')('IE_PROTO')
-  , ObjectProto = Object.prototype;
-
-module.exports = Object.getPrototypeOf || function(O){
-  O = toObject(O);
-  if(has(O, IE_PROTO))return O[IE_PROTO];
-  if(typeof O.constructor == 'function' && O instanceof O.constructor){
-    return O.constructor.prototype;
-  } return O instanceof Object ? ObjectProto : null;
-};
-},{"./_has":35,"./_shared-key":66,"./_to-object":73}],58:[function(require,module,exports){
-var has          = require('./_has')
-  , toIObject    = require('./_to-iobject')
-  , arrayIndexOf = require('./_array-includes')(false)
-  , IE_PROTO     = require('./_shared-key')('IE_PROTO');
-
-module.exports = function(object, names){
-  var O      = toIObject(object)
-    , i      = 0
-    , result = []
-    , key;
-  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
-  // Don't enum bug & hidden keys
-  while(names.length > i)if(has(O, key = names[i++])){
-    ~arrayIndexOf(result, key) || result.push(key);
-  }
-  return result;
-};
-},{"./_array-includes":23,"./_has":35,"./_shared-key":66,"./_to-iobject":71}],59:[function(require,module,exports){
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys       = require('./_object-keys-internal')
-  , enumBugKeys = require('./_enum-bug-keys');
-
-module.exports = Object.keys || function keys(O){
-  return $keys(O, enumBugKeys);
-};
-},{"./_enum-bug-keys":30,"./_object-keys-internal":58}],60:[function(require,module,exports){
-exports.f = {}.propertyIsEnumerable;
-},{}],61:[function(require,module,exports){
-// most Object methods by ES6 should accept primitives
-var $export = require('./_export')
-  , core    = require('./_core')
-  , fails   = require('./_fails');
-module.exports = function(KEY, exec){
-  var fn  = (core.Object || {})[KEY] || Object[KEY]
-    , exp = {};
-  exp[KEY] = exec(fn);
-  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
-};
-},{"./_core":25,"./_export":32,"./_fails":33}],62:[function(require,module,exports){
-module.exports = function(bitmap, value){
-  return {
-    enumerable  : !(bitmap & 1),
-    configurable: !(bitmap & 2),
-    writable    : !(bitmap & 4),
-    value       : value
-  };
-};
-},{}],63:[function(require,module,exports){
-module.exports = require('./_hide');
-},{"./_hide":36}],64:[function(require,module,exports){
-// Works with __proto__ only. Old v8 can't work with null proto objects.
-/* eslint-disable no-proto */
-var isObject = require('./_is-object')
-  , anObject = require('./_an-object');
-var check = function(O, proto){
-  anObject(O);
-  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
-};
-module.exports = {
-  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
-    function(test, buggy, set){
-      try {
-        set = require('./_ctx')(Function.call, require('./_object-gopd').f(Object.prototype, '__proto__').set, 2);
-        set(test, []);
-        buggy = !(test instanceof Array);
-      } catch(e){ buggy = true; }
-      return function setPrototypeOf(O, proto){
-        check(O, proto);
-        if(buggy)O.__proto__ = proto;
-        else set(O, proto);
-        return O;
-      };
-    }({}, false) : undefined),
-  check: check
-};
-},{"./_an-object":22,"./_ctx":26,"./_is-object":41,"./_object-gopd":53}],65:[function(require,module,exports){
-var def = require('./_object-dp').f
-  , has = require('./_has')
-  , TAG = require('./_wks')('toStringTag');
-
-module.exports = function(it, tag, stat){
-  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
-};
-},{"./_has":35,"./_object-dp":51,"./_wks":78}],66:[function(require,module,exports){
-var shared = require('./_shared')('keys')
-  , uid    = require('./_uid');
-module.exports = function(key){
-  return shared[key] || (shared[key] = uid(key));
-};
-},{"./_shared":67,"./_uid":75}],67:[function(require,module,exports){
-var global = require('./_global')
-  , SHARED = '__core-js_shared__'
-  , store  = global[SHARED] || (global[SHARED] = {});
-module.exports = function(key){
-  return store[key] || (store[key] = {});
-};
-},{"./_global":34}],68:[function(require,module,exports){
-var toInteger = require('./_to-integer')
-  , defined   = require('./_defined');
-// true  -> String#at
-// false -> String#codePointAt
-module.exports = function(TO_STRING){
-  return function(that, pos){
-    var s = String(defined(that))
-      , i = toInteger(pos)
-      , l = s.length
-      , a, b;
-    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
-    a = s.charCodeAt(i);
-    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-      ? TO_STRING ? s.charAt(i) : a
-      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-  };
-};
-},{"./_defined":27,"./_to-integer":70}],69:[function(require,module,exports){
-var toInteger = require('./_to-integer')
-  , max       = Math.max
-  , min       = Math.min;
-module.exports = function(index, length){
-  index = toInteger(index);
-  return index < 0 ? max(index + length, 0) : min(index, length);
-};
-},{"./_to-integer":70}],70:[function(require,module,exports){
-// 7.1.4 ToInteger
-var ceil  = Math.ceil
-  , floor = Math.floor;
-module.exports = function(it){
-  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-};
-},{}],71:[function(require,module,exports){
-// to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = require('./_iobject')
-  , defined = require('./_defined');
-module.exports = function(it){
-  return IObject(defined(it));
-};
-},{"./_defined":27,"./_iobject":39}],72:[function(require,module,exports){
-// 7.1.15 ToLength
-var toInteger = require('./_to-integer')
-  , min       = Math.min;
-module.exports = function(it){
-  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-};
-},{"./_to-integer":70}],73:[function(require,module,exports){
-// 7.1.13 ToObject(argument)
-var defined = require('./_defined');
-module.exports = function(it){
-  return Object(defined(it));
-};
-},{"./_defined":27}],74:[function(require,module,exports){
-// 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = require('./_is-object');
-// instead of the ES6 spec version, we didn't implement @@toPrimitive case
-// and the second argument - flag - preferred type is a string
-module.exports = function(it, S){
-  if(!isObject(it))return it;
-  var fn, val;
-  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
-  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
-  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
-  throw TypeError("Can't convert object to primitive value");
-};
-},{"./_is-object":41}],75:[function(require,module,exports){
-var id = 0
-  , px = Math.random();
-module.exports = function(key){
-  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-};
-},{}],76:[function(require,module,exports){
-var global         = require('./_global')
-  , core           = require('./_core')
-  , LIBRARY        = require('./_library')
-  , wksExt         = require('./_wks-ext')
-  , defineProperty = require('./_object-dp').f;
-module.exports = function(name){
-  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
-  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
-};
-},{"./_core":25,"./_global":34,"./_library":47,"./_object-dp":51,"./_wks-ext":77}],77:[function(require,module,exports){
-exports.f = require('./_wks');
-},{"./_wks":78}],78:[function(require,module,exports){
-var store      = require('./_shared')('wks')
-  , uid        = require('./_uid')
-  , Symbol     = require('./_global').Symbol
-  , USE_SYMBOL = typeof Symbol == 'function';
-
-var $exports = module.exports = function(name){
-  return store[name] || (store[name] =
-    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
-};
-
-$exports.store = store;
-},{"./_global":34,"./_shared":67,"./_uid":75}],79:[function(require,module,exports){
-'use strict';
-var addToUnscopables = require('./_add-to-unscopables')
-  , step             = require('./_iter-step')
-  , Iterators        = require('./_iterators')
-  , toIObject        = require('./_to-iobject');
-
-// 22.1.3.4 Array.prototype.entries()
-// 22.1.3.13 Array.prototype.keys()
-// 22.1.3.29 Array.prototype.values()
-// 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = require('./_iter-define')(Array, 'Array', function(iterated, kind){
-  this._t = toIObject(iterated); // target
-  this._i = 0;                   // next index
-  this._k = kind;                // kind
-// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-}, function(){
-  var O     = this._t
-    , kind  = this._k
-    , index = this._i++;
-  if(!O || index >= O.length){
-    this._t = undefined;
-    return step(1);
-  }
-  if(kind == 'keys'  )return step(0, index);
-  if(kind == 'values')return step(0, O[index]);
-  return step(0, [index, O[index]]);
-}, 'values');
-
-// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
-Iterators.Arguments = Iterators.Array;
-
-addToUnscopables('keys');
-addToUnscopables('values');
-addToUnscopables('entries');
-},{"./_add-to-unscopables":21,"./_iter-define":43,"./_iter-step":44,"./_iterators":45,"./_to-iobject":71}],80:[function(require,module,exports){
-// 19.1.3.1 Object.assign(target, source)
-var $export = require('./_export');
-
-$export($export.S + $export.F, 'Object', {assign: require('./_object-assign')});
-},{"./_export":32,"./_object-assign":49}],81:[function(require,module,exports){
-var $export = require('./_export')
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', {create: require('./_object-create')});
-},{"./_export":32,"./_object-create":50}],82:[function(require,module,exports){
-var $export = require('./_export');
-// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
-},{"./_descriptors":28,"./_export":32,"./_object-dp":51}],83:[function(require,module,exports){
-// 19.1.2.9 Object.getPrototypeOf(O)
-var toObject        = require('./_to-object')
-  , $getPrototypeOf = require('./_object-gpo');
-
-require('./_object-sap')('getPrototypeOf', function(){
-  return function getPrototypeOf(it){
-    return $getPrototypeOf(toObject(it));
-  };
-});
-},{"./_object-gpo":57,"./_object-sap":61,"./_to-object":73}],84:[function(require,module,exports){
-// 19.1.3.19 Object.setPrototypeOf(O, proto)
-var $export = require('./_export');
-$export($export.S, 'Object', {setPrototypeOf: require('./_set-proto').set});
-},{"./_export":32,"./_set-proto":64}],85:[function(require,module,exports){
-
-},{}],86:[function(require,module,exports){
-'use strict';
-var $at  = require('./_string-at')(true);
-
-// 21.1.3.27 String.prototype[@@iterator]()
-require('./_iter-define')(String, 'String', function(iterated){
-  this._t = String(iterated); // target
-  this._i = 0;                // next index
-// 21.1.5.2.1 %StringIteratorPrototype%.next()
-}, function(){
-  var O     = this._t
-    , index = this._i
-    , point;
-  if(index >= O.length)return {value: undefined, done: true};
-  point = $at(O, index);
-  this._i += point.length;
-  return {value: point, done: false};
-});
-},{"./_iter-define":43,"./_string-at":68}],87:[function(require,module,exports){
-'use strict';
-// ECMAScript 6 symbols shim
-var global         = require('./_global')
-  , has            = require('./_has')
-  , DESCRIPTORS    = require('./_descriptors')
-  , $export        = require('./_export')
-  , redefine       = require('./_redefine')
-  , META           = require('./_meta').KEY
-  , $fails         = require('./_fails')
-  , shared         = require('./_shared')
-  , setToStringTag = require('./_set-to-string-tag')
-  , uid            = require('./_uid')
-  , wks            = require('./_wks')
-  , wksExt         = require('./_wks-ext')
-  , wksDefine      = require('./_wks-define')
-  , keyOf          = require('./_keyof')
-  , enumKeys       = require('./_enum-keys')
-  , isArray        = require('./_is-array')
-  , anObject       = require('./_an-object')
-  , toIObject      = require('./_to-iobject')
-  , toPrimitive    = require('./_to-primitive')
-  , createDesc     = require('./_property-desc')
-  , _create        = require('./_object-create')
-  , gOPNExt        = require('./_object-gopn-ext')
-  , $GOPD          = require('./_object-gopd')
-  , $DP            = require('./_object-dp')
-  , $keys          = require('./_object-keys')
-  , gOPD           = $GOPD.f
-  , dP             = $DP.f
-  , gOPN           = gOPNExt.f
-  , $Symbol        = global.Symbol
-  , $JSON          = global.JSON
-  , _stringify     = $JSON && $JSON.stringify
-  , PROTOTYPE      = 'prototype'
-  , HIDDEN         = wks('_hidden')
-  , TO_PRIMITIVE   = wks('toPrimitive')
-  , isEnum         = {}.propertyIsEnumerable
-  , SymbolRegistry = shared('symbol-registry')
-  , AllSymbols     = shared('symbols')
-  , ObjectProto    = Object[PROTOTYPE]
-  , USE_NATIVE     = typeof $Symbol == 'function'
-  , QObject        = global.QObject;
-// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
-var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
-
-// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
-var setSymbolDesc = DESCRIPTORS && $fails(function(){
-  return _create(dP({}, 'a', {
-    get: function(){ return dP(this, 'a', {value: 7}).a; }
-  })).a != 7;
-}) ? function(it, key, D){
-  var protoDesc = gOPD(ObjectProto, key);
-  if(protoDesc)delete ObjectProto[key];
-  dP(it, key, D);
-  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
-} : dP;
-
-var wrap = function(tag){
-  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
-  sym._k = tag;
-  return sym;
-};
-
-var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
-  return typeof it == 'symbol';
-} : function(it){
-  return it instanceof $Symbol;
-};
-
-var $defineProperty = function defineProperty(it, key, D){
-  anObject(it);
-  key = toPrimitive(key, true);
-  anObject(D);
-  if(has(AllSymbols, key)){
-    if(!D.enumerable){
-      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
-      it[HIDDEN][key] = true;
-    } else {
-      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
-      D = _create(D, {enumerable: createDesc(0, false)});
-    } return setSymbolDesc(it, key, D);
-  } return dP(it, key, D);
-};
-var $defineProperties = function defineProperties(it, P){
-  anObject(it);
-  var keys = enumKeys(P = toIObject(P))
-    , i    = 0
-    , l = keys.length
-    , key;
-  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
-  return it;
-};
-var $create = function create(it, P){
-  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
-};
-var $propertyIsEnumerable = function propertyIsEnumerable(key){
-  var E = isEnum.call(this, key = toPrimitive(key, true));
-  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
-};
-var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
-  var D = gOPD(it = toIObject(it), key = toPrimitive(key, true));
-  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
-  return D;
-};
-var $getOwnPropertyNames = function getOwnPropertyNames(it){
-  var names  = gOPN(toIObject(it))
-    , result = []
-    , i      = 0
-    , key;
-  while(names.length > i)if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
-  return result;
-};
-var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
-  var names  = gOPN(toIObject(it))
-    , result = []
-    , i      = 0
-    , key;
-  while(names.length > i)if(has(AllSymbols, key = names[i++]))result.push(AllSymbols[key]);
-  return result;
-};
-
-// 19.4.1.1 Symbol([description])
-if(!USE_NATIVE){
-  $Symbol = function Symbol(){
-    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
-    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
-    DESCRIPTORS && setter && setSymbolDesc(ObjectProto, tag, {
-      configurable: true,
-      set: function(value){
-        if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
-        setSymbolDesc(this, tag, createDesc(1, value));
-      }
-    });
-    return wrap(tag);
-  };
-  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
-    return this._k;
-  });
-
-  $GOPD.f = $getOwnPropertyDescriptor;
-  $DP.f   = $defineProperty;
-  require('./_object-gopn').f = gOPNExt.f = $getOwnPropertyNames;
-  require('./_object-pie').f  = $propertyIsEnumerable;
-  require('./_object-gops').f = $getOwnPropertySymbols;
-
-  if(DESCRIPTORS && !require('./_library')){
-    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
-  }
-
-  wksExt.f = function(name){
-    return wrap(wks(name));
-  }
-}
-
-$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
-
-for(var symbols = (
-  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
-  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
-).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
-
-for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
-
-$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
-  // 19.4.2.1 Symbol.for(key)
-  'for': function(key){
-    return has(SymbolRegistry, key += '')
-      ? SymbolRegistry[key]
-      : SymbolRegistry[key] = $Symbol(key);
-  },
-  // 19.4.2.5 Symbol.keyFor(sym)
-  keyFor: function keyFor(key){
-    if(isSymbol(key))return keyOf(SymbolRegistry, key);
-    throw TypeError(key + ' is not a symbol!');
-  },
-  useSetter: function(){ setter = true; },
-  useSimple: function(){ setter = false; }
-});
-
-$export($export.S + $export.F * !USE_NATIVE, 'Object', {
-  // 19.1.2.2 Object.create(O [, Properties])
-  create: $create,
-  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
-  defineProperty: $defineProperty,
-  // 19.1.2.3 Object.defineProperties(O, Properties)
-  defineProperties: $defineProperties,
-  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
-  // 19.1.2.7 Object.getOwnPropertyNames(O)
-  getOwnPropertyNames: $getOwnPropertyNames,
-  // 19.1.2.8 Object.getOwnPropertySymbols(O)
-  getOwnPropertySymbols: $getOwnPropertySymbols
-});
-
-// 24.3.2 JSON.stringify(value [, replacer [, space]])
-$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
-  var S = $Symbol();
-  // MS Edge converts symbol values to JSON as {}
-  // WebKit converts symbol values to JSON as null
-  // V8 throws on boxed symbols
-  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
-})), 'JSON', {
-  stringify: function stringify(it){
-    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
-    var args = [it]
-      , i    = 1
-      , replacer, $replacer;
-    while(arguments.length > i)args.push(arguments[i++]);
-    replacer = args[1];
-    if(typeof replacer == 'function')$replacer = replacer;
-    if($replacer || !isArray(replacer))replacer = function(key, value){
-      if($replacer)value = $replacer.call(this, key, value);
-      if(!isSymbol(value))return value;
-    };
-    args[1] = replacer;
-    return _stringify.apply($JSON, args);
-  }
-});
-
-// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-$Symbol[PROTOTYPE][TO_PRIMITIVE] || require('./_hide')($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
-// 19.4.3.5 Symbol.prototype[@@toStringTag]
-setToStringTag($Symbol, 'Symbol');
-// 20.2.1.9 Math[@@toStringTag]
-setToStringTag(Math, 'Math', true);
-// 24.3.3 JSON[@@toStringTag]
-setToStringTag(global.JSON, 'JSON', true);
-},{"./_an-object":22,"./_descriptors":28,"./_enum-keys":31,"./_export":32,"./_fails":33,"./_global":34,"./_has":35,"./_hide":36,"./_is-array":40,"./_keyof":46,"./_library":47,"./_meta":48,"./_object-create":50,"./_object-dp":51,"./_object-gopd":53,"./_object-gopn":55,"./_object-gopn-ext":54,"./_object-gops":56,"./_object-keys":59,"./_object-pie":60,"./_property-desc":62,"./_redefine":63,"./_set-to-string-tag":65,"./_shared":67,"./_to-iobject":71,"./_to-primitive":74,"./_uid":75,"./_wks":78,"./_wks-define":76,"./_wks-ext":77}],88:[function(require,module,exports){
-require('./_wks-define')('asyncIterator');
-},{"./_wks-define":76}],89:[function(require,module,exports){
-require('./_wks-define')('observable');
-},{"./_wks-define":76}],90:[function(require,module,exports){
-require('./es6.array.iterator');
-var global        = require('./_global')
-  , hide          = require('./_hide')
-  , Iterators     = require('./_iterators')
-  , TO_STRING_TAG = require('./_wks')('toStringTag');
-
-for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
-  var NAME       = collections[i]
-    , Collection = global[NAME]
-    , proto      = Collection && Collection.prototype;
-  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
-  Iterators[NAME] = Iterators.Array;
-}
-},{"./_global":34,"./_hide":36,"./_iterators":45,"./_wks":78,"./es6.array.iterator":79}],91:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1253,7 +33,7 @@ module.exports = function () {
   };
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Mixin.js":93,"react":131}],92:[function(require,module,exports){
+},{"./Mixin.js":3,"react":38}],2:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1286,7 +66,7 @@ module.exports = function (Component) {
   });
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Mixin.js":93,"react":131}],93:[function(require,module,exports){
+},{"./Mixin.js":3,"react":38}],3:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1463,7 +243,7 @@ module.exports = {
   }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./utils.js":95,"react":131}],94:[function(require,module,exports){
+},{"./utils.js":5,"react":38}],4:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1926,7 +706,7 @@ if (!global.exports && !global.module && (!global.define || !global.define.amd))
 
 module.exports = Formsy;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Decorator.js":91,"./HOC.js":92,"./Mixin.js":93,"./utils.js":95,"./validationRules.js":96,"form-data-to-object":97,"react":131}],95:[function(require,module,exports){
+},{"./Decorator.js":1,"./HOC.js":2,"./Mixin.js":3,"./utils.js":5,"./validationRules.js":6,"form-data-to-object":7,"react":38}],5:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -1982,7 +762,7 @@ module.exports = {
     return null;
   }
 };
-},{}],96:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 var _isExisty = function _isExisty(value) {
@@ -2063,7 +843,7 @@ var validations = {
 };
 
 module.exports = validations;
-},{}],97:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 function toObj(source) {
   return Object.keys(source).reduce(function (output, key) {
     var parentKey = key.match(/[^\[]*/i);
@@ -2110,7 +890,7 @@ module.exports = {
   fromObj: fromObj,
   toObj: toObj
 }
-},{}],98:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2206,1071 +986,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],99:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _assign = require('babel-runtime/core-js/object/assign');
-
-var _assign2 = _interopRequireDefault(_assign);
-
-var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactSwipeable = require('react-swipeable');
-
-var _reactSwipeable2 = _interopRequireDefault(_reactSwipeable);
-
-var _screenfull = require('screenfull');
-
-var _screenfull2 = _interopRequireDefault(_screenfull);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var MIN_INTERVAL = 500;
-
-function throttle(func, wait) {
-  var context = void 0,
-      args = void 0,
-      result = void 0;
-  var timeout = null;
-  var previous = 0;
-
-  var later = function later() {
-    previous = new Date().getTime();
-    timeout = null;
-    result = func.apply(context, args);
-    if (!timeout) context = args = null;
-  };
-  return function () {
-    var now = new Date().getTime();
-    var remaining = wait - (now - previous);
-    context = this;
-    args = arguments;
-    if (remaining <= 0 || remaining > wait) {
-      if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-      }
-      previous = now;
-      result = func.apply(context, args);
-      if (!timeout) context = args = null;
-    } else if (!timeout) {
-      timeout = setTimeout(later, remaining);
-    }
-    return result;
-  };
-}
-
-var ImageGallery = function (_React$Component) {
-  (0, _inherits3.default)(ImageGallery, _React$Component);
-
-  function ImageGallery(props) {
-    (0, _classCallCheck3.default)(this, ImageGallery);
-
-    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageGallery).call(this, props));
-
-    _this.state = {
-      currentIndex: props.startIndex,
-      thumbsTranslateX: 0,
-      offsetPercentage: 0,
-      galleryWidth: 0
-    };
-
-    _this._slideLeft = throttle(_this._slideLeft, MIN_INTERVAL, true);
-    _this._slideRight = throttle(_this._slideRight, MIN_INTERVAL, true);
-    _this._handleResize = _this._handleResize.bind(_this);
-    _this._handleKeyDown = _this._handleKeyDown.bind(_this);
-    return _this;
-  }
-
-  (0, _createClass3.default)(ImageGallery, [{
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState) {
-      if (prevState.galleryWidth !== this.state.galleryWidth || prevProps.showThumbnails !== this.props.showThumbnails) {
-
-        // adjust thumbnail container when window width is adjusted
-        this._setThumbsTranslateX(-this._getThumbsTranslateX(this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
-      }
-
-      if (prevState.currentIndex !== this.state.currentIndex) {
-        if (this.props.onSlide) {
-          this.props.onSlide(this.state.currentIndex);
-        }
-
-        this._updateThumbnailTranslateX(prevState);
-      }
-    }
-  }, {
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      this._thumbnailDelay = 300;
-      this._ghotClickDelay = 600;
-      this._preventGhostClick = false;
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      window.setTimeout(function () {
-        _this2._handleResize(), 300;
-      });
-      if (this.props.autoPlay) {
-        this.play();
-      }
-      window.addEventListener('keydown', this._handleKeyDown);
-      window.addEventListener('resize', this._handleResize);
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      window.removeEventListener('keydown', this._handleKeyDown);
-      window.removeEventListener('resize', this._handleResize);
-      if (this._intervalId) {
-        window.clearInterval(this._intervalId);
-        this._intervalId = null;
-      }
-    }
-  }, {
-    key: 'play',
-    value: function play() {
-      var _this3 = this;
-
-      var callback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-      if (this._intervalId) {
-        return;
-      }
-      var slideInterval = this.props.slideInterval;
-
-      this._intervalId = window.setInterval(function () {
-        if (!_this3.state.hovering) {
-          if (!_this3.props.infinite && !_this3._canSlideRight()) {
-            _this3.pause();
-          } else {
-            _this3.slideToIndex(_this3.state.currentIndex + 1);
-          }
-        }
-      }, slideInterval > MIN_INTERVAL ? slideInterval : MIN_INTERVAL);
-
-      if (this.props.onPlay && callback) {
-        this.props.onPlay(this.state.currentIndex);
-      }
-    }
-  }, {
-    key: 'pause',
-    value: function pause() {
-      var callback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-      if (this._intervalId) {
-        window.clearInterval(this._intervalId);
-        this._intervalId = null;
-      }
-
-      if (this.props.onPause && callback) {
-        this.props.onPause(this.state.currentIndex);
-      }
-    }
-  }, {
-    key: 'fullScreen',
-    value: function fullScreen() {
-      if (_screenfull2.default.enabled) {
-        if (!_screenfull2.default.isFullscreen) {
-          _screenfull2.default.request(this._imageGallery);
-        } else {
-          _screenfull2.default.exit();
-        }
-      }
-    }
-  }, {
-    key: 'slideToIndex',
-    value: function slideToIndex(index, event) {
-      var slideCount = this.props.items.length - 1;
-      var currentIndex = index;
-
-      if (index < 0) {
-        currentIndex = slideCount;
-      } else if (index > slideCount) {
-        currentIndex = 0;
-      }
-
-      this.setState({
-        previousIndex: this.state.currentIndex,
-        currentIndex: currentIndex,
-        offsetPercentage: 0,
-        style: {
-          transition: 'transform .45s ease-out'
-        }
-      });
-
-      if (event) {
-        if (this._intervalId) {
-          // user event, while playing, reset interval
-          this.pause(false);
-          this.play(false);
-        }
-      }
-    }
-  }, {
-    key: '_wrapClick',
-    value: function _wrapClick(func) {
-      var _this4 = this;
-
-      if (typeof func === 'function') {
-        return function (event) {
-          if (_this4._preventGhostClick === true) {
-            return;
-          }
-          func(event);
-        };
-      }
-    }
-  }, {
-    key: '_touchEnd',
-    value: function _touchEnd() {
-      var _this5 = this;
-
-      this._preventGhostClick = true;
-      this._preventGhostClickTimer = window.setTimeout(function () {
-        _this5._preventGhostClick = false;
-        _this5._preventGhostClickTimer = null;
-      }, this._ghotClickDelay);
-    }
-  }, {
-    key: '_handleResize',
-    value: function _handleResize() {
-      if (this._imageGallery) {
-        this.setState({ galleryWidth: this._imageGallery.offsetWidth });
-      }
-    }
-  }, {
-    key: '_handleKeyDown',
-    value: function _handleKeyDown(event) {
-      var LEFT_ARROW = 37;
-      var RIGHT_ARROW = 39;
-      var key = parseInt(event.keyCode || event.which || 0);
-
-      switch (key) {
-        case LEFT_ARROW:
-          if (this._canSlideLeft() && !this._intervalId) {
-            this._slideLeft();
-          }
-          break;
-        case RIGHT_ARROW:
-          if (this._canSlideRight() && !this._intervalId) {
-            this._slideRight();
-          }
-          break;
-      }
-    }
-  }, {
-    key: '_handleMouseOverThumbnails',
-    value: function _handleMouseOverThumbnails(index) {
-      var _this6 = this;
-
-      if (this.props.slideOnThumbnailHover) {
-        this.setState({ hovering: true });
-        if (this._thumbnailTimer) {
-          window.clearTimeout(this._thumbnailTimer);
-          this._thumbnailTimer = null;
-        }
-        this._thumbnailTimer = window.setTimeout(function () {
-          _this6.slideToIndex(index);
-        }, this._thumbnailDelay);
-      }
-    }
-  }, {
-    key: '_handleMouseLeaveThumbnails',
-    value: function _handleMouseLeaveThumbnails() {
-      if (this._thumbnailTimer) {
-        window.clearTimeout(this._thumbnailTimer);
-        this._thumbnailTimer = null;
-        if (this.props.autoPlay === true) {
-          this.play(false);
-        }
-      }
-      this.setState({ hovering: false });
-    }
-  }, {
-    key: '_handleMouseOver',
-    value: function _handleMouseOver() {
-      this.setState({ hovering: true });
-    }
-  }, {
-    key: '_handleMouseLeave',
-    value: function _handleMouseLeave() {
-      this.setState({ hovering: false });
-    }
-  }, {
-    key: '_handleImageError',
-    value: function _handleImageError(event) {
-      if (this.props.defaultImage && event.target.src.indexOf(this.props.defaultImage) === -1) {
-        event.target.src = this.props.defaultImage;
-      }
-    }
-  }, {
-    key: '_handleOnSwiped',
-    value: function _handleOnSwiped(ev, x, y, isFlick) {
-      this.setState({ isFlick: isFlick });
-    }
-  }, {
-    key: '_handleOnSwipedTo',
-    value: function _handleOnSwipedTo(index) {
-      var slideTo = this.state.currentIndex;
-      if (Math.abs(this.state.offsetPercentage) > 30 || this.state.isFlick) {
-        slideTo += index;
-      }
-
-      if (index < 0) {
-        if (!this._canSlideLeft()) {
-          slideTo = this.state.currentIndex;
-        }
-      } else {
-        if (!this._canSlideRight()) {
-          slideTo = this.state.currentIndex;
-        }
-      }
-
-      this.slideToIndex(slideTo);
-    }
-  }, {
-    key: '_handleSwiping',
-    value: function _handleSwiping(index, _, delta) {
-      var offsetPercentage = index * (delta / this.state.galleryWidth * 100);
-      this.setState({ offsetPercentage: offsetPercentage, style: {} });
-    }
-  }, {
-    key: '_canNavigate',
-    value: function _canNavigate() {
-      return this.props.items.length >= 2;
-    }
-  }, {
-    key: '_canSlideLeft',
-    value: function _canSlideLeft() {
-      if (this.props.infinite) {
-        return true;
-      } else {
-        return this.state.currentIndex > 0;
-      }
-    }
-  }, {
-    key: '_canSlideRight',
-    value: function _canSlideRight() {
-      if (this.props.infinite) {
-        return true;
-      } else {
-        return this.state.currentIndex < this.props.items.length - 1;
-      }
-    }
-  }, {
-    key: '_updateThumbnailTranslateX',
-    value: function _updateThumbnailTranslateX(prevState) {
-      if (this.state.currentIndex === 0) {
-        this._setThumbsTranslateX(0);
-      } else {
-        var indexDifference = Math.abs(prevState.currentIndex - this.state.currentIndex);
-        var scrollX = this._getThumbsTranslateX(indexDifference);
-        if (scrollX > 0) {
-          if (prevState.currentIndex < this.state.currentIndex) {
-            this._setThumbsTranslateX(this.state.thumbsTranslateX - scrollX);
-          } else if (prevState.currentIndex > this.state.currentIndex) {
-            this._setThumbsTranslateX(this.state.thumbsTranslateX + scrollX);
-          }
-        }
-      }
-    }
-  }, {
-    key: '_setThumbsTranslateX',
-    value: function _setThumbsTranslateX(thumbsTranslateX) {
-      this.setState({ thumbsTranslateX: thumbsTranslateX });
-    }
-  }, {
-    key: '_getThumbsTranslateX',
-    value: function _getThumbsTranslateX(indexDifference) {
-      if (this.props.disableThumbnailScroll) {
-        return 0;
-      }
-
-      if (this._thumbnails) {
-        if (this._thumbnails.scrollWidth <= this.state.galleryWidth) {
-          return 0;
-        }
-        var totalThumbnails = this._thumbnails.children.length;
-        // total scroll-x required to see the last thumbnail
-        var totalScrollX = this._thumbnails.scrollWidth - this.state.galleryWidth;
-        // scroll-x required per index change
-        var perIndexScrollX = totalScrollX / (totalThumbnails - 1);
-
-        return indexDifference * perIndexScrollX;
-      }
-    }
-  }, {
-    key: '_getAlignmentClassName',
-    value: function _getAlignmentClassName(index) {
-      var currentIndex = this.state.currentIndex;
-
-      var alignment = '';
-      var LEFT = 'left';
-      var CENTER = 'center';
-      var RIGHT = 'right';
-
-      switch (index) {
-        case currentIndex - 1:
-          alignment = ' ' + LEFT;
-          break;
-        case currentIndex:
-          alignment = ' ' + CENTER;
-          break;
-        case currentIndex + 1:
-          alignment = ' ' + RIGHT;
-          break;
-      }
-
-      if (this.props.items.length >= 3 && this.props.infinite) {
-        if (index === 0 && currentIndex === this.props.items.length - 1) {
-          // set first slide as right slide if were sliding right from last slide
-          alignment = ' ' + RIGHT;
-        } else if (index === this.props.items.length - 1 && currentIndex === 0) {
-          // set last slide as left slide if were sliding left from first slide
-          alignment = ' ' + LEFT;
-        }
-      }
-
-      return alignment;
-    }
-  }, {
-    key: '_getSlideStyle',
-    value: function _getSlideStyle(index) {
-      var _state = this.state;
-      var currentIndex = _state.currentIndex;
-      var offsetPercentage = _state.offsetPercentage;
-
-      var basetranslateX = -100 * currentIndex;
-      var totalSlides = this.props.items.length - 1;
-
-      var translateX = basetranslateX + index * 100 + offsetPercentage;
-      var zIndex = 1;
-
-      if (this.props.infinite && this.props.items.length > 1) {
-        if (currentIndex === 0 && index === totalSlides) {
-          // make the last slide the slide before the first
-          translateX = -100 + offsetPercentage;
-        } else if (currentIndex === totalSlides && index === 0) {
-          // make the first slide the slide after the last
-          translateX = 100 + offsetPercentage;
-        }
-      }
-
-      // current index has more zIndex so slides wont fly by toggling infinite
-      if (index === currentIndex) {
-        zIndex = 3;
-      } else if (index === this.state.previousIndex) {
-        zIndex = 2;
-      }
-
-      var translate3d = 'translate3d(' + translateX + '%, 0, 0)';
-
-      return {
-        WebkitTransform: translate3d,
-        MozTransform: translate3d,
-        msTransform: translate3d,
-        OTransform: translate3d,
-        transform: translate3d,
-        zIndex: zIndex
-      };
-    }
-  }, {
-    key: '_getThumbnailStyle',
-    value: function _getThumbnailStyle() {
-      var translate3d = 'translate3d(' + this.state.thumbsTranslateX + 'px, 0, 0)';
-      return {
-        WebkitTransform: translate3d,
-        MozTransform: translate3d,
-        msTransform: translate3d,
-        OTransform: translate3d,
-        transform: translate3d
-      };
-    }
-  }, {
-    key: '_slideLeft',
-    value: function _slideLeft() {
-      this.slideToIndex(this.state.currentIndex - 1);
-    }
-  }, {
-    key: '_slideRight',
-    value: function _slideRight() {
-      this.slideToIndex(this.state.currentIndex + 1);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this7 = this;
-
-      var currentIndex = this.state.currentIndex;
-
-      var thumbnailStyle = this._getThumbnailStyle();
-
-      var slideLeft = this._slideLeft.bind(this);
-      var slideRight = this._slideRight.bind(this);
-
-      var slides = [];
-      var thumbnails = [];
-      var bullets = [];
-
-      this.props.items.map(function (item, index) {
-        var alignment = _this7._getAlignmentClassName(index);
-        var originalClass = item.originalClass ? ' ' + item.originalClass : '';
-        var thumbnailClass = item.thumbnailClass ? ' ' + item.thumbnailClass : '';
-
-        var onImageError = _this7._handleImageError;
-        if (_this7.props.onImageError) {
-          onImageError = _this7.props.onImageError;
-        }
-        var slide = _react2.default.createElement(
-          'div',
-          {
-            key: index,
-            className: 'image-gallery-slide' + alignment + originalClass,
-            style: (0, _assign2.default)(_this7._getSlideStyle(index), _this7.state.style),
-            onClick: _this7._wrapClick(_this7.props.onClick),
-            onTouchStart: _this7.props.onClick,
-            onTouchEnd: _this7._touchEnd.bind(_this7)
-          },
-          _react2.default.createElement(
-            'div',
-            { className: 'image-gallery-image' },
-            _react2.default.createElement('img', {
-              src: item.original,
-              alt: item.originalAlt,
-              onLoad: _this7.props.onImageLoad,
-              onError: onImageError.bind(_this7)
-            }),
-            item.description && _react2.default.createElement(
-              'span',
-              { className: 'image-gallery-description' },
-              item.description
-            )
-          )
-        );
-
-        if (_this7.props.lazyLoad) {
-          if (alignment) {
-            slides.push(slide);
-          }
-        } else {
-          slides.push(slide);
-        }
-
-        var onThumbnailError = _this7._handleImageError;
-        if (_this7.props.onThumbnailError) {
-          onThumbnailError = _this7.props.onThumbnailError;
-        }
-
-        if (_this7.props.showThumbnails) {
-          thumbnails.push(_react2.default.createElement(
-            'a',
-            {
-              onMouseOver: _this7._handleMouseOverThumbnails.bind(_this7, index),
-              onMouseLeave: _this7._handleMouseLeaveThumbnails.bind(_this7, index),
-              key: index,
-              className: 'image-gallery-thumbnail' + (currentIndex === index ? ' active' : '') + thumbnailClass,
-
-              onTouchStart: _this7.slideToIndex.bind(_this7, index),
-              onTouchEnd: _this7._touchEnd.bind(_this7),
-              onClick: _this7._wrapClick(_this7.slideToIndex.bind(_this7, index)) },
-            _react2.default.createElement('img', {
-              src: item.thumbnail,
-              alt: item.thumbnailAlt,
-              onError: onThumbnailError.bind(_this7) })
-          ));
-        }
-
-        if (_this7.props.showBullets) {
-          bullets.push(_react2.default.createElement('li', {
-            key: index,
-            className: 'image-gallery-bullet ' + (currentIndex === index ? 'active' : ''),
-
-            onTouchStart: _this7.slideToIndex.bind(_this7, index),
-            onTouchEnd: _this7._touchEnd.bind(_this7),
-            onClick: _this7._wrapClick(_this7.slideToIndex.bind(_this7, index)) }));
-        }
-      });
-
-      return _react2.default.createElement(
-        'section',
-        { ref: function ref(i) {
-            return _this7._imageGallery = i;
-          }, className: 'image-gallery' },
-        _react2.default.createElement(
-          'div',
-          {
-            onMouseOver: this._handleMouseOver.bind(this),
-            onMouseLeave: this._handleMouseLeave.bind(this),
-            className: 'image-gallery-content' },
-          this._canNavigate() ? [this.props.showNav && _react2.default.createElement(
-            'span',
-            { key: 'navigation' },
-            this._canSlideLeft() && _react2.default.createElement('a', {
-              className: 'image-gallery-left-nav',
-              onTouchStart: slideLeft,
-              onTouchEnd: this._touchEnd.bind(this),
-              onClick: this._wrapClick(slideLeft) }),
-            this._canSlideRight() && _react2.default.createElement('a', {
-              className: 'image-gallery-right-nav',
-              onTouchStart: slideRight,
-              onTouchEnd: this._touchEnd.bind(this),
-              onClick: this._wrapClick(slideRight) })
-          ), _react2.default.createElement(
-            _reactSwipeable2.default,
-            {
-              className: 'image-gallery-swipe',
-              key: 'swipeable',
-              delta: 1,
-              onSwipingLeft: this._handleSwiping.bind(this, -1),
-              onSwipingRight: this._handleSwiping.bind(this, 1),
-              onSwiped: this._handleOnSwiped.bind(this),
-              onSwipedLeft: this._handleOnSwipedTo.bind(this, 1),
-              onSwipedRight: this._handleOnSwipedTo.bind(this, -1)
-            },
-            _react2.default.createElement(
-              'div',
-              { className: 'image-gallery-slides' },
-              slides
-            )
-          )] : _react2.default.createElement(
-            'div',
-            { className: 'image-gallery-slides' },
-            slides
-          ),
-          this.props.showBullets && _react2.default.createElement(
-            'div',
-            { className: 'image-gallery-bullets' },
-            _react2.default.createElement(
-              'ul',
-              { className: 'image-gallery-bullets-container' },
-              bullets
-            )
-          ),
-          this.props.showIndex && _react2.default.createElement(
-            'div',
-            { className: 'image-gallery-index' },
-            _react2.default.createElement(
-              'span',
-              { className: 'image-gallery-index-current' },
-              this.state.currentIndex + 1
-            ),
-            _react2.default.createElement(
-              'span',
-              { className: 'image-gallery-index-separator' },
-              this.props.indexSeparator
-            ),
-            _react2.default.createElement(
-              'span',
-              { className: 'image-gallery-index-total' },
-              this.props.items.length
-            )
-          )
-        ),
-        this.props.showThumbnails && _react2.default.createElement(
-          'div',
-          { className: 'image-gallery-thumbnails' },
-          _react2.default.createElement(
-            'div',
-            {
-              ref: function ref(t) {
-                return _this7._thumbnails = t;
-              },
-              className: 'image-gallery-thumbnails-container',
-              style: thumbnailStyle },
-            thumbnails
-          )
-        )
-      );
-    }
-  }]);
-  return ImageGallery;
-}(_react2.default.Component);
-
-exports.default = ImageGallery;
-
-
-ImageGallery.propTypes = {
-  items: _react2.default.PropTypes.array.isRequired,
-  showNav: _react2.default.PropTypes.bool,
-  autoPlay: _react2.default.PropTypes.bool,
-  lazyLoad: _react2.default.PropTypes.bool,
-  infinite: _react2.default.PropTypes.bool,
-  showIndex: _react2.default.PropTypes.bool,
-  showBullets: _react2.default.PropTypes.bool,
-  showThumbnails: _react2.default.PropTypes.bool,
-  slideOnThumbnailHover: _react2.default.PropTypes.bool,
-  disableThumbnailScroll: _react2.default.PropTypes.bool,
-  defaultImage: _react2.default.PropTypes.string,
-  indexSeparator: _react2.default.PropTypes.string,
-  startIndex: _react2.default.PropTypes.number,
-  slideInterval: _react2.default.PropTypes.number,
-  onSlide: _react2.default.PropTypes.func,
-  onPause: _react2.default.PropTypes.func,
-  onPlay: _react2.default.PropTypes.func,
-  onClick: _react2.default.PropTypes.func,
-  onImageLoad: _react2.default.PropTypes.func,
-  onImageError: _react2.default.PropTypes.func,
-  onThumbnailError: _react2.default.PropTypes.func
-};
-
-ImageGallery.defaultProps = {
-  items: [],
-  showNav: true,
-  autoPlay: false,
-  lazyLoad: false,
-  infinite: true,
-  showIndex: false,
-  showBullets: false,
-  showThumbnails: true,
-  slideOnThumbnailHover: false,
-  disableThumbnailScroll: false,
-  indexSeparator: ' / ',
-  startIndex: 0,
-  slideInterval: 3000
-};
-},{"babel-runtime/core-js/object/assign":1,"babel-runtime/core-js/object/get-prototype-of":4,"babel-runtime/helpers/classCallCheck":8,"babel-runtime/helpers/createClass":9,"babel-runtime/helpers/inherits":10,"babel-runtime/helpers/possibleConstructorReturn":11,"react":131,"react-swipeable":100,"screenfull":101}],100:[function(require,module,exports){
-'use strict';
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var React = require('react');
-
-var Swipeable = React.createClass({
-  displayName: 'Swipeable',
-
-  propTypes: {
-    onSwiped: React.PropTypes.func,
-    onSwiping: React.PropTypes.func,
-    onSwipingUp: React.PropTypes.func,
-    onSwipingRight: React.PropTypes.func,
-    onSwipingDown: React.PropTypes.func,
-    onSwipingLeft: React.PropTypes.func,
-    onSwipedUp: React.PropTypes.func,
-    onSwipedRight: React.PropTypes.func,
-    onSwipedDown: React.PropTypes.func,
-    onSwipedLeft: React.PropTypes.func,
-    flickThreshold: React.PropTypes.number,
-    delta: React.PropTypes.number,
-    preventDefaultTouchmoveEvent: React.PropTypes.bool
-  },
-
-  getInitialState: function getInitialState() {
-    return {
-      x: null,
-      y: null,
-      swiping: false,
-      start: 0
-    };
-  },
-
-  getDefaultProps: function getDefaultProps() {
-    return {
-      flickThreshold: 0.6,
-      delta: 10,
-      preventDefaultTouchmoveEvent: true
-    };
-  },
-
-  calculatePos: function calculatePos(e) {
-    var x = e.changedTouches[0].clientX;
-    var y = e.changedTouches[0].clientY;
-
-    var xd = this.state.x - x;
-    var yd = this.state.y - y;
-
-    var axd = Math.abs(xd);
-    var ayd = Math.abs(yd);
-
-    var time = Date.now() - this.state.start;
-    var velocity = Math.sqrt(axd * axd + ayd * ayd) / time;
-
-    return {
-      deltaX: xd,
-      deltaY: yd,
-      absX: axd,
-      absY: ayd,
-      velocity: velocity
-    };
-  },
-
-  touchStart: function touchStart(e) {
-    if (e.touches.length > 1) {
-      return;
-    }
-    this.setState({
-      start: Date.now(),
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-      swiping: false
-    });
-  },
-
-  touchMove: function touchMove(e) {
-    if (!this.state.x || !this.state.y || e.touches.length > 1) {
-      return;
-    }
-
-    var cancelPageSwipe = false;
-    var pos = this.calculatePos(e);
-
-    if (pos.absX < this.props.delta && pos.absY < this.props.delta) {
-      return;
-    }
-
-    if (this.props.onSwiping) {
-      this.props.onSwiping(e, pos.deltaX, pos.deltaY, pos.absX, pos.absY, pos.velocity);
-    }
-
-    if (pos.absX > pos.absY) {
-      if (pos.deltaX > 0) {
-        if (this.props.onSwipingLeft || this.props.onSwipedLeft) {
-          this.props.onSwipingLeft && this.props.onSwipingLeft(e, pos.absX);
-          cancelPageSwipe = true;
-        }
-      } else {
-        if (this.props.onSwipingRight || this.props.onSwipedRight) {
-          this.props.onSwipingRight && this.props.onSwipingRight(e, pos.absX);
-          cancelPageSwipe = true;
-        }
-      }
-    } else {
-      if (pos.deltaY > 0) {
-        if (this.props.onSwipingUp || this.props.onSwipedUp) {
-          this.props.onSwipingUp && this.props.onSwipingUp(e, pos.absY);
-          cancelPageSwipe = true;
-        }
-      } else {
-        if (this.props.onSwipingDown || this.props.onSwipedDown) {
-          this.props.onSwipingDown && this.props.onSwipingDown(e, pos.absY);
-          cancelPageSwipe = true;
-        }
-      }
-    }
-
-    this.setState({ swiping: true });
-
-    if (cancelPageSwipe && this.props.preventDefaultTouchmoveEvent) {
-      e.preventDefault();
-    }
-  },
-
-  touchEnd: function touchEnd(ev) {
-    if (this.state.swiping) {
-      var pos = this.calculatePos(ev);
-
-      var isFlick = pos.velocity > this.props.flickThreshold;
-
-      this.props.onSwiped && this.props.onSwiped(ev, pos.deltaX, pos.deltaY, isFlick);
-
-      if (pos.absX > pos.absY) {
-        if (pos.deltaX > 0) {
-          this.props.onSwipedLeft && this.props.onSwipedLeft(ev, pos.deltaX, isFlick);
-        } else {
-          this.props.onSwipedRight && this.props.onSwipedRight(ev, pos.deltaX, isFlick);
-        }
-      } else {
-        if (pos.deltaY > 0) {
-          this.props.onSwipedUp && this.props.onSwipedUp(ev, pos.deltaY, isFlick);
-        } else {
-          this.props.onSwipedDown && this.props.onSwipedDown(ev, pos.deltaY, isFlick);
-        }
-      }
-    }
-
-    this.setState(this.getInitialState());
-  },
-
-  render: function render() {
-    return React.createElement(
-      'div',
-      _extends({}, this.props, {
-        onTouchStart: this.touchStart,
-        onTouchMove: this.touchMove,
-        onTouchEnd: this.touchEnd }),
-      this.props.children
-    );
-  }
-});
-
-module.exports = Swipeable;
-},{"react":131}],101:[function(require,module,exports){
-/*!
-* screenfull
-* v3.0.0 - 2015-11-24
-* (c) Sindre Sorhus; MIT License
-*/
-(function () {
-	'use strict';
-
-	var isCommonjs = typeof module !== 'undefined' && module.exports;
-	var keyboardAllowed = typeof Element !== 'undefined' && 'ALLOW_KEYBOARD_INPUT' in Element;
-
-	var fn = (function () {
-		var val;
-		var valLength;
-
-		var fnMap = [
-			[
-				'requestFullscreen',
-				'exitFullscreen',
-				'fullscreenElement',
-				'fullscreenEnabled',
-				'fullscreenchange',
-				'fullscreenerror'
-			],
-			// new WebKit
-			[
-				'webkitRequestFullscreen',
-				'webkitExitFullscreen',
-				'webkitFullscreenElement',
-				'webkitFullscreenEnabled',
-				'webkitfullscreenchange',
-				'webkitfullscreenerror'
-
-			],
-			// old WebKit (Safari 5.1)
-			[
-				'webkitRequestFullScreen',
-				'webkitCancelFullScreen',
-				'webkitCurrentFullScreenElement',
-				'webkitCancelFullScreen',
-				'webkitfullscreenchange',
-				'webkitfullscreenerror'
-
-			],
-			[
-				'mozRequestFullScreen',
-				'mozCancelFullScreen',
-				'mozFullScreenElement',
-				'mozFullScreenEnabled',
-				'mozfullscreenchange',
-				'mozfullscreenerror'
-			],
-			[
-				'msRequestFullscreen',
-				'msExitFullscreen',
-				'msFullscreenElement',
-				'msFullscreenEnabled',
-				'MSFullscreenChange',
-				'MSFullscreenError'
-			]
-		];
-
-		var i = 0;
-		var l = fnMap.length;
-		var ret = {};
-
-		for (; i < l; i++) {
-			val = fnMap[i];
-			if (val && val[1] in document) {
-				for (i = 0, valLength = val.length; i < valLength; i++) {
-					ret[fnMap[0][i]] = val[i];
-				}
-				return ret;
-			}
-		}
-
-		return false;
-	})();
-
-	var screenfull = {
-		request: function (elem) {
-			var request = fn.requestFullscreen;
-
-			elem = elem || document.documentElement;
-
-			// Work around Safari 5.1 bug: reports support for
-			// keyboard in fullscreen even though it doesn't.
-			// Browser sniffing, since the alternative with
-			// setTimeout is even worse.
-			if (/5\.1[\.\d]* Safari/.test(navigator.userAgent)) {
-				elem[request]();
-			} else {
-				elem[request](keyboardAllowed && Element.ALLOW_KEYBOARD_INPUT);
-			}
-		},
-		exit: function () {
-			document[fn.exitFullscreen]();
-		},
-		toggle: function (elem) {
-			if (this.isFullscreen) {
-				this.exit();
-			} else {
-				this.request(elem);
-			}
-		},
-		raw: fn
-	};
-
-	if (!fn) {
-		if (isCommonjs) {
-			module.exports = false;
-		} else {
-			window.screenfull = false;
-		}
-
-		return;
-	}
-
-	Object.defineProperties(screenfull, {
-		isFullscreen: {
-			get: function () {
-				return Boolean(document[fn.fullscreenElement]);
-			}
-		},
-		element: {
-			enumerable: true,
-			get: function () {
-				return document[fn.fullscreenElement];
-			}
-		},
-		enabled: {
-			enumerable: true,
-			get: function () {
-				// Coerce to boolean in case of old WebKit
-				return Boolean(document[fn.fullscreenEnabled]);
-			}
-		}
-	});
-
-	if (isCommonjs) {
-		module.exports = screenfull;
-	} else {
-		window.screenfull = screenfull;
-	}
-})();
-
-},{}],102:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -3392,7 +1108,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":98,"fbjs/lib/invariant":125}],103:[function(require,module,exports){
+},{"_process":8,"fbjs/lib/invariant":32}],10:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -3482,7 +1198,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactChildren":104,"./ReactClass":105,"./ReactComponent":106,"./ReactDOMFactories":108,"./ReactElement":110,"./ReactElementValidator":111,"./ReactPropTypes":117,"./ReactVersion":118,"./onlyChild":121,"_process":98,"fbjs/lib/warning":129,"object-assign":130}],104:[function(require,module,exports){
+},{"./ReactChildren":11,"./ReactClass":12,"./ReactComponent":13,"./ReactDOMFactories":15,"./ReactElement":17,"./ReactElementValidator":18,"./ReactPropTypes":24,"./ReactVersion":25,"./onlyChild":28,"_process":8,"fbjs/lib/warning":36,"object-assign":37}],11:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -3666,7 +1382,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":102,"./ReactElement":110,"./traverseAllChildren":122,"fbjs/lib/emptyFunction":123}],105:[function(require,module,exports){
+},{"./PooledClass":9,"./ReactElement":17,"./traverseAllChildren":29,"fbjs/lib/emptyFunction":30}],12:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -4392,7 +2108,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./ReactComponent":106,"./ReactElement":110,"./ReactNoopUpdateQueue":114,"./ReactPropTypeLocationNames":115,"./ReactPropTypeLocations":116,"_process":98,"fbjs/lib/emptyObject":124,"fbjs/lib/invariant":125,"fbjs/lib/keyMirror":126,"fbjs/lib/keyOf":127,"fbjs/lib/warning":129,"object-assign":130}],106:[function(require,module,exports){
+},{"./ReactComponent":13,"./ReactElement":17,"./ReactNoopUpdateQueue":21,"./ReactPropTypeLocationNames":22,"./ReactPropTypeLocations":23,"_process":8,"fbjs/lib/emptyObject":31,"fbjs/lib/invariant":32,"fbjs/lib/keyMirror":33,"fbjs/lib/keyOf":34,"fbjs/lib/warning":36,"object-assign":37}],13:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -4516,7 +2232,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactInstrumentation":112,"./ReactNoopUpdateQueue":114,"./canDefineProperty":119,"_process":98,"fbjs/lib/emptyObject":124,"fbjs/lib/invariant":125,"fbjs/lib/warning":129}],107:[function(require,module,exports){
+},{"./ReactInstrumentation":19,"./ReactNoopUpdateQueue":21,"./canDefineProperty":26,"_process":8,"fbjs/lib/emptyObject":31,"fbjs/lib/invariant":32,"fbjs/lib/warning":36}],14:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4548,7 +2264,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],108:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -4727,7 +2443,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":110,"./ReactElementValidator":111,"_process":98,"fbjs/lib/mapObject":128}],109:[function(require,module,exports){
+},{"./ReactElement":17,"./ReactElementValidator":18,"_process":8,"fbjs/lib/mapObject":35}],16:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -4802,7 +2518,7 @@ ReactDebugTool.addDevtool(ReactInvalidSetStateWarningDevTool);
 
 module.exports = ReactDebugTool;
 }).call(this,require('_process'))
-},{"./ReactInvalidSetStateWarningDevTool":113,"_process":98,"fbjs/lib/warning":129}],110:[function(require,module,exports){
+},{"./ReactInvalidSetStateWarningDevTool":20,"_process":8,"fbjs/lib/warning":36}],17:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -5092,7 +2808,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":107,"./canDefineProperty":119,"_process":98,"fbjs/lib/warning":129,"object-assign":130}],111:[function(require,module,exports){
+},{"./ReactCurrentOwner":14,"./canDefineProperty":26,"_process":8,"fbjs/lib/warning":36,"object-assign":37}],18:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -5376,7 +3092,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":107,"./ReactElement":110,"./ReactPropTypeLocationNames":115,"./ReactPropTypeLocations":116,"./canDefineProperty":119,"./getIteratorFn":120,"_process":98,"fbjs/lib/invariant":125,"fbjs/lib/warning":129}],112:[function(require,module,exports){
+},{"./ReactCurrentOwner":14,"./ReactElement":17,"./ReactPropTypeLocationNames":22,"./ReactPropTypeLocations":23,"./canDefineProperty":26,"./getIteratorFn":27,"_process":8,"fbjs/lib/invariant":32,"fbjs/lib/warning":36}],19:[function(require,module,exports){
 /**
  * Copyright 2016-present, Facebook, Inc.
  * All rights reserved.
@@ -5393,7 +3109,7 @@ module.exports = ReactElementValidator;
 var ReactDebugTool = require('./ReactDebugTool');
 
 module.exports = { debugTool: ReactDebugTool };
-},{"./ReactDebugTool":109}],113:[function(require,module,exports){
+},{"./ReactDebugTool":16}],20:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -5432,7 +3148,7 @@ var ReactInvalidSetStateWarningDevTool = {
 
 module.exports = ReactInvalidSetStateWarningDevTool;
 }).call(this,require('_process'))
-},{"_process":98,"fbjs/lib/warning":129}],114:[function(require,module,exports){
+},{"_process":8,"fbjs/lib/warning":36}],21:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
@@ -5530,7 +3246,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":98,"fbjs/lib/warning":129}],115:[function(require,module,exports){
+},{"_process":8,"fbjs/lib/warning":36}],22:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -5557,7 +3273,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":98}],116:[function(require,module,exports){
+},{"_process":8}],23:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -5580,7 +3296,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":126}],117:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":33}],24:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -5961,7 +3677,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":110,"./ReactPropTypeLocationNames":115,"./getIteratorFn":120,"fbjs/lib/emptyFunction":123}],118:[function(require,module,exports){
+},{"./ReactElement":17,"./ReactPropTypeLocationNames":22,"./getIteratorFn":27,"fbjs/lib/emptyFunction":30}],25:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -5976,7 +3692,7 @@ module.exports = ReactPropTypes;
 'use strict';
 
 module.exports = '15.0.1';
-},{}],119:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -6003,7 +3719,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":98}],120:[function(require,module,exports){
+},{"_process":8}],27:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -6044,7 +3760,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],121:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -6080,7 +3796,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":110,"_process":98,"fbjs/lib/invariant":125}],122:[function(require,module,exports){
+},{"./ReactElement":17,"_process":8,"fbjs/lib/invariant":32}],29:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -6272,7 +3988,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":107,"./ReactElement":110,"./getIteratorFn":120,"_process":98,"fbjs/lib/invariant":125,"fbjs/lib/warning":129}],123:[function(require,module,exports){
+},{"./ReactCurrentOwner":14,"./ReactElement":17,"./getIteratorFn":27,"_process":8,"fbjs/lib/invariant":32,"fbjs/lib/warning":36}],30:[function(require,module,exports){
 "use strict";
 
 /**
@@ -6310,7 +4026,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],124:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -6332,7 +4048,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":98}],125:[function(require,module,exports){
+},{"_process":8}],32:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -6384,7 +4100,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":98}],126:[function(require,module,exports){
+},{"_process":8}],33:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -6434,7 +4150,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":125,"_process":98}],127:[function(require,module,exports){
+},{"./invariant":32,"_process":8}],34:[function(require,module,exports){
 "use strict";
 
 /**
@@ -6469,7 +4185,7 @@ var keyOf = function (oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],128:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -6520,7 +4236,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],129:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -6579,7 +4295,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":123,"_process":98}],130:[function(require,module,exports){
+},{"./emptyFunction":30,"_process":8}],37:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -6620,12 +4336,12 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],131:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":103}],132:[function(require,module,exports){
+},{"./lib/React":10}],39:[function(require,module,exports){
 'use strict';
 
 var _catmenu = require('./components/catmenu.jsx');
@@ -6636,14 +4352,6 @@ var _formview = require('./components/formview.jsx');
 
 var _formview2 = _interopRequireDefault(_formview);
 
-var _itemdetail = require('./components/itemdetail.jsx');
-
-var _itemdetail2 = _interopRequireDefault(_itemdetail);
-
-var _itemlist = require('./components/itemlist.jsx');
-
-var _itemlist2 = _interopRequireDefault(_itemlist);
-
 var _userbox = require('./components/userbox.jsx');
 
 var _userbox2 = _interopRequireDefault(_userbox);
@@ -6653,8 +4361,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 window.CatMenu = _catmenu2.default;
 window.FormView = _formview2.default;
-window.ItemDetail = _itemdetail2.default;
-window.ItemList = _itemlist2.default;
 window.UserBox = _userbox2.default;
 /**
  * Some common functions
@@ -6888,7 +4594,7 @@ window.sendMessage = function (e) {
 	}
 };
 
-},{"./components/catmenu.jsx":133,"./components/formview.jsx":134,"./components/itemdetail.jsx":135,"./components/itemlist.jsx":136,"./components/userbox.jsx":138}],133:[function(require,module,exports){
+},{"./components/catmenu.jsx":40,"./components/formview.jsx":41,"./components/userbox.jsx":42}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7049,7 +4755,7 @@ var CatMenu = React.createClass({
 			if (!this.parent_id) {
 				return 'javascript:expandMenu(this, "menu-toggle")';
 			} else if (this.atomic) {
-				return 'cat/' + this.id;
+				return 'cat/' + (usecode ? this.code.toLowerCase() : this.id);
 			} else {
 				return '';
 			}
@@ -7072,7 +4778,7 @@ CatMenu.Menu = Menu;
 CatMenu.MenuItem = MenuItem;
 exports.default = CatMenu;
 
-},{}],134:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7470,385 +5176,7 @@ FormView.Form = _formsyReact2.default.Form;
 
 exports.default = FormView;
 
-},{"formsy-react":94}],135:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _itemsummary = require('./itemsummary.jsx');
-
-var _itemsummary2 = _interopRequireDefault(_itemsummary);
-
-var _reactImageGallery = require('react-image-gallery');
-
-var _reactImageGallery2 = _interopRequireDefault(_reactImageGallery);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * ItemDetail defination
- */
-var ItemDetail = React.createClass({
-	displayName: 'ItemDetail',
-	handleImageLoad: function handleImageLoad(event) {},
-	handlePlay: function handlePlay() {
-		this._imageGallery.play();
-	},
-	handlePause: function handlePause() {
-		this._imageGallery.pause();
-	},
-
-	render: function render() {
-		var _this = this;
-
-		var className = 'item-detail-wrapper ' + (this.props.className ? this.props.className : '');
-		var item = this.props.item;
-		var showThumbnails = true;
-		var slideOnThumbnailHover = true;
-		var showNav = false;
-		var images = [];
-		if (item.images) {
-			item.images.map(function (o, i) {
-				images.push({
-					original: o.url,
-					thumbnail: o.url,
-					originalAlt: o.title,
-					description: o.description
-				});
-			});
-		}
-		var posted_at = React.createElement(
-			'div',
-			{ className: 'item-created' },
-			React.createElement(
-				'a',
-				null,
-				React.createElement(
-					'span',
-					null,
-					'Posted:'
-				),
-				React.createElement(
-					'span',
-					{ className: 'datetimeformat' },
-					item.created_at
-				)
-			)
-		);
-
-		var created = new Date(item.created_at);
-		var updated = new Date(item.updated_at);
-		if (+updated !== +created) {
-			posted_at = React.createElement(
-				'div',
-				{ className: 'item-date item-updated' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						null,
-						'Edited:'
-					),
-					React.createElement(
-						'span',
-						{ className: 'datetimeformat' },
-						item.updated_at
-					)
-				)
-			);
-		}
-		var expired_at = '';
-		if (item.deleted_at) {
-			expired_at = React.createElement(
-				'div',
-				{ className: 'item-date item-expired' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						null,
-						'Expire:'
-					),
-					React.createElement(
-						'span',
-						{ className: 'datetimeformat' },
-						item.deleted_at
-					)
-				)
-			);
-		}
-		var showLink = false;
-		var lines = item.description.split('\n');
-		return React.createElement(
-			'div',
-			{ className: className },
-			React.createElement(
-				'div',
-				{ className: 'row item-detail' },
-				React.createElement(
-					'div',
-					{ className: 'col-xs-6 col-md-7' },
-					React.createElement(_itemsummary2.default, { item: item, showLink: showLink, prices: 'original,now' }),
-					React.createElement(
-						'div',
-						{ className: 'item-description' },
-						lines.map(function (o, i) {
-							return React.createElement(
-								'p',
-								{ key: i },
-								o
-							);
-						})
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'col-xs-6 col-md-5 item-gallery sensitive' },
-					React.createElement(_reactImageGallery2.default, {
-						ref: function ref(i) {
-							return _this._imageGallery = i;
-						},
-						items: images,
-						slideInterval: 3000,
-						handleImageLoad: this.handleImageLoad,
-						showThumbnails: showThumbnails,
-						slideOnThumbnailHover: slideOnThumbnailHover,
-						showNav: showNav })
-				)
-			)
-		);
-	}
-});
-
-exports.default = ItemDetail;
-
-},{"./itemsummary.jsx":137,"react-image-gallery":99}],136:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _itemsummary = require('./itemsummary.jsx');
-
-var _itemsummary2 = _interopRequireDefault(_itemsummary);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * ItemList defination
- */
-var ItemList = React.createClass({
-	displayName: 'ItemList',
-
-	render: function render() {
-		var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
-		var items = this.props.items;
-		var id = this.props.id ? this.props.id : uuid('item-list');
-		return React.createElement(
-			'div',
-			{ className: className, id: id },
-			React.createElement(
-				'div',
-				{ className: 'cat-detail' },
-				React.createElement(
-					'div',
-					{ className: 'cat-name' },
-					React.createElement(
-						'label',
-						null,
-						cat && cat.details ? cat.details.name : ''
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'cat-title' },
-					React.createElement(
-						'label',
-						null,
-						cat && cat.details ? cat.details.title : ''
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'cat-description' },
-					React.createElement(
-						'p',
-						null,
-						cat && cat.details ? cat.details.description : ''
-					)
-				)
-			),
-			React.createElement(
-				'div',
-				{ className: 'row item-list' },
-				items.map(function (item, i) {
-					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
-					return React.createElement(
-						'div',
-						{ className: itemClassName, key: i },
-						React.createElement(
-							'div',
-							{ className: 'item-firstimage' },
-							React.createElement(
-								'div',
-								{ className: 'item-firstimage-wrapper' },
-								React.createElement('img', { src: item.images[0].url })
-							)
-						),
-						React.createElement(_itemsummary2.default, { item: item, key: i, prices: 'original,now' }),
-						React.createElement(UserBox, { user: item.user })
-					);
-				})
-			)
-		);
-	}
-});
-
-exports.default = ItemList;
-
-},{"./itemsummary.jsx":137}],137:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-/**
- * ItemSummary defination
- */
-var ItemSummary = React.createClass({
-	displayName: 'ItemSummary',
-
-	render: function render() {
-		var className = 'item-summary ' + (this.props.className ? this.props.className : '');
-		var item = this.props.item;
-		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-		var href = showLink ? '/item/' + item.id : 'javascript:void(0);';
-		var posted_at = React.createElement(
-			'div',
-			{ className: 'item-created' },
-			React.createElement(
-				'a',
-				null,
-				React.createElement(
-					'span',
-					{ className: 'label' },
-					'Posted:'
-				),
-				React.createElement(
-					'span',
-					{ className: 'datetimeformat' },
-					item.created_at
-				)
-			)
-		);
-
-		var created = new Date(item.created_at);
-		var updated = new Date(item.updated_at);
-		if (+updated !== +created) {
-			posted_at = React.createElement(
-				'div',
-				{ className: 'item-date item-updated' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label' },
-						'Edited:'
-					),
-					React.createElement(
-						'span',
-						{ className: 'datetimeformat' },
-						item.updated_at
-					)
-				)
-			);
-		}
-		var expired_at = '';
-		if (item.deleted_at) {
-			expired_at = React.createElement(
-				'div',
-				{ className: 'item-date item-expired' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label' },
-						'Expire:'
-					),
-					React.createElement(
-						'span',
-						{ className: 'datetimeformat' },
-						item.deleted_at
-					)
-				)
-			);
-		}
-		var prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original', 'sale', 'now'];
-		var price_list = React.createElement(
-			'div',
-			{ className: 'item-prices' },
-			prices.map(function (o, i) {
-				var pclassName = 'item-price item-' + o + 'price';
-				var pvalue = item[o + 'price'];
-				return React.createElement(
-					'div',
-					{ className: pclassName, key: i },
-					React.createElement(
-						'span',
-						{ className: 'currency-sign' },
-						currentLocation.currency
-					),
-					React.createElement(
-						'span',
-						{ className: 'currency-value' },
-						pvalue
-					),
-					React.createElement(
-						'span',
-						{ className: 'label' },
-						o[0].toUpperCase() + o.slice(1)
-					)
-				);
-			})
-		);
-		return React.createElement(
-			'div',
-			{ className: className },
-			React.createElement(
-				'div',
-				{ className: 'item-title' },
-				React.createElement(
-					'a',
-					{ href: href },
-					React.createElement(
-						'span',
-						null,
-						item.title
-					)
-				)
-			),
-			posted_at,
-			expired_at,
-			React.createElement(
-				'div',
-				{ className: item.is_new ? 'new' : 'used' },
-				item.is_new ? 'New' : 'Used'
-			),
-			price_list
-		);
-	}
-});
-
-exports.default = ItemSummary;
-
-},{}],138:[function(require,module,exports){
+},{"formsy-react":4}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7861,14 +5189,33 @@ var UserBox = React.createClass({
 	displayName: 'UserBox',
 
 	render: function render() {
-		var className = 'userbox ' + (this.props.className ? this.props.className : '');
 		var user = this.props.user;
-		return React.createElement('div', { className: className });
+		if (user) {
+			var className = 'userbox ' + (this.props.className ? this.props.className : '');
+			var avatar = user && user.avatar ? user.avatar : 'http://media.ezsell.com/noavatar' + (user.gender == 'MALE' ? 'man' : 'woman');
+			var href = '/' + user.name;
+			return React.createElement(
+				'div',
+				{ className: className },
+				React.createElement('img', { src: avatar }),
+				React.createElement(
+					'a',
+					{ href: href },
+					React.createElement(
+						'span',
+						null,
+						user.displayname
+					)
+				)
+			);
+		} else {
+			return React.createElement('div', null);
+		}
 	}
 });
 
 exports.default = UserBox;
 
-},{}]},{},[132]);
+},{}]},{},[39]);
 
 //# sourceMappingURL=common.js.map

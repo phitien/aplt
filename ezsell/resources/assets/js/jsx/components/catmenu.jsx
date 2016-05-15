@@ -117,7 +117,7 @@ const CatMenu = React.createClass({
 				return 'javascript:expandMenu(this, "menu-toggle")';
 			}
 			else if (this.atomic) {
-				return 'cat/' + this.id;
+				return 'cat/' + (usecode ? this.code.toLowerCase() : this.id);
 			}
 			else {
 				return '';

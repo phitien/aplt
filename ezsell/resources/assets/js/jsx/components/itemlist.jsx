@@ -7,17 +7,18 @@ var ItemList = React.createClass({
 		const className = 'item-list-wrapper ' + (this.props.className?this.props.className:'');
 		const items = this.props.items;
 		const id = this.props.id ? this.props.id : uuid('item-list');
+		const cat = this.props.cat ? this.props.cat : cat;
 		return (
 			<div className={className} id={id}>
 				<div className='cat-detail'>
 					<div className='cat-name'>
-						<label>{cat && cat.details ? cat.details.name : ''}</label>
+						<label>{cat.details.name}</label>
 					</div>
 					<div className='cat-title'>
-						<label>{cat && cat.details ? cat.details.title : ''}</label>
+						<label>{cat.details.title}</label>
 					</div>
 					<div className='cat-description'>
-						<p>{cat && cat.details ? cat.details.description : ''}</p>
+						<p>{cat.details.description}</p>
 					</div>
 				</div>
 				<div className='row item-list'>

@@ -13,7 +13,6 @@ use App\IM\Models\User\Traits\RoleTrait;
 use App\IM\Models\User\Traits\ActionTrait;
 use App\IM\Models\User\Traits\SocietyTrait;
 use DateTime;
-use Crypt;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 	/**
@@ -24,6 +23,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	 * Traits
 	 */
 	use ExtensionTrait, RoleTrait, ActionTrait, SocietyTrait;
+	/**
+	 * Table name
+	 *
+	 * @var unknown $table
+	 */
+	protected $table = 'users';
 	/**
 	 *
 	 * @var array
@@ -101,7 +106,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	 * @return bool
 	 */
 	public static function decodeActivationCode($activationCode) {
-		$key = Crypt::decrypt ( $activationCode );
+		$key = static::decrypt ( $activationCode );
 		$pattern = '/\{(\d+)\}\-\{(.+)\}\-\{(\d+)\}-\{(.*)\}/';
 		preg_match ( $pattern, $key, $matches );
 		if ($matches && count ( $matches ) == 5) {
@@ -148,7 +153,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	public function generateActivationCode() {
 		$timestamp = (new DateTime ())->getTimestamp ();
 		$key = "{{$this->id}}-{{$this->email}}-{{$timestamp}}-{{$this->baseUrl}}";
-		$this->activationCode = Crypt::encrypt ( $key );
+		$this->activationCode = static::encrypt ( $key );
 		$this->active = 0;
 		$this->save ();
 		return $this->activationCode;
@@ -168,11 +173,18 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	 */
 	public function toArray() {
 		$attributes = parent::toArray ();
+		
 		return array_merge ( $attributes, [ 
+				'displayname' => $this->getDisplayName (),
 				'extension' => $this->extension ()->all (),
 				'followers' => count ( $this->followers ),
 				'following' => count ( $this->following ) 
 		] );
+	}
+	protected function getDisplayName() {
+		return $this->alias ? $this->alias : 
+
+		($this->first_name ? $this->first_name . $this->last_name ? " {$this->last_name}" : '' : $this->name);
 	}
 	/**
 	 * Override save function to save json property

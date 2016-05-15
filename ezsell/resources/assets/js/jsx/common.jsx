@@ -1,13 +1,9 @@
 import CatMenu from './components/catmenu.jsx';
 import FormView from './components/formview.jsx';
-import ItemDetail from './components/itemdetail.jsx';
-import ItemList from './components/itemlist.jsx';
 import UserBox from './components/userbox.jsx';
 //
 window.CatMenu = CatMenu;
 window.FormView = FormView;
-window.ItemDetail = ItemDetail;
-window.ItemList = ItemList;
 window.UserBox = UserBox;
 /**
  * Some common functions

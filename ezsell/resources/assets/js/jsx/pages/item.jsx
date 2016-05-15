@@ -1,3 +1,5 @@
+import ItemDetail from '../components/itemdetail.jsx';
+//
 $( document ).ready(function() {
 	ReactDOM.render(React.createElement(ItemDetail, {
 		item: item,

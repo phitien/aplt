@@ -5,7 +5,6 @@ namespace App\IM\Traits;
 use App\IM\Config\Config;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Crypt;
 
 trait ResponseTrait
 {
@@ -19,7 +18,7 @@ trait ResponseTrait
 	public function response($content = '', $status = Response::HTTP_OK, array $headers = []) {
 		if (! $this->user ()->isGuest ()) {
 			$headers [Config::TOKEN_KEY] = $this->token ();
-			$headers [Config::SESSION_KEY] = Crypt::encrypt ( ( string ) $this->user () );
+			$headers [Config::SESSION_KEY] = static::encrypt ( ( string ) $this->user () );
 		}
 		return response ( $content, $status, $headers );
 	}
@@ -34,7 +33,7 @@ trait ResponseTrait
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
 		if (! $this->user ()->isGuest ()) {
 			$headers [Config::TOKEN_KEY] = $this->token ();
-			$headers [Config::SESSION_KEY] = Crypt::encrypt ( ( string ) $this->user () );
+			$headers [Config::SESSION_KEY] = static::encrypt ( ( string ) $this->user () );
 			$headers ['Content-Type'] = 'application/json';
 		}
 		return response ()->json ( [ 

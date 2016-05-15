@@ -22,7 +22,7 @@ trait UtilTrait {
 	 * @return string
 	 */
 	public static function encrypt($str) {
-		return encrypt ( $str );
+		return base64_encode ( $str );
 	}
 	
 	/**
@@ -31,7 +31,7 @@ trait UtilTrait {
 	 * @return string
 	 */
 	public static function decrypt($str) {
-		return decrypt ( $str );
+		return base64_decode ( $str );
 	}
 	/**
 	 *

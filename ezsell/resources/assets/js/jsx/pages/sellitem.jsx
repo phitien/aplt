@@ -20,7 +20,7 @@ $( document ).ready(function() {
 				value: 0
 			}];
 			return (
-				<FormView.Form className='form row' method='post' action='/newitem' encType='multipart/form-data'
+				<FormView.Form className='form row' method='post' action='/sellitem' encType='multipart/form-data'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<div className="row">
 						<FormView.Input type='radiolist' name='is_new' required title='Condition' options={conditions} className='col-xs-6 col-md-4 inline-block-list' />
