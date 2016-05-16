@@ -1,29 +1,32 @@
 @import "theme";
 
-.form {}
-.form .center-block {float: none !important;}
+.form {
+	.center-block {float: none !important;}
+}
 .validation-error {color: $warning-color;}
-.inline-block-list {}
-.inline-block-list div.radio,.inline-block-list div.checkbox {display: inline-block;margin: 0 $smedium;}
+.inline-block-list {
+	div.radio,div.checkbox {display: inline-block;margin: 0 $smedium;}
+}
 .image-preview {
 	@extend .border-all;
 	display: none;
+	img {
+		width: 100%;
+		margin: 3px 0;
+	}
+	.image-preview-item {
+		margin: $sbig 0;
+	}
+	.image-info {
+		float: left;
+		margin-top: 10px;
+	}
+	.image-remove {
+		float: right;
+		margin-top: 3px;
+	}
 }
-.image-preview img {
-	width: 100%;
-	margin: 3px 0;
-}
-.image-preview .image-preview-item {
-	margin: $sbig 0;
-}
-.image-preview .image-info {
-	float: left;
-	margin-top: 10px;
-}
-.image-preview .image-remove {
-	float: right;
-	margin-top: 3px;
-}
+
 .btn-fixed-right {position: fixed; top: ($navigation-height + $sbig); right: $sbig;}
 
 .menuitem {}
@@ -41,31 +44,56 @@
 	position: fixed;top: 0;
 	width: 100%;
 	background: white;
+	ul,li {vertical-align: top;}
+	ul.nav {height: $navigation-height;}
 }
-#navigation ul,#navigation li {vertical-align: top;} 
-#navigation ul.nav {height: $navigation-height;}
-#leftmenu {position: inherit;float: left;width: 75%;height: 100%;}
-#leftmenu>ul {width: 100%;margin: 0;padding: 0;}
-#leftmenu>ul>li {display: inline-block;}
-#leftmenu>ul a {padding: $sbig;background-color: #transparent;}
-#leftmenu>ul a:hover {background-color: #transparent;}
-
-#catmenu {margin-top: $sbig;position: inherit;}
-#catmenu>ul,#catmenu>ul ul {margin: 0;padding: 0;}
-#catmenu>ul li {margin: 0;padding: 0;}
-#catmenu>ul {text-align: left;}
-#catmenu>ul>li {display: inline-block;}
-#catmenu>ul>li>ul {
-	@extend .border-bottom,.overlay-menu;
-	padding: $sbig 0;
-	left: 0;
+#leftmenu {
+	position: inherit;float: left;width: 75%;height: 100%;
+	a {padding: $sbig;background-color: transparent;}
+	a:hover {background-color: transparent;}
+	ul {
+		width: 100%;margin: 0;padding: 0;
+		li:first-child {display: inline-block;}
+		li#catmenu {
+			display: inline-block;margin-top: $sbig;position: inherit;
+			ul {
+				text-align: left;margin: 0;padding: 0;
+				li {
+					display: inline-block;margin: 0;padding: 0;
+					a:first-child {cursor: pointer;}
+					a {
+						span{}
+					}
+					ul {
+						@extend .border-bottom,.overlay-menu;
+						padding: $sbig 0;left: 0;margin: 0;padding: 0;
+						a {
+							padding: $ssmall $sbig;
+							span{}
+						}
+						li {
+							display: block;float: left;
+							a {
+								span{}
+							}
+							ul {
+								display: block;height: 200px;
+								position: initial;
+								li {
+									float: none;
+									a {
+										span{}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
-#catmenu>ul>li>ul>li {display: block;float: left;}
-#catmenu>ul>li>ul>li>ul {display: block;}
-#catmenu>ul>li>ul>li>ul>li {display: block;}
 
-#catmenu>ul>li>a:first-child {cursor: pointer;}
-#catmenu #catmenu>ul>li>ul a {padding: $ssmall $sbig;}
 
 #rightmenu {position: inherit;float: right;width: 25%;height: 100%;}
 #rightmenu>ul a {padding: $smedium;background-color: transparent;}
@@ -117,5 +145,5 @@
 	@extend .border-all;
 	position: absolute;bottom: 0x;right: 10px;height: 28px;width: 230px;
 }
-#sendmessages input[type=text] {width: 180px;}
+#sendmessages input[type=text] {width: 170px;line-height:22px;padding-top: 3px;padding-bottom: 2px;}
 #sendmessages input[type=button] {float: right;}

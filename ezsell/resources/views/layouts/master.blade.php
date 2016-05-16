@@ -117,7 +117,7 @@ $centerCols = $totalCols - $leftCols - $rightCols;
 			<div id="messages"></div>
 			<div id="sendmessages">
 				<input type="text" name="message" onkeypress="javascript:if (event.keyCode==13) {$(this).next('input').click();}" />
-				<input type="button" value="send" onclick="sendMessage(this)"/>
+				<input type="button" value="send" onclick="sendMessage(this)" class="btn"/>
 			</div>
 		</div>
 @section('navigation')
