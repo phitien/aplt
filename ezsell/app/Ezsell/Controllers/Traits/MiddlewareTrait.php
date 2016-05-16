@@ -4,7 +4,7 @@ namespace App\Ezsell\Controllers\Traits;
 
 use Illuminate\Http\Request;
 use Exception;
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 use Route;
 use App\Ezsell\Config\AuthorizationMaps;
 use App\Ezsell\Traits\AllTrait;

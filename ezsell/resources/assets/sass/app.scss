@@ -4,7 +4,7 @@
 .form .center-block {float: none !important;}
 .validation-error {color: $warning-color;}
 .inline-block-list {}
-.inline-block-list div.radio,.inline-block-list div.checkbox {display: inline-block;margin: 0 $sbig;}
+.inline-block-list div.radio,.inline-block-list div.checkbox {display: inline-block;margin: 0 $smedium;}
 .image-preview {
 	@extend .border-all;
 	display: none;
@@ -32,11 +32,12 @@
 .overlay-menu {display: none;position: absolute;overflow-y: hidden;width: 100%;height: 5000px;background: white;top: ($navigation-height + 1px);}
 
 #navigation-replacement {
+	@extend .no-margin;
 	height: ($navigation-height + $border-width);width: 100%;
 	background-color: transparent;
 }
 #navigation {
-	@extend .border-bottom;
+	@extend .no-margin;@extend .border-bottom;
 	position: fixed;top: 0;
 	width: 100%;
 	background: white;
@@ -50,21 +51,21 @@
 #leftmenu>ul a:hover {background-color: #transparent;}
 
 #catmenu {margin-top: $sbig;position: inherit;}
-ul.catmenu,ul.catmenu ul {margin: 0;padding: 0;}
-ul.catmenu li {margin: 0;padding: 0;}
-ul.catmenu {text-align: left;}
-ul.catmenu>li {display: inline-block;}
-ul.catmenu>li>ul {
+#catmenu>ul,#catmenu>ul ul {margin: 0;padding: 0;}
+#catmenu>ul li {margin: 0;padding: 0;}
+#catmenu>ul {text-align: left;}
+#catmenu>ul>li {display: inline-block;}
+#catmenu>ul>li>ul {
 	@extend .border-bottom,.overlay-menu;
 	padding: $sbig 0;
 	left: 0;
 }
-ul.catmenu>li>ul>li {display: block;float: left;}
-ul.catmenu>li>ul>li>ul {display: block;}
-ul.catmenu>li>ul>li>ul>li {display: block;}
+#catmenu>ul>li>ul>li {display: block;float: left;}
+#catmenu>ul>li>ul>li>ul {display: block;}
+#catmenu>ul>li>ul>li>ul>li {display: block;}
 
-ul.catmenu>li>a:first-child {cursor: pointer;}
-#catmenu ul.catmenu>li>ul a {padding: $ssmall $sbig;}
+#catmenu>ul>li>a:first-child {cursor: pointer;}
+#catmenu #catmenu>ul>li>ul a {padding: $ssmall $sbig;}
 
 #rightmenu {position: inherit;float: right;width: 25%;height: 100%;}
 #rightmenu>ul a {padding: $smedium;background-color: transparent;}
@@ -94,21 +95,17 @@ ul.catmenu>li>a:first-child {cursor: pointer;}
 
 #banner {
 	@extend .border-bottom;
-	min-height: 248px;
+	min-height: $banner-height;
 }
 
-#container {}
+#container {@extend .no-margin;padding-bottom: $footer-height + $sbig;margin-top: $sbig;}
 
 #left {}
-
-#content {
-	padding-top: 2*$sbig;
-	padding-bottom: 3*$sbig;
-}
-
+#center {}
+#right {}
 #footer {
-	@extend .border-top;
-	position: fixed;bottom: 0;right: 0;height: 30px;width: 100%;
+	@extend .no-margin;@extend .border-top;
+	position: fixed;bottom: 0;right: 0;height: $footer-height;width: 100%;
 	background-color: $border-color;
 }
 #messages {

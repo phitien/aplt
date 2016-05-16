@@ -2,7 +2,19 @@
 
 @section('title', 'EZSell - Login')
 
-@section('bottomscripts')
+@section('scripts')
 @parent
-	<script type="text/javascript" src="js/pages/login.js"></script>
+	{{ Html::script('js/pages/login.js', ['type' => 'text/javascript']) }}
+@endsection
+
+@section('left')
+@parent
+@endsection
+
+@section('center')
+@parent
+@endsection
+
+@section('right')
+@parent
 @endsection

@@ -8,20 +8,20 @@ var ItemSummary = React.createClass({
 		const showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
 		const href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
 		var posted_at = <div className='item-created'>
-							<a><span className='label'>Posted:</span><span className='datetimeformat'>{item.created_at}</span></a>
+							<a><span className='label posted-label'>Posted:</span><span className='datetimeformat'>{item.created_at}</span></a>
 						</div>;
 						
 		var created = new Date(item.created_at);
 		var updated = new Date(item.updated_at);
 		if (+updated !== +created) {
 			posted_at = <div className='item-date item-updated'>
-							<a><span className='label'>Edited:</span><span className='datetimeformat'>{item.updated_at}</span></a>
+							<a><span className='label edited-label'>Edited:</span><span className='datetimeformat'>{item.updated_at}</span></a>
 						</div>;
 		}
 		var expired_at = '';
 		if (item.deleted_at) {
 			expired_at = <div className='item-date item-expired'>
-							<a><span className='label'>Expire:</span><span className='datetimeformat'>{item.deleted_at}</span></a>
+							<a><span className='label expired-label'>Expire:</span><span className='datetimeformat'>{item.deleted_at}</span></a>
 						</div>;
 		}
 		var prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original','sale','now'];

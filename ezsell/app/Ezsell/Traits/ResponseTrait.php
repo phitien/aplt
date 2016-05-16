@@ -2,38 +2,41 @@
 
 namespace App\Ezsell\Traits;
 
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Image;
+use Illuminate\Support\Facades\Redirect;
 
-trait ResponseTrait
-{
-	use RequestTrait;
+trait ResponseTrait {
 	/**
 	 *
 	 * @param \Illuminate\Http\Response $response        	
 	 */
-	protected function applyCookies($response) {
+	protected static function applyCookies($response) {
 		return $response-> //
 
 		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )-> //
 
 		withCookie ( Cookie::forever ( Config::SESSION_KEY, static::encrypt ( ( string ) static::getUser () ) ), true )-> //
 
-		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::getLocationId () ), true );
+		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::getLocationId () ), true )-> //
+
+		withCookie ( Cookie::forever ( Config::REQUEST_TIME, static::getRequestTime () ), true );
 	}
 	/**
 	 *
 	 * @param \Illuminate\Http\Response $response        	
 	 */
-	protected function clearCookies($response) {
+	protected static function clearCookies($response) {
 		return $response-> //
 
 		withCookie ( Config::TOKEN_KEY, null, true )-> //
 
-		withCookie ( Config::SESSION_KEY, null, true );
+		withCookie ( Config::SESSION_KEY, null, true )-> //
+
+		withCookie ( Config::REQUEST_TIME, null, true );
 	}
 	/**
 	 * Build response
@@ -44,10 +47,8 @@ trait ResponseTrait
 	 * @param bool $secure        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function redirect($to = null, $status = 302, $headers = [], $secure = null) {
-		if (! $to)
-			$to = Config::HOME_PAGE;
-		return $this->applyCookies ( redirect ( $to, $status, $headers, $secure ) );
+	public function redirect($to = Config::HOME_PAGE, $status = 302, $headers = [], $secure = null) {
+		return static::applyCookies ( redirect ( $to, $status, $headers, $secure ) );
 	}
 	/**
 	 *
@@ -57,7 +58,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function response($content, $status = Response::HTTP_OK, array $headers = []) {
-		return $this->applyCookies ( response ( $content, $status, $headers ) );
+		return static::applyCookies ( response ( $content, $status, $headers ) );
 	}
 	/**
 	 *
@@ -105,16 +106,16 @@ trait ResponseTrait
 			$this->pumpImage ( Image::make ( $path ) );
 	}
 	/**
+	 */
+	public function pumpNoImage() {
+		$this->pumpImagePath ( '../repo/not-found.jpg' );
+	}
+	/**
 	 *
 	 * @param Image $image        	
 	 */
 	public function pumpImage($image) {
 		header ( "Content-Type: $image->mime ()" );
 		die ( $image->encode () );
-	}
-	/**
-	 */
-	public function pumpNoImage() {
-		$this->pumpImagePath ( '../repo/not-found.jpg' );
 	}
 }

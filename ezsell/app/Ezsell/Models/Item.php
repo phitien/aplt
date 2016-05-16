@@ -25,7 +25,8 @@ class Item extends Model {
 			'groups',
 			'tags',
 			'options',
-			'bits' 
+			'bits',
+			'deleted_at' 
 	];
 	protected $hidden = [ ];
 	protected $dates = [ 

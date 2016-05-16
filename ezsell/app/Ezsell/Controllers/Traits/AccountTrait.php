@@ -4,7 +4,7 @@ namespace App\Ezsell\Controllers\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 
 trait AccountTrait {
 	/**

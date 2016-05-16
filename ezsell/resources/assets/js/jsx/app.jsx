@@ -4,13 +4,6 @@ $( document ).ready(function() {
 			hideMenus();
 		}
 	});
-	if (appMessage) {
-		showMessageDialog(appMessage);
-	}
-	ReactDOM.render(React.createElement(CatMenu, { 
-		items : cats 
-	}), document.getElementById('catmenu'));
-	
 	//scroll to bottom to load more data
 	$(window).scroll(function() {
     	if($(window).scrollTop() == $(document).height() - $(window).height()) {
@@ -20,5 +13,20 @@ $( document ).ready(function() {
     		console.log('TODO: reach to the top, don\'t know what to do now :-o');
     	}
 	});
+
+	ReactDOM.render(React.createElement(CatMenu, { 
+		items: cats
+	}), document.getElementById('catmenu'));
+	if (showLeft) {
+		ReactDOM.render(React.createElement(CatMenu, { 
+			items: cats,
+			showRoot: false,
+			className: 'leftmenu'
+		}), document.getElementById(leftDivId));
+	}
 	
+	if (appMessage) {
+		showMessageDialog(appMessage);
+	}
+
 });

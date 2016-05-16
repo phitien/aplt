@@ -1,8 +1,24 @@
-@extends('layouts.master')
+<?php
 
-@section('title', 'EZSell - Sell')
+$showBanner = false;
 
-@section('bottomscripts')
+?>@extends('layouts.master')
+
+@section('title', 'EZSell - Want to sell something')
+
+@section('scripts')
 @parent
-	<script type="text/javascript" src="js/pages/sellitem.js"></script>
+	{{ Html::script('js/pages/sellitem.js', ['type' => 'text/javascript']) }}
+@endsection
+
+@section('left')
+@parent
+@endsection
+
+@section('center')
+@parent
+@endsection
+
+@section('right')
+@parent
 @endsection

@@ -1,8 +1,20 @@
 @extends('layouts.master')
 
-@section('title', 'EZSell - Password')
+@section('title', 'EZSell - Change password')
 
-@section('bottomscripts')
+@section('scripts')
 @parent
-	<script type="text/javascript" src="js/pages/password.js"></script>
+	{{ Html::script('js/pages/password.js', ['type' => 'text/javascript']) }}
+@endsection
+
+@section('left')
+@parent
+@endsection
+
+@section('center')
+@parent
+@endsection
+
+@section('right')
+@parent
 @endsection

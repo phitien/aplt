@@ -14,14 +14,14 @@ window.format = {
 		var n = parseFloat(v) != NaN ? parseFloat(v) : 0; 
 		return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 	},
-	time: function (v) {
+	time: function (v, format) {
 		return $.format.date(v, currentLocation.timeformat);
 	},
-	date: function (v) {
-		return $.format.date(v, currentLocation.dateformat);
+	date: function (v, format) {
+		return $.format.date(v, format ? format : currentLocation.dateformat);
 	},
-	datetime: function (v) {
-		return $.format.date(v, currentLocation.datetimeformat);
+	datetime: function (v, format) {
+		return $.format.date(v, format ? format : currentLocation.datetimeformat);
 	},
 	prettyDate: function (v) {
 		return $.format.prettyDate(v);
@@ -68,35 +68,33 @@ window.showMessageDialog = function(msg, title, btn, callback) {
 		buttons: buttons
 	});//end confirm dialog
 }
-window.expandMenu = function(e, classNameToHide) {
+window.expandMenu = function(e) {
 	var menu = $(e).next('ul');
-	hideClassName(classNameToHide, menu);
 	toggleElement(menu);
 }
 window.hideMenus = function() {
-	slideUp($('.menu-toggle'));
+	slideUp($('.sensitive'));
 };
 window.toggleElement = function(e) {
+	console.log(e);
 	if ( e.css('display') == 'none' ) {
 		slideDown(e);
 	} else {
 		slideUp(e);
 	}
 }
+window.sensitive = 'input,select,textarea,img,.sensitive';
 window.slideDown = function(e) {
-	$('input,select,textarea,img,.sensitive').not(e.find('input,img')).css('visibility', 'hidden');
 	e.slideDown();
+	e.css('visibility', 'visible');
+	$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
 }
 window.slideUp = function(e) {
 	e.slideUp(function () {
-		$('input,select,textarea,img,.sensitive').not(e.find('input,img')).css('visibility', 'visible');
+		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'visible');
+		e.css('visibility', 'hidden');
 	});
 }
-window.toggleForm = function(classNameToHide) {
-	var form = $('#form-container');
-	hideClassName(classNameToHide, form);
-	toggleElement(form);
-};
 window.hideClassName = function(classNameToHide, exceptions) {
 	$('.' + classNameToHide).not(exceptions).hide();
 }
@@ -119,11 +117,11 @@ window.showLoginForm = function(e) {
 				); 
 			}
 		}), document.getElementById('form-container'), function() {
-			toggleForm('menu-toggle');
+			toggleElement($('#form-container'));
 		});
 	}
 	else {
-		toggleForm('menu-toggle');
+		toggleElement($('#form-container'));
 	}
 }
 window.showRegistrationForm = function(e) {
@@ -148,11 +146,11 @@ window.showRegistrationForm = function(e) {
 				); 
 			}
 		}), document.getElementById('form-container'), function() {
-			toggleForm('menu-toggle');
+			toggleElement($('#form-container'));
 		});
 	}
 	else {
-		toggleForm('menu-toggle');
+		toggleElement($('#form-container'));
 	}
 }
 window.showLocationForm = function(e) {
@@ -167,14 +165,10 @@ window.showLocationForm = function(e) {
 			},
 			onValidSubmit(model) {},
 			formrender() { 
-				var currentLocationLabel = '';
-				if (currentLocation) {
-					currentLocationLabel = <label>Current: {currentLocation.name}</label>;
-				}
 				return (
 					<FormView.Form className='form' method='post' action='/location'>
-						{currentLocationLabel}
-						<FormView.Input type='autocomplete' name='location' title='Location' source='/searchlocation' className='center-block' />
+						<FormView.Input type='autocomplete' name='location' title='Location' source='/searchlocation' className='center-block' 
+							value={currentLocation.name} placeholder='Please type a location name' />
 					</FormView.Form>
 				); 
 			}
@@ -209,16 +203,16 @@ window.showLocationForm = function(e) {
 							if (id && id != currentLocation.id)
 								submitForm($(this).parents('form:first'));
 							else
-								toggleForm('menu-toggle');
+								toggleElement($('#form-container'));
 						}
 					}
 				});
 			});
-			toggleForm('menu-toggle');
+			toggleElement($('#form-container'));
 		});
 	}
 	else {
-		toggleForm('menu-toggle');
+		toggleElement($('#form-container'));
 	}
 }
 window.sendMessage = function(e) {

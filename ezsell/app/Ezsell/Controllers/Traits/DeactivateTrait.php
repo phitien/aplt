@@ -2,7 +2,7 @@
 
 namespace App\Ezsell\Controllers\Traits;
 
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

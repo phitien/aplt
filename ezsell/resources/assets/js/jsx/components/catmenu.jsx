@@ -114,7 +114,7 @@ const CatMenu = React.createClass({
 		}
 		function getHref() {
 			if (!this.parent_id) {
-				return 'javascript:expandMenu(this, "menu-toggle")';
+				return 'javascript:expandMenu(this)';
 			}
 			else if (this.atomic) {
 				return 'cat/' + (usecode ? this.code.toLowerCase() : this.id);
@@ -125,13 +125,15 @@ const CatMenu = React.createClass({
 		}
 		function getSubMenuClassName() {
 			if (!this.parent_id) {
-				return 'menu-toggle';
+				return 'sensitive';
 			}
 			return '';
 		}
-		const className = 'catmenu ' + (this.props.className?this.props.className:'');
+		const className = 'catmenu ' + (this.props.hasOwnProperty('className') ? this.props.className : '');
+		const showRoot = this.props.hasOwnProperty('showRoot') ? this.props.showRoot : true;
+		const items = showRoot ? this.props.items : this.props.items[0].children;
 		return (
-			<Menu className={className} items={this.props.items} 
+			<Menu className={className} items={items} 
 				getText={getText} 
 				getHref={getHref} 
 				getSubMenuClassName={getSubMenuClassName} />

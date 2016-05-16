@@ -3,7 +3,7 @@
 namespace App\Ezsell\Traits;
 
 use GuzzleHttp\Client;
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 use Illuminate\Http\Response;
 use GuzzleHttp\Exception\ClientException;
 use Exception;
@@ -11,7 +11,6 @@ use Psr\Http\Message\ResponseInterface;
 use App\User;
 
 trait RestfulTrait {
-	use UserTrait;
 	/**
 	 *
 	 * @return \GuzzleHttp\Client

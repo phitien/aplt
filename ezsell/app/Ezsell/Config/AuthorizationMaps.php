@@ -2,7 +2,7 @@
 
 namespace App\Ezsell\Config;
 
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 
 class AuthorizationMaps {
 	const MAPS = [ 

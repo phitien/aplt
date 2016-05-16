@@ -1,8 +1,20 @@
 @extends('layouts.master')
 
-@section('title', 'EZSell - Code')
+@section('title', 'EZSell - Send activation code')
 
-@section('bottomscripts')
+@section('scripts')
 @parent
-	<script type="text/javascript" src="js/pages/code.js"></script>
+    {{ Html::script('js/pages/code.js', ['type' => 'text/javascript']) }}
+@endsection
+
+@section('left')
+@parent
+@endsection
+
+@section('center')
+@parent
+@endsection
+
+@section('right')
+@parent
 @endsection

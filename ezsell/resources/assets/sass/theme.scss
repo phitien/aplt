@@ -12,83 +12,101 @@
 .grounded-m {border-radius: $smedium;}
 .grounded-b {border-radius: $sbig;}
 
+.no-margin {margin: 0;}
+.no-padding {padding: 0;}
+.no-margin-padding {margin: 0;padding: 0;}
+
 a {}
 a:hover {text-decoration: none !important;}
 
-.ui-autocomplete {}
-.ui-autocomplete .ui-menu-item .ui-corner-all {background-color: aliceblue;}
-.ui-autocomplete .ui-menu-item .ui-state-focus {background-color: #23527c !important;}
+/**
+ * Icons
+ */
+.icon-heart {background-color: transparent;background-image: url('../images/icon-heart.png');display: block;height: 24px;width: 24px;cursor: pointer;}
 
-.item-detail-wrapper {}
-.item-detail {}
-.item-title {}
-.item-prices {font-size: $fsmall;}
-.item-inline-prices .item-price {display: inline-block; margin: $ssmall $sbig 0 0;}
-.item-block-prices .item-price {display: block; margin: 7px 0 7px 0;}
-.item-prices label {text-decoration: initial;font-weight: normal;margin-left: $ssmall;}
+.ui-autocomplete {
+	.ui-menu-item {
+		.ui-corner-all {background-color: aliceblue;}
+		.ui-state-focus {background-color: #23527c !important;}
+	}
+}
+.item-summary {
+	min-height: $item-summary-height;
+	.label {display: none;}
+	.expired-label {@extend .no-margin-padding;display: initial;}
+	.new,.used {
+		@extend .grounded-s;
+		display: inline-block;
+	    margin-right: $sbig;
+	    border: 1px solid;
+	    padding: 2px $smedium;
+	    font-size: $fxsmall;
+	    margin-top: $ssmall;
+	}
+	.new {
+		border-color: $primary-color-opp;
+		color: $primary-color-opp;
+	}
+	.used {
+		border-color: $primary-color;
+		color: $primary-color;
+	}
+	.item-title {
+		a {
+			span {}
+		}
+	}
+	.item-date {
+		padding: 3px 0;
+		a {
+			span {
+				font-style: italic;
+				font-size: $fsmall;
+				color: gainsboro !important;
+			}
+			.datetimeformat {
+				margin-left: 3px; 
+			}
+		}
+	}
+	.item-created, .item-updated,.item-expired {@extend .item-date;}
+	.item-prices {
+		font-size: $fsmall;clear: both;margin: $smedium 0;
+		.item-price {
+			span {}
+			.currency-sign {margin-right: 3px;}
+			.currency-value {}
+			.label {}
+		}
+		.item-originalprice {
+			@extend .item-price;
+			.currency-sign {color: $primary-color;}
+			.currency-value {color: $primary-color;text-decoration: line-through;}
+		}
+		.item-saleprice {
+			@extend .item-price;
+			.currency-sign {color: violet;}
+			.currency-value {color: violet;text-decoration: line-through;}
+		}
+		.item-nowprice {
+			@extend .item-price;
+			.currency-sign {color: $primary-color-opp;}
+			.currency-value {color: $primary-color-opp;text-decoration: blink;}
+		}
+	}
+	.item-inline-prices {
+		@extend .item-prices;
+		.item-price {display: inline-block; margin: $ssmall $sbig 0 0;}
+	}
+	.item-block-prices {
+		@extend .item-prices;
+		.item-price {display: block; margin: 7px 0 7px 0;}
+	}
+}
+.item-detail-wrapper {
+	.item-detail {
 
-.originalprice {color: $primary-color;}
-.item-originalprice span.currency-sign {
-	@extend .originalprice; 
-}
-.item-originalprice span.currency-value {
-	@extend .originalprice;
-	text-decoration: line-through;
-}
-.currency-sign {margin-right: 3px;}
-.saleprice {color: violet;}
-.item-saleprice span.currency-sign {
-	@extend .saleprice;
-}
-.item-saleprice span.currency-value {
-	@extend .saleprice;
-	text-decoration: line-through;
-}
-.nowprice {color: $primary-color-opp;}
-.item-nowprice span.currency-sign {
-	@extend .nowprice;
-}
-.item-nowprice span.currency-value {
-	@extend .nowprice;
-	text-decoration: blink;
-}
-
-.item-date {
-	padding: 3px 0;
-}
-.item-created, .item-created, .item-created {
-	@extend .item-date;
-}
-.item-date span {
-	font-style: italic;
-	font-size: $fsmall;
-	color: gainsboro !important;
-}
-.item-date .datetimeformat {
-	margin-left: 3px; 
-}
-.item-summary {}
-.item-summary .item-title {}
-.item-summary .label {display: none;}
-.item-summary .new,.item-summary .used {
-	@extend .grounded-s;
-	display: inline-block;
-    margin-right: $sbig;
-    border: 1px solid;
-    padding: 2px $smedium;
-    font-size: $fsmall;
-    margin-top: $ssmall;
-}
-.item-summary .new {
-	border-color: $primary-color-opp;
-	color: $primary-color-opp;
-}
-.item-summary .used {
-	border-color: $primary-color;
-	color: $primary-color;
-}
-.item-summary .item-prices {
-	clear: both;
+	}
 }
 
 .item-list {
@@ -98,25 +116,40 @@ a:hover {text-decoration: none !important;}
 .item {
 	@extend .border-bottom,.border-right;
 	padding: 0 $ssmall;
+	.item-firstimage {
+		@extend .border-bottom;
+		padding: $ssmall;
+		margin-bottom: $ssmall;
+		.item-firstimage-wrapper {
+			@extend .border-all,.grounded-m;
+			height: $item-image-height;
+			width: ($item-image-width + 4*$border-width);
+			overflow: hidden;
+			margin: auto;
+			padding: $border-width;
+			position: relative;
+			img {
+				@extend .grounded-m;
+				width: $item-image-width;
+			}
+			a.icon-heart {
+				display: none;
+				position: absolute;
+				top: $sbig;
+				right: $sbig;
+			}
+		}
+	}
+	.item-firstimage:hover {
+		.item-firstimage-wrapper {
+			a.icon-heart {
+				display: block;
+			}
+		}
+	}
 }
 .item-first {
 	@extend .item;
-}
-.item-firstimage {
-	@extend .border-bottom;
-	padding: $sbig;
-	margin-bottom: $ssmall;
-}
-.item-firstimage-wrapper {
-	@extend .border-all,.grounded-m;
-	height: 150px;
-	width: 150px;
-	overflow: hidden;
-	margin: auto;
-}
-.item-firstimage-wrapper img {
-	@extend .grounded-m;
-	width: 150px;
 }
 
 .btn-buy span, .btn-sell span,.btn-more span {
@@ -153,10 +186,14 @@ a:hover {text-decoration: none !important;}
 
 .cat-detail .cat-name {display: none;}
 
-.userbox {@extend .border-top;padding: $smedium 0 $sbig;}
-.userbox img {@extend .grounded-b; width: 40px;margin-right: $ssmall;}
-.userbox a {}
-.userbox a span {font-size: $fsmall;}
-
+.userbox {
+	@extend .border-top;padding: $smedium 0 $sbig;
+	img {@extend .grounded-b; width: 40px;margin-right: $ssmall;}
+	a {
+		span {font-size: $fsmall;}
+	}
+}
 .image-gallery-slide img {@extend .grounded-s;max-height: 311px;width: auto;margin: auto;display: block;}
 .image-gallery-thumbnail img{@extend .grounded-s;max-height: 80px;}
+.image-gallery-image {background-color: $image-gallery-image-bg;}
+

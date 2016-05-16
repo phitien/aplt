@@ -2,49 +2,37 @@
 
 namespace App\Ezsell\Traits;
 
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 use App\Ezsell\Config\LocationMap;
 
-trait LocationTrait
-{
-	use ResponseTrait;
-	/**
-	 *
-	 * @var string
-	 */
-	protected static $_location_id;
-	/**
-	 *
-	 * @var array
-	 */
-	protected static $_location;
+trait LocationTrait {
 	/**
 	 *
 	 * @return string encrypted location id
 	 */
-	protected static function getLocationId() {
-		if (! static::$_location_id) {
-			static::$_location_id = static::param ( Config::LOCATION_KEY );
+	public static function getLocationId() {
+		if (! \App\Ezsell\Helper::$_location_id) {
+			\App\Ezsell\Helper::$_location_id = static::param ( Config::LOCATION_KEY );
 		}
-		return static::$_location_id;
+		return \App\Ezsell\Helper::$_location_id;
 	}
 	/**
 	 *
 	 * @param int $location_id        	
 	 */
 	protected static function setLocationId($location_id) {
-		static::$_location_id = $location_id;
-		static::$_location = LocationMap::find ( static::$_location_id );
+		\App\Ezsell\Helper::$_location_id = $location_id;
+		\App\Ezsell\Helper::$_location = LocationMap::find ( \App\Ezsell\Helper::$_location_id );
 	}
 	/**
 	 *
 	 * @return Location
 	 */
-	protected static function getLocation() {
+	public static function getLocation() {
 		$location_id = static::getLocationId ();
-		if (! static::$_location) {
-			static::$_location = LocationMap::find ( $location_id );
+		if (! \App\Ezsell\Helper::$_location) {
+			\App\Ezsell\Helper::$_location = LocationMap::find ( $location_id );
 		}
-		return static::$_location ? static::$_location : LocationMap::earth ();
+		return \App\Ezsell\Helper::$_location ? \App\Ezsell\Helper::$_location : LocationMap::earth ();
 	}
 }

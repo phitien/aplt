@@ -3,7 +3,7 @@
 namespace App\Ezsell\Middleware;
 
 use Closure;
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 use Tymon\JWTAuth\Middleware\BaseMiddleware;
 
 class Prehandle extends BaseMiddleware {

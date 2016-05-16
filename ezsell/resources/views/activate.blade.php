@@ -2,6 +2,18 @@
 
 @section('title', 'EZSell - Activate')
 
-@section('bottomscripts')
+@section('scripts')
+@parent
+@endsection
+
+@section('left')
+@parent
+@endsection
+
+@section('center')
+@parent
+@endsection
+
+@section('right')
 @parent
 @endsection

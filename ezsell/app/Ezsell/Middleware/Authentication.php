@@ -3,7 +3,7 @@
 namespace App\Ezsell\Middleware;
 
 use Closure;
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 use Illuminate\Http\Response;
 
 class Authentication extends Middleware {

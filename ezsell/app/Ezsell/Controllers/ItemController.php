@@ -8,7 +8,7 @@ use App\Ezsell\Exceptions\ItemNotFound;
 use App\Ezsell\Models\Cat;
 use App\Ezsell\Models\Image;
 use Carbon\Carbon;
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 
 class ItemController extends Controller {
 	/**
@@ -19,6 +19,7 @@ class ItemController extends Controller {
 			'except' => [ 
 					'index',
 					'cat',
+					'user',
 					'item' 
 			] 
 	];
@@ -74,9 +75,9 @@ class ItemController extends Controller {
 				else
 					$items [$i] ['user'] = [ ];
 			}
-			return $this->response ( view ( 'item.items', [ 
-					'cat' => $cat,
-					'items' => $items 
+			return $this->response ( view ( 'item.catitems', [ 
+					'catitems_cat' => $cat,
+					'catitems_items' => $items 
 			] ) );
 		} else {
 			throw new ItemNotFound ();
@@ -96,8 +97,8 @@ class ItemController extends Controller {
 		}
 		$item = Item::find ( $id );
 		if ($item) {
-			return $this->response ( view ( 'item.detail', [ 
-					'item' => $item 
+			return $this->response ( view ( 'item.itemdetails', [ 
+					'itemdetails_item' => $item 
 			] ) );
 		} else {
 			return $this->redirect ( Config::HOME_PAGE );
@@ -145,7 +146,8 @@ class ItemController extends Controller {
 				'meetup_at',
 				'meetup_details',
 				'mailing_details',
-				'groups' 
+				'groups',
+				'deleted_at' 
 		] );
 		$data ['is_new'] = $data ['is_new'] ? true : false;
 		$data ['is_selling'] = $data ['is_selling'] ? true : false;
@@ -170,7 +172,7 @@ class ItemController extends Controller {
 				}
 			}
 			if (Config::USE_CODE) {
-				return $this->redirect ( "/item/{$item->code()}" );
+				return $this->redirect ( "/cat/{$item->code()}" );
 			} else {
 				return $this->redirect ( "/item/{$item->id}" );
 			}
@@ -200,8 +202,8 @@ class ItemController extends Controller {
 				$items [$i] ['user'] = $user;
 			}
 			return $this->response ( view ( 'item.useritems', [ 
-					'user' => $user,
-					'items' => $items 
+					'useritems_user' => json_encode ( $user ),
+					'useritems_items' => $items 
 			] ) );
 		} else {
 			return $this->redirect ( Config::HOME_PAGE );

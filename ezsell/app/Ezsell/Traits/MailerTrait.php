@@ -5,11 +5,9 @@ namespace App\Ezsell\Traits;
 use Mail;
 use App\User;
 use Html;
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 
-trait MailerTrait
-{
-	use ApiCallRestfulTrait;
+trait MailerTrait {
 	/**
 	 *
 	 * @param User $receiver        	

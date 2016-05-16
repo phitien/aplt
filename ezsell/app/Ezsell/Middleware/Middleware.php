@@ -4,7 +4,7 @@ namespace App\Ezsell\Middleware;
 
 use Tymon\JWTAuth\Middleware\BaseMiddleware;
 use Closure;
-use App\Ezsell\Config\Config;
+use App\Ezsell\Config;
 use Illuminate\Http\Response;
 use App\Ezsell\Traits\AllTrait;
 

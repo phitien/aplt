@@ -21,8 +21,18 @@ trait UtilTrait {
 	 * @param string $str        	
 	 * @return string
 	 */
-	public static function encrypt($str) {
-		return base64_encode ( $str );
+	protected static function encrypt($string) {
+		$data = base64_encode ( $string );
+		$data = str_replace ( array (
+				'+',
+				'/',
+				'=' 
+		), array (
+				'-',
+				'_',
+				'' 
+		), $data );
+		return $data;
 	}
 	
 	/**
@@ -30,8 +40,19 @@ trait UtilTrait {
 	 * @param string $str        	
 	 * @return string
 	 */
-	public static function decrypt($str) {
-		return base64_decode ( $str );
+	protected static function decrypt($string) {
+		$data = str_replace ( array (
+				'-',
+				'_' 
+		), array (
+				'+',
+				'/' 
+		), $string );
+		$mod4 = strlen ( $data ) % 4;
+		if ($mod4) {
+			$data .= substr ( '====', $mod4 );
+		}
+		return base64_decode ( $data );
 	}
 	/**
 	 *

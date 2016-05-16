@@ -18,7 +18,7 @@ elixir(function(mix) {
 	
 	.browserify('jsx/app.jsx', 'public/js')
 
-	.browserify('jsx/pages/index.jsx', 'public/js/pages')
+	.browserify('jsx/pages/home.jsx', 'public/js/pages')
 
 	.browserify('jsx/pages/register.jsx', 'public/js/pages')
 
@@ -40,12 +40,14 @@ elixir(function(mix) {
 	
 	.browserify('jsx/pages/buyitem.jsx', 'public/js/pages')
 	
-	.browserify('jsx/pages/item.jsx', 'public/js/pages')
+	.browserify('jsx/pages/itemdetails.jsx', 'public/js/pages')
 	
-	.browserify('jsx/pages/items.jsx', 'public/js/pages')
+	.browserify('jsx/pages/catitems.jsx', 'public/js/pages')
 	
 	.browserify('jsx/pages/useritems.jsx', 'public/js/pages')
 
+	.copy('resources/assets/images', 'public/images')
+	
 	.copy('node_modules/jquery-ui/themes', 'public/css/jquery-ui/themes')
 	
 	.copy('resources/assets/js/socket.io-1.3.4.js', 'public/js')

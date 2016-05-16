@@ -3,17 +3,8 @@
 namespace App\Ezsell\View;
 
 use Illuminate\View\Factory as BaseFactory;
-use App\Ezsell\View\Html\Menu\Menu;
-use App\Ezsell\View\Html\Menu\MenuItem;
-use App\Ezsell\Models\Cat;
-use App\Ezsell\Traits\AllTrait;
-use App\Ezsell\Config\Config;
 
 class Factory extends BaseFactory {
-	/**
-	 * TRAITS
-	 */
-	use AllTrait;
 	/**
 	 *
 	 * @var bool
@@ -39,38 +30,6 @@ class Factory extends BaseFactory {
 	 */
 	protected function preProcessData($data = []) {
 		if (! $this->requireOriginalRendering) {
-			$isGuest = ( bool ) static::getUser ()->isGuest ();
-			$data ['isGuest'] = $isGuest;
-			$data ['user'] = static::getUser ();
-			$data ['theme'] = 'south-street';
-			$data ['cats'] = Cat::getHierarchy ();
-			$data ['location'] = static::getLocation ();
-			$data ['usecode'] = Config::USE_CODE;
-			
-			if (! isset ( $data ['appMessage'] ))
-				$data ['appMessage'] = '';
-			$menu = (new Menu ())->setClassName ( 'nav' );
-			if ($isGuest) {
-				$menu->addChild ( (new MenuItem ())->setText ( 'Login' )->setAttribute ( 'onClick', 'showLoginForm(this)' ) );
-				$menu->addChild ( (new MenuItem ())->setText ( 'Register' )->setAttribute ( 'onClick', 'showRegistrationForm(this)' ) );
-				$menu->addChild ( (new MenuItem ())->setText ( 'Location' )->setAttribute ( 'onClick', 'showLocationForm(this)' ) );
-				// $menu->addChild ( (new MenuItem ())->setText ( 'Code' )->setHref ( '/code' ) );
-			} else {
-				$menu->addChild ( (new MenuItem ())->setText ( 'Buy' )->setClassName ( 'btn-buy' )->setHref ( '/buyitem' ) );
-				$menu->addChild ( (new MenuItem ())->setText ( 'Sell' )->setClassName ( 'btn-sell' )->setHref ( '/sellitem' ) );
-				$moreMenuItem = (new MenuItem ())->setText ( 'More' )->setClassName ( 'btn-more' )->setAttribute ( 'onClick', 'expandMenu(this, "menu-toggle")' );
-				$menu->addChild ( $moreMenuItem );
-				$moreMenu = (new Menu ())->setClassName ( 'menu-toggle more-nav' );
-				$moreMenu->addChild ( (new MenuItem ())->setText ( 'Password' )->setHref ( '/password' ) );
-				$moreMenu->addChild ( (new MenuItem ())->setText ( 'Profile' )->setHref ( '/profile' ) );
-				$moreMenu->addChild ( (new MenuItem ())->setText ( 'Email' )->setHref ( '/email' ) );
-				$moreMenu->addChild ( (new MenuItem ())->setText ( 'Account' )->setHref ( '/account' ) );
-				$moreMenu->addChild ( (new MenuItem ())->setText ( 'Deactivate' )->setHref ( '/deactivate' ) );
-				$moreMenu->addChild ( (new MenuItem ())->setText ( 'Location' )->setAttribute ( 'onClick', 'showLocationForm(this)' ) );
-				$moreMenu->addChild ( (new MenuItem ())->setText ( 'Logout' )->setHref ( '/logout' ) );
-				$moreMenuItem->addChild ( $moreMenu );
-			}
-			$data ['menu'] = $menu;
 		}
 		return $data;
 	}

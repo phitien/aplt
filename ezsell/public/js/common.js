@@ -4371,14 +4371,14 @@ window.format = {
 		var n = parseFloat(v) != NaN ? parseFloat(v) : 0;
 		return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 	},
-	time: function time(v) {
+	time: function time(v, format) {
 		return $.format.date(v, currentLocation.timeformat);
 	},
-	date: function date(v) {
-		return $.format.date(v, currentLocation.dateformat);
+	date: function date(v, format) {
+		return $.format.date(v, format ? format : currentLocation.dateformat);
 	},
-	datetime: function datetime(v) {
-		return $.format.date(v, currentLocation.datetimeformat);
+	datetime: function datetime(v, format) {
+		return $.format.date(v, format ? format : currentLocation.datetimeformat);
 	},
 	prettyDate: function prettyDate(v) {
 		return $.format.prettyDate(v);
@@ -4425,34 +4425,32 @@ window.showMessageDialog = function (msg, title, btn, callback) {
 		buttons: buttons
 	}); //end confirm dialog
 };
-window.expandMenu = function (e, classNameToHide) {
+window.expandMenu = function (e) {
 	var menu = $(e).next('ul');
-	hideClassName(classNameToHide, menu);
 	toggleElement(menu);
 };
 window.hideMenus = function () {
-	slideUp($('.menu-toggle'));
+	slideUp($('.sensitive'));
 };
 window.toggleElement = function (e) {
+	console.log(e);
 	if (e.css('display') == 'none') {
 		slideDown(e);
 	} else {
 		slideUp(e);
 	}
 };
+window.sensitive = 'input,select,textarea,img,.sensitive';
 window.slideDown = function (e) {
-	$('input,select,textarea,img,.sensitive').not(e.find('input,img')).css('visibility', 'hidden');
 	e.slideDown();
+	e.css('visibility', 'visible');
+	$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
 };
 window.slideUp = function (e) {
 	e.slideUp(function () {
-		$('input,select,textarea,img,.sensitive').not(e.find('input,img')).css('visibility', 'visible');
+		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'visible');
+		e.css('visibility', 'hidden');
 	});
-};
-window.toggleForm = function (classNameToHide) {
-	var form = $('#form-container');
-	hideClassName(classNameToHide, form);
-	toggleElement(form);
 };
 window.hideClassName = function (classNameToHide, exceptions) {
 	$('.' + classNameToHide).not(exceptions).hide();
@@ -4476,10 +4474,10 @@ window.showLoginForm = function (e) {
 				);
 			}
 		}), document.getElementById('form-container'), function () {
-			toggleForm('menu-toggle');
+			toggleElement($('#form-container'));
 		});
 	} else {
-		toggleForm('menu-toggle');
+		toggleElement($('#form-container'));
 	}
 };
 window.showRegistrationForm = function (e) {
@@ -4504,10 +4502,10 @@ window.showRegistrationForm = function (e) {
 				);
 			}
 		}), document.getElementById('form-container'), function () {
-			toggleForm('menu-toggle');
+			toggleElement($('#form-container'));
 		});
 	} else {
-		toggleForm('menu-toggle');
+		toggleElement($('#form-container'));
 	}
 };
 window.showLocationForm = function (e) {
@@ -4522,20 +4520,11 @@ window.showLocationForm = function (e) {
 			},
 			onValidSubmit: function onValidSubmit(model) {},
 			formrender: function formrender() {
-				var currentLocationLabel = '';
-				if (currentLocation) {
-					currentLocationLabel = React.createElement(
-						'label',
-						null,
-						'Current: ',
-						currentLocation.name
-					);
-				}
 				return React.createElement(
 					_formview2.default.Form,
 					{ className: 'form', method: 'post', action: '/location' },
-					currentLocationLabel,
-					React.createElement(_formview2.default.Input, { type: 'autocomplete', name: 'location', title: 'Location', source: '/searchlocation', className: 'center-block' })
+					React.createElement(_formview2.default.Input, { type: 'autocomplete', name: 'location', title: 'Location', source: '/searchlocation', className: 'center-block',
+						value: currentLocation.name, placeholder: 'Please type a location name' })
 				);
 			}
 		}), document.getElementById('form-container'), function () {
@@ -4566,15 +4555,15 @@ window.showLocationForm = function (e) {
 							this.setAttribute('data-value', ui.item);
 							var id = ui.item.id;
 							this.nextSibling.value = id;
-							if (id && id != currentLocation.id) submitForm($(this).parents('form:first'));else toggleForm('menu-toggle');
+							if (id && id != currentLocation.id) submitForm($(this).parents('form:first'));else toggleElement($('#form-container'));
 						}
 					}
 				});
 			});
-			toggleForm('menu-toggle');
+			toggleElement($('#form-container'));
 		});
 	} else {
-		toggleForm('menu-toggle');
+		toggleElement($('#form-container'));
 	}
 };
 window.sendMessage = function (e) {
@@ -4753,7 +4742,7 @@ var CatMenu = React.createClass({
 		}
 		function getHref() {
 			if (!this.parent_id) {
-				return 'javascript:expandMenu(this, "menu-toggle")';
+				return 'javascript:expandMenu(this)';
 			} else if (this.atomic) {
 				return 'cat/' + (usecode ? this.code.toLowerCase() : this.id);
 			} else {
@@ -4762,12 +4751,14 @@ var CatMenu = React.createClass({
 		}
 		function getSubMenuClassName() {
 			if (!this.parent_id) {
-				return 'menu-toggle';
+				return 'sensitive';
 			}
 			return '';
 		}
-		var className = 'catmenu ' + (this.props.className ? this.props.className : '');
-		return React.createElement(Menu, { className: className, items: this.props.items,
+		var className = 'catmenu ' + (this.props.hasOwnProperty('className') ? this.props.className : '');
+		var showRoot = this.props.hasOwnProperty('showRoot') ? this.props.showRoot : true;
+		var items = showRoot ? this.props.items : this.props.items[0].children;
+		return React.createElement(Menu, { className: className, items: items,
 			getText: getText,
 			getHref: getHref,
 			getSubMenuClassName: getSubMenuClassName });

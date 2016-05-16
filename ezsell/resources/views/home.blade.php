@@ -1,16 +1,24 @@
-@extends('layouts.master')
+<?php 
 
-@section('title', 'EZSell')
+$showBanner = true;
 
-@section('banner')
+?>@extends('layouts.master')
+
+@section('title', 'EZSell - Home page')
+
+@section('scripts')
 @parent
-		<div class="container clearfix" id="banner">
-			<div class="clearfix"></div>
-		</div>
+    {{ Html::script('js/pages/home.js', ['type' => 'text/javascript']) }}
 @endsection
 
-@section('bottomscripts')
+@section('left')
 @parent
-    <script type="text/javascript" src="js/pages/index.js"></script>
 @endsection
 
+@section('center')
+@parent
+@endsection
+
+@section('right')
+@parent
+@endsection

@@ -2,7 +2,14 @@
 
 namespace App\Ezsell\Traits;
 
-trait AllTrait
-{
-	use MailerTrait;
+trait AllTrait {
+	use ApiCallRestfulTrait, 
+		LocationTrait, 
+		MailerTrait, 
+		RequestTimeTrait, 
+		ResponseTrait, 
+		RestfulTrait, 
+		SessionTrait, 
+		TokenTrait, 
+		UtilTrait;
 }

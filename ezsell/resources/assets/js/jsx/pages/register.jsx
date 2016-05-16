@@ -18,5 +18,5 @@ $( document ).ready(function() {
 				</FormView.Form>
 			); 
 		}
-	}), document.getElementById(contentDivId));
+	}), document.getElementById(centerDivId));
 });

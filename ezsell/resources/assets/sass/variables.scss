@@ -1,13 +1,17 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "node_modules/react-image-gallery/src/image-gallery";
 
+$sxbig: 30px;
 $sbig: 15px;
 $smedium: 10px;
 $ssmall: 5px;
+$sxsmall: 3px;
 
+$fxbig: 18px;
 $fbig: 15px;
 $fmedium: 13px;
 $fsmall: 12px;
+$fxsmall: 10px;
 
 $primary-color: #23527c;
 $primary-color-opp: crimson;
@@ -24,3 +28,13 @@ $rightmenu-background-color: transparent;
 
 $btn-hover-bg-color: #cccccc;
 $navigation-height: 55px;
+
+$banner-height: 150px;
+$footer-height: 30px;
+
+$item-image-width: 150px;
+$item-image-height: 118px;
+
+$image-gallery-image-bg: silver;
+
+$item-summary-height: 161px;
