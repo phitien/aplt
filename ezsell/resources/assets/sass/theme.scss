@@ -1,4 +1,5 @@
 @import "variables";
+@import "node_modules/rc-switch/assets/index";
 
 .border {border-color: $border-color;border-width : $border-width;}
 .border-dark {border-color: $border-color-dark;}
@@ -197,3 +198,15 @@ a:hover {text-decoration: none !important;}
 .image-gallery-thumbnail img{@extend .grounded-s;max-height: 80px;}
 .image-gallery-image {background-color: $image-gallery-image-bg;}
 
+/** SWITCH **/
+.form-view {
+	.form-group {
+		.rc-switch {
+			@extend .no-margin-padding;
+			width: 50px;
+		}
+		.rc-switch-checked:after {
+			left: 28px;
+		}
+	} 		
+}

@@ -1,4 +1,54 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/*!
+  Copyright (c) 2016 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', [], function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+},{}],2:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -33,7 +83,7 @@ module.exports = function () {
   };
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Mixin.js":3,"react":38}],2:[function(require,module,exports){
+},{"./Mixin.js":4,"react":39}],3:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -66,7 +116,7 @@ module.exports = function (Component) {
   });
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Mixin.js":3,"react":38}],3:[function(require,module,exports){
+},{"./Mixin.js":4,"react":39}],4:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -243,7 +293,7 @@ module.exports = {
   }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./utils.js":5,"react":38}],4:[function(require,module,exports){
+},{"./utils.js":6,"react":39}],5:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -706,7 +756,7 @@ if (!global.exports && !global.module && (!global.define || !global.define.amd))
 
 module.exports = Formsy;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Decorator.js":1,"./HOC.js":2,"./Mixin.js":3,"./utils.js":5,"./validationRules.js":6,"form-data-to-object":7,"react":38}],5:[function(require,module,exports){
+},{"./Decorator.js":2,"./HOC.js":3,"./Mixin.js":4,"./utils.js":6,"./validationRules.js":7,"form-data-to-object":8,"react":39}],6:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -762,7 +812,7 @@ module.exports = {
     return null;
   }
 };
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var _isExisty = function _isExisty(value) {
@@ -843,7 +893,7 @@ var validations = {
 };
 
 module.exports = validations;
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 function toObj(source) {
   return Object.keys(source).reduce(function (output, key) {
     var parentKey = key.match(/[^\[]*/i);
@@ -890,7 +940,7 @@ module.exports = {
   fromObj: fromObj,
   toObj: toObj
 }
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -986,7 +1036,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -1108,7 +1158,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":8,"fbjs/lib/invariant":32}],10:[function(require,module,exports){
+},{"_process":9,"fbjs/lib/invariant":33}],11:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -1198,7 +1248,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactChildren":11,"./ReactClass":12,"./ReactComponent":13,"./ReactDOMFactories":15,"./ReactElement":17,"./ReactElementValidator":18,"./ReactPropTypes":24,"./ReactVersion":25,"./onlyChild":28,"_process":8,"fbjs/lib/warning":36,"object-assign":37}],11:[function(require,module,exports){
+},{"./ReactChildren":12,"./ReactClass":13,"./ReactComponent":14,"./ReactDOMFactories":16,"./ReactElement":18,"./ReactElementValidator":19,"./ReactPropTypes":25,"./ReactVersion":26,"./onlyChild":29,"_process":9,"fbjs/lib/warning":37,"object-assign":38}],12:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1382,7 +1432,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":9,"./ReactElement":17,"./traverseAllChildren":29,"fbjs/lib/emptyFunction":30}],12:[function(require,module,exports){
+},{"./PooledClass":10,"./ReactElement":18,"./traverseAllChildren":30,"fbjs/lib/emptyFunction":31}],13:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -2108,7 +2158,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./ReactComponent":13,"./ReactElement":17,"./ReactNoopUpdateQueue":21,"./ReactPropTypeLocationNames":22,"./ReactPropTypeLocations":23,"_process":8,"fbjs/lib/emptyObject":31,"fbjs/lib/invariant":32,"fbjs/lib/keyMirror":33,"fbjs/lib/keyOf":34,"fbjs/lib/warning":36,"object-assign":37}],13:[function(require,module,exports){
+},{"./ReactComponent":14,"./ReactElement":18,"./ReactNoopUpdateQueue":22,"./ReactPropTypeLocationNames":23,"./ReactPropTypeLocations":24,"_process":9,"fbjs/lib/emptyObject":32,"fbjs/lib/invariant":33,"fbjs/lib/keyMirror":34,"fbjs/lib/keyOf":35,"fbjs/lib/warning":37,"object-assign":38}],14:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -2232,7 +2282,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactInstrumentation":19,"./ReactNoopUpdateQueue":21,"./canDefineProperty":26,"_process":8,"fbjs/lib/emptyObject":31,"fbjs/lib/invariant":32,"fbjs/lib/warning":36}],14:[function(require,module,exports){
+},{"./ReactInstrumentation":20,"./ReactNoopUpdateQueue":22,"./canDefineProperty":27,"_process":9,"fbjs/lib/emptyObject":32,"fbjs/lib/invariant":33,"fbjs/lib/warning":37}],15:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -2264,7 +2314,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -2443,7 +2493,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":17,"./ReactElementValidator":18,"_process":8,"fbjs/lib/mapObject":35}],16:[function(require,module,exports){
+},{"./ReactElement":18,"./ReactElementValidator":19,"_process":9,"fbjs/lib/mapObject":36}],17:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -2518,7 +2568,7 @@ ReactDebugTool.addDevtool(ReactInvalidSetStateWarningDevTool);
 
 module.exports = ReactDebugTool;
 }).call(this,require('_process'))
-},{"./ReactInvalidSetStateWarningDevTool":20,"_process":8,"fbjs/lib/warning":36}],17:[function(require,module,exports){
+},{"./ReactInvalidSetStateWarningDevTool":21,"_process":9,"fbjs/lib/warning":37}],18:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -2808,7 +2858,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":14,"./canDefineProperty":26,"_process":8,"fbjs/lib/warning":36,"object-assign":37}],18:[function(require,module,exports){
+},{"./ReactCurrentOwner":15,"./canDefineProperty":27,"_process":9,"fbjs/lib/warning":37,"object-assign":38}],19:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -3092,7 +3142,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":14,"./ReactElement":17,"./ReactPropTypeLocationNames":22,"./ReactPropTypeLocations":23,"./canDefineProperty":26,"./getIteratorFn":27,"_process":8,"fbjs/lib/invariant":32,"fbjs/lib/warning":36}],19:[function(require,module,exports){
+},{"./ReactCurrentOwner":15,"./ReactElement":18,"./ReactPropTypeLocationNames":23,"./ReactPropTypeLocations":24,"./canDefineProperty":27,"./getIteratorFn":28,"_process":9,"fbjs/lib/invariant":33,"fbjs/lib/warning":37}],20:[function(require,module,exports){
 /**
  * Copyright 2016-present, Facebook, Inc.
  * All rights reserved.
@@ -3109,7 +3159,7 @@ module.exports = ReactElementValidator;
 var ReactDebugTool = require('./ReactDebugTool');
 
 module.exports = { debugTool: ReactDebugTool };
-},{"./ReactDebugTool":16}],20:[function(require,module,exports){
+},{"./ReactDebugTool":17}],21:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -3148,7 +3198,7 @@ var ReactInvalidSetStateWarningDevTool = {
 
 module.exports = ReactInvalidSetStateWarningDevTool;
 }).call(this,require('_process'))
-},{"_process":8,"fbjs/lib/warning":36}],21:[function(require,module,exports){
+},{"_process":9,"fbjs/lib/warning":37}],22:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
@@ -3246,7 +3296,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":8,"fbjs/lib/warning":36}],22:[function(require,module,exports){
+},{"_process":9,"fbjs/lib/warning":37}],23:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -3273,7 +3323,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":8}],23:[function(require,module,exports){
+},{"_process":9}],24:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -3296,7 +3346,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":33}],24:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":34}],25:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -3677,7 +3727,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":17,"./ReactPropTypeLocationNames":22,"./getIteratorFn":27,"fbjs/lib/emptyFunction":30}],25:[function(require,module,exports){
+},{"./ReactElement":18,"./ReactPropTypeLocationNames":23,"./getIteratorFn":28,"fbjs/lib/emptyFunction":31}],26:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -3692,7 +3742,7 @@ module.exports = ReactPropTypes;
 'use strict';
 
 module.exports = '15.0.1';
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -3719,7 +3769,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":8}],27:[function(require,module,exports){
+},{"_process":9}],28:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -3760,7 +3810,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -3796,7 +3846,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":17,"_process":8,"fbjs/lib/invariant":32}],29:[function(require,module,exports){
+},{"./ReactElement":18,"_process":9,"fbjs/lib/invariant":33}],30:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -3988,7 +4038,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":14,"./ReactElement":17,"./getIteratorFn":27,"_process":8,"fbjs/lib/invariant":32,"fbjs/lib/warning":36}],30:[function(require,module,exports){
+},{"./ReactCurrentOwner":15,"./ReactElement":18,"./getIteratorFn":28,"_process":9,"fbjs/lib/invariant":33,"fbjs/lib/warning":37}],31:[function(require,module,exports){
 "use strict";
 
 /**
@@ -4026,7 +4076,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -4048,7 +4098,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":8}],32:[function(require,module,exports){
+},{"_process":9}],33:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -4100,7 +4150,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":8}],33:[function(require,module,exports){
+},{"_process":9}],34:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -4150,7 +4200,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":32,"_process":8}],34:[function(require,module,exports){
+},{"./invariant":33,"_process":9}],35:[function(require,module,exports){
 "use strict";
 
 /**
@@ -4185,7 +4235,7 @@ var keyOf = function (oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4236,7 +4286,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -4295,7 +4345,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":30,"_process":8}],37:[function(require,module,exports){
+},{"./emptyFunction":31,"_process":9}],38:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -4336,12 +4386,12 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":10}],39:[function(require,module,exports){
+},{"./lib/React":11}],40:[function(require,module,exports){
 'use strict';
 
 var _catmenu = require('./components/catmenu.jsx');
@@ -4583,7 +4633,7 @@ window.sendMessage = function (e) {
 	}
 };
 
-},{"./components/catmenu.jsx":40,"./components/formview.jsx":41,"./components/userbox.jsx":42}],40:[function(require,module,exports){
+},{"./components/catmenu.jsx":41,"./components/formview.jsx":42,"./components/userbox.jsx":44}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4769,21 +4819,48 @@ CatMenu.Menu = Menu;
 CatMenu.MenuItem = MenuItem;
 exports.default = CatMenu;
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _formsyReact = require('formsy-react');
 
 var _formsyReact2 = _interopRequireDefault(_formsyReact);
 
+var _switch = require('./switch.jsx');
+
+var _switch2 = _interopRequireDefault(_switch);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
+
+var _extends = Object.assign || function (target) {
+	for (var i = 1; i < arguments.length; i++) {
+		var source = arguments[i];for (var key in source) {
+			if (Object.prototype.hasOwnProperty.call(source, key)) {
+				target[key] = source[key];
+			}
+		}
+	}return target;
+};
+function _objectWithoutProperties(obj, keys) {
+	var target = {};for (var i in obj) {
+		if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
+	}return target;
+}
+function _defineProperty(obj, key, value) {
+	if (key in obj) {
+		Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+	} else {
+		obj[key] = value;
+	}return obj;
+}
 //
 _formsyReact2.default.addValidationRule('notEqualsField', function (values, value, field) {
 	return value != values[field];
@@ -4839,6 +4916,8 @@ var Input = React.createClass({
 		var value;
 		if (type == 'checkbox') {
 			value = event.currentTarget.checked;
+		} else if (type == 'switch') {
+			value = event;
 		} else if (type == 'textarea') {
 			value = event.currentTarget.value;
 		} else if (type == 'image') {
@@ -4884,15 +4963,18 @@ var Input = React.createClass({
 				return this.renderFile();
 			case 'image':
 				return this.renderImage();
+			case 'switch':
+				return this.renderSwitch();
 			case 'text':
 			default:
 				return this.renderText();
 		}
 	},
 	renderHidden: function renderHidden() {
-		return React.createElement('input', _extends({}, this.props, { id: this.id, type: 'hidden', name: this.props.name, value: this.getValue() || '' }));
+		return React.createElement('input', { id: this.id, type: 'hidden', name: this.props.name, value: this.getValue() || '' });
 	},
 	renderText: function renderText() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'onChange', 'id', 'value']);
 		return React.createElement(
 			'div',
 			{ className: this.className },
@@ -4901,7 +4983,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('input', _extends({}, this.props, { id: this.id, type: this.type, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
+			React.createElement('input', _extends2({}, restProps, { id: this.id, type: this.type, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
 			React.createElement(
 				'span',
 				{ className: 'validation-error' },
@@ -4910,6 +4992,7 @@ var Input = React.createClass({
 		);
 	},
 	renderAutocomplete: function renderAutocomplete() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'data-source']);
 		var source = this.props.source ? this.props.source : null;
 		return React.createElement(
 			'div',
@@ -4919,7 +5002,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('input', _extends({}, this.props, { id: this.id, type: 'text', onChange: this.changeValue, value: this.getValue() || '', className: 'form-control autocomplete',
+			React.createElement('input', _extends2({}, restProps, { id: this.id, type: 'text', onChange: this.changeValue, value: this.getValue() || '', className: 'form-control autocomplete',
 				'data-source': source })),
 			React.createElement('input', { type: 'hidden', name: this.props.name }),
 			React.createElement(
@@ -4930,6 +5013,7 @@ var Input = React.createClass({
 		);
 	},
 	renderCheckboxRadio: function renderCheckboxRadio() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
 		var name = this.props.name ? this.props.name : uuid('radiolist_');
 		this.className += ' ' + this.type;
 		var labelClassName = 'form-' + this.type + '-label';
@@ -4939,15 +5023,15 @@ var Input = React.createClass({
 			React.createElement(
 				'label',
 				{ className: labelClassName, htmlFor: name },
-				React.createElement('input', _extends({}, this.props, { id: this.id, type: this.type, name: name, onChange: this.changeValue, className: this.type })),
+				React.createElement('input', _extends2({}, restProps, { id: this.id, type: this.type, name: name, onChange: this.changeValue, className: this.type })),
 				this.props.title
 			)
 		);
 	},
 	renderCheckboxRadioList: function renderCheckboxRadioList() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
 		var name = this.props.name ? this.props.name : uuid('radiolist_');
 		var type = this.type == 'checkboxlist' ? 'checkbox' : 'radio';
-		var props = this.props;
 		this.className += ' ' + this.type;
 		var changeValue = this.changeValue;
 		var labelClassName = 'form-' + type + '-label';
@@ -4969,7 +5053,7 @@ var Input = React.createClass({
 					React.createElement(
 						'label',
 						{ htmlFor: itemname },
-						React.createElement('input', _extends({}, props, { type: type, name: name, id: itemname, value: value, className: type, onChange: changeValue })),
+						React.createElement('input', _extends2({}, restProps, { type: type, name: name, id: itemname, value: value, className: type, onChange: changeValue })),
 						item.label
 					)
 				);
@@ -4978,10 +5062,12 @@ var Input = React.createClass({
 		);
 	},
 	renderButton: function renderButton() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'onClick', 'disabled']);
 		this.className = 'btn btn-default ' + (this.props.className ? this.props.className : '');
-		return React.createElement('input', _extends({}, this.props, { id: this.id, name: this.props.name, type: this.type, value: this.getValue() || '', className: this.className, onClick: this.props.onClick, disabled: this.props.disabled }));
+		return React.createElement('input', _extends2({}, restProps, { id: this.id, name: this.props.name, type: this.type, value: this.getValue() || '', className: this.className, onClick: this.props.onClick, disabled: this.props.disabled }));
 	},
 	renderTextarea: function renderTextarea() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'cols', 'rows']);
 		return React.createElement(
 			'div',
 			{ className: this.className },
@@ -4990,7 +5076,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('textarea', _extends({}, this.props, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
+			React.createElement('textarea', _extends2({}, restProps, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
 				cols: this.props.cols, rows: this.props.rows })),
 			React.createElement(
 				'span',
@@ -5000,6 +5086,7 @@ var Input = React.createClass({
 		);
 	},
 	renderSelect: function renderSelect() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'disabled']);
 		var optionLabel = this.props.optionLabel || function () {
 			return this.label;
 		};
@@ -5024,7 +5111,7 @@ var Input = React.createClass({
 			),
 			React.createElement(
 				'select',
-				_extends({}, this.props, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control', disabled: this.props.disabled }),
+				_extends2({}, restProps, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control', disabled: this.props.disabled }),
 				placeholder,
 				this.props.options.map(function (item, i) {
 					var label = optionLabel.bind(item)();
@@ -5032,7 +5119,7 @@ var Input = React.createClass({
 					var props = optionAttrs.bind(item)();
 					return React.createElement(
 						'option',
-						_extends({ key: i }, props, { value: value }),
+						_extends2({ key: i }, props, { value: value }),
 						label
 					);
 				})
@@ -5045,6 +5132,7 @@ var Input = React.createClass({
 		);
 	},
 	renderFile: function renderFile() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
 		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
 		return React.createElement(
 			'div',
@@ -5054,7 +5142,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('input', _extends({}, this.props, { id: this.id, type: this.type, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
+			React.createElement('input', _extends2({}, restProps, { id: this.id, type: this.type, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
 			React.createElement(
 				'span',
 				{ className: 'validation-error' },
@@ -5063,6 +5151,7 @@ var Input = React.createClass({
 		);
 	},
 	renderImage: function renderImage() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'accept']);
 		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
 		return React.createElement(
 			'div',
@@ -5072,7 +5161,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('input', _extends({}, this.props, { id: this.id, type: 'file', name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
+			React.createElement('input', _extends2({}, restProps, { id: this.id, type: 'file', name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
 				accept: 'image/*' })),
 			React.createElement(
 				'span',
@@ -5080,6 +5169,25 @@ var Input = React.createClass({
 				this.getErrorMessage()
 			),
 			React.createElement('div', { className: 'row image-preview' })
+		);
+	},
+	renderSwitch: function renderSwitch() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'accept']);
+		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
+		return React.createElement(
+			'div',
+			{ className: this.className },
+			React.createElement(
+				'label',
+				{ htmlFor: this.props.name },
+				this.props.title
+			),
+			React.createElement(_switch2.default, _extends2({}, restProps, { id: this.id, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
+			React.createElement(
+				'span',
+				{ className: 'validation-error' },
+				this.getErrorMessage()
+			)
 		);
 	}
 });
@@ -5167,7 +5275,133 @@ FormView.Form = _formsyReact2.default.Form;
 
 exports.default = FormView;
 
-},{"formsy-react":4}],42:[function(require,module,exports){
+},{"./switch.jsx":43,"formsy-react":5}],43:[function(require,module,exports){
+'use strict';
+
+//
+var _extends = Object.assign || function (target) {
+	for (var i = 1; i < arguments.length; i++) {
+		var source = arguments[i];for (var key in source) {
+			if (Object.prototype.hasOwnProperty.call(source, key)) {
+				target[key] = source[key];
+			}
+		}
+	}return target;
+};
+function _objectWithoutProperties(obj, keys) {
+	var target = {};for (var i in obj) {
+		if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
+	}return target;
+}
+function _defineProperty(obj, key, value) {
+	if (key in obj) {
+		Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+	} else {
+		obj[key] = value;
+	}return obj;
+}
+//
+var classNames = require('classnames');
+//
+function noop() {}
+var Switch = React.createClass({
+	displayName: 'Switch',
+
+	propTypes: {
+		className: React.PropTypes.string,
+		prefixCls: React.PropTypes.string,
+		disabled: React.PropTypes.bool,
+		checkedChildren: React.PropTypes.any,
+		unCheckedChildren: React.PropTypes.any,
+		onChange: React.PropTypes.func,
+		onMouseUp: React.PropTypes.func
+	},
+	getDefaultProps: function getDefaultProps() {
+		return {
+			prefixCls: 'rc-switch',
+			checkedChildren: null,
+			unCheckedChildren: null,
+			className: '',
+			defaultChecked: false,
+			onChange: noop
+		};
+	},
+	getInitialState: function getInitialState() {
+		var props = this.props;
+		var checked = false;
+		if ('checked' in props) {
+			checked = !!props.checked;
+		} else {
+			checked = !!props.defaultChecked;
+		}
+		return {
+			checked: checked
+		};
+	},
+	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+		if ('checked' in nextProps) {
+			this.setState({
+				checked: !!nextProps.checked
+			});
+		}
+	},
+	setChecked: function setChecked(e) {
+		var checked = !this.state.checked;
+		$(e.currentTarget).find('input[type=hidden]').val(checked ? 1 : '');
+		if (!('checked' in this.props)) {
+			this.setState({
+				checked: checked
+			});
+		}
+		this.props.onChange(checked);
+		if (this.props.onMouseUp) {
+			this.props.onMouseUp(e, checked);
+		}
+	},
+	toggle: function toggle(e) {
+		this.setChecked(e);
+	},
+	handleKeyDown: function handleKeyDown(e) {
+		if (e.keyCode === 37) {
+			this.setChecked(false);
+		}
+		if (e.keyCode === 39) {
+			this.setChecked(true);
+		}
+	},
+	render: function render() {
+		var _classNames;
+
+		var _props = this.props;
+		var className = _props.className;
+		var prefixCls = _props.prefixCls;
+		var disabled = _props.disabled;
+		var checkedChildren = _props.checkedChildren;
+		var unCheckedChildren = _props.unCheckedChildren;
+
+		var restProps = _objectWithoutProperties(_props, ['name', 'id', 'className', 'prefixCls', 'disabled', 'checkedChildren', 'unCheckedChildren']);
+
+		var checked = this.state.checked;
+		var switchClassName = classNames((_classNames = {}, _defineProperty(_classNames, className, !!className), _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-checked', checked), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _classNames));
+
+		return React.createElement(
+			'span',
+			{ className: switchClassName,
+				onKeyDown: this.handleKeyDown,
+				onClick: disabled ? noop : this.toggle },
+			React.createElement(
+				'span',
+				{ className: prefixCls + '-inner' },
+				checked ? checkedChildren : unCheckedChildren
+			),
+			React.createElement('input', { type: 'hidden', id: _props.id, name: _props.name })
+		);
+	}
+});
+
+module.exports = Switch;
+
+},{"classnames":1}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5207,6 +5441,6 @@ var UserBox = React.createClass({
 
 exports.default = UserBox;
 
-},{}]},{},[39]);
+},{}]},{},[40]);
 
 //# sourceMappingURL=common.js.map

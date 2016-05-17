@@ -16,7 +16,32 @@ $( document ).ready(function() {
 
 	ReactDOM.render(React.createElement(CatMenu, { 
 		items: cats
-	}), document.getElementById('catmenu'));
+	}), document.getElementById(catmenuDivId));
+	ReactDOM.render(React.createElement(FormView, {
+		onMouseUp(e, checked) {
+			$.ajax({
+				url: location.href,
+				data: {
+					mode: checked ? 1 : ''
+				},
+				success: function( data ) {
+					console.log(data);
+				}
+			});
+		},
+		formrender() {
+			return (
+				<FormView.Form className='form' method='get' encType='multipart/form-data'
+				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
+					<FormView.Input type='switch' name='mode' title='Mode'
+						defaultChecked={mode == MODES.SELL ? true : false} 
+						checkedChildren={'Sell'}
+        				unCheckedChildren={'Buy'}
+        				onMouseUp={this.props.onMouseUp} />
+				</FormView.Form>
+			); 
+		}
+	}), document.getElementById(extraDivId));
 	if (showLeft) {
 		ReactDOM.render(React.createElement(CatMenu, { 
 			items: cats,

@@ -23,6 +23,11 @@ class Helper {
 	public static $_request_time;
 	/**
 	 *
+	 * @var string
+	 */
+	public static $_mode;
+	/**
+	 *
 	 * @var string $_userInfoFromRequest
 	 */
 	public static $_userInfoFromRequest;

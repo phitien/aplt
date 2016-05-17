@@ -11,5 +11,6 @@ trait AllTrait {
 		RestfulTrait, 
 		SessionTrait, 
 		TokenTrait, 
+		ModeTrait,
 		UtilTrait;
 }

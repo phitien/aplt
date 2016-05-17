@@ -7,6 +7,8 @@ use App\Ezsell\Config;
 
 $usecode = Config::USE_CODE;
 $user = Helper::getUser ();
+$MODES = json_encode(Config::MODES);
+$mode = Helper::getMode ();
 $isGuest = ( bool ) $user->isGuest ();
 $cats = Cat::getHierarchy ();
 $location = Helper::getLocation ();
@@ -73,7 +75,11 @@ $centerCols = $totalCols - $leftCols - $rightCols;
 		var rightDivId = 'right';
 		var footerDivId = 'footer';
 		var formContainerDivId = 'form-container';
+		var extraDivId = 'extra';
+		var catmenuDivId = 'catmenu';
 		var user = {!! $user !!};
+		var MODES = {!! $MODES !!};
+		var mode = {!! (int) $mode !!};
 		var appMessage = '{{ $appMessage }}';
 		var cats = {!! $cats !!};
 		var currentLocation = {!! $location ? json_encode($location) : '{}' !!};
@@ -127,6 +133,7 @@ $centerCols = $totalCols - $leftCols - $rightCols;
 					<ul class="nav">
 						<li><a href="/"><span>Home</span></a></li>
 						<li id="catmenu"></li>
+						<li id="extra"></li>
 					</ul>
 					<div class="clearfix"></div>
 				</div>

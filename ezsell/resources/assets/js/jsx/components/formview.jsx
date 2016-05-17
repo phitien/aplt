@@ -1,4 +1,10 @@
 import Formsy from 'formsy-react';
+import Switch from './switch.jsx';
+//
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 //
 Formsy.addValidationRule('notEqualsField', function (values, value, field) {
 	return value != values[field];
@@ -54,6 +60,9 @@ const Input = React.createClass({
 		if (type == 'checkbox') {
 			value = event.currentTarget.checked;
 		}
+		else if (type == 'switch') {
+			value = event;
+		}
 		else if (type == 'textarea') {
 			value = event.currentTarget.value;
 		}
@@ -103,6 +112,8 @@ const Input = React.createClass({
 				return this.renderFile();
 			case 'image':
 				return this.renderImage();
+			case 'switch':
+				return this.renderSwitch();
 			case 'text':
 			default:
 				return this.renderText();
@@ -110,24 +121,26 @@ const Input = React.createClass({
 	},
 	renderHidden() {
 		return (
-			<input {...this.props} id={this.id} type='hidden' name={this.props.name} value={this.getValue()||''} />
+			<input id={this.id} type='hidden' name={this.props.name} value={this.getValue()||''} />
 		);
 	},
 	renderText() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'onChange', 'id', 'value']);
 		return (
 			<div className={this.className}>
 				<label htmlFor={this.props.name}>{this.props.title}</label>
-				<input {...this.props} id={this.id} type={this.type} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' />
+				<input {...restProps} id={this.id} type={this.type} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' />
 				<span className='validation-error'>{this.getErrorMessage()}</span>
 			</div>
 		);
 	},
 	renderAutocomplete() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'data-source']);
 		var source = this.props.source ? this.props.source : null;
 		return (
 			<div className={this.className}>
 				<label htmlFor={this.props.name}>{this.props.title}</label>
-				<input {...this.props} id={this.id} type='text' onChange={this.changeValue} value={this.getValue()||''} className='form-control autocomplete' 
+				<input {...restProps} id={this.id} type='text' onChange={this.changeValue} value={this.getValue()||''} className='form-control autocomplete' 
 					data-source={source}/>
 				<input type='hidden' name={this.props.name} />
 				<span className='validation-error'>{this.getErrorMessage()}</span>
@@ -135,22 +148,23 @@ const Input = React.createClass({
 		);
 	},
 	renderCheckboxRadio() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
 		var name = this.props.name ? this.props.name : uuid('radiolist_');
 		this.className += ' ' + this.type;
 		var labelClassName = 'form-' + this.type + '-label';
 		return (
 			<div className={this.className}>
 				<label className={labelClassName} htmlFor={name}>
-					<input {...this.props} id={this.id} type={this.type} name={name} onChange={this.changeValue} className={this.type} />
+					<input {...restProps} id={this.id} type={this.type} name={name} onChange={this.changeValue} className={this.type} />
 					{this.props.title}
 				</label>
 			</div>
 		);
 	},
 	renderCheckboxRadioList() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
 		var name = this.props.name ? this.props.name : uuid('radiolist_');
 		var type = this.type == 'checkboxlist' ? 'checkbox' : 'radio';
-		var props = this.props;
 		this.className += ' ' + this.type;
 		var changeValue = this.changeValue;
 		var labelClassName = 'form-' + type + '-label';
@@ -164,7 +178,7 @@ const Input = React.createClass({
 					return (
 						<div className={itemClassName} key={i}>
 							<label htmlFor={itemname}>
-								<input {...props} type={type} name={name} id={itemname} value={value} className={type} onChange={changeValue} />
+								<input {...restProps} type={type} name={name} id={itemname} value={value} className={type} onChange={changeValue} />
 								{item.label}
 							</label>
 						</div>
@@ -175,22 +189,25 @@ const Input = React.createClass({
 		);
 	},
 	renderButton() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'onClick', 'disabled']);
 		this.className = 'btn btn-default ' + (this.props.className?this.props.className:''); 
 		return (
-			<input {...this.props} id={this.id} name={this.props.name} type={this.type} value={this.getValue()||''} className={this.className} onClick={this.props.onClick} disabled={this.props.disabled} />
+			<input {...restProps} id={this.id} name={this.props.name} type={this.type} value={this.getValue()||''} className={this.className} onClick={this.props.onClick} disabled={this.props.disabled} />
 		);
 	},
 	renderTextarea() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'cols', 'rows']);
 		return (
 			<div className={this.className}>
 				<label htmlFor={this.props.name}>{this.props.title}</label>
-				<textarea {...this.props} id={this.id} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className='form-control'
+				<textarea {...restProps} id={this.id} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className='form-control'
 					cols={this.props.cols} rows={this.props.rows}></textarea>
 				<span className='validation-error'>{this.getErrorMessage()}</span>
 			</div>
 		);
 	},
 	renderSelect() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'disabled']);
 		const optionLabel = this.props.optionLabel || function(){return this.label;};
 		const optionValue = this.props.optionValue || function(){return this.value;};
 		const optionAttrs = this.props.optionAttrs || function(){return {};};
@@ -198,7 +215,7 @@ const Input = React.createClass({
 		return (
 			<div className={this.className}>
 				<label htmlFor={this.props.name}>{this.props.title}</label>
-				<select {...this.props} id={this.id} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className="form-control" disabled={this.props.disabled}>
+				<select {...restProps} id={this.id} name={this.props.name} onChange={this.changeValue} value={this.getValue()||''} className="form-control" disabled={this.props.disabled}>
 					{placeholder}
 					{this.props.options.map(function(item, i) {
 						var label = optionLabel.bind(item)();
@@ -214,24 +231,37 @@ const Input = React.createClass({
 		);
 	},
 	renderFile() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
 		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
 		return (
 			<div className={this.className}>
 				<label htmlFor={this.props.name}>{this.props.title}</label>
-				<input {...this.props} id={this.id} type={this.type} name={name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' />
+				<input {...restProps} id={this.id} type={this.type} name={name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' />
 				<span className='validation-error'>{this.getErrorMessage()}</span>
 			</div>
 		);
 	},
 	renderImage() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'accept']);
 		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
 		return (
 			<div className={this.className}>
 				<label htmlFor={this.props.name}>{this.props.title}</label>
-				<input {...this.props} id={this.id} type='file' name={name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' 
+				<input {...restProps} id={this.id} type='file' name={name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' 
 					accept='image/*' />
 				<span className='validation-error'>{this.getErrorMessage()}</span>
 				<div className='row image-preview'></div>
+			</div>
+		);
+	},
+	renderSwitch() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'accept']);
+		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
+		return (
+			<div className={this.className}>
+				<label htmlFor={this.props.name}>{this.props.title}</label>
+				<Switch {...restProps} id={this.id} name={name} onChange={this.changeValue} value={this.getValue()||''} className='form-control' />
+				<span className='validation-error'>{this.getErrorMessage()}</span>
 			</div>
 		);
 	}

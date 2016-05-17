@@ -91,6 +91,13 @@
 				}
 			}
 		}
+		li#extra {
+			display: inline-block;
+			.form-view {
+				padding: $sbig;
+				.rc-switch {margin-left: $ssmall;}
+			}
+		}
 	}
 }
 

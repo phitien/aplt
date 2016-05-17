@@ -7,6 +7,10 @@ use App\Ezsell\Models\Role;
 use App\Ezsell\Models\Action;
 
 class Config {
+	const MODES = [ 
+			'SELL' => 1,
+			'BUY' => 0 
+	];
 	const PAGE_SIZE = 18;
 	const USE_CODE = true;
 	const HOME_PAGE = '/';

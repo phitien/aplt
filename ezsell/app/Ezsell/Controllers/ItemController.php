@@ -46,7 +46,7 @@ class ItemController extends Controller {
 	public function cat(Request $request) {
 		return $this->process ( 'cat', func_get_args () );
 	}
-	protected function pgetCat(Request $request, $id) {
+	protected function pcatGetResponseData(Request $request, $id) {
 		if (Config::USE_CODE) {
 			$cat = Cat::where ( 'code', strtoupper ( $id ) )->first ();
 		} else {
@@ -55,6 +55,8 @@ class ItemController extends Controller {
 		if ($cat) {
 			$now = Carbon::now ();
 			$query = $cat->items ()->where ( 'location_id', static::getLocationId () )->
+
+			where ( 'items.is_selling', static::getMode () )->
 
 			whereRaw ( "(items.deleted_at IS NULL OR items.deleted_at > '{$now}')" );
 			
@@ -75,10 +77,26 @@ class ItemController extends Controller {
 				else
 					$items [$i] ['user'] = [ ];
 			}
-			return $this->response ( view ( 'item.catitems', [ 
+			return [ 
 					'catitems_cat' => $cat,
 					'catitems_items' => $items 
-			] ) );
+			];
+		} else {
+			return null;
+		}
+	}
+	protected function pgetCat(Request $request, $id) {
+		$data = $this->pcatGetResponseData ( $request, $id );
+		if ($data) {
+			return $this->response ( view ( 'item.catitems', $data ) );
+		} else {
+			throw new ItemNotFound ();
+		}
+	}
+	protected function pajaxCat(Request $request, $id) {
+		$data = $this->pcatGetResponseData ( $request, $id );
+		if ($data) {
+			return $this->jsonResponse ( 'cat_item_list', $data );
 		} else {
 			throw new ItemNotFound ();
 		}
