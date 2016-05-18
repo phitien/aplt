@@ -6464,6 +6464,8 @@ $(document).ready(function () {
 	ReactDOM.render(React.createElement(_application2.default, { data: data }), document.getElementById(centerDivId));
 });
 
+window.Application = _application2.default;
+
 },{"./components/application.jsx":131}],131:[function(require,module,exports){
 'use strict';
 
@@ -6489,6 +6491,7 @@ var _dispatcher2 = _interopRequireDefault(_dispatcher);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+window.Dispatcher = _dispatcher2.default;
 //
 /**
  * Application defination
@@ -6564,8 +6567,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var CatItemList = React.createClass({
 	displayName: 'CatItemList',
+
+	getInitialState: function getInitialState() {
+		return {
+			data: Dispatcher.list()
+		};
+	},
+	componentDidMount: function componentDidMount() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
+			me.setState({
+				data: Dispatcher.list()
+			});
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function () {});
+	},
 	render: function render() {
-		var data = this.props.data;
+		var data = this.state.data;
 		var cat = data.catitems;
 		var items = data.paginate.data;
 		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
@@ -6807,16 +6827,35 @@ Object.defineProperty(exports, "__esModule", {
  */
 var ItemImage = React.createClass({
 	displayName: 'ItemImage',
+
+	getInitialState: function getInitialState() {
+		return {
+			item: Dispatcher.item()
+		};
+	},
+	componentDidMount: function componentDidMount() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
+			me.setState({
+				item: Dispatcher.item()
+			});
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function () {});
+	},
 	onClick: function onClick(e) {
 		if (!isGuest && user && user.id) {
 			var id = usecode ? this.props.item.code : this.props.item.id;
 			if (id) {
-				ajax.post('/like', function (o) {}, { id: id, user_id: user.id });
+				ajax.post('/like', function (o) {
+					Dispatcher.emit(o.data);
+				}, { id: id, user_id: user.id });
 			}
 		}
 	},
 	render: function render() {
-		var item = this.props.item;
+		var item = this.state.item ? this.state.item : this.props.item;
 		var className = 'item-firstimage ' + (this.props.className ? this.props.className : '');
 		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
 		var href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
@@ -6850,8 +6889,25 @@ Object.defineProperty(exports, "__esModule", {
  */
 var ItemSummary = React.createClass({
 	displayName: 'ItemSummary',
+
+	getInitialState: function getInitialState() {
+		return {
+			item: Dispatcher.item()
+		};
+	},
+	componentDidMount: function componentDidMount() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
+			me.setState({
+				item: Dispatcher.item()
+			});
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function () {});
+	},
 	render: function render() {
-		var item = this.props.item;
+		var item = this.state.item ? this.state.item : this.props.item;
 		var prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original', 'sale', 'now'];
 		var className = 'item-summary ' + (this.props.className ? this.props.className : '');
 		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
@@ -6968,7 +7024,12 @@ var ItemSummary = React.createClass({
 				{ className: item.is_new ? 'new' : 'used' },
 				item.is_new ? 'New' : 'Used'
 			),
-			price_list
+			price_list,
+			React.createElement(
+				'div',
+				{ className: 'likes' },
+				item.likes
+			)
 		);
 	}
 });
@@ -6997,8 +7058,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var UserItemList = React.createClass({
 	displayName: 'UserItemList',
+
+	getInitialState: function getInitialState() {
+		return {
+			data: Dispatcher.list()
+		};
+	},
+	componentDidMount: function componentDidMount() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
+			me.setState({
+				data: Dispatcher.list()
+			});
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function () {});
+	},
 	render: function render() {
-		var data = this.props.data;
+		var data = this.state.data;
 		var user = data.useritems;
 		var items = data.paginate.data;
 		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
@@ -7089,20 +7167,18 @@ var EventEmitter = function (_Events) {
 }(_events2.default);
 
 var eventEmitter = new EventEmitter();
-var CHANGE_EVENT = 'datachange';
-var LIST_CHANGE = 'listchange';
+var EVENT = 'listchange';
 //
 var Dispatcher = new _flux2.default.Dispatcher();
 Dispatcher.register(function (action) {
-	console.log(action);
-	eventEmitter.emit(CHANGE_EVENT);
-	eventEmitter.emit(LIST_CHANGE);
+	eventEmitter.emit(EVENT);
 });
 //
 var Constants = (0, _keymirror2.default)({
 	CATITEMS: null,
 	USERITEMS: null,
-	ITEMDETAILS: null
+	ITEMDETAILS: null,
+	ITEMUPDATE: null
 });
 var Actions = {
 	catitems: function catitems(data) {
@@ -7122,25 +7198,42 @@ var Actions = {
 			actionType: Constants.ITEMDETAILS,
 			data: data
 		});
+	},
+	itemupdate: function itemupdate(data) {
+		Dispatcher.dispatch({
+			actionType: Constants.ITEMUPDATE,
+			data: data
+		});
 	}
 };
+var _item = null;
+var _list = window.data ? window.data : null;
+
 Dispatcher.Constants = Constants;
 Dispatcher.Actions = Actions;
 Dispatcher.EventEmitter = eventEmitter;
+Dispatcher.item = function () {
+	return _item;
+};
+Dispatcher.list = function () {
+	return _list;
+};
 Dispatcher.emit = function (_data) {
-	window.data = Object.assign({}, data, _data);
-	if (data) {
+	if (_data.catitems || _data.useritems || _data.itemdetails) {
+		_list = Object.assign({}, _list, _data);
 		if (data.catitems) {
-			Actions.catitems(data);
+			Actions.catitems(_list);
 		} else if (data.useritems) {
-			Actions.useritems(data);
+			Actions.useritems(_list);
 		} else if (data.itemdetails) {
-			Actions.itemdetails(data);
+			Actions.itemdetails(_list);
 		}
+	} else {
+		_item = _data;
+		Actions.itemupdate(_item);
 	}
 };
-Dispatcher.CHANGE_EVENT = CHANGE_EVENT;
-Dispatcher.LIST_CHANGE = LIST_CHANGE;
+Dispatcher.EVENT = EVENT;
 
 exports.default = Dispatcher;
 

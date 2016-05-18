@@ -4,20 +4,18 @@ import Events from 'events';
 //
 class EventEmitter extends Events {}
 var eventEmitter = new EventEmitter();
-var CHANGE_EVENT = 'datachange';
-var LIST_CHANGE = 'listchange';
+var EVENT = 'listchange';
 //
 var Dispatcher = new Flux.Dispatcher();
 Dispatcher.register(function(action) {
-	console.log(action);
-	eventEmitter.emit(CHANGE_EVENT);
-	eventEmitter.emit(LIST_CHANGE);
+	eventEmitter.emit(EVENT);
 });
 //
 var Constants = KeyMirror({
 	CATITEMS: null,
 	USERITEMS: null,
-	ITEMDETAILS: null
+	ITEMDETAILS: null,
+	ITEMUPDATE: null
 });
 var Actions = {
 	catitems: function(data) {
@@ -37,26 +35,40 @@ var Actions = {
 			actionType: Constants.ITEMDETAILS,
 			data: data
 		});
+	},
+	itemupdate: function(data) {
+		Dispatcher.dispatch({
+			actionType: Constants.ITEMUPDATE,
+			data: data
+		});
 	}
 };
+var _item = null;
+var _list = window.data ? window.data : null;
+
 Dispatcher.Constants = Constants;
 Dispatcher.Actions = Actions;
 Dispatcher.EventEmitter = eventEmitter;
+Dispatcher.item = function() {return _item;};
+Dispatcher.list = function() {return _list;};
 Dispatcher.emit = function(_data) {
-	window.data = Object.assign({}, data, _data);
-	if (data) {
+	if (_data.catitems || _data.useritems || _data.itemdetails) {
+		_list = Object.assign({}, _list, _data);
 		if (data.catitems) {
-			Actions.catitems(data);
+			Actions.catitems(_list);
 		}
 		else if (data.useritems) {
-			Actions.useritems(data);
+			Actions.useritems(_list);
 		}
 		else if (data.itemdetails) {
-			Actions.itemdetails(data);
+			Actions.itemdetails(_list);
 		}
 	}
+	else {
+		_item = _data;
+		Actions.itemupdate(_item);
+	}
 };
-Dispatcher.CHANGE_EVENT = CHANGE_EVENT;
-Dispatcher.LIST_CHANGE = LIST_CHANGE;
+Dispatcher.EVENT = EVENT;
 
 export default Dispatcher;

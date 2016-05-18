@@ -37,7 +37,9 @@ a:hover {text-decoration: none !important;}
 	.expired-label {@extend .no-margin-padding;display: initial;}
 	.new,.used {
 		@extend .grounded-s;
-		display: inline-block;
+		clear: both;
+	    display: block;
+	    float: left;
 	    margin-right: $sbig;
 	    border: 1px solid;
 	    padding: 2px $smedium;
@@ -72,7 +74,7 @@ a:hover {text-decoration: none !important;}
 	}
 	.item-created, .item-updated,.item-expired {@extend .item-date;}
 	.item-prices {
-		font-size: $fsmall;clear: both;margin: $smedium 0;
+		font-size: $fsmall;clear: both;margin: $smedium 0;float: left;
 		.item-price {
 			span {}
 			.currency-sign {margin-right: 3px;}
@@ -102,6 +104,10 @@ a:hover {text-decoration: none !important;}
 	.item-block-prices {
 		@extend .item-prices;
 		.item-price {display: block; margin: 7px 0 7px 0;}
+	}
+	.likes {
+		float: right;clear: right;
+		font-size: $fsmall;margin: $smedium $smedium $smedium 0;
 	}
 }
 .item-detail-wrapper {

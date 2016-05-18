@@ -49,12 +49,13 @@ class Item extends Model {
 	public function toArray() {
 		$attributes = parent::toArray ();
 		$user = static::getUser ();
+		$like = $this->likes ()->where ( 'user_id', $user->id )->first ();
 		return array_merge ( $attributes, [ 
 				'code' => $this->code (),
 				'images' => $this->images,
-// 				'likes' => $this->like ()->count (),
-// 				'liked' => $this->like ()->where ( 'user_id', $user->id )->first () ? true : false,
-// 				'comments' => $this->comments ()->count () 
+				'likes' => $this->likes ()->count (),
+				'liked' => ($like ? true : false),
+				'comments' => $this->comments ()->count () 
 		] );
 	}
 	public function code() {
@@ -69,7 +70,7 @@ class Item extends Model {
 	public function images() {
 		return $this->hasMany ( 'App\Ezsell\Models\Image', 'parent_id', 'id' );
 	}
-	public function commnents() {
+	public function comments() {
 		return $this->hasMany ( 'App\Ezsell\Models\Comment', 'parent_id', 'id' );
 	}
 	public function likes() {

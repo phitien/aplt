@@ -69,3 +69,5 @@ $( document ).ready(function() {
 		document.getElementById(centerDivId)
 	);
 });
+
+window.Application = Application;

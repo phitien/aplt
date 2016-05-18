@@ -27,14 +27,14 @@ trait ItemLikeTrait {
 				$like = $item->likes ()->where ( 'user_id', $user_id )->first ();
 				if ($like) {
 					$like->delete ();
-					return $this->jsonResponse ( 'unliked' );
+					return $this->jsonResponse ( 'unliked', $item );
 				} else {
 					$like = new Like ( [ 
 							'user_id' => $user_id 
 					] );
 					$like->item ()->associate ( $item );
 					$like->save ();
-					return $this->jsonResponse ( 'liked' );
+					return $this->jsonResponse ( 'liked', $item );
 				}
 			} else {
 				return $this->jsonResponse ( 'user_not_found', null, Response::HTTP_BAD_REQUEST );

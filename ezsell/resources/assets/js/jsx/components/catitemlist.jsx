@@ -5,8 +5,24 @@ import ItemImage from './itemimage.jsx';
  * CatItemList defination
  */
 var CatItemList = React.createClass({
+	getInitialState: function() {
+		return {
+			data: Dispatcher.list()
+		};
+	},
+	componentDidMount() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function() {
+			me.setState({
+				data: Dispatcher.list()
+			});
+		});
+	},
+	componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function() {});
+	},
 	render() {
-		var data = this.props.data;
+		var data = this.state.data;
 		const cat = data.catitems;
 		const items = data.paginate.data;
 		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');

@@ -2,8 +2,24 @@
  * ItemSummary defination
  */
 var ItemSummary = React.createClass({
+	getInitialState: function() {
+		return {
+			item: Dispatcher.item()
+		};
+	},
+	componentDidMount() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function() {
+			me.setState({
+				item: Dispatcher.item()
+			});
+		});
+	},
+	componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function() {});
+	},
 	render() {
-		const item = this.props.item;
+		const item = this.state.item ? this.state.item : this.props.item;
 		const prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original','sale','now'];
 		const className = 'item-summary ' + (this.props.className ? this.props.className : '');
 		const showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
@@ -47,6 +63,7 @@ var ItemSummary = React.createClass({
 				{expired_at}
 				<div className={item.is_new ? 'new' : 'used'}>{item.is_new ? 'New' : 'Used'}</div>
 				{price_list}
+				<div className='likes'>{item.likes}</div>
 			</div>
 		);
 	}

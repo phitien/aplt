@@ -3,6 +3,7 @@ import UserItemsList from './useritemlist.jsx';
 import ItemDetails from './itemdetails.jsx';
 
 import Dispatcher from '../dispatcher/dispatcher.jsx';
+window.Dispatcher = Dispatcher;
 //
 /**
  * Application defination
