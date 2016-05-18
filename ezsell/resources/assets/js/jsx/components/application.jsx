@@ -14,9 +14,9 @@ var Application = React.createClass({
 		};
 	},
 	componentDidMount() {
+		var me = this;
 		Dispatcher.EventEmitter.on(Dispatcher.LIST_CHANGE, function() {
-			console.log(arguments);
-			this.setState({
+			me.setState({
 				data: data
 			});
 		});
@@ -57,4 +57,5 @@ var Application = React.createClass({
 	}
 });
 
+Application.Dispatcher = Dispatcher;
 export default Application;

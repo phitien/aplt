@@ -38,11 +38,8 @@ $( document ).ready(function() {
 			setMode(checked ? 1 : 0);
 			ajax.get(location.href, function( _data ) {
 				if (_data && _data.data) {
-					data = _data.data;
-					ReactDOM.render(
-						<Application data={data} />, 
-						document.getElementById(centerDivId)
-					);
+					//data = _data.data;
+					Application.Dispatcher.emit(_data.data);
 				}
 			});
 		},

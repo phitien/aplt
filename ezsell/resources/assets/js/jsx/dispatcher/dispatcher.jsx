@@ -1,7 +1,6 @@
 import Flux from 'flux';
 import KeyMirror from 'keymirror';
 import Events from 'events';
-import Assign from 'object-assign';
 //
 class EventEmitter extends Events {}
 var eventEmitter = new EventEmitter();
@@ -40,11 +39,11 @@ var Actions = {
 		});
 	}
 };
-Dispatcher['Constants'] = Constants;
-Dispatcher['Actions'] = Actions;
-Dispatcher['EventEmitter'] = eventEmitter;
-Dispatcher['emit'] = function(_data) {
-	data = Assign({}, data, _data);
+Dispatcher.Constants = Constants;
+Dispatcher.Actions = Actions;
+Dispatcher.EventEmitter = eventEmitter;
+Dispatcher.emit = function(_data) {
+	window.data = Object.assign({}, data, _data);
 	if (data) {
 		if (data.catitems) {
 			Actions.catitems(data);
@@ -57,7 +56,7 @@ Dispatcher['emit'] = function(_data) {
 		}
 	}
 };
-Dispatcher['CHANGE_EVENT'] = CHANGE_EVENT;
-Dispatcher['LIST_CHANGE'] = LIST_CHANGE;
+Dispatcher.CHANGE_EVENT = CHANGE_EVENT;
+Dispatcher.LIST_CHANGE = LIST_CHANGE;
 
 export default Dispatcher;
