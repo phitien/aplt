@@ -83,6 +83,7 @@ $centerCols = $totalCols - $leftCols - $rightCols;
 		var showLeft = {!! $leftCols ? 'true' : 'false' !!};
 		var showRight = {!! $rightCols ? 'true' : 'false' !!};
 		var user = {!! $user !!};
+		var isGuest = {!! $isGuest ? 'true' : 'false' !!};
 		var MODES = {!! $MODES !!};
 		var mode = {!! (int) $mode !!};
 		var appMessage = '{{ $appMessage }}';
@@ -97,7 +98,7 @@ $centerCols = $totalCols - $leftCols - $rightCols;
 	{{ Html::script('js/app.js', ['type' => 'text/javascript']) }}
 @yield('scripts')
     </head>
-    <body>
+    <body class="{{ $isGuest ? 'guest' : 'user' }}">
 		<div class="container-fluid row clearfix" id="navigation-replacement">
 		</div>
 @if ($showBanner)

@@ -34,10 +34,10 @@ Route::post ( 'sendmessage', 'SocketController@sendmessage' );
 /**
  * item
  */
-Route::any ( 'cat/{id}', 'ItemController@cat' );
-Route::any ( 'buyitem', 'ItemController@buyitem' );
-Route::any ( 'sellitem', 'ItemController@sellitem' );
-Route::any ( 'item/{id}', 'ItemController@item' );
+Route::any ( '/cat/{id}', 'ItemController@cat' );
+Route::any ( '/buyitem', 'ItemController@buyitem' );
+Route::any ( '/sellitem', 'ItemController@sellitem' );
+Route::any ( '/item/{id}', 'ItemController@item' );
+Route::any ( '/like', 'ItemController@like' );
 Route::any ( '/{username}', 'ItemController@user' );
-
 

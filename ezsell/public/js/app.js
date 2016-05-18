@@ -27,7 +27,7 @@ exports.default = function (instance, Constructor) {
 
 exports.__esModule = true;
 
-var _defineProperty = require("../core-js/object/define-property");
+var _defineProperty = require("babel-runtime/core-js/object/define-property");
 
 var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
@@ -50,20 +50,20 @@ exports.default = function () {
     return Constructor;
   };
 }();
-},{"../core-js/object/define-property":3}],10:[function(require,module,exports){
+},{"babel-runtime/core-js/object/define-property":3}],10:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
 
-var _setPrototypeOf = require("../core-js/object/set-prototype-of");
+var _setPrototypeOf = require("babel-runtime/core-js/object/set-prototype-of");
 
 var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
 
-var _create = require("../core-js/object/create");
+var _create = require("babel-runtime/core-js/object/create");
 
 var _create2 = _interopRequireDefault(_create);
 
-var _typeof2 = require("../helpers/typeof");
+var _typeof2 = require("babel-runtime/helpers/typeof");
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -84,12 +84,12 @@ exports.default = function (subClass, superClass) {
   });
   if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
 };
-},{"../core-js/object/create":2,"../core-js/object/set-prototype-of":5,"../helpers/typeof":12}],11:[function(require,module,exports){
+},{"babel-runtime/core-js/object/create":2,"babel-runtime/core-js/object/set-prototype-of":5,"babel-runtime/helpers/typeof":12}],11:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
 
-var _typeof2 = require("../helpers/typeof");
+var _typeof2 = require("babel-runtime/helpers/typeof");
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -102,16 +102,16 @@ exports.default = function (self, call) {
 
   return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
 };
-},{"../helpers/typeof":12}],12:[function(require,module,exports){
+},{"babel-runtime/helpers/typeof":12}],12:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
 
-var _iterator = require("../core-js/symbol/iterator");
+var _iterator = require("babel-runtime/core-js/symbol/iterator");
 
 var _iterator2 = _interopRequireDefault(_iterator);
 
-var _symbol = require("../core-js/symbol");
+var _symbol = require("babel-runtime/core-js/symbol");
 
 var _symbol2 = _interopRequireDefault(_symbol);
 
@@ -124,7 +124,7 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 } : function (obj) {
   return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 };
-},{"../core-js/symbol":6,"../core-js/symbol/iterator":7}],13:[function(require,module,exports){
+},{"babel-runtime/core-js/symbol":6,"babel-runtime/core-js/symbol/iterator":7}],13:[function(require,module,exports){
 require('../../modules/es6.object.assign');
 module.exports = require('../../modules/_core').Object.assign;
 },{"../../modules/_core":25,"../../modules/es6.object.assign":80}],14:[function(require,module,exports){
@@ -197,7 +197,7 @@ module.exports = function(it){
   return toString.call(it).slice(8, -1);
 };
 },{}],25:[function(require,module,exports){
-var core = module.exports = {version: '2.4.0'};
+var core = module.exports = {version: '2.3.0'};
 if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 },{}],26:[function(require,module,exports){
 // optional / simple context binding
@@ -1012,7 +1012,6 @@ var global         = require('./_global')
   , isEnum         = {}.propertyIsEnumerable
   , SymbolRegistry = shared('symbol-registry')
   , AllSymbols     = shared('symbols')
-  , OPSymbols      = shared('op-symbols')
   , ObjectProto    = Object[PROTOTYPE]
   , USE_NATIVE     = typeof $Symbol == 'function'
   , QObject        = global.QObject;
@@ -1044,7 +1043,6 @@ var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
 };
 
 var $defineProperty = function defineProperty(it, key, D){
-  if(it === ObjectProto)$defineProperty(OPSymbols, key, D);
   anObject(it);
   key = toPrimitive(key, true);
   anObject(D);
@@ -1072,14 +1070,10 @@ var $create = function create(it, P){
 };
 var $propertyIsEnumerable = function propertyIsEnumerable(key){
   var E = isEnum.call(this, key = toPrimitive(key, true));
-  if(this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return false;
   return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
 };
 var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
-  it  = toIObject(it);
-  key = toPrimitive(key, true);
-  if(it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return;
-  var D = gOPD(it, key);
+  var D = gOPD(it = toIObject(it), key = toPrimitive(key, true));
   if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
   return D;
 };
@@ -1088,19 +1082,16 @@ var $getOwnPropertyNames = function getOwnPropertyNames(it){
     , result = []
     , i      = 0
     , key;
-  while(names.length > i){
-    if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
-  } return result;
+  while(names.length > i)if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
+  return result;
 };
 var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
-  var IS_OP  = it === ObjectProto
-    , names  = gOPN(IS_OP ? OPSymbols : toIObject(it))
+  var names  = gOPN(toIObject(it))
     , result = []
     , i      = 0
     , key;
-  while(names.length > i){
-    if(has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true))result.push(AllSymbols[key]);
-  } return result;
+  while(names.length > i)if(has(AllSymbols, key = names[i++]))result.push(AllSymbols[key]);
+  return result;
 };
 
 // 19.4.1.1 Symbol([description])
@@ -1108,12 +1099,13 @@ if(!USE_NATIVE){
   $Symbol = function Symbol(){
     if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
     var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
-    var $set = function(value){
-      if(this === ObjectProto)$set.call(OPSymbols, value);
-      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
-      setSymbolDesc(this, tag, createDesc(1, value));
-    };
-    if(DESCRIPTORS && setter)setSymbolDesc(ObjectProto, tag, {configurable: true, set: $set});
+    DESCRIPTORS && setter && setSymbolDesc(ObjectProto, tag, {
+      configurable: true,
+      set: function(value){
+        if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+        setSymbolDesc(this, tag, createDesc(1, value));
+      }
+    });
     return wrap(tag);
   };
   redefine($Symbol[PROTOTYPE], 'toString', function toString(){
@@ -1892,6 +1884,9 @@ var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
     draining = false;
     if (currentQueue.length) {
         queue = currentQueue.concat(queue);
@@ -6498,15 +6493,14 @@ $(document).ready(function () {
 	//scroll to bottom to load more data
 	$(window).scroll(function () {
 		if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-			$.ajax({
-				url: location.href,
-				data: {
-					page: '2'
-				},
-				success: function success(data) {
-					_application2.default.Dispatcher.emit(data.data);
-				}
-			});
+			if (data.paginate.next_page_url) {
+				ajax.get(data.paginate.next_page_url, function (_data) {
+					var items = data.paginate.data.concat(_data.data.paginate.data);
+					data.paginate = _data.data.paginate;
+					data.paginate.data = items;
+					ReactDOM.render(React.createElement(_application2.default, { data: data }), document.getElementById(centerDivId));
+				});
+			}
 		} else if ($(window).scrollTop() == 0) {}
 	});
 	/**
@@ -6521,13 +6515,10 @@ $(document).ready(function () {
 	ReactDOM.render(React.createElement(FormView, {
 		onMouseUp: function onMouseUp(e, checked) {
 			setMode(checked ? 1 : 0);
-			$.ajax({
-				url: location.href,
-				data: {
-					mode: getMode()
-				},
-				success: function success(data) {
-					_application2.default.Dispatcher.emit(data.data);
+			ajax.get(location.href, function (_data) {
+				if (_data && _data.data) {
+					data = _data.data;
+					ReactDOM.render(React.createElement(_application2.default, { data: data }), document.getElementById(centerDivId));
 				}
 			});
 		},
@@ -6556,7 +6547,7 @@ $(document).ready(function () {
 		showMessageDialog(appMessage);
 	}
 
-	ReactDOM.render(React.createElement(_application2.default, null), document.getElementById(centerDivId));
+	ReactDOM.render(React.createElement(_application2.default, { data: data }), document.getElementById(centerDivId));
 });
 
 },{"./components/application.jsx":132}],132:[function(require,module,exports){
@@ -6585,8 +6576,6 @@ var _dispatcher2 = _interopRequireDefault(_dispatcher);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //
-window.Dispatcher = _dispatcher2.default;
-//
 /**
  * Application defination
  */
@@ -6595,19 +6584,13 @@ var Application = React.createClass({
 
 	getInitialState: function getInitialState() {
 		return {
-			data: {}
+			data: data
 		};
 	},
-	componentWillMount: function componentWillMount() {
-		this.setState({
-			data: data
-		});
-	},
-
 	componentDidMount: function componentDidMount() {
-		var me = this;
-		_dispatcher2.default.EventEmitter.on(_dispatcher2.default.CHANGE_EVENT, function () {
-			me.setState({
+		_dispatcher2.default.EventEmitter.on(_dispatcher2.default.LIST_CHANGE, function () {
+			console.log(arguments);
+			this.setState({
 				data: data
 			});
 		});
@@ -6623,7 +6606,7 @@ var Application = React.createClass({
 		});
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		_dispatcher2.default.EventEmitter.removeListener(_dispatcher2.default.CHANGE_EVENT, function () {});
+		_dispatcher2.default.EventEmitter.removeListener(_dispatcher2.default.LIST_CHANGE, function () {});
 	},
 	render: function render() {
 		var data = this.state.data;
@@ -6640,8 +6623,6 @@ var Application = React.createClass({
 		return null;
 	}
 });
-
-Application['Dispatcher'] = _dispatcher2.default;
 
 exports.default = Application;
 
@@ -6662,31 +6643,16 @@ var _itemimage2 = _interopRequireDefault(_itemimage);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
 /**
  * CatItemList defination
  */
 var CatItemList = React.createClass({
 	displayName: 'CatItemList',
-	getInitialState: function getInitialState() {
-		return {
-			cat: this.props.data.catitems,
-			items: this.props.data.items
-		};
-	},
-
-	componentDidMount: function componentDidMount() {
-		var me = this;
-		Dispatcher.EventEmitter.on(Dispatcher.CHANGE_EVENT, function () {
-			me.setState({
-				cat: data.catitems,
-				items: data.items
-			});
-		});
-	},
-	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.CHANGE_EVENT, function () {});
-	},
 	render: function render() {
+		var data = this.props.data;
+		var cat = data.catitems;
+		var items = data.paginate.data;
 		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
 		var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
 		return React.createElement(
@@ -6701,7 +6667,7 @@ var CatItemList = React.createClass({
 					React.createElement(
 						'label',
 						null,
-						this.state.cat.details.name
+						cat.details.name
 					)
 				),
 				React.createElement(
@@ -6710,7 +6676,7 @@ var CatItemList = React.createClass({
 					React.createElement(
 						'label',
 						null,
-						this.state.cat.details.title
+						cat.details.title
 					)
 				),
 				React.createElement(
@@ -6719,14 +6685,14 @@ var CatItemList = React.createClass({
 					React.createElement(
 						'p',
 						null,
-						this.state.cat.details.description
+						cat.details.description
 					)
 				)
 			),
 			React.createElement(
 				'div',
 				{ className: 'row item-list' },
-				this.state.items.map(function (item, i) {
+				items.map(function (item, i) {
 					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
 					return React.createElement(
 						'div',
@@ -6926,15 +6892,19 @@ Object.defineProperty(exports, "__esModule", {
  */
 var ItemImage = React.createClass({
 	displayName: 'ItemImage',
-	getInitialState: function getInitialState() {
-		return {
-			item: this.props.item
-		};
+	onClick: function onClick(e) {
+		if (!isGuest && user && user.id) {
+			var id = usecode ? this.props.item.code : this.props.item.id;
+			if (id) {
+				ajax.post('/like', function (o) {}, { id: id, user_id: user.id });
+			}
+		}
 	},
 	render: function render() {
+		var item = this.props.item;
 		var className = 'item-firstimage ' + (this.props.className ? this.props.className : '');
 		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-		var href = showLink ? '/item/' + (usecode ? this.state.item.code : this.state.item.id) : 'javascript:void(0);';
+		var href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
 		return React.createElement(
 			'div',
 			{ className: className },
@@ -6944,9 +6914,9 @@ var ItemImage = React.createClass({
 				React.createElement(
 					'a',
 					{ href: href },
-					React.createElement('img', { src: this.state.item.images[0].url })
+					React.createElement('img', { src: item.images[0].url })
 				),
-				React.createElement('a', { className: 'icon-heart' })
+				React.createElement('a', { className: 'icon-heart', onClick: this.onClick })
 			)
 		);
 	}
@@ -6965,17 +6935,12 @@ Object.defineProperty(exports, "__esModule", {
  */
 var ItemSummary = React.createClass({
 	displayName: 'ItemSummary',
-	getInitialState: function getInitialState() {
-		return {
-			item: this.props.item,
-			prices: this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original', 'sale', 'now']
-		};
-	},
 	render: function render() {
-		var me = this;
+		var item = this.props.item;
+		var prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original', 'sale', 'now'];
 		var className = 'item-summary ' + (this.props.className ? this.props.className : '');
 		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-		var href = showLink ? '/item/' + (usecode ? this.state.item.code : this.state.item.id) : 'javascript:void(0);';
+		var href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
 		var posted_at = React.createElement(
 			'div',
 			{ className: 'item-created' },
@@ -6990,13 +6955,13 @@ var ItemSummary = React.createClass({
 				React.createElement(
 					'span',
 					{ className: 'datetimeformat' },
-					this.state.item.created_at
+					item.created_at
 				)
 			)
 		);
 
-		var created = new Date(this.state.item.created_at);
-		var updated = new Date(this.state.item.updated_at);
+		var created = new Date(item.created_at);
+		var updated = new Date(item.updated_at);
 		if (+updated !== +created) {
 			posted_at = React.createElement(
 				'div',
@@ -7012,13 +6977,13 @@ var ItemSummary = React.createClass({
 					React.createElement(
 						'span',
 						{ className: 'datetimeformat' },
-						this.state.item.updated_at
+						item.updated_at
 					)
 				)
 			);
 		}
 		var expired_at = '';
-		if (this.state.item.deleted_at) {
+		if (item.deleted_at) {
 			expired_at = React.createElement(
 				'div',
 				{ className: 'item-date item-expired' },
@@ -7033,7 +6998,7 @@ var ItemSummary = React.createClass({
 					React.createElement(
 						'span',
 						{ className: 'datetimeformat' },
-						this.state.item.deleted_at
+						item.deleted_at
 					)
 				)
 			);
@@ -7041,9 +7006,9 @@ var ItemSummary = React.createClass({
 		var price_list = React.createElement(
 			'div',
 			{ className: 'item-prices' },
-			this.state.prices.map(function (o, i) {
+			prices.map(function (o, i) {
 				var pclassName = 'item-price item-' + o + 'price';
-				var pvalue = me.state.item[o + 'price'];
+				var pvalue = item[o + 'price'];
 				return React.createElement(
 					'div',
 					{ className: pclassName, key: i },
@@ -7077,7 +7042,7 @@ var ItemSummary = React.createClass({
 					React.createElement(
 						'span',
 						null,
-						this.state.item.title
+						item.title
 					)
 				)
 			),
@@ -7085,8 +7050,8 @@ var ItemSummary = React.createClass({
 			expired_at,
 			React.createElement(
 				'div',
-				{ className: this.state.item.is_new ? 'new' : 'used' },
-				this.state.item.is_new ? 'New' : 'Used'
+				{ className: item.is_new ? 'new' : 'used' },
+				item.is_new ? 'New' : 'Used'
 			),
 			price_list
 		);
@@ -7117,26 +7082,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var UserItemList = React.createClass({
 	displayName: 'UserItemList',
-	getInitialState: function getInitialState() {
-		return {
-			user: this.props.data.useritems,
-			items: this.props.data.items
-		};
-	},
-
-	componentDidMount: function componentDidMount() {
-		var me = this;
-		Dispatcher.EventEmitter.on(Dispatcher.CHANGE_EVENT, function () {
-			me.setState({
-				user: data.useritems,
-				items: data.items
-			});
-		});
-	},
-	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.CHANGE_EVENT, function () {});
-	},
 	render: function render() {
+		var data = this.props.data;
+		var user = data.useritems;
+		var items = data.paginate.data;
 		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
 		var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
 		return React.createElement(
@@ -7151,7 +7100,7 @@ var UserItemList = React.createClass({
 					React.createElement(
 						'label',
 						null,
-						this.state.user.displayname
+						user.displayname
 					)
 				),
 				React.createElement(
@@ -7160,14 +7109,14 @@ var UserItemList = React.createClass({
 					React.createElement(
 						'p',
 						null,
-						this.state.user.description
+						user.description
 					)
 				)
 			),
 			React.createElement(
 				'div',
 				{ className: 'row item-list' },
-				this.state.items.map(function (item, i) {
+				items.map(function (item, i) {
 					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
 					return React.createElement(
 						'div',
@@ -7230,10 +7179,13 @@ var EventEmitter = function (_Events) {
 
 var eventEmitter = new EventEmitter();
 var CHANGE_EVENT = 'datachange';
+var LIST_CHANGE = 'listchange';
 //
 var Dispatcher = new _flux2.default.Dispatcher();
 Dispatcher.register(function (action) {
+	console.log(action);
 	eventEmitter.emit(CHANGE_EVENT);
+	eventEmitter.emit(LIST_CHANGE);
 });
 //
 var Constants = (0, _keymirror2.default)({
@@ -7277,6 +7229,7 @@ Dispatcher['emit'] = function (_data) {
 	}
 };
 Dispatcher['CHANGE_EVENT'] = CHANGE_EVENT;
+Dispatcher['LIST_CHANGE'] = LIST_CHANGE;
 
 exports.default = Dispatcher;
 

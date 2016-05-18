@@ -9,15 +9,17 @@ $( document ).ready(function() {
 	//scroll to bottom to load more data
 	$(window).scroll(function() {
     	if($(window).scrollTop() == $(document).height() - $(window).height()) {
-    		$.ajax({
-				url: location.href,
-				data: {
-					page: '2'
-				},
-				success: function( data ) {
-					Application.Dispatcher.emit(data.data);
-				}
-			});
+    		if (data.paginate.next_page_url) {
+				ajax.get(data.paginate.next_page_url, function( _data ) {
+					var items = data.paginate.data.concat(_data.data.paginate.data);
+					data.paginate = _data.data.paginate;
+					data.paginate.data = items;
+					ReactDOM.render(
+						<Application data={data} />, 
+						document.getElementById(centerDivId)
+					);
+				});
+    		}
     	}
     	else if($(window).scrollTop() == 0) {
     	}
@@ -34,13 +36,13 @@ $( document ).ready(function() {
 	ReactDOM.render(React.createElement(FormView, {
 		onMouseUp(e, checked) {
 			setMode(checked ? 1 : 0);
-			$.ajax({
-				url: location.href,
-				data: {
-					mode: getMode()
-				},
-				success: function( data ) {
-					Application.Dispatcher.emit(data.data);
+			ajax.get(location.href, function( _data ) {
+				if (_data && _data.data) {
+					data = _data.data;
+					ReactDOM.render(
+						<Application data={data} />, 
+						document.getElementById(centerDivId)
+					);
 				}
 			});
 		},
@@ -70,7 +72,7 @@ $( document ).ready(function() {
 	}
 
 	ReactDOM.render(
-		<Application />, 
+		<Application data={data} />, 
 		document.getElementById(centerDivId)
 	);
 });

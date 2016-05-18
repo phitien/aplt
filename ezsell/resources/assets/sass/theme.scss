@@ -149,6 +149,8 @@ a:hover {text-decoration: none !important;}
 		}
 	}
 }
+.guest .item .item-firstimage:hover .item-firstimage-wrapper a.icon-heart {display: none !important;}
+
 .item-first {
 	@extend .item;
 }

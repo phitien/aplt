@@ -48,9 +48,13 @@ class Item extends Model {
 	 */
 	public function toArray() {
 		$attributes = parent::toArray ();
+		$user = static::getUser ();
 		return array_merge ( $attributes, [ 
 				'code' => $this->code (),
-				'images' => $this->images 
+				'images' => $this->images,
+// 				'likes' => $this->like ()->count (),
+// 				'liked' => $this->like ()->where ( 'user_id', $user->id )->first () ? true : false,
+// 				'comments' => $this->comments ()->count () 
 		] );
 	}
 	public function code() {

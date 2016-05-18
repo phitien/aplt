@@ -6,10 +6,13 @@ import Assign from 'object-assign';
 class EventEmitter extends Events {}
 var eventEmitter = new EventEmitter();
 var CHANGE_EVENT = 'datachange';
+var LIST_CHANGE = 'listchange';
 //
 var Dispatcher = new Flux.Dispatcher();
 Dispatcher.register(function(action) {
+	console.log(action);
 	eventEmitter.emit(CHANGE_EVENT);
+	eventEmitter.emit(LIST_CHANGE);
 });
 //
 var Constants = KeyMirror({
@@ -55,5 +58,6 @@ Dispatcher['emit'] = function(_data) {
 	}
 };
 Dispatcher['CHANGE_EVENT'] = CHANGE_EVENT;
+Dispatcher['LIST_CHANGE'] = LIST_CHANGE;
 
 export default Dispatcher;

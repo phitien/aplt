@@ -15,12 +15,20 @@ class CreateCommentsTable extends Migration {
 			$table->integer ( 'parent_id' )->unsigned ();
 			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'comments' )->onDelete ( 'cascade' );
 			//
+			$table->integer ( 'user_id' );
+			//
 			$table->text ( 'text' )->nullable ();
 			//
 			$table->text ( 'options' )->nullable ();
 			//
 			$table->timestamps ();
 			$table->softDeletes ();
+			
+			$table->unique ( [ 
+					'parent_id',
+					'user_id',
+					'item_id' 
+			] );
 		} );
 	}
 	

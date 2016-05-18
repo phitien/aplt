@@ -19,6 +19,11 @@ class CreateLikesTable extends Migration {
 			//
 			$table->timestamps ();
 			$table->softDeletes ();
+			
+			$table->unique ( [ 
+					'parent_id',
+					'user_id' 
+			] );
 		} );
 	}
 	

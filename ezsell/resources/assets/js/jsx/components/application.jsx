@@ -1,9 +1,8 @@
 import CatItemsList from './catitemlist.jsx';
 import UserItemsList from './useritemlist.jsx';
 import ItemDetails from './itemdetails.jsx';
+
 import Dispatcher from '../dispatcher/dispatcher.jsx';
-//
-window.Dispatcher = Dispatcher;
 //
 /**
  * Application defination
@@ -11,18 +10,13 @@ window.Dispatcher = Dispatcher;
 var Application = React.createClass({
 	getInitialState: function() {
 		return {
-			data: {}
+			data: data
 		};
 	},
-	componentWillMount() {
-		this.setState({
-			data: data
-		});
-	},
-	componentDidMount: function() {
-		var me = this;
-		Dispatcher.EventEmitter.on(Dispatcher.CHANGE_EVENT, function() {
-			me.setState({
+	componentDidMount() {
+		Dispatcher.EventEmitter.on(Dispatcher.LIST_CHANGE, function() {
+			console.log(arguments);
+			this.setState({
 				data: data
 			});
 		});
@@ -37,12 +31,10 @@ var Application = React.createClass({
 			me.text(format.currency(text));
 		});
 	},
-	componentWillUnmount: function() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.CHANGE_EVENT, function() {
-			
-		});
+	componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.LIST_CHANGE, function() {});
 	},
-	render : function() {
+	render() {
 		var data = this.state.data;
 		if (data) {
 			if (data.catitems) {
@@ -64,7 +56,5 @@ var Application = React.createClass({
 		return null;
 	}
 });
-
-Application['Dispatcher'] = Dispatcher;
 
 export default Application;

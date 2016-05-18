@@ -10,8 +10,10 @@ use App\Ezsell\Models\Image;
 use Carbon\Carbon;
 use App\Ezsell\Config;
 use App\Ezsell\Exceptions\UserNotFound;
+use App\Ezsell\Controllers\Traits\ItemLikeTrait;
 
 class ItemController extends Controller {
+	use ItemLikeTrait;
 	/**
 	 *
 	 * @var array $_authenticationMiddlewareOptions
@@ -21,7 +23,8 @@ class ItemController extends Controller {
 					'index',
 					'cat',
 					'user',
-					'item' 
+					'item',
+					'like' 
 			] 
 	];
 	/**
@@ -47,6 +50,24 @@ class ItemController extends Controller {
 	public function cat(Request $request) {
 		return $this->process ( 'cat', func_get_args () );
 	}
+	/**
+	 *
+	 * @param Request $request        	
+	 * @param unknown $query        	
+	 * @return \Illuminate\Pagination\AbstractPaginator
+	 */
+	protected function addWhere(Request $request, $query) {
+		$now = Carbon::now ();
+		$requestTime = static::getRequestTime ();
+		$query->where ( 'location_id', static::getLocationId () )->
+
+		where ( 'items.is_selling', ( int ) static::getMode () )->
+
+		where ( 'items.updated_at', '<=', $requestTime )->
+
+		whereRaw ( "(items.deleted_at IS NULL OR items.deleted_at > '{$now}')" );
+		return $query->paginate ( Config::PAGE_SIZE );
+	}
 	protected function pcatGetResponseData(Request $request, $id) {
 		if (Config::USE_CODE) {
 			$cat = Cat::where ( 'code', strtoupper ( $id ) )->first ();
@@ -54,21 +75,9 @@ class ItemController extends Controller {
 			$cat = Cat::find ( $id );
 		}
 		if ($cat) {
-			$now = Carbon::now ();
+			$paginate = $this->addWhere ( $request, $cat->items () );
 			
-			$requestTime = static::getRequestTime ();
-			
-			$query = $cat->items ()->where ( 'location_id', static::getLocationId () )->
-
-			where ( 'items.is_selling', ( int ) static::getMode () )->
-
-			where ( 'items.updated_at', '<=', $requestTime )->
-
-			whereRaw ( "(items.deleted_at IS NULL OR items.deleted_at > '{$now}')" );
-			
-			$pagination = $query->paginate ( Config::PAGE_SIZE );
-			
-			$items = $pagination->getCollection ();
+			$items = $paginate->getCollection ();
 			$user_ids = [ ];
 			foreach ( $items as $item ) {
 				array_push ( $user_ids, $item->user_id );
@@ -78,6 +87,7 @@ class ItemController extends Controller {
 			] );
 			
 			$users = static::json_decode ( $response->getBody (), true ) ['data'];
+			
 			for($i = 0; $i < count ( $items ); $i ++) {
 				if (isset ( $users [$items [$i]->user_id] ))
 					$items [$i] ['user'] = $users [$items [$i]->user_id];
@@ -86,7 +96,7 @@ class ItemController extends Controller {
 			}
 			return [ 
 					'catitems' => $cat,
-					'items' => $items 
+					'paginate' => $paginate 
 			];
 		} else {
 			return null;
@@ -119,10 +129,7 @@ class ItemController extends Controller {
 		return $this->process ( 'item', func_get_args () );
 	}
 	protected function pgetItem(Request $request, $id) {
-		if (Config::USE_CODE) {
-			$id = static::decrypt ( $id );
-		}
-		$item = Item::find ( $id );
+		$item = $this->getItemByIdOrCode ( $id );
 		if ($item) {
 			return $this->response ( view ( 'item.itemdetails', [ 
 					'data' => [ 
@@ -245,26 +252,33 @@ class ItemController extends Controller {
 		] );
 		$user = static::json_decode ( $response->getBody (), true ) ['data'];
 		if ($user) {
+			$now = Carbon::now ();
+			
 			$requestTime = static::getRequestTime ();
+			$paginate = $this->addWhere ( $request, Item::where ( 'user_id', $user ['id'] ) );
 			
-			$pagination = Item::where ( 'user_id', $user ['id'] )->
-
-			where ( 'items.is_selling', ( int ) static::getMode () )->
-
-			where ( 'items.updated_at', '<=', $requestTime )->
-			
-			paginate ( Config::PAGE_SIZE );
-			
-			$items = $pagination->getCollection ();
+			$items = $paginate->getCollection ();
 			for($i = 0; $i < count ( $items ); $i ++) {
 				$items [$i] ['user'] = $user;
 			}
 			return [ 
 					'useritems' => $user,
-					'items' => $items 
+					'paginate' => $paginate 
 			];
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 *
+	 * @param string $id        	
+	 * @return Item
+	 */
+	protected function getItemByIdOrCode($id) {
+		if (Config::USE_CODE) {
+			$id = static::decrypt ( $id );
+		}
+		return Item::find ( $id );
 	}
 }

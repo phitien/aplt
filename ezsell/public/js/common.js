@@ -950,6 +950,9 @@ var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
     draining = false;
     if (currentQueue.length) {
         queue = currentQueue.concat(queue);
@@ -4450,6 +4453,29 @@ window.submitForm = function (form) {
 	}).appendTo(form);
 	form.submit();
 };
+window.ajax = {
+	exe: function exe(url, success, data, type) {
+		$.ajax({
+			type: type ? type : 'GET',
+			url: url,
+			data: Object.assign({ '_token': token(), 'mode': getMode() }, data),
+			success: success
+		});
+	},
+	get: function get(url, success, data) {
+		this.exe(url, success, data, 'GET');
+	},
+	post: function post(url, success, data) {
+		this.exe(url, success, data, 'POST');
+	},
+	put: function put(url, success, data) {
+		this.exe(url, success, data, 'PUT');
+	},
+	delete: function _delete(url, success, data) {
+		this.exe(url, success, data, 'DELETE');
+	}
+};
+
 window.showMessageDialog = function (msg, title, btn, callback) {
 	btn = btn ? btn : 'Ok';
 	title = title ? title : 'Message';
@@ -4578,21 +4604,17 @@ window.showLocationForm = function (e) {
 				var _source = e.getAttribute('data-source');
 				$(e).autocomplete({
 					source: function source(request, response) {
-						$.ajax({
-							url: _source,
-							data: {
-								q: request.term
-							},
-							success: function success(data) {
-								var items = [];
-								$.each(data.data, function (i, v) {
-									items.push({
-										id: v.id,
-										label: v.fullname
-									});
+						ajax.get(_source, function (data) {
+							var items = [];
+							$.each(data.data, function (i, v) {
+								items.push({
+									id: v.id,
+									label: v.fullname
 								});
-								response(items);
-							}
+							});
+							response(items);
+						}, {
+							q: request.term
 						});
 					},
 					minLength: 2,
@@ -4615,17 +4637,9 @@ window.showLocationForm = function (e) {
 window.sendMessage = function (e) {
 	var message = $(e).prev('input').val();
 	if (message) {
-		$.ajax({
-			type: 'POST',
-			data: {
-				url: '/sendmessage',
-				'_token': token(),
-				'message': message
-			},
-			success: function success() {
-				$(e).prev('input').val('');
-			}
-		});
+		ajax.post('/sendmessage', function () {
+			$(e).prev('input').val('');
+		}, { 'message': message });
 	}
 };
 
