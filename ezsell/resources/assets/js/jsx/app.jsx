@@ -11,13 +11,10 @@ $( document ).ready(function() {
     	if($(window).scrollTop() == $(document).height() - $(window).height()) {
     		if (data.paginate.next_page_url) {
 				ajax.get(data.paginate.next_page_url, function( _data ) {
-					var items = data.paginate.data.concat(_data.data.paginate.data);
-					data.paginate = _data.data.paginate;
-					data.paginate.data = items;
-					ReactDOM.render(
-						<Application data={data} />, 
-						document.getElementById(centerDivId)
-					);
+					if (_data && _data.data) {
+						_data.data.paginate.data = data.paginate.data.concat(_data.data.paginate.data);
+						Application.Dispatcher.emit(_data.data);
+					}
 				});
     		}
     	}
@@ -38,7 +35,6 @@ $( document ).ready(function() {
 			setMode(checked ? 1 : 0);
 			ajax.get(location.href, function( _data ) {
 				if (_data && _data.data) {
-					//data = _data.data;
 					Application.Dispatcher.emit(_data.data);
 				}
 			});
