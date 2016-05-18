@@ -14,7 +14,8 @@ var ItemDetails = React.createClass({
 	},
 	render : function() {
 		const className = 'item-detail-wrapper ' + (this.props.className?this.props.className:'');
-		const item = this.props.item;
+		const data = this.props.data;
+		const item = data.itemdetails_item;
 		const showThumbnails = true;
 		const slideOnThumbnailHover = true;
 		const showNav = true;

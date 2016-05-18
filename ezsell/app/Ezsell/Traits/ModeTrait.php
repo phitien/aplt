@@ -12,11 +12,11 @@ trait ModeTrait {
 	 */
 	public static function getMode() {
 		if (! \App\Ezsell\Helper::$_mode) {
-			\App\Ezsell\Helper::$_mode = static::param ( 'mode', Config::MODES ['SELL'] );
+			\App\Ezsell\Helper::$_mode = static::param ( 'mode', Config::$modes ['SELL'] );
 		}
 		return \App\Ezsell\Helper::$_mode;
 	}
 	protected static function setMode($mode) {
-		\App\Ezsell\Helper::$_mode = ( int ) $mode > 0 ? Config::MODES ['SELL'] : Config::MODES ['BUY'];
+		\App\Ezsell\Helper::$_mode = ( int ) $mode > 0 ? Config::$modes ['SELL'] : Config::$modes ['BUY'];
 	}
 }

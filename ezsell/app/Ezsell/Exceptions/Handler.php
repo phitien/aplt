@@ -24,4 +24,7 @@ class Handler extends BaseHandler {
 			return $this->convertExceptionToResponse ( $e );
 		}
 	}
+// 	public function render($request, Exception $e) {
+// 		return parent::render ( $request, $e );
+// 	}
 }

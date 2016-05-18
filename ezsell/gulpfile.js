@@ -12,6 +12,16 @@ elixir(function(mix) {
 	
 	.copy(bootstrapPath + '/javascripts/bootstrap.min.js', 'public/js')
 
+	.copy('resources/assets/images', 'public/images')
+	
+	.copy('node_modules/jquery-ui/themes', 'public/css/jquery-ui/themes')
+	
+	.copy('resources/assets/js/socket.io-1.3.4.js', 'public/js')
+	
+	.copy('resources/assets/js/jquery-migrate-1.2.1.min.js', 'public/js')
+	
+	.copy('node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js', 'public/js')
+	
 	.browserify('jsx/libraries.jsx', 'public/js')
 	
 	.browserify('jsx/common.jsx', 'public/js')
@@ -38,22 +48,6 @@ elixir(function(mix) {
 	
 	.browserify('jsx/pages/sellitem.jsx', 'public/js/pages')
 	
-	.browserify('jsx/pages/buyitem.jsx', 'public/js/pages')
-	
-	.browserify('jsx/pages/itemdetails.jsx', 'public/js/pages')
-	
-	.browserify('jsx/pages/catitems.jsx', 'public/js/pages')
-	
-	.browserify('jsx/pages/useritems.jsx', 'public/js/pages')
-
-	.copy('resources/assets/images', 'public/images')
-	
-	.copy('node_modules/jquery-ui/themes', 'public/css/jquery-ui/themes')
-	
-	.copy('resources/assets/js/socket.io-1.3.4.js', 'public/js')
-	
-	.copy('resources/assets/js/jquery-migrate-1.2.1.min.js', 'public/js')
-	
-	.copy('node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js', 'public/js');
+	.browserify('jsx/pages/buyitem.jsx', 'public/js/pages');
 	
 });

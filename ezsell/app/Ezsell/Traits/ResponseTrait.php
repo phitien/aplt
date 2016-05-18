@@ -23,7 +23,7 @@ trait ResponseTrait {
 
 		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::getLocationId () ), true )-> //
 
-		withCookie ( Cookie::forever ( Config::REQUEST_TIME, static::getRequestTime () ), true );
+		withCookie ( Cookie::forever ( Config::MODE, static::getMode () ), true );
 	}
 	/**
 	 *
@@ -36,7 +36,7 @@ trait ResponseTrait {
 
 		withCookie ( Config::SESSION_KEY, null, true )-> //
 
-		withCookie ( Config::REQUEST_TIME, null, true );
+		withCookie ( Config::MODE, null, true );
 	}
 	/**
 	 * Build response

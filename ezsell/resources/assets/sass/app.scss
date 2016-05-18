@@ -135,7 +135,24 @@
 
 #container {@extend .no-margin;padding-bottom: $footer-height + $sbig;margin-top: $sbig;}
 
-#left {}
+#left {
+	.leftmenu {
+		@extend .no-margin-padding;
+		li {
+			@extend .no-margin-padding;
+			list-style: none;
+			font-size: $fsmall;
+			ul {
+				@extend .no-margin-padding;
+				padding-left: $sbig;
+				li {
+					font-size: $fmedium;
+					list-style: none;
+				}
+			}
+		}
+	}
+}
 #center {}
 #right {}
 #footer {

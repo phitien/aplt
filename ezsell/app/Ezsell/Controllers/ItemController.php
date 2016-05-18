@@ -9,6 +9,7 @@ use App\Ezsell\Models\Cat;
 use App\Ezsell\Models\Image;
 use Carbon\Carbon;
 use App\Ezsell\Config;
+use App\Ezsell\Exceptions\UserNotFound;
 
 class ItemController extends Controller {
 	/**
@@ -54,13 +55,19 @@ class ItemController extends Controller {
 		}
 		if ($cat) {
 			$now = Carbon::now ();
+			
+			$requestTime = static::getRequestTime ();
+			
 			$query = $cat->items ()->where ( 'location_id', static::getLocationId () )->
 
-			where ( 'items.is_selling', static::getMode () )->
+			where ( 'items.is_selling', ( int ) static::getMode () )->
+
+			where ( 'items.updated_at', '<=', $requestTime )->
 
 			whereRaw ( "(items.deleted_at IS NULL OR items.deleted_at > '{$now}')" );
 			
 			$pagination = $query->paginate ( Config::PAGE_SIZE );
+			
 			$items = $pagination->getCollection ();
 			$user_ids = [ ];
 			foreach ( $items as $item ) {
@@ -78,8 +85,8 @@ class ItemController extends Controller {
 					$items [$i] ['user'] = [ ];
 			}
 			return [ 
-					'catitems_cat' => $cat,
-					'catitems_items' => $items 
+					'catitems' => $cat,
+					'items' => $items 
 			];
 		} else {
 			return null;
@@ -88,7 +95,9 @@ class ItemController extends Controller {
 	protected function pgetCat(Request $request, $id) {
 		$data = $this->pcatGetResponseData ( $request, $id );
 		if ($data) {
-			return $this->response ( view ( 'item.catitems', $data ) );
+			return $this->response ( view ( 'item.catitems', [ 
+					'data' => $data 
+			] ) );
 		} else {
 			throw new ItemNotFound ();
 		}
@@ -116,7 +125,9 @@ class ItemController extends Controller {
 		$item = Item::find ( $id );
 		if ($item) {
 			return $this->response ( view ( 'item.itemdetails', [ 
-					'itemdetails_item' => $item 
+					'data' => [ 
+							'itemdetails' => $item 
+					] 
 			] ) );
 		} else {
 			return $this->redirect ( Config::HOME_PAGE );
@@ -167,10 +178,12 @@ class ItemController extends Controller {
 				'groups',
 				'deleted_at' 
 		] );
+		$data ['active'] = 1;
 		$data ['is_new'] = $data ['is_new'] ? true : false;
 		$data ['is_selling'] = $data ['is_selling'] ? true : false;
 		$data ['user_id'] = static::getUser ()->id;
 		$data ['location_id'] = static::getLocation ()->id;
+		$data ['deleted_at'] = static::isDateInThePast ( $data ['deleted_at'] ) ? null : $data ['deleted_at'];
 		if ($item = Item::create ( $data )) {
 			$titles = $request->get ( 'files-title' );
 			$descriptions = $request->get ( 'files-description' );
@@ -209,22 +222,49 @@ class ItemController extends Controller {
 		return $this->process ( 'user', func_get_args () );
 	}
 	protected function pgetUser(Request $request, $username) {
+		$data = $this->puserGetResponseData ( $request, $username );
+		if ($data) {
+			return $this->response ( view ( 'item.useritems', [ 
+					'data' => $data 
+			] ) );
+		} else {
+			throw new UserNotFound ();
+		}
+	}
+	protected function pajaxUser(Request $request, $username) {
+		$data = $this->puserGetResponseData ( $request, $username );
+		if ($data) {
+			return $this->jsonResponse ( 'user_item_list', $data );
+		} else {
+			throw new UserNotFound ();
+		}
+	}
+	protected function puserGetResponseData(Request $request, $username) {
 		$response = $this->apiCallInfo ( [ 
 				'code' => $username 
 		] );
 		$user = static::json_decode ( $response->getBody (), true ) ['data'];
 		if ($user) {
-			$pagination = Item::where ( 'user_id', $user ['id'] )->paginate ( Config::PAGE_SIZE );
+			$requestTime = static::getRequestTime ();
+			
+			$pagination = Item::where ( 'user_id', $user ['id'] )->
+
+			where ( 'items.is_selling', ( int ) static::getMode () )->
+
+			where ( 'items.updated_at', '<=', $requestTime )->
+			
+			paginate ( Config::PAGE_SIZE );
+			
 			$items = $pagination->getCollection ();
 			for($i = 0; $i < count ( $items ); $i ++) {
 				$items [$i] ['user'] = $user;
 			}
-			return $this->response ( view ( 'item.useritems', [ 
-					'useritems_user' => json_encode ( $user ),
-					'useritems_items' => $items 
-			] ) );
+			return [ 
+					'useritems' => $user,
+					'items' => $items 
+			];
 		} else {
-			return $this->redirect ( Config::HOME_PAGE );
+			return null;
 		}
 	}
 }

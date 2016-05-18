@@ -7,7 +7,7 @@ use App\Ezsell\Models\Role;
 use App\Ezsell\Models\Action;
 
 class Config {
-	const MODES = [ 
+	public static $modes = [ 
 			'SELL' => 1,
 			'BUY' => 0 
 	];
@@ -19,6 +19,7 @@ class Config {
 	const MEDIA_BASE_URL = 'http://media.ezsell.com';
 	const LOCATION_KEY = 'location';
 	const REQUEST_TIME = 'requesttime';
+	const MODE = 'mode';
 	const DATETIME_DB_FORMAT = 'Y-m-d H:i:s';
 	/**
 	 *

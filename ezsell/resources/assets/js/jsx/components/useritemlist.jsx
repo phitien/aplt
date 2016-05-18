@@ -6,8 +6,9 @@ import ItemImage from './itemimage.jsx';
 var UserItemList = React.createClass({
 	render : function() {
 		const className = 'item-list-wrapper ' + (this.props.className?this.props.className:'');
-		const user = this.props.user;
-		const items = this.props.items;
+		const data = this.props.data;
+		const user = data.useritems;
+		const items = data.items;
 		const id = this.props.id ? this.props.id : uuid('item-list');
 		return (
 			<div className={className} id={id}>

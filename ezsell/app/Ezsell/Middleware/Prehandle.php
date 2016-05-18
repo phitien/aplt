@@ -5,8 +5,14 @@ namespace App\Ezsell\Middleware;
 use Closure;
 use App\Ezsell\Config;
 use Tymon\JWTAuth\Middleware\BaseMiddleware;
+use App\Ezsell\Traits\AllTrait;
+use DateTime;
 
 class Prehandle extends BaseMiddleware {
+	/**
+	 * TRAITS
+	 */
+	use AllTrait;
 	/**
 	 *
 	 * @param \Illuminate\Http\Request $request        	
@@ -15,6 +21,11 @@ class Prehandle extends BaseMiddleware {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
+		// Set request time variable in session
+		if ($request->has ( Config::MODE ) || ! $request->ajax ()) {
+			$request->session ()->set ( Config::REQUEST_TIME, (new DateTime ())->format ( Config::DATETIME_DB_FORMAT ) );
+		}
+		// Set redirect variable in session
 		if ($url = request ()->get ( 'redirect' )) {
 			if (strpos ( $url, '/login' ) === false) {
 				$request->session ()->set ( 'redirect', $url );

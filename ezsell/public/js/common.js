@@ -950,9 +950,6 @@ var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
     draining = false;
     if (currentQueue.length) {
         queue = currentQueue.concat(queue);
@@ -4483,7 +4480,6 @@ window.hideMenus = function () {
 	slideUp($('.sensitive'));
 };
 window.toggleElement = function (e) {
-	console.log(e);
 	if (e.css('display') == 'none') {
 		slideDown(e);
 	} else {
@@ -4621,8 +4617,8 @@ window.sendMessage = function (e) {
 	if (message) {
 		$.ajax({
 			type: 'POST',
-			url: '/sendmessage',
 			data: {
+				url: '/sendmessage',
 				'_token': token(),
 				'message': message
 			},
@@ -4631,6 +4627,13 @@ window.sendMessage = function (e) {
 			}
 		});
 	}
+};
+
+window.getMode = function () {
+	return mode;
+};
+window.setMode = function (_mode) {
+	mode = _mode;
 };
 
 },{"./components/catmenu.jsx":41,"./components/formview.jsx":42,"./components/userbox.jsx":44}],41:[function(require,module,exports){

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Storage;
 use View;
 use Html;
 use Cookie;
+use DateTime;
+use App\Ezsell\Config;
 
 trait UtilTrait {
 	/**
@@ -118,5 +120,12 @@ trait UtilTrait {
 	 */
 	protected static function param($key, $default = null) {
 		return request ()->get ( $key, request ()->header ( $key, Cookie::get ( $key, $default ) ) );
+	}
+	/**
+	 *
+	 * @param string $datetime        	
+	 */
+	protected static function isDateInThePast($datetime) {
+		return DateTime::createFromFormat ( Config::DATETIME_DB_FORMAT, $datetime ) < (new DateTime ());
 	}
 }

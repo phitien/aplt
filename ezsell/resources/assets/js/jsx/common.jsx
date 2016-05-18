@@ -76,7 +76,6 @@ window.hideMenus = function() {
 	slideUp($('.sensitive'));
 };
 window.toggleElement = function(e) {
-	console.log(e);
 	if ( e.css('display') == 'none' ) {
 		slideDown(e);
 	} else {
@@ -220,8 +219,8 @@ window.sendMessage = function(e) {
 	if (message) {
 		$.ajax({
 			type: 'POST',
-			url: '/sendmessage',
 			data: { 
+			url: '/sendmessage',
 				'_token': token(),
 				'message': message
 			},
@@ -230,4 +229,11 @@ window.sendMessage = function(e) {
 			}
 		});
 	}
+};
+
+window.getMode = function() {
+	return mode;
+};
+window.setMode = function(_mode) {
+	mode = _mode;
 };
