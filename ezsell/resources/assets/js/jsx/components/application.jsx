@@ -1,24 +1,31 @@
 import CatItemsList from './catitemlist.jsx';
 import UserItemsList from './useritemlist.jsx';
 import ItemDetails from './itemdetails.jsx';
-import Store from '../stores/store.jsx';
-import Actions from '../actions/actions.jsx';
-window.Actions = Actions;
+import Dispatcher from '../dispatcher/dispatcher.jsx';
+//
+window.Dispatcher = Dispatcher;
+//
 /**
  * Application defination
  */
-function getState() {
-	return {
-		data: Store.getAll()
-	};
-}
 var Application = React.createClass({
 	getInitialState: function() {
-		return getState();
+		return {
+			data: {}
+		};
+	},
+	componentWillMount() {
+		this.setState({
+			data: data
+		});
 	},
 	componentDidMount: function() {
-		Store.addChangeListener(this._onChange);
-		Actions.dispatch(data);
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.CHANGE_EVENT, function() {
+			me.setState({
+				data: data
+			});
+		});
 		$('.datetimeformat').each(function () {
 			var me = $(this);
 			var text = me.text().trim();
@@ -31,13 +38,12 @@ var Application = React.createClass({
 		});
 	},
 	componentWillUnmount: function() {
-		Store.removeChangeListener(this._onChange);
-	},
-	_onChange: function() {
-		this.setState(getState());
+		Dispatcher.EventEmitter.removeListener(Dispatcher.CHANGE_EVENT, function() {
+			
+		});
 	},
 	render : function() {
-		var data = getState().data;
+		var data = this.state.data;
 		if (data) {
 			if (data.catitems) {
 				return (
@@ -58,5 +64,7 @@ var Application = React.createClass({
 		return null;
 	}
 });
+
+Application['Dispatcher'] = Dispatcher;
 
 export default Application;

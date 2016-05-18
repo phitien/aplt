@@ -4,27 +4,42 @@ import ItemImage from './itemimage.jsx';
  * CatItemList defination
  */
 var CatItemList = React.createClass({
-	render : function() {
-		const className = 'item-list-wrapper ' + (this.props.className?this.props.className:'');
-		const data = this.props.data;
-		const cat = data.catitems;
-		const items = data.items;
-		const id = this.props.id ? this.props.id : uuid('item-list');
+	getInitialState() {
+		return {
+			cat: this.props.data.catitems,
+			items: this.props.data.items
+		};
+	},
+	componentDidMount: function() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.CHANGE_EVENT, function() {
+			me.setState({
+				cat: data.catitems,
+				items: data.items
+			});
+		});
+	},
+	componentWillUnmount: function() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.CHANGE_EVENT, function() {});
+	},
+	render() {
+		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
+		const className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
 		return (
-			<div className={className} id={id}>
+			<div className={className} id={this.id}>
 				<div className='cat-detail'>
 					<div className='cat-name'>
-						<label>{cat.details.name}</label>
+						<label>{this.state.cat.details.name}</label>
 					</div>
 					<div className='cat-title'>
-						<label>{cat.details.title}</label>
+						<label>{this.state.cat.details.title}</label>
 					</div>
 					<div className='cat-description'>
-						<p>{cat.details.description}</p>
+						<p>{this.state.cat.details.description}</p>
 					</div>
 				</div>
 				<div className='row item-list'>
-					{items.map(function (item, i) {
+					{this.state.items.map(function (item, i) {
 						var itemClassName = 'col-xs-6 col-md-2 item ' + (i==0?'item-first':'');
 						return (
 							<div className={itemClassName} key={i}>

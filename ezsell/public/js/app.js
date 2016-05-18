@@ -6482,59 +6482,6 @@ module.exports = require('./lib/React');
 },{"./lib/React":102}],131:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _dispatcher = require('../dispatcher/dispatcher.jsx');
-
-var _dispatcher2 = _interopRequireDefault(_dispatcher);
-
-var _constants = require('../constants/constants.jsx');
-
-var _constants2 = _interopRequireDefault(_constants);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//
-exports.default = {
-	dispatch: function dispatch(data) {
-		if (data) {
-			if (data.catitems) {
-				this.catitems(data);
-			} else if (data.useritems) {
-				this.useritems(data);
-			} else if (data.itemdetails) {
-				this.itemdetails(data);
-			}
-		}
-	},
-
-	catitems: function catitems(data) {
-		_dispatcher2.default.dispatch({
-			actionType: _constants2.default.CATITEMS,
-			data: data
-		});
-	},
-
-	useritems: function useritems(data) {
-		_dispatcher2.default.dispatch({
-			actionType: _constants2.default.USERITEMS,
-			data: data
-		});
-	},
-
-	itemdetails: function itemdetails(data) {
-		_dispatcher2.default.dispatch({
-			actionType: _constants2.default.ITEMDETAILS,
-			data: data
-		});
-	}
-};
-
-},{"../constants/constants.jsx":139,"../dispatcher/dispatcher.jsx":140}],132:[function(require,module,exports){
-'use strict';
-
 var _application = require('./components/application.jsx');
 
 var _application2 = _interopRequireDefault(_application);
@@ -6557,7 +6504,7 @@ $(document).ready(function () {
 					page: '2'
 				},
 				success: function success(data) {
-					Actions.dispatch(data.data);
+					_application2.default.Dispatcher.emit(data.data);
 				}
 			});
 		} else if ($(window).scrollTop() == 0) {}
@@ -6580,7 +6527,7 @@ $(document).ready(function () {
 					mode: getMode()
 				},
 				success: function success(data) {
-					Actions.dispatch(data.data);
+					_application2.default.Dispatcher.emit(data.data);
 				}
 			});
 		},
@@ -6612,7 +6559,7 @@ $(document).ready(function () {
 	ReactDOM.render(React.createElement(_application2.default, null), document.getElementById(centerDivId));
 });
 
-},{"./components/application.jsx":133}],133:[function(require,module,exports){
+},{"./components/application.jsx":132}],132:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6631,34 +6578,39 @@ var _itemdetails = require('./itemdetails.jsx');
 
 var _itemdetails2 = _interopRequireDefault(_itemdetails);
 
-var _store = require('../stores/store.jsx');
+var _dispatcher = require('../dispatcher/dispatcher.jsx');
 
-var _store2 = _interopRequireDefault(_store);
-
-var _actions = require('../actions/actions.jsx');
-
-var _actions2 = _interopRequireDefault(_actions);
+var _dispatcher2 = _interopRequireDefault(_dispatcher);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-window.Actions = _actions2.default;
+//
+window.Dispatcher = _dispatcher2.default;
+//
 /**
  * Application defination
  */
-function getState() {
-	return {
-		data: _store2.default.getAll()
-	};
-}
 var Application = React.createClass({
 	displayName: 'Application',
 
 	getInitialState: function getInitialState() {
-		return getState();
+		return {
+			data: {}
+		};
 	},
+	componentWillMount: function componentWillMount() {
+		this.setState({
+			data: data
+		});
+	},
+
 	componentDidMount: function componentDidMount() {
-		_store2.default.addChangeListener(this._onChange);
-		_actions2.default.dispatch(data);
+		var me = this;
+		_dispatcher2.default.EventEmitter.on(_dispatcher2.default.CHANGE_EVENT, function () {
+			me.setState({
+				data: data
+			});
+		});
 		$('.datetimeformat').each(function () {
 			var me = $(this);
 			var text = me.text().trim();
@@ -6671,13 +6623,10 @@ var Application = React.createClass({
 		});
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		_store2.default.removeChangeListener(this._onChange);
-	},
-	_onChange: function _onChange() {
-		this.setState(getState());
+		_dispatcher2.default.EventEmitter.removeListener(_dispatcher2.default.CHANGE_EVENT, function () {});
 	},
 	render: function render() {
-		var data = getState().data;
+		var data = this.state.data;
 		if (data) {
 			if (data.catitems) {
 				return React.createElement(_catitemlist2.default, { data: data, className: 'item-block-prices' });
@@ -6692,9 +6641,11 @@ var Application = React.createClass({
 	}
 });
 
+Application['Dispatcher'] = _dispatcher2.default;
+
 exports.default = Application;
 
-},{"../actions/actions.jsx":131,"../stores/store.jsx":141,"./catitemlist.jsx":134,"./itemdetails.jsx":135,"./useritemlist.jsx":138}],134:[function(require,module,exports){
+},{"../dispatcher/dispatcher.jsx":138,"./catitemlist.jsx":133,"./itemdetails.jsx":134,"./useritemlist.jsx":137}],133:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6716,16 +6667,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var CatItemList = React.createClass({
 	displayName: 'CatItemList',
+	getInitialState: function getInitialState() {
+		return {
+			cat: this.props.data.catitems,
+			items: this.props.data.items
+		};
+	},
 
+	componentDidMount: function componentDidMount() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.CHANGE_EVENT, function () {
+			me.setState({
+				cat: data.catitems,
+				items: data.items
+			});
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.CHANGE_EVENT, function () {});
+	},
 	render: function render() {
+		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
 		var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
-		var data = this.props.data;
-		var cat = data.catitems;
-		var items = data.items;
-		var id = this.props.id ? this.props.id : uuid('item-list');
 		return React.createElement(
 			'div',
-			{ className: className, id: id },
+			{ className: className, id: this.id },
 			React.createElement(
 				'div',
 				{ className: 'cat-detail' },
@@ -6735,7 +6701,7 @@ var CatItemList = React.createClass({
 					React.createElement(
 						'label',
 						null,
-						cat.details.name
+						this.state.cat.details.name
 					)
 				),
 				React.createElement(
@@ -6744,7 +6710,7 @@ var CatItemList = React.createClass({
 					React.createElement(
 						'label',
 						null,
-						cat.details.title
+						this.state.cat.details.title
 					)
 				),
 				React.createElement(
@@ -6753,14 +6719,14 @@ var CatItemList = React.createClass({
 					React.createElement(
 						'p',
 						null,
-						cat.details.description
+						this.state.cat.details.description
 					)
 				)
 			),
 			React.createElement(
 				'div',
 				{ className: 'row item-list' },
-				items.map(function (item, i) {
+				this.state.items.map(function (item, i) {
 					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
 					return React.createElement(
 						'div',
@@ -6777,7 +6743,7 @@ var CatItemList = React.createClass({
 
 exports.default = CatItemList;
 
-},{"./itemimage.jsx":136,"./itemsummary.jsx":137}],135:[function(require,module,exports){
+},{"./itemimage.jsx":135,"./itemsummary.jsx":136}],134:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6799,6 +6765,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var ItemDetails = React.createClass({
 	displayName: 'ItemDetails',
+	getInitialState: function getInitialState() {
+		return {
+			item: this.props.data.itemdetails
+		};
+	},
+
+	componentDidMount: function componentDidMount() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.CHANGE_EVENT, function () {
+			me.setState({
+				item: data.itemdetails
+			});
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.CHANGE_EVENT, function () {});
+	},
 	handleImageLoad: function handleImageLoad(event) {},
 	handlePlay: function handlePlay() {
 		this._imageGallery.play();
@@ -6806,19 +6789,18 @@ var ItemDetails = React.createClass({
 	handlePause: function handlePause() {
 		this._imageGallery.pause();
 	},
-
 	render: function render() {
 		var _this = this;
 
-		var className = 'item-detail-wrapper ' + (this.props.className ? this.props.className : '');
-		var data = this.props.data;
-		var item = data.itemdetails_item;
-		var showThumbnails = true;
-		var slideOnThumbnailHover = true;
-		var showNav = true;
+		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
+		var className = 'item-details-wrapper ' + (this.props.className ? this.props.className : '');
+		var showThumbnails = this.props.showThumbnails ? this.props.showThumbnails : true;
+		var slideOnThumbnailHover = this.props.slideOnThumbnailHover ? this.props.slideOnThumbnailHover : true;
+		var showNav = this.props.showNav ? this.props.showNav : true;
+		var slideInterval = this.props.slideInterval ? this.props.slideInterval : 3000;
 		var images = [];
-		if (item.images) {
-			item.images.map(function (o, i) {
+		if (this.state.item.images) {
+			this.state.item.images.map(function (o, i) {
 				images.push({
 					original: o.url,
 					thumbnail: o.url,
@@ -6841,13 +6823,12 @@ var ItemDetails = React.createClass({
 				React.createElement(
 					'span',
 					{ className: 'datetimeformat' },
-					item.created_at
+					this.state.item.created_at
 				)
 			)
 		);
-
-		var created = new Date(item.created_at);
-		var updated = new Date(item.updated_at);
+		var created = new Date(this.state.item.created_at);
+		var updated = new Date(this.state.item.updated_at);
 		if (+updated !== +created) {
 			posted_at = React.createElement(
 				'div',
@@ -6863,13 +6844,13 @@ var ItemDetails = React.createClass({
 					React.createElement(
 						'span',
 						{ className: 'datetimeformat' },
-						item.updated_at
+						this.state.item.updated_at
 					)
 				)
 			);
 		}
 		var expired_at = '';
-		if (item.deleted_at) {
+		if (this.state.item.deleted_at) {
 			expired_at = React.createElement(
 				'div',
 				{ className: 'item-date item-expired' },
@@ -6884,23 +6865,23 @@ var ItemDetails = React.createClass({
 					React.createElement(
 						'span',
 						{ className: 'datetimeformat' },
-						item.deleted_at
+						this.state.item.deleted_at
 					)
 				)
 			);
 		}
 		var showLink = false;
-		var lines = item.description.split('\n');
+		var lines = this.state.item.description.split('\n');
 		return React.createElement(
 			'div',
-			{ className: className },
+			{ className: className, id: this.id },
 			React.createElement(
 				'div',
 				{ className: 'row item-detail' },
 				React.createElement(
 					'div',
 					{ className: 'col-xs-6 col-md-7' },
-					React.createElement(_itemsummary2.default, { item: item, showLink: showLink, prices: 'original,now' }),
+					React.createElement(_itemsummary2.default, { item: this.state.item, showLink: showLink, prices: 'original,now' }),
 					React.createElement(
 						'div',
 						{ className: 'item-description' },
@@ -6921,7 +6902,7 @@ var ItemDetails = React.createClass({
 							return _this._imageGallery = i;
 						},
 						items: images,
-						slideInterval: 3000,
+						slideInterval: slideInterval,
 						handleImageLoad: this.handleImageLoad,
 						showThumbnails: showThumbnails,
 						slideOnThumbnailHover: slideOnThumbnailHover,
@@ -6934,7 +6915,7 @@ var ItemDetails = React.createClass({
 
 exports.default = ItemDetails;
 
-},{"./itemsummary.jsx":137,"react-image-gallery":98}],136:[function(require,module,exports){
+},{"./itemsummary.jsx":136,"react-image-gallery":98}],135:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6945,12 +6926,15 @@ Object.defineProperty(exports, "__esModule", {
  */
 var ItemImage = React.createClass({
 	displayName: 'ItemImage',
-
+	getInitialState: function getInitialState() {
+		return {
+			item: this.props.item
+		};
+	},
 	render: function render() {
 		var className = 'item-firstimage ' + (this.props.className ? this.props.className : '');
-		var item = this.props.item;
 		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-		var href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
+		var href = showLink ? '/item/' + (usecode ? this.state.item.code : this.state.item.id) : 'javascript:void(0);';
 		return React.createElement(
 			'div',
 			{ className: className },
@@ -6960,7 +6944,7 @@ var ItemImage = React.createClass({
 				React.createElement(
 					'a',
 					{ href: href },
-					React.createElement('img', { src: item.images[0].url })
+					React.createElement('img', { src: this.state.item.images[0].url })
 				),
 				React.createElement('a', { className: 'icon-heart' })
 			)
@@ -6970,7 +6954,7 @@ var ItemImage = React.createClass({
 
 exports.default = ItemImage;
 
-},{}],137:[function(require,module,exports){
+},{}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6981,12 +6965,17 @@ Object.defineProperty(exports, "__esModule", {
  */
 var ItemSummary = React.createClass({
 	displayName: 'ItemSummary',
-
+	getInitialState: function getInitialState() {
+		return {
+			item: this.props.item,
+			prices: this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original', 'sale', 'now']
+		};
+	},
 	render: function render() {
+		var me = this;
 		var className = 'item-summary ' + (this.props.className ? this.props.className : '');
-		var item = this.props.item;
 		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-		var href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
+		var href = showLink ? '/item/' + (usecode ? this.state.item.code : this.state.item.id) : 'javascript:void(0);';
 		var posted_at = React.createElement(
 			'div',
 			{ className: 'item-created' },
@@ -7001,13 +6990,13 @@ var ItemSummary = React.createClass({
 				React.createElement(
 					'span',
 					{ className: 'datetimeformat' },
-					item.created_at
+					this.state.item.created_at
 				)
 			)
 		);
 
-		var created = new Date(item.created_at);
-		var updated = new Date(item.updated_at);
+		var created = new Date(this.state.item.created_at);
+		var updated = new Date(this.state.item.updated_at);
 		if (+updated !== +created) {
 			posted_at = React.createElement(
 				'div',
@@ -7023,13 +7012,13 @@ var ItemSummary = React.createClass({
 					React.createElement(
 						'span',
 						{ className: 'datetimeformat' },
-						item.updated_at
+						this.state.item.updated_at
 					)
 				)
 			);
 		}
 		var expired_at = '';
-		if (item.deleted_at) {
+		if (this.state.item.deleted_at) {
 			expired_at = React.createElement(
 				'div',
 				{ className: 'item-date item-expired' },
@@ -7044,18 +7033,17 @@ var ItemSummary = React.createClass({
 					React.createElement(
 						'span',
 						{ className: 'datetimeformat' },
-						item.deleted_at
+						this.state.item.deleted_at
 					)
 				)
 			);
 		}
-		var prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original', 'sale', 'now'];
 		var price_list = React.createElement(
 			'div',
 			{ className: 'item-prices' },
-			prices.map(function (o, i) {
+			this.state.prices.map(function (o, i) {
 				var pclassName = 'item-price item-' + o + 'price';
-				var pvalue = item[o + 'price'];
+				var pvalue = me.state.item[o + 'price'];
 				return React.createElement(
 					'div',
 					{ className: pclassName, key: i },
@@ -7089,7 +7077,7 @@ var ItemSummary = React.createClass({
 					React.createElement(
 						'span',
 						null,
-						item.title
+						this.state.item.title
 					)
 				)
 			),
@@ -7097,8 +7085,8 @@ var ItemSummary = React.createClass({
 			expired_at,
 			React.createElement(
 				'div',
-				{ className: item.is_new ? 'new' : 'used' },
-				item.is_new ? 'New' : 'Used'
+				{ className: this.state.item.is_new ? 'new' : 'used' },
+				this.state.item.is_new ? 'New' : 'Used'
 			),
 			price_list
 		);
@@ -7107,7 +7095,7 @@ var ItemSummary = React.createClass({
 
 exports.default = ItemSummary;
 
-},{}],138:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7129,16 +7117,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var UserItemList = React.createClass({
 	displayName: 'UserItemList',
+	getInitialState: function getInitialState() {
+		return {
+			user: this.props.data.useritems,
+			items: this.props.data.items
+		};
+	},
 
+	componentDidMount: function componentDidMount() {
+		var me = this;
+		Dispatcher.EventEmitter.on(Dispatcher.CHANGE_EVENT, function () {
+			me.setState({
+				user: data.useritems,
+				items: data.items
+			});
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.CHANGE_EVENT, function () {});
+	},
 	render: function render() {
+		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
 		var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
-		var data = this.props.data;
-		var user = data.useritems;
-		var items = data.items;
-		var id = this.props.id ? this.props.id : uuid('item-list');
 		return React.createElement(
 			'div',
-			{ className: className, id: id },
+			{ className: className, id: this.id },
 			React.createElement(
 				'div',
 				{ className: 'user-detail' },
@@ -7148,7 +7151,7 @@ var UserItemList = React.createClass({
 					React.createElement(
 						'label',
 						null,
-						user.displayname
+						this.state.user.displayname
 					)
 				),
 				React.createElement(
@@ -7157,14 +7160,14 @@ var UserItemList = React.createClass({
 					React.createElement(
 						'p',
 						null,
-						user.description
+						this.state.user.description
 					)
 				)
 			),
 			React.createElement(
 				'div',
 				{ className: 'row item-list' },
-				items.map(function (item, i) {
+				this.state.items.map(function (item, i) {
 					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
 					return React.createElement(
 						'div',
@@ -7180,69 +7183,103 @@ var UserItemList = React.createClass({
 
 exports.default = UserItemList;
 
-},{"./itemimage.jsx":136,"./itemsummary.jsx":137}],139:[function(require,module,exports){
-'use strict';
-
-var keyMirror = require('keymirror');
-
-module.exports = keyMirror({
-	CATITEMS: null,
-	USERITEMS: null,
-	ITEMDETAILS: null
-});
-
-},{"keymirror":94}],140:[function(require,module,exports){
-'use strict';
-
-var Dispatcher = require('flux').Dispatcher;
-
-module.exports = new Dispatcher();
-
-},{"flux":91}],141:[function(require,module,exports){
+},{"./itemimage.jsx":135,"./itemsummary.jsx":136}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _dispatcher = require('../dispatcher/dispatcher.jsx');
+var _flux = require('flux');
 
-var _dispatcher2 = _interopRequireDefault(_dispatcher);
+var _flux2 = _interopRequireDefault(_flux);
 
-var _constants = require('../constants/constants.jsx');
+var _keymirror = require('keymirror');
 
-var _constants2 = _interopRequireDefault(_constants);
+var _keymirror2 = _interopRequireDefault(_keymirror);
+
+var _events = require('events');
+
+var _events2 = _interopRequireDefault(_events);
+
+var _objectAssign = require('object-assign');
+
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-var CHANGE_EVENT = 'change';
-var _data = {};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 //
-var Store = assign({}, EventEmitter.prototype, {
-	getAll: function getAll() {
-		return _data;
-	},
-	emitChange: function emitChange() {
-		this.emit(CHANGE_EVENT);
-	},
-	addChangeListener: function addChangeListener(callback) {
-		this.on(CHANGE_EVENT, callback);
-	},
-	removeChangeListener: function removeChangeListener(callback) {
-		this.removeListener(CHANGE_EVENT, callback);
+
+var EventEmitter = function (_Events) {
+	_inherits(EventEmitter, _Events);
+
+	function EventEmitter() {
+		_classCallCheck(this, EventEmitter);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(EventEmitter).apply(this, arguments));
 	}
+
+	return EventEmitter;
+}(_events2.default);
+
+var eventEmitter = new EventEmitter();
+var CHANGE_EVENT = 'datachange';
+//
+var Dispatcher = new _flux2.default.Dispatcher();
+Dispatcher.register(function (action) {
+	eventEmitter.emit(CHANGE_EVENT);
 });
 //
-// Register callback to handle all updates
-_dispatcher2.default.register(function (action) {
-	_data = assign({}, _data, action.data);
-	Store.emitChange();
+var Constants = (0, _keymirror2.default)({
+	CATITEMS: null,
+	USERITEMS: null,
+	ITEMDETAILS: null
 });
+var Actions = {
+	catitems: function catitems(data) {
+		Dispatcher.dispatch({
+			actionType: Constants.CATITEMS,
+			data: data
+		});
+	},
+	useritems: function useritems(data) {
+		Dispatcher.dispatch({
+			actionType: Constants.USERITEMS,
+			data: data
+		});
+	},
+	itemdetails: function itemdetails(data) {
+		Dispatcher.dispatch({
+			actionType: Constants.ITEMDETAILS,
+			data: data
+		});
+	}
+};
+Dispatcher['Constants'] = Constants;
+Dispatcher['Actions'] = Actions;
+Dispatcher['EventEmitter'] = eventEmitter;
+Dispatcher['emit'] = function (_data) {
+	data = (0, _objectAssign2.default)({}, data, _data);
+	if (data) {
+		if (data.catitems) {
+			Actions.catitems(data);
+		} else if (data.useritems) {
+			Actions.useritems(data);
+		} else if (data.itemdetails) {
+			Actions.itemdetails(data);
+		}
+	}
+};
+Dispatcher['CHANGE_EVENT'] = CHANGE_EVENT;
 
-exports.default = Store;
+exports.default = Dispatcher;
 
-},{"../constants/constants.jsx":139,"../dispatcher/dispatcher.jsx":140,"events":95,"object-assign":97}]},{},[132]);
+},{"events":95,"flux":91,"keymirror":94,"object-assign":97}]},{},[131]);
 
 //# sourceMappingURL=app.js.map

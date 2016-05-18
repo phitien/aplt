@@ -15,7 +15,7 @@ $( document ).ready(function() {
 					page: '2'
 				},
 				success: function( data ) {
-					Actions.dispatch(data.data);
+					Application.Dispatcher.emit(data.data);
 				}
 			});
     	}
@@ -40,7 +40,7 @@ $( document ).ready(function() {
 					mode: getMode()
 				},
 				success: function( data ) {
-					Actions.dispatch(data.data);
+					Application.Dispatcher.emit(data.data);
 				}
 			});
 		},
