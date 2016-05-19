@@ -1,0 +1,28 @@
+/**
+ * Icons
+ */
+.icon {display: block;height: $icon-size;width: $icon-size;cursor: pointer;display: inline-block;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color:transparent;
+}
+.icon-disabled {opacity: 0.2 !important;cursor: text !important;}
+.icon-like {
+	@extend .icon;
+	background-image: url('../images/icon-red-rose-16.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color: black;
+	border-radius: $smedium;
+	opacity: 0.8;
+}
+.icon-like-unliked {@extend .icon-like;background-image: url('../images/icon-white-rose-16.png');background-color: pink;}
+
+.icon-chat {
+	@extend .icon;
+	background-image: url('../images/icon-chat.png');
+}
+.icon-follow {
+	@extend .icon;
+	background-image: url('../images/icon-pin-16.png');
+}

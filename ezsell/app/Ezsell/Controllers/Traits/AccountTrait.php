@@ -20,14 +20,16 @@ trait AccountTrait {
 		$data = $request->only ( 'current_password', 'password', 'password_confirmation' );
 		$response = static::apiCallPassword ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			static::setToken ( Config::INVALID_TOKEN );
+			// static::setToken ( Config::INVALID_TOKEN );
 			return $this->response ( view ( 'password', [ 
-					'appMessage' => "Hehe mật khẩu đổi rồi đấy, an toàn rồi :D" 
+					'appMessage' => trans ( 'messages.sentences.password_changed' ) 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( view ( 'password', [ 
-					'appMessage' => "Hỏng rồi, không đổi được mật khẩu, lý do vì {$data['message']}. Thử lại phát đi." 
+					'appMessage' => trans ( 'messages.sentences.password_change_failed', [ 
+							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
+					] ) 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -50,14 +52,16 @@ trait AccountTrait {
 		$data = $request->only ( 'current_password', 'email', 'email_confirmation' );
 		$response = static::apiCallEmail ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			static::setToken ( Config::INVALID_TOKEN );
+			// static::setToken ( Config::INVALID_TOKEN );
 			return $this->response ( view ( 'email', [ 
-					'appMessage' => "Hehe email đổi rồi đấy, đăng nhập bằng email mới đi ha :D" 
+					'appMessage' => trans ( 'messages.sentences.email_changed' ) 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( view ( 'email', [ 
-					'appMessage' => "Hỏng rồi, không đổi được email rồi, lý do vì {$data['message']}. Thử lại phát đi." 
+					'appMessage' => trans ( 'messages.sentences.email_change_failed', [ 
+							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
+					] ) 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -80,14 +84,15 @@ trait AccountTrait {
 		$data = $request->only ( 'current_password', 'name' );
 		$response = static::apiCallAccount ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			static::setToken ( Config::INVALID_TOKEN );
 			return $this->response ( view ( 'account', [ 
-					'appMessage' => "Hehe account đổi rồi đấy :D" 
+					'appMessage' => trans ( 'messages.sentences.account_changed' ) 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( view ( 'account', [ 
-					'appMessage' => "Hỏng rồi, không đổi được account, lý do vì {$data['message']}. Thử lại phát đi." 
+					'appMessage' => trans ( 'messages.sentences.account_change_failed', [ 
+							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
+					] ) 
 			] ), $response->getStatusCode () );
 		}
 	}

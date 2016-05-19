@@ -37,10 +37,10 @@ trait ItemLikeTrait {
 					return $this->jsonResponse ( 'liked', $item );
 				}
 			} else {
-				return $this->jsonResponse ( 'user_not_found', null, Response::HTTP_BAD_REQUEST );
+				return $this->jsonResponse ( trans ( 'messages.errors.user_not_found' ), null, Response::HTTP_BAD_REQUEST );
 			}
 		} else {
-			return $this->jsonResponse ( 'item_not_found', null, Response::HTTP_BAD_REQUEST );
+			return $this->jsonResponse ( trans ( 'messages.errors.item_not_found' ), null, Response::HTTP_BAD_REQUEST );
 		}
 	}
 }

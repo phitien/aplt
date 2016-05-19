@@ -48,7 +48,6 @@ trait RestfulTrait {
 		try {
 			static::setUser ( new User ( json_decode ( static::decrypt ( $response->getHeader ( Config::SESSION_KEY ) [0] ), true ) ) );
 		} catch ( Exception $e ) {
-			static::setUser ( User::getGuest () );
 		}
 		return $response;
 	}

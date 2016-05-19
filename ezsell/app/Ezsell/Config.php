@@ -27,7 +27,7 @@ class Config {
 	 */
 	const TOKEN_EXPIRING_TIME = 7200; // 60 * 120
 	                                  //
-	const MAIL_SUBJECT_PREFIX = "[EZSell] ";
+	const MAIL_SUBJECT_PREFIX = "email_subject_prefix";
 	//
 	const TOKEN_KEY = "TOKEN-KEY";
 	const SESSION_KEY = "SESSION-KEY";

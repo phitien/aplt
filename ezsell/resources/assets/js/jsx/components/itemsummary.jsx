@@ -4,14 +4,14 @@
 var ItemSummary = React.createClass({
 	getInitialState: function() {
 		return {
-			item: Dispatcher.item()
+			item: Dispatcher.item(this.props.item.id)
 		};
 	},
 	componentDidMount() {
 		var me = this;
 		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function() {
 			me.setState({
-				item: Dispatcher.item()
+				item: Dispatcher.item(me.props.item.id)
 			});
 		});
 	},
@@ -21,7 +21,7 @@ var ItemSummary = React.createClass({
 	render() {
 		const item = this.state.item ? this.state.item : this.props.item;
 		const prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original','sale','now'];
-		const className = 'item-summary ' + (this.props.className ? this.props.className : '');
+		const className = 'item-summary ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
 		const showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
 		const href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
 		var posted_at = <div className='item-created'>
@@ -54,6 +54,7 @@ var ItemSummary = React.createClass({
 				);
 			})}
 		</div>;
+		const iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
 		return (
 			<div className={className}>
 				<div className='item-title'>
@@ -63,7 +64,10 @@ var ItemSummary = React.createClass({
 				{expired_at}
 				<div className={item.is_new ? 'new' : 'used'}>{item.is_new ? 'New' : 'Used'}</div>
 				{price_list}
-				<div className='likes'>{item.likes}</div>
+				<div className='likes'>
+					<div className='amount'>{item.likes}</div>
+					<div className={iconClassName}></div>
+				</div>
 			</div>
 		);
 	}

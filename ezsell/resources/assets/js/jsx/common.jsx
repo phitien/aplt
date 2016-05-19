@@ -70,8 +70,8 @@ window.ajax = {
 }; 
 
 window.showMessageDialog = function(msg, title, btn, callback) {
-	btn = btn ? btn : 'Ok';
-	title = title ? title : 'Message';
+	btn = btn ? btn : localization.ok;
+	title = title ? title : localization.message;
 	var buttons = {};
 	buttons[btn] = function() {
 		$( this ).dialog( 'close' );
@@ -129,12 +129,12 @@ window.showLoginForm = function(e) {
 				return (
 					<FormView.Form className='form' method='post' action='/login' autocomplete='off' onkeypress='return event.keyCode != 13;'
 					onValidSubmit={this.submit} onValid={this.enableButton} onInvalid={this.disableButton}>
-						<FormView.Input type='email' required name='email' title='Email' validations='isEmail' 
-							validationError='This is not a valid email' />
-						<FormView.Input type='password' required name='password' title='Password' 
-							validationError='Password is required' />
-						<FormView.Input type='checkbox' name='remember' title='Remember me' />
-						<FormView.Input name='btn-submit' type='submit' disabled={!this.state.canSubmit} value='Login' className='center-block' />
+						<FormView.Input type='email' required name='email' title={localization.email} validations='isEmail' 
+							validationError={localization.invalid_email} />
+						<FormView.Input type='password' required name='password' title={localization.password} 
+							validationError={localization.invalid_password} />
+						<FormView.Input type='checkbox' name='remember' title={localization.remember_me} />
+						<FormView.Input name='btn-submit' type='submit' disabled={!this.state.canSubmit} value={localization.login} className='center-block' />
 					</FormView.Form>
 				); 
 			}
@@ -155,15 +155,15 @@ window.showRegistrationForm = function(e) {
 				return (
 					<FormView.Form className='form' method='post' action='/register' autocomplete='off' onkeypress='return event.keyCode != 13;' 
 					onValidSubmit={this.submit} onValid={this.enableButton} onInvalid={this.disableButton}>
-						<FormView.Input type='email' required name='email' title='Email' validations='isEmail' 
-							validationError='This is not a valid email' />
-						<FormView.Input type='email' name='email_confirmation' title='Email confirmation' validations='equalsField:email' 
-							validationError='Email confirmation is not matched' />
-						<FormView.Input type='password' required name='password' title='Password' validations='isPassword' 
-							validationError='Password rules: Length between 6-30, at lease 1 lowercase character, 1 uppercase character, 1 number, 1 special character (!@#0^&*()+)' />
-						<FormView.Input type='password' name='password_confirmation' title='Password confirmation' validations='equalsField:password' 
-							validationError='Password confirmation is not matched' />
-						<FormView.Input name='btn-submit' type='submit' disabled={!this.state.canSubmit} value='Register' className='center-block' />
+						<FormView.Input type='email' required name='email' title={localization.email} validations='isEmail' 
+							validationError={localization.invalid_email} />
+						<FormView.Input type='email' name='email_confirmation' title={localization.email_confirmation} validations='equalsField:email' 
+							validationError={localization.email_confirmation_not_matched} />
+						<FormView.Input type='password' required name='password' title={localization.password} validations='isPassword' 
+							validationError={localization.password_rules} />
+						<FormView.Input type='password' name='password_confirmation' title={localization.password_confirmation} validations='equalsField:password' 
+							validationError={localization.password_confirmation_not_matched} />
+						<FormView.Input name='btn-submit' type='submit' disabled={!this.state.canSubmit} value={localization.register} className='center-block' />
 					</FormView.Form>
 				); 
 			}
@@ -189,8 +189,8 @@ window.showLocationForm = function(e) {
 			formrender() { 
 				return (
 					<FormView.Form className='form' method='post' action='/location'>
-						<FormView.Input type='autocomplete' name='location' title='Location' source='/searchlocation' className='center-block' 
-							value={currentLocation.name} placeholder='Please type a location name' />
+						<FormView.Input type='autocomplete' name='location' title={localization.location} source='/searchlocation' className='center-block' 
+							value={currentLocation.name} placeholder={localization.please_type_location} />
 					</FormView.Form>
 				); 
 			}
@@ -247,4 +247,10 @@ window.getMode = function() {
 };
 window.setMode = function(_mode) {
 	mode = _mode;
+};
+window.isCurrentUser = function(_user) {
+	if (user.id == _user.id) {
+		return true;
+	}
+	return false;
 };

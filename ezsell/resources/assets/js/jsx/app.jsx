@@ -43,10 +43,10 @@ $( document ).ready(function() {
 			return (
 				<FormView.Form className='form' method='get' encType='multipart/form-data'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-					<FormView.Input type='switch' name='mode' title='Mode'
+					<FormView.Input type='switch' name='mode' title={localization.mode}
 						defaultChecked={getMode() == MODES.SELL ? true : false} 
-						checkedChildren={'Sell'}
-        				unCheckedChildren={'Buy'}
+						checkedChildren={localization.sell}
+        				unCheckedChildren={localization.buy}
         				onMouseUp={this.props.onMouseUp} />
 				</FormView.Form>
 			); 

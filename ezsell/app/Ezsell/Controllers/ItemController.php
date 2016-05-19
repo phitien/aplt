@@ -76,7 +76,6 @@ class ItemController extends Controller {
 		}
 		if ($cat) {
 			$paginate = $this->addWhere ( $request, $cat->items () );
-			
 			$items = $paginate->getCollection ();
 			$user_ids = [ ];
 			foreach ( $items as $item ) {
@@ -210,13 +209,13 @@ class ItemController extends Controller {
 				}
 			}
 			if (Config::USE_CODE) {
-				return $this->redirect ( "/cat/{$item->code()}" );
+				return $this->redirect ( "/item/{$item->code()}" );
 			} else {
 				return $this->redirect ( "/item/{$item->id}" );
 			}
 		} else {
 			return $this->response ( view ( $view, [ 
-					'appMessage' => 'Không hiểu sao ko tạo được :(, sorry nha' 
+					'appMessage' => trans ( 'messages.errors.item_create_failed' ) 
 			] ) );
 		}
 	}

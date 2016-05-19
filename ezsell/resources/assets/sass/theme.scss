@@ -1,5 +1,6 @@
 @import "variables";
 @import "node_modules/rc-switch/assets/index";
+@import "icons";
 
 .border {border-color: $border-color;border-width : $border-width;}
 .border-dark {border-color: $border-color-dark;}
@@ -19,11 +20,6 @@
 
 a {}
 a:hover {text-decoration: none !important;}
-
-/**
- * Icons
- */
-.icon-heart {background-color: transparent;background-image: url('../images/icon-heart.png');display: block;height: 24px;width: 24px;cursor: pointer;}
 
 .ui-autocomplete {
 	.ui-menu-item {
@@ -106,9 +102,19 @@ a:hover {text-decoration: none !important;}
 		.item-price {display: block; margin: 7px 0 7px 0;}
 	}
 	.likes {
-		float: right;clear: right;
+		float: right;clear: right;line-height: $icon-size;
 		font-size: $fsmall;margin: $smedium $smedium $smedium 0;
+		.amount {
+			display: inline-block;vertical-align: top;margin-right: $sxsmall;color: gainsboro;font-style: italic;
+		}
+		.amount::before {
+			content: '( '
+		}
+		.amount::after {
+			content: ' )'
+		}
 	}
+	.icon-like {cursor: text;}
 }
 .item-detail-wrapper {
 	.item-detail {
@@ -125,21 +131,20 @@ a:hover {text-decoration: none !important;}
 	padding: 0 $ssmall;
 	.item-firstimage {
 		@extend .border-bottom;
-		padding: $ssmall;
+		padding: $ssmall 0;
 		margin-bottom: $ssmall;
 		.item-firstimage-wrapper {
 			@extend .border-all,.grounded-m;
 			height: $item-image-height;
-			width: ($item-image-width + 4*$border-width);
+			width: $item-image-width;
 			overflow: hidden;
 			margin: auto;
-			padding: $border-width;
 			position: relative;
 			img {
 				@extend .grounded-m;
 				width: $item-image-width;
 			}
-			a.icon-heart {
+			a.icon-like {
 				display: none;
 				position: absolute;
 				top: $sbig;
@@ -149,13 +154,13 @@ a:hover {text-decoration: none !important;}
 	}
 	.item-firstimage:hover {
 		.item-firstimage-wrapper {
-			a.icon-heart {
+			a.icon-like {
 				display: block;
 			}
 		}
 	}
 }
-.guest .item .item-firstimage:hover .item-firstimage-wrapper a.icon-heart {display: none !important;}
+.guest .item .item-firstimage:hover .item-firstimage-wrapper a.icon-like {display: none !important;}
 
 .item-first {
 	@extend .item;
@@ -196,12 +201,31 @@ a:hover {text-decoration: none !important;}
 .cat-detail .cat-name {display: none;}
 
 .userbox {
-	@extend .border-top;padding: $smedium 0 $sbig;
+	@extend .border-top;padding: $smedium 0 $ssmall;position: relative;
 	img {@extend .grounded-b; width: 40px;margin-right: $ssmall;}
-	a {
-		span {font-size: $fsmall;}
+	a.user-name {
+		margin: $smedium;float: right;
+		span {font-size: $fsmall;font-style: italic;color: lightskyblue;}
+	}
+	a.icon-chat {
+		position: absolute;
+		top: 0px;
+		left: 38px;
+		display: none;
+	}
+	a.icon-follow {
+		position: absolute;
+		bottom: 1px;
+		left: 12px;
+		display: none;
 	}
 }
+.userbox:hover {
+	a.icon {
+		display: block;
+	}
+}
+
 .image-gallery-slide img {@extend .grounded-s;max-height: 311px;width: auto;margin: auto;display: block;}
 .image-gallery-thumbnail img{@extend .grounded-s;max-height: 80px;}
 .image-gallery-image {background-color: $image-gallery-image-bg;}

@@ -43,13 +43,18 @@ var Actions = {
 		});
 	}
 };
-var _item = null;
 var _list = window.data ? window.data : null;
 
 Dispatcher.Constants = Constants;
 Dispatcher.Actions = Actions;
 Dispatcher.EventEmitter = eventEmitter;
-Dispatcher.item = function() {return _item;};
+Dispatcher.item = function(id) {
+	for (var i=0; i < _list.paginate.data.length; i++) {
+		if (_list.paginate.data[i].id == id) {
+			return _list.paginate.data[i];
+		}
+	}
+};
 Dispatcher.list = function() {return _list;};
 Dispatcher.emit = function(_data) {
 	if (_data.catitems || _data.useritems || _data.itemdetails) {
@@ -65,8 +70,13 @@ Dispatcher.emit = function(_data) {
 		}
 	}
 	else {
-		_item = _data;
-		Actions.itemupdate(_item);
+		for (var i=0; i < _list.paginate.data.length; i++) {
+			if (_list.paginate.data[i].id == _data.id) {
+				_list.paginate.data[i] = Object.assign(_list.paginate.data[i], _data);
+				Actions.itemupdate(_list.paginate.data[i]);
+				break;
+			}
+		}
 	}
 };
 Dispatcher.EVENT = EVENT;

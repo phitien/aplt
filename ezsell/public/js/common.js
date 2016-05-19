@@ -4477,8 +4477,8 @@ window.ajax = {
 };
 
 window.showMessageDialog = function (msg, title, btn, callback) {
-	btn = btn ? btn : 'Ok';
-	title = title ? title : 'Message';
+	btn = btn ? btn : localization.ok;
+	title = title ? title : localization.message;
 	var buttons = {};
 	buttons[btn] = function () {
 		$(this).dialog('close');
@@ -4537,12 +4537,12 @@ window.showLoginForm = function (e) {
 					_formview2.default.Form,
 					{ className: 'form', method: 'post', action: '/login', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
 						onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
-					React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: 'Email', validations: 'isEmail',
-						validationError: 'This is not a valid email' }),
-					React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: 'Password',
-						validationError: 'Password is required' }),
-					React.createElement(_formview2.default.Input, { type: 'checkbox', name: 'remember', title: 'Remember me' }),
-					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: 'Login', className: 'center-block' })
+					React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
+						validationError: localization.invalid_email }),
+					React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: localization.password,
+						validationError: localization.invalid_password }),
+					React.createElement(_formview2.default.Input, { type: 'checkbox', name: 'remember', title: localization.remember_me }),
+					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: localization.login, className: 'center-block' })
 				);
 			}
 		}), document.getElementById('form-container'), function () {
@@ -4562,15 +4562,15 @@ window.showRegistrationForm = function (e) {
 					_formview2.default.Form,
 					{ className: 'form', method: 'post', action: '/register', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
 						onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
-					React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: 'Email', validations: 'isEmail',
-						validationError: 'This is not a valid email' }),
-					React.createElement(_formview2.default.Input, { type: 'email', name: 'email_confirmation', title: 'Email confirmation', validations: 'equalsField:email',
-						validationError: 'Email confirmation is not matched' }),
-					React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: 'Password', validations: 'isPassword',
-						validationError: 'Password rules: Length between 6-30, at lease 1 lowercase character, 1 uppercase character, 1 number, 1 special character (!@#0^&*()+)' }),
-					React.createElement(_formview2.default.Input, { type: 'password', name: 'password_confirmation', title: 'Password confirmation', validations: 'equalsField:password',
-						validationError: 'Password confirmation is not matched' }),
-					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: 'Register', className: 'center-block' })
+					React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
+						validationError: localization.invalid_email }),
+					React.createElement(_formview2.default.Input, { type: 'email', name: 'email_confirmation', title: localization.email_confirmation, validations: 'equalsField:email',
+						validationError: localization.email_confirmation_not_matched }),
+					React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: localization.password, validations: 'isPassword',
+						validationError: localization.password_rules }),
+					React.createElement(_formview2.default.Input, { type: 'password', name: 'password_confirmation', title: localization.password_confirmation, validations: 'equalsField:password',
+						validationError: localization.password_confirmation_not_matched }),
+					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: localization.register, className: 'center-block' })
 				);
 			}
 		}), document.getElementById('form-container'), function () {
@@ -4595,8 +4595,8 @@ window.showLocationForm = function (e) {
 				return React.createElement(
 					_formview2.default.Form,
 					{ className: 'form', method: 'post', action: '/location' },
-					React.createElement(_formview2.default.Input, { type: 'autocomplete', name: 'location', title: 'Location', source: '/searchlocation', className: 'center-block',
-						value: currentLocation.name, placeholder: 'Please type a location name' })
+					React.createElement(_formview2.default.Input, { type: 'autocomplete', name: 'location', title: localization.location, source: '/searchlocation', className: 'center-block',
+						value: currentLocation.name, placeholder: localization.please_type_location })
 				);
 			}
 		}), document.getElementById('form-container'), function () {
@@ -4648,6 +4648,12 @@ window.getMode = function () {
 };
 window.setMode = function (_mode) {
 	mode = _mode;
+};
+window.isCurrentUser = function (_user) {
+	if (user.id == _user.id) {
+		return true;
+	}
+	return false;
 };
 
 },{"./components/catmenu.jsx":41,"./components/formview.jsx":42,"./components/userbox.jsx":44}],41:[function(require,module,exports){
@@ -5429,6 +5435,16 @@ Object.defineProperty(exports, "__esModule", {
  */
 var UserBox = React.createClass({
 	displayName: 'UserBox',
+	onChatClick: function onChatClick(e) {
+		if (!isCurrentUser(this.props.user)) {
+			console.log('TODO start conversation!!');
+		}
+	},
+	onFollowClick: function onFollowClick(e) {
+		if (!isCurrentUser(this.props.user)) {
+			console.log('TODO follow user!!');
+		}
+	},
 
 	render: function render() {
 		var user = this.props.user;
@@ -5436,22 +5452,28 @@ var UserBox = React.createClass({
 			var className = 'userbox ' + (this.props.className ? this.props.className : '');
 			var avatar = user && user.avatar ? user.avatar : 'http://media.ezsell.com/noavatar' + (user.gender == 'MALE' ? 'man' : 'woman');
 			var href = '/' + user.name;
+			var iconChatClassName = 'icon icon-chat' + (isGuest || isCurrentUser(user) ? ' icon-disabled' : '');
+			var iconChatTitle = isGuest ? ' Please login' : isCurrentUser(user) ? 'Cannot chat to yourself' : '';
+			var iconFollowClassName = 'icon icon-follow' + (isGuest || isCurrentUser(user) ? ' icon-disabled' : '');
+			var iconFollowTitle = isGuest ? ' Please login' : isCurrentUser(user) ? 'Cannot follow yourself' : '';
 			return React.createElement(
 				'div',
 				{ className: className },
 				React.createElement('img', { src: avatar }),
 				React.createElement(
 					'a',
-					{ href: href },
+					{ className: 'user-name', href: href },
 					React.createElement(
 						'span',
 						null,
 						user.displayname
 					)
-				)
+				),
+				React.createElement('a', { className: iconChatClassName, onClick: this.onChatClick, title: iconChatTitle }),
+				React.createElement('a', { className: iconFollowClassName, onClick: this.onFollowClick, title: iconFollowTitle })
 			);
 		} else {
-			return React.createElement('div', null);
+			return null;
 		}
 	}
 });

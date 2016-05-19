@@ -19,12 +19,14 @@ trait  ActivateTrait {
 		$response = static::apiCallActivate ( $code );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->response ( view ( 'activate', [ 
-					'appMessage' => "Hehe kích hoạt ok rồi đấy. Lướt thôi :D" 
+					'appMessage' => trans ( 'messages.sentences.activated' ) 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( view ( 'activate', [ 
-					'appMessage' => "Hỏng rồi, không kích hoạt được, lý do vì {$data['message']}." 
+					'appMessage' => trans ( 'messages.sentences.activate_failed', [ 
+							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
+					] ) 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -39,24 +41,19 @@ trait  ActivateTrait {
 	}
 	protected function ppostCode(Request $request) {
 		$email = $request->get ( 'email' );
-		if ($msg = $this->emailValidator ( [ 
-				'email' => $email 
-		] )) {
-			return $this->response ( view ( 'code', [ 
-					'appMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$msg}. Thử lại phát đi." 
-			] ), Response::HTTP_BAD_REQUEST );
-		}
 		$response = static::apiCallCode ( [ 
 				'email' => $email 
 		] );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->response ( view ( 'code', [ 
-					'appMessage' => "Hehe thư kích hoạt gửi rồi đấy, đăng nhập email và kích hoạt ngay đi nhé :)." 
+					'appMessage' => trans ( 'messages.sentences.code_sent' ) 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( view ( 'code', [ 
-					'appMessage' => "Hỏng rồi, không gửi được thư kích hoạt, lý do vì {$data['message']}. Thử lại phát đi." 
+					'appMessage' => trans ( 'messages.sentences.code_send_failed', [ 
+							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
+					] ) 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -65,13 +62,5 @@ trait  ActivateTrait {
 			return $this->response ( view ( 'code' ) );
 		else
 			return $this->redirect ();
-	}
-	protected function emailValidator(array $data) {
-		$validator = Validator::make ( $data, [ 
-				'email' => 'required|email|max:255' 
-		] );
-		if ($validator->fails ()) {
-			return 'invalid_email';
-		}
 	}
 }

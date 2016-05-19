@@ -36,18 +36,17 @@ trait  ProfileTrait {
 	 */
 	protected function ppostProfile(Request $request) {
 		$data = $request->request->all (); // only get post data
-		if ($msg = $this->validateProfileData ( $data )) {
-			return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
-		}
 		$response = static::apiCallUpdateProfile ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( view ( 'deactivate', [ 
-					'appMessage' => "Hehe update ok rồi đấy :)." 
+			return $this->response ( view ( 'profile', [ 
+					'appMessage' => trans ( 'messages.sentences.profile_updated' ) 
 			] ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'deactivate', [ 
-					'appMessage' => "Hỏng rồi, update có vài lỗi, lý do vì {$data['message']}. Thử lại phát đi." 
+			return $this->response ( view ( 'profile', [ 
+					'appMessage' => trans ( 'messages.sentences.profile_update_failed', [ 
+							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
+					] ) 
 			] ), $response->getStatusCode () );
 		}
 	}
@@ -67,7 +66,7 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	protected function pgetProfileEx(Request $request) {
-		return $this->jsonResponse ( 'profile_extension', static::getUser ()->extension ()->all () );
+		// TODO
 	}
 	/**
 	 * Return the authenticated user
@@ -76,8 +75,6 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	protected function ppostProfileEx(Request $request) {
-		static::getUser ()->fillEx ( $request->request->all () )->save ();
-		// the token is valid and we have found the user via the sub claim
-		return $this->jsonResponse ( 'update_profile_extension_successfully', static::getUser ()->extension ()->all () );
+		// TODO
 	}
 }

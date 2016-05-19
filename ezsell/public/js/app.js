@@ -6441,10 +6441,10 @@ $(document).ready(function () {
 				FormView.Form,
 				{ className: 'form', method: 'get', encType: 'multipart/form-data',
 					onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
-				React.createElement(FormView.Input, { type: 'switch', name: 'mode', title: 'Mode',
+				React.createElement(FormView.Input, { type: 'switch', name: 'mode', title: localization.mode,
 					defaultChecked: getMode() == MODES.SELL ? true : false,
-					checkedChildren: 'Sell',
-					unCheckedChildren: 'Buy',
+					checkedChildren: localization.sell,
+					unCheckedChildren: localization.buy,
 					onMouseUp: this.props.onMouseUp })
 			);
 		}
@@ -6629,12 +6629,13 @@ var CatItemList = React.createClass({
 				{ className: 'row item-list' },
 				items.map(function (item, i) {
 					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
+					var userbox = isCurrentUser(item.user) ? null : React.createElement(UserBox, { user: item.user });
 					return React.createElement(
 						'div',
 						{ className: itemClassName, key: i },
 						React.createElement(_itemimage2.default, { item: item }),
 						React.createElement(_itemsummary2.default, { item: item, prices: 'original,now' }),
-						React.createElement(UserBox, { user: item.user })
+						userbox
 					);
 				})
 			)
@@ -6830,14 +6831,14 @@ var ItemImage = React.createClass({
 
 	getInitialState: function getInitialState() {
 		return {
-			item: Dispatcher.item()
+			item: Dispatcher.item(this.props.item.id)
 		};
 	},
 	componentDidMount: function componentDidMount() {
 		var me = this;
 		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
 			me.setState({
-				item: Dispatcher.item()
+				item: Dispatcher.item(me.props.item.id)
 			});
 		});
 	},
@@ -6856,9 +6857,10 @@ var ItemImage = React.createClass({
 	},
 	render: function render() {
 		var item = this.state.item ? this.state.item : this.props.item;
-		var className = 'item-firstimage ' + (this.props.className ? this.props.className : '');
+		var className = 'item-firstimage ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
 		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
 		var href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
+		var iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : '');
 		return React.createElement(
 			'div',
 			{ className: className },
@@ -6870,7 +6872,7 @@ var ItemImage = React.createClass({
 					{ href: href },
 					React.createElement('img', { src: item.images[0].url })
 				),
-				React.createElement('a', { className: 'icon-heart', onClick: this.onClick })
+				React.createElement('a', { className: iconClassName, onClick: this.onClick })
 			)
 		);
 	}
@@ -6892,14 +6894,14 @@ var ItemSummary = React.createClass({
 
 	getInitialState: function getInitialState() {
 		return {
-			item: Dispatcher.item()
+			item: Dispatcher.item(this.props.item.id)
 		};
 	},
 	componentDidMount: function componentDidMount() {
 		var me = this;
 		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
 			me.setState({
-				item: Dispatcher.item()
+				item: Dispatcher.item(me.props.item.id)
 			});
 		});
 	},
@@ -6909,7 +6911,7 @@ var ItemSummary = React.createClass({
 	render: function render() {
 		var item = this.state.item ? this.state.item : this.props.item;
 		var prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original', 'sale', 'now'];
-		var className = 'item-summary ' + (this.props.className ? this.props.className : '');
+		var className = 'item-summary ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
 		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
 		var href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
 		var posted_at = React.createElement(
@@ -7001,6 +7003,7 @@ var ItemSummary = React.createClass({
 				);
 			})
 		);
+		var iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
 		return React.createElement(
 			'div',
 			{ className: className },
@@ -7028,7 +7031,12 @@ var ItemSummary = React.createClass({
 			React.createElement(
 				'div',
 				{ className: 'likes' },
-				item.likes
+				React.createElement(
+					'div',
+					{ className: 'amount' },
+					item.likes
+				),
+				React.createElement('div', { className: iconClassName })
 			)
 		);
 	}
@@ -7111,11 +7119,13 @@ var UserItemList = React.createClass({
 				{ className: 'row item-list' },
 				items.map(function (item, i) {
 					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
+					var userbox = isCurrentUser(item.user) ? null : React.createElement(UserBox, { user: item.user });
 					return React.createElement(
 						'div',
 						{ className: itemClassName, key: i },
 						React.createElement(_itemimage2.default, { item: item }),
-						React.createElement(_itemsummary2.default, { item: item, prices: 'original,now' })
+						React.createElement(_itemsummary2.default, { item: item, prices: 'original,now' }),
+						userbox
 					);
 				})
 			)
@@ -7206,14 +7216,17 @@ var Actions = {
 		});
 	}
 };
-var _item = null;
 var _list = window.data ? window.data : null;
 
 Dispatcher.Constants = Constants;
 Dispatcher.Actions = Actions;
 Dispatcher.EventEmitter = eventEmitter;
-Dispatcher.item = function () {
-	return _item;
+Dispatcher.item = function (id) {
+	for (var i = 0; i < _list.paginate.data.length; i++) {
+		if (_list.paginate.data[i].id == id) {
+			return _list.paginate.data[i];
+		}
+	}
 };
 Dispatcher.list = function () {
 	return _list;
@@ -7229,8 +7242,13 @@ Dispatcher.emit = function (_data) {
 			Actions.itemdetails(_list);
 		}
 	} else {
-		_item = _data;
-		Actions.itemupdate(_item);
+		for (var i = 0; i < _list.paginate.data.length; i++) {
+			if (_list.paginate.data[i].id == _data.id) {
+				_list.paginate.data[i] = Object.assign(_list.paginate.data[i], _data);
+				Actions.itemupdate(_list.paginate.data[i]);
+				break;
+			}
+		}
 	}
 };
 Dispatcher.EVENT = EVENT;

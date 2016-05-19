@@ -43,11 +43,12 @@ var CatItemList = React.createClass({
 				<div className='row item-list'>
 					{items.map(function (item, i) {
 						var itemClassName = 'col-xs-6 col-md-2 item ' + (i==0?'item-first':'');
+						var userbox = isCurrentUser(item.user) ? null : <UserBox user={item.user} />; 
 						return (
 							<div className={itemClassName} key={i}>
 								<ItemImage item={item} />
 								<ItemSummary item={item} prices='original,now' />
-								<UserBox user={item.user} />
+								{userbox}
 							</div>
 						);
 					})}

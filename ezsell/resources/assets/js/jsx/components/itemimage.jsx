@@ -4,14 +4,14 @@
 var ItemImage = React.createClass({
 	getInitialState: function() {
 		return {
-			item: Dispatcher.item()
+			item: Dispatcher.item(this.props.item.id)
 		};
 	},
 	componentDidMount() {
 		var me = this;
 		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function() {
 			me.setState({
-				item: Dispatcher.item()
+				item: Dispatcher.item(me.props.item.id)
 			});
 		});
 	},
@@ -30,14 +30,15 @@ var ItemImage = React.createClass({
 	},
 	render() {
 		const item = this.state.item ? this.state.item : this.props.item;
-		const className = 'item-firstimage ' + (this.props.className ? this.props.className : '');
+		const className = 'item-firstimage ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
 		const showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
 		const href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
+		const iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : ''); 
 		return (
 			<div className={className}>
 				<div className='item-firstimage-wrapper'>
 					<a href={href}><img src={item.images[0].url}/></a>
-					<a className='icon-heart' onClick={this.onClick}></a>
+					<a className={iconClassName} onClick={this.onClick}></a>
 				</div>
 			</div>
 		);

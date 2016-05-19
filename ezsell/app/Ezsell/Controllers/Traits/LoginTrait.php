@@ -26,7 +26,9 @@ trait  LoginTrait {
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
 			return $this->response ( view ( 'login', [ 
-					'appMessage' => "Hỏng rồi, không login được, lý do vì {$data['message']}. Thử lại phát đi" 
+					'appMessage' => trans ( 'messages.sentences.login_failed', [ 
+							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
+					] ) 
 			] ), $response->getStatusCode () );
 		}
 	}

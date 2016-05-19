@@ -11,8 +11,8 @@ $( document ).ready(function() {
 				<FormView.Form className='form row' method='post' action='/location' autocomplete='off' onkeypress='return false;'
 					onValid={this.enableButton} onInvalid={this.disableButton}>
 					<div className="col-xs-12 col-sm-6 col-md-5 center-block">
-						<FormView.Input type='autocomplete' name='location' title='Location' source='/searchlocation' className='center-block' 
-							value={currentLocation.name} placeholder='Please type a location name' />
+						<FormView.Input type='autocomplete' name='location' title={localization.location} source='/searchlocation' className='center-block' 
+							value={currentLocation.name} placeholder={localization.please_type_location} />
 					</div>
 				</FormView.Form>
 			); 
