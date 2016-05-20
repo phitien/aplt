@@ -2,55 +2,55 @@
  * MenuItem defination
  */
 const MenuItem = React.createClass({
-	getText() {
-		try {return this.props.getText.bind(this.props.data) ();}
+	getText(_item) {
+		try {return this.props.getText(_item);}
 		catch (e) {
-			try {return this.props.data.text;}
+			try {return _item.text;}
 			catch (e) {
 				return '';
 			}
 		}
 	},
-	getHref() {
-		try {return this.props.getHref.bind(this.props.data) ();}
+	getHref(_item) {
+		try {return this.props.getHref(_item);}
 		catch (e) {
-			try {return this.props.data.href;}
+			try {return _item.href;}
 			catch (e) {
 				return '';
 			}
 		}
 	},
-	getChildren() {
-		try {return this.props.getChildren.bind(this.props.data) ();}
+	getChildren(_item) {
+		try {return this.props.getChildren(_item);}
 		catch (e) {
-			try {return this.props.data.children;}
+			try {return _item.children;}
 			catch (e) {
 				return [];
 			}
 		}
 	},
-	getSubMenuClassName() {
-		try {return this.props.getSubMenuClassName.bind(this.props.data) ();}
+	getSubMenuClassName(_item) {
+		try {return this.props.getSubMenuClassName(_item);}
 		catch (e) {
-			try {return this.props.data.subMenuClassName;}
+			try {return _item.subMenuClassName;}
 			catch (e) {
 				return '';
 			}
 		}
 	},
 	handleItemClick(event) {
-		var href = this.getHref().replace('javascript:', '');
-		var fn = eval('(function () {'+href+';})');
+		var href = this.getHref(this.props.data).replace('javascript:', '');
+		var fn = eval('(function () {' + href + ';})');
 		fn.bind(event.currentTarget)();
 	},
 	render() {
-		var text = this.getText();
+		var text = this.getText(this.props.data);
 		if (!text) {
 			return (
 				<li></li>
 			); 
 		}
-		var href = this.getHref();
+		var href = this.getHref(this.props.data);
 		var html;
 		if (href) {
 			if (href.indexOf("javascript:") == 0) {
@@ -63,8 +63,8 @@ const MenuItem = React.createClass({
 		else {
 			html = <a className='menuitem menuitem-nonatomic'><span>{text}</span></a>;
 		}
-		const children = this.getChildren();
-		var subMenuClassName = this.getSubMenuClassName(); 
+		const children = this.getChildren(this.props.data);
+		var subMenuClassName = this.getSubMenuClassName(this.props.data); 
 		if (children && children.length > 0) {
 			return (
 				<li>
@@ -89,7 +89,7 @@ const MenuItem = React.createClass({
  */
 const Menu = React.createClass({
 	render() {
-		const className = this.props.className ? this.props.className : '';
+		const className = getPropValue(this.props, 'className');
 		const me = this;
 		return (
 			<ul className={className}>
@@ -108,35 +108,31 @@ const Menu = React.createClass({
  * CatMenu defination
  */
 const CatMenu = React.createClass({
-	render: function() {
-		function getText() {
-			return this.details ? this.details.name : '';
-		}
-		function getHref() {
-			if (!this.parent_id) {
-				return 'javascript:expandMenu(this)';
-			}
-			else if (this.atomic) {
-				return 'cat/' + (usecode ? this.code.toLowerCase() : this.id);
-			}
-			else {
-				return '';
-			}
-		}
-		function getSubMenuClassName() {
-			if (!this.parent_id) {
-				return 'sensitive';
-			}
+	getText(_item) {
+		return _item.details ? _item.details.name : '';
+	},
+	getHref(_item) {
+		if (!_item.parent_id) 
+			return 'javascript:expandMenu(this)';
+		else if (_item.atomic) 
+			return 'cat/' + (sessionManager.get('usecode') ? _item.code.toLowerCase() : _item.id);
+		else 
 			return '';
-		}
-		const className = 'catmenu ' + (this.props.hasOwnProperty('className') ? this.props.className : '');
-		const showRoot = this.props.hasOwnProperty('showRoot') ? this.props.showRoot : true;
+	},
+	getSubMenuClassName(_item) {
+		if (!_item.parent_id) 
+			return 'sensitive';
+		return '';
+	},
+	render() {
+		const className = 'catmenu ' + getPropValue(this.props, 'className');
+		const showRoot = getPropValue(this.props, 'showRoot', true);
 		const items = showRoot ? this.props.items : this.props.items[0].children;
 		return (
 			<Menu className={className} items={items} 
-				getText={getText} 
-				getHref={getHref} 
-				getSubMenuClassName={getSubMenuClassName} />
+				getText={this.getText} 
+				getHref={this.getHref} 
+				getSubMenuClassName={this.getSubMenuClassName} />
 		);
 	}
 });

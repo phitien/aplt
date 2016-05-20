@@ -12,7 +12,7 @@ $( document ).ready(function() {
 					onValid={this.enableButton} onInvalid={this.disableButton}>
 					<div className="col-xs-12 col-sm-6 col-md-5 center-block">
 						<FormView.Input type='autocomplete' name='location' title={localization.location} source='/searchlocation' className='center-block' 
-							value={currentLocation.name} placeholder={localization.please_type_location} />
+							value={sessionManager.get('location').name} placeholder={localization.please_type_location} />
 					</div>
 				</FormView.Form>
 			); 
@@ -27,9 +27,9 @@ $( document ).ready(function() {
 						data: {
 							q: request.term
 						},
-						success: function( data ) {
+						success: function( _data ) {
 							var items = [];
-							$.each(data.data, function (i, v) {
+							$.each(_data.data, function (i, v) {
 								items.push({
 									id: v.id,
 									label: v.fullname
@@ -45,7 +45,7 @@ $( document ).ready(function() {
 						$(this).attr('data-value', ui.item);
 						const id = ui.item.id;
 						this.nextSibling.value = id;
-						if (id && id != currentLocation.id)
+						if (id && id != sessionManager.get('location').id)
 							submitForm($(this).parents('form:first'));
 					}
 				}

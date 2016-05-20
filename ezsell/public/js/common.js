@@ -4409,252 +4409,409 @@ var _userbox2 = _interopRequireDefault(_userbox);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //
-window.CatMenu = _catmenu2.default;
-window.FormView = _formview2.default;
-window.UserBox = _userbox2.default;
 /**
  * Some common functions
  */
-//
-window.format = {
-	currency: function currency(v) {
-		var n = parseFloat(v) != NaN ? parseFloat(v) : 0;
-		return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+Object.assign(window, {
+	CatMenu: _catmenu2.default,
+	FormView: _formview2.default,
+	UserBox: _userbox2.default,
+	sensitive: 'input,select,textarea,img,.sensitive',
+	getPropValue: function getPropValue(props, name, defaultValue) {
+		if (props.hasOwnProperty(name)) return props[name];
+		return defaultValue;
 	},
-	time: function time(v, format) {
-		return $.format.date(v, currentLocation.timeformat);
-	},
-	date: function date(v, format) {
-		return $.format.date(v, format ? format : currentLocation.dateformat);
-	},
-	datetime: function datetime(v, format) {
-		return $.format.date(v, format ? format : currentLocation.datetimeformat);
-	},
-	prettyDate: function prettyDate(v) {
-		return $.format.prettyDate(v);
-	}
-};
-window.uuid = function (prefix) {
-	return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
-};
-window.token = function () {
-	return $('meta[name="csrf-token"]').attr('content');
-};
-window.submitForm = function (form) {
-	$('<input>').attr({
-		type: 'hidden',
-		name: '_token',
-		value: token()
-	}).appendTo(form);
-	$('<input>').attr({
-		type: 'hidden',
-		name: 'redirect',
-		value: location.href
-	}).appendTo(form);
-	form.submit();
-};
-window.ajax = {
-	exe: function exe(url, success, data, type) {
-		$.ajax({
-			type: type ? type : 'GET',
-			url: url,
-			data: Object.assign({ '_token': token(), 'mode': getMode() }, data),
-			success: success
-		});
-	},
-	get: function get(url, success, data) {
-		this.exe(url, success, data, 'GET');
-	},
-	post: function post(url, success, data) {
-		this.exe(url, success, data, 'POST');
-	},
-	put: function put(url, success, data) {
-		this.exe(url, success, data, 'PUT');
-	},
-	delete: function _delete(url, success, data) {
-		this.exe(url, success, data, 'DELETE');
-	}
-};
-
-window.showMessageDialog = function (msg, title, btn, callback) {
-	btn = btn ? btn : localization.ok;
-	title = title ? title : localization.message;
-	var buttons = {};
-	buttons[btn] = function () {
-		$(this).dialog('close');
-		$(this).remove();
-		if (callback) {
-			callback();
-		}
-	};
-	$('<div></div>').dialog({
-		modal: true,
-		title: title,
-		closeOnEscape: false,
-		open: function open(e, ui) {
-			$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
-			$(this).html(msg);
-		},
-		buttons: buttons
-	}); //end confirm dialog
-};
-window.expandMenu = function (e) {
-	var menu = $(e).next('ul');
-	toggleElement(menu);
-};
-window.hideMenus = function () {
-	slideUp($('.sensitive'));
-};
-window.toggleElement = function (e) {
-	if (e.css('display') == 'none') {
-		slideDown(e);
-	} else {
-		slideUp(e);
-	}
-};
-window.sensitive = 'input,select,textarea,img,.sensitive';
-window.slideDown = function (e) {
-	e.slideDown();
-	e.css('visibility', 'visible');
-	$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
-};
-window.slideUp = function (e) {
-	e.slideUp(function () {
-		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'visible');
-		e.css('visibility', 'hidden');
-	});
-};
-window.hideClassName = function (classNameToHide, exceptions) {
-	$('.' + classNameToHide).not(exceptions).hide();
-};
-window.showLoginForm = function (e) {
-	if (!window.currentForm || window.currentForm != 'login') {
-		$('#form-container').hide();
-		window.currentForm = 'login';
-		ReactDOM.render(React.createElement(_formview2.default, {
-			formrender: function formrender() {
-				return React.createElement(
-					_formview2.default.Form,
-					{ className: 'form', method: 'post', action: '/login', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
-						onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
-					React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
-						validationError: localization.invalid_email }),
-					React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: localization.password,
-						validationError: localization.invalid_password }),
-					React.createElement(_formview2.default.Input, { type: 'checkbox', name: 'remember', title: localization.remember_me }),
-					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: localization.login, className: 'center-block' })
-				);
-			}
-		}), document.getElementById('form-container'), function () {
-			toggleElement($('#form-container'));
-		});
-	} else {
-		toggleElement($('#form-container'));
-	}
-};
-window.showRegistrationForm = function (e) {
-	if (!window.currentForm || window.currentForm != 'register') {
-		$('#form-container').hide();
-		window.currentForm = 'register';
-		ReactDOM.render(React.createElement(_formview2.default, {
-			formrender: function formrender() {
-				return React.createElement(
-					_formview2.default.Form,
-					{ className: 'form', method: 'post', action: '/register', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
-						onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
-					React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
-						validationError: localization.invalid_email }),
-					React.createElement(_formview2.default.Input, { type: 'email', name: 'email_confirmation', title: localization.email_confirmation, validations: 'equalsField:email',
-						validationError: localization.email_confirmation_not_matched }),
-					React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: localization.password, validations: 'isPassword',
-						validationError: localization.password_rules }),
-					React.createElement(_formview2.default.Input, { type: 'password', name: 'password_confirmation', title: localization.password_confirmation, validations: 'equalsField:password',
-						validationError: localization.password_confirmation_not_matched }),
-					React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: localization.register, className: 'center-block' })
-				);
-			}
-		}), document.getElementById('form-container'), function () {
-			toggleElement($('#form-container'));
-		});
-	} else {
-		toggleElement($('#form-container'));
-	}
-};
-window.showLocationForm = function (e) {
-	if (!window.currentForm || window.currentForm != 'location') {
-		$('#form-container').hide();
-		window.currentForm = 'location';
-		ReactDOM.render(React.createElement(_formview2.default, {
-			initialState: {
-				value: '',
-				locations: [],
-				loading: false
+	sessionManager: function () {
+		var me = this;
+		var _data = {};
+		return {
+			isListPage: function isListPage() {
+				if (this.has('data')) return this.get('data').paginate;
+				return false;
 			},
-			onValidSubmit: function onValidSubmit(model) {},
-			formrender: function formrender() {
-				return React.createElement(
-					_formview2.default.Form,
-					{ className: 'form', method: 'post', action: '/location' },
-					React.createElement(_formview2.default.Input, { type: 'autocomplete', name: 'location', title: localization.location, source: '/searchlocation', className: 'center-block',
-						value: currentLocation.name, placeholder: localization.please_type_location })
-				);
+			has: function has(name) {
+				return _data.hasOwnProperty(name);
+			},
+			get: function get(name, defaultValue) {
+				if (this.has(name)) return _data[name];
+				return defaultValue;
+			},
+			set: function set(name, value) {
+				_data[name] = value;
+				return this;
+			},
+			assign: function assign(name, value) {
+				if (this.has(name)) Object.assign(_data[name], value);else _data[name] = Object.assign({}, value);
+				return this;
+			},
+			remove: function remove(name) {
+				if (this.has(name)) delete _data[name];
+				return this;
 			}
-		}), document.getElementById('form-container'), function () {
-			$('.autocomplete').each(function (i, e) {
-				var _source = e.getAttribute('data-source');
-				$(e).autocomplete({
-					source: function source(request, response) {
-						ajax.get(_source, function (data) {
-							var items = [];
-							$.each(data.data, function (i, v) {
-								items.push({
-									id: v.id,
-									label: v.fullname
-								});
-							});
-							response(items);
-						}, {
-							q: request.term
-						});
-					},
-					minLength: 2,
-					select: function select(event, ui) {
-						if (ui && ui.item) {
-							this.setAttribute('data-value', ui.item);
-							var id = ui.item.id;
-							this.nextSibling.value = id;
-							if (id && id != currentLocation.id) submitForm($(this).parents('form:first'));else toggleElement($('#form-container'));
-						}
-					}
-				});
+		};
+	}(),
+	uuid: function uuid(prefix) {
+		return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+	},
+	token: function token() {
+		return $('meta[name="csrf-token"]').attr('content');
+	},
+	getMode: function getMode() {
+		return sessionManager.get('mode');
+	},
+	setMode: function setMode(mode) {
+		sessionManager.set('mode', mode);
+	},
+	isCurrentUser: function isCurrentUser(_user) {
+		var user = sessionManager.get('user');
+		if (user && user.id == _user.id) {
+			return true;
+		}
+		return false;
+	},
+	format: {
+		currency: function currency(v) {
+			var n = parseFloat(v) != NaN ? parseFloat(v) : 0;
+			return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+		},
+		time: function time(v, format) {
+			return $.format.date(v, sessionManager.get('location').timeformat);
+		},
+		date: function date(v, format) {
+			return $.format.date(v, format ? format : sessionManager.get('location').dateformat);
+		},
+		datetime: function datetime(v, format) {
+			return $.format.date(v, format ? format : sessionManager.get('location').datetimeformat);
+		},
+		prettyDate: function prettyDate(v) {
+			return $.format.prettyDate(v);
+		}
+	},
+	submitForm: function submitForm(form) {
+		$('<input>').attr({
+			type: 'hidden',
+			name: '_token',
+			value: token()
+		}).appendTo(form);
+		$('<input>').attr({
+			type: 'hidden',
+			name: 'redirect',
+			value: location.href
+		}).appendTo(form);
+		form.submit();
+	},
+	ajax: {
+		exe: function exe(url, success, data, type) {
+			$.ajax({
+				type: type ? type : 'GET',
+				url: url,
+				data: Object.assign({ '_token': token(), 'mode': getMode() }, data),
+				success: success
 			});
-			toggleElement($('#form-container'));
+		},
+		get: function get(url, success, data) {
+			this.exe(url, success, data, 'GET');
+		},
+		post: function post(url, success, data) {
+			this.exe(url, success, data, 'POST');
+		},
+		put: function put(url, success, data) {
+			this.exe(url, success, data, 'PUT');
+		},
+		delete: function _delete(url, success, data) {
+			this.exe(url, success, data, 'DELETE');
+		}
+	},
+	showMessageDialog: function showMessageDialog(msg, title, btn, callback) {
+		btn = btn ? btn : localization.ok;
+		title = title ? title : localization.message;
+		var buttons = {};
+		buttons[btn] = function () {
+			$(this).dialog('close');
+			$(this).remove();
+			if (callback) {
+				callback();
+			}
+		};
+		$('<div></div>').dialog({
+			modal: true,
+			title: title,
+			closeOnEscape: false,
+			open: function open(e, ui) {
+				$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
+				$(this).html(msg);
+			},
+			buttons: buttons
+		}); //end confirm dialog
+	},
+	expandMenu: function expandMenu(e) {
+		var menu = $(e).next('ul');
+		toggleElement(menu);
+	},
+	hideMenus: function hideMenus() {
+		slideUp($('.sensitive'));
+	},
+	toggleElement: function toggleElement(e) {
+		if (e.css('display') == 'none') slideDown(e);else slideUp(e);
+	},
+	slideDown: function slideDown(e) {
+		e.slideDown();
+		e.css('visibility', 'visible');
+		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
+	},
+	slideUp: function slideUp(e) {
+		e.slideUp(function () {
+			$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'visible');
+			e.css('visibility', 'hidden');
 		});
-	} else {
-		toggleElement($('#form-container'));
-	}
-};
-window.sendMessage = function (e) {
-	var message = $(e).prev('input').val();
-	if (message) {
-		ajax.post('/sendmessage', function () {
-			$(e).prev('input').val('');
-		}, { 'message': message });
-	}
-};
+	},
+	hideClassName: function hideClassName(classNameToHide, exceptions) {
+		$('.' + classNameToHide).not(exceptions).hide();
+	},
+	showLoginForm: function showLoginForm(e) {
+		if (!window.currentForm || window.currentForm != 'login') {
+			$('#form-container').hide();
+			window.currentForm = 'login';
+			ReactDOM.render(React.createElement(_formview2.default, {
+				formrender: function formrender() {
+					return React.createElement(
+						_formview2.default.Form,
+						{ className: 'form', method: 'post', action: '/login', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+							onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+						React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
+							validationError: localization.invalid_email }),
+						React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: localization.password,
+							validationError: localization.invalid_password }),
+						React.createElement(_formview2.default.Input, { type: 'checkbox', name: 'remember', title: localization.remember_me }),
+						React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: localization.login, className: 'center-block' })
+					);
+				}
+			}), document.getElementById('form-container'), function () {
+				toggleElement($('#form-container'));
+			});
+		} else {
+			toggleElement($('#form-container'));
+		}
+	},
+	showRegistrationForm: function showRegistrationForm(e) {
+		if (!window.currentForm || window.currentForm != 'register') {
+			$('#form-container').hide();
+			window.currentForm = 'register';
+			ReactDOM.render(React.createElement(_formview2.default, {
+				formrender: function formrender() {
+					return React.createElement(
+						_formview2.default.Form,
+						{ className: 'form', method: 'post', action: '/register', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+							onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+						React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
+							validationError: localization.invalid_email }),
+						React.createElement(_formview2.default.Input, { type: 'email', name: 'email_confirmation', title: localization.email_confirmation, validations: 'equalsField:email',
+							validationError: localization.email_confirmation_not_matched }),
+						React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: localization.password, validations: 'isPassword',
+							validationError: localization.password_rules }),
+						React.createElement(_formview2.default.Input, { type: 'password', name: 'password_confirmation', title: localization.password_confirmation, validations: 'equalsField:password',
+							validationError: localization.password_confirmation_not_matched }),
+						React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: localization.register, className: 'center-block' })
+					);
+				}
+			}), document.getElementById('form-container'), function () {
+				toggleElement($('#form-container'));
+			});
+		} else {
+			toggleElement($('#form-container'));
+		}
+	},
+	showLocationForm: function showLocationForm(e) {
+		if (!window.currentForm || window.currentForm != 'location') {
+			$('#form-container').hide();
+			window.currentForm = 'location';
+			ReactDOM.render(React.createElement(_formview2.default, {
+				initialState: {
+					value: '',
+					locations: [],
+					loading: false
+				},
+				onValidSubmit: function onValidSubmit(model) {},
+				formrender: function formrender() {
+					return React.createElement(
+						_formview2.default.Form,
+						{ className: 'form', method: 'post', action: '/location' },
+						React.createElement(_formview2.default.Input, { type: 'autocomplete', name: 'location', title: localization.location, source: '/searchlocation', className: 'center-block',
+							value: sessionManager.get('location').name, placeholder: localization.please_type_location })
+					);
+				}
+			}), document.getElementById('form-container'), function () {
+				$('.autocomplete').each(function (i, e) {
+					var _source = e.getAttribute('data-source');
+					$(e).autocomplete({
+						source: function source(request, response) {
+							ajax.get(_source, function (data) {
+								var items = [];
+								$.each(data.data, function (i, v) {
+									items.push({
+										id: v.id,
+										label: v.fullname
+									});
+								});
+								response(items);
+							}, {
+								q: request.term
+							});
+						},
+						minLength: 2,
+						select: function select(event, ui) {
+							if (ui && ui.item) {
+								this.setAttribute('data-value', ui.item);
+								var id = ui.item.id;
+								this.nextSibling.value = id;
+								if (id && id != sessionManager.get('location').id) submitForm($(this).parents('form:first'));else toggleElement($('#form-container'));
+							}
+						}
+					});
+				});
+				toggleElement($('#form-container'));
+			});
+		} else {
+			toggleElement($('#form-container'));
+		}
+	},
+	sendMessage: function sendMessage(e) {
+		var message = $(e).prev('input').val();
+		if (message) {
+			ajax.post('/sendmessage', function () {
+				$(e).prev('input').val('');
+			}, { 'message': message });
+		}
+	},
+	ui: {
+		getItemExpires: function getItemExpires(item) {
+			return item.deleted_at ? expired_at = React.createElement(
+				'div',
+				{ className: 'item-date item-expired' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						{ className: 'label expired-label' },
+						localization.expires_at
+					),
+					React.createElement(
+						'span',
+						{ className: 'prettydateformat' },
+						item.deleted_at
+					)
+				)
+			) : null;
+		},
+		getItemPostedOrEdited: function getItemPostedOrEdited(item) {
+			var created = new Date(item.created_at);
+			var updated = new Date(item.updated_at);
+			return +updated !== +created ? React.createElement(
+				'div',
+				{ className: 'item-date item-updated' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						{ className: 'label edited-label' },
+						localization.edited_at
+					),
+					React.createElement(
+						'span',
+						{ className: 'prettydateformat' },
+						item.updated_at
+					)
+				)
+			) : React.createElement(
+				'div',
+				{ className: 'item-date item-created' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						{ className: 'label posted-label' },
+						localization.posted_at
+					),
+					React.createElement(
+						'span',
+						{ className: 'prettydateformat' },
+						item.created_at
+					)
+				)
+			);
+		},
+		plugins: {
+			format: function (_format) {
+				function format(_x) {
+					return _format.apply(this, arguments);
+				}
 
-window.getMode = function () {
-	return mode;
-};
-window.setMode = function (_mode) {
-	mode = _mode;
-};
-window.isCurrentUser = function (_user) {
-	if (user.id == _user.id) {
-		return true;
+				format.toString = function () {
+					return _format.toString();
+				};
+
+				return format;
+			}(function ($container) {
+				if (!$container) {
+					$('.prettydateformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
+					});
+					$('.dateformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.date(text));
+					});
+					$('.timeformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.time(text));
+					});
+					$('.datetimeformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.datetime(text));
+					});
+					$('.currency-value').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.currency(text));
+					});
+				} else {
+					$container.find('.prettydateformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
+					});
+					$container.find('.dateformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.date(text));
+					});
+					$container.find('.timeformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.time(text));
+					});
+					$container.find('.datetimeformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.datetime(text));
+					});
+					$container.find('.currency-value').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.currency(text));
+					});
+				}
+			})
+		}
 	}
-	return false;
-};
+});
 
 },{"./components/catmenu.jsx":41,"./components/formview.jsx":42,"./components/userbox.jsx":44}],41:[function(require,module,exports){
 'use strict';
@@ -4667,61 +4824,61 @@ Object.defineProperty(exports, "__esModule", {
  */
 var MenuItem = React.createClass({
 	displayName: 'MenuItem',
-	getText: function getText() {
+	getText: function getText(_item) {
 		try {
-			return this.props.getText.bind(this.props.data)();
+			return this.props.getText(_item);
 		} catch (e) {
 			try {
-				return this.props.data.text;
+				return _item.text;
 			} catch (e) {
 				return '';
 			}
 		}
 	},
-	getHref: function getHref() {
+	getHref: function getHref(_item) {
 		try {
-			return this.props.getHref.bind(this.props.data)();
+			return this.props.getHref(_item);
 		} catch (e) {
 			try {
-				return this.props.data.href;
+				return _item.href;
 			} catch (e) {
 				return '';
 			}
 		}
 	},
-	getChildren: function getChildren() {
+	getChildren: function getChildren(_item) {
 		try {
-			return this.props.getChildren.bind(this.props.data)();
+			return this.props.getChildren(_item);
 		} catch (e) {
 			try {
-				return this.props.data.children;
+				return _item.children;
 			} catch (e) {
 				return [];
 			}
 		}
 	},
-	getSubMenuClassName: function getSubMenuClassName() {
+	getSubMenuClassName: function getSubMenuClassName(_item) {
 		try {
-			return this.props.getSubMenuClassName.bind(this.props.data)();
+			return this.props.getSubMenuClassName(_item);
 		} catch (e) {
 			try {
-				return this.props.data.subMenuClassName;
+				return _item.subMenuClassName;
 			} catch (e) {
 				return '';
 			}
 		}
 	},
 	handleItemClick: function handleItemClick(event) {
-		var href = this.getHref().replace('javascript:', '');
+		var href = this.getHref(this.props.data).replace('javascript:', '');
 		var fn = eval('(function () {' + href + ';})');
 		fn.bind(event.currentTarget)();
 	},
 	render: function render() {
-		var text = this.getText();
+		var text = this.getText(this.props.data);
 		if (!text) {
 			return React.createElement('li', null);
 		}
-		var href = this.getHref();
+		var href = this.getHref(this.props.data);
 		var html;
 		if (href) {
 			if (href.indexOf("javascript:") == 0) {
@@ -4756,8 +4913,8 @@ var MenuItem = React.createClass({
 				)
 			);
 		}
-		var children = this.getChildren();
-		var subMenuClassName = this.getSubMenuClassName();
+		var children = this.getChildren(this.props.data);
+		var subMenuClassName = this.getSubMenuClassName(this.props.data);
 		if (children && children.length > 0) {
 			return React.createElement(
 				'li',
@@ -4788,7 +4945,7 @@ var MenuItem = React.createClass({
 var Menu = React.createClass({
 	displayName: 'Menu',
 	render: function render() {
-		var className = this.props.className ? this.props.className : '';
+		var className = getPropValue(this.props, 'className');
 		var me = this;
 		return React.createElement(
 			'ul',
@@ -4808,33 +4965,24 @@ var Menu = React.createClass({
  */
 var CatMenu = React.createClass({
 	displayName: 'CatMenu',
-
+	getText: function getText(_item) {
+		return _item.details ? _item.details.name : '';
+	},
+	getHref: function getHref(_item) {
+		if (!_item.parent_id) return 'javascript:expandMenu(this)';else if (_item.atomic) return 'cat/' + (sessionManager.get('usecode') ? _item.code.toLowerCase() : _item.id);else return '';
+	},
+	getSubMenuClassName: function getSubMenuClassName(_item) {
+		if (!_item.parent_id) return 'sensitive';
+		return '';
+	},
 	render: function render() {
-		function getText() {
-			return this.details ? this.details.name : '';
-		}
-		function getHref() {
-			if (!this.parent_id) {
-				return 'javascript:expandMenu(this)';
-			} else if (this.atomic) {
-				return 'cat/' + (usecode ? this.code.toLowerCase() : this.id);
-			} else {
-				return '';
-			}
-		}
-		function getSubMenuClassName() {
-			if (!this.parent_id) {
-				return 'sensitive';
-			}
-			return '';
-		}
-		var className = 'catmenu ' + (this.props.hasOwnProperty('className') ? this.props.className : '');
-		var showRoot = this.props.hasOwnProperty('showRoot') ? this.props.showRoot : true;
+		var className = 'catmenu ' + getPropValue(this.props, 'className');
+		var showRoot = getPropValue(this.props, 'showRoot', true);
 		var items = showRoot ? this.props.items : this.props.items[0].children;
 		return React.createElement(Menu, { className: className, items: items,
-			getText: getText,
-			getHref: getHref,
-			getSubMenuClassName: getSubMenuClassName });
+			getText: this.getText,
+			getHref: this.getHref,
+			getSubMenuClassName: this.getSubMenuClassName });
 	}
 });
 //
@@ -4849,7 +4997,7 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _formsyReact = require('formsy-react');
 
@@ -4862,27 +5010,10 @@ var _switch2 = _interopRequireDefault(_switch);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //
-
-var _extends = Object.assign || function (target) {
-	for (var i = 1; i < arguments.length; i++) {
-		var source = arguments[i];for (var key in source) {
-			if (Object.prototype.hasOwnProperty.call(source, key)) {
-				target[key] = source[key];
-			}
-		}
-	}return target;
-};
 function _objectWithoutProperties(obj, keys) {
 	var target = {};for (var i in obj) {
 		if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
 	}return target;
-}
-function _defineProperty(obj, key, value) {
-	if (key in obj) {
-		Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-	} else {
-		obj[key] = value;
-	}return obj;
 }
 //
 _formsyReact2.default.addValidationRule('notEqualsField', function (values, value, field) {
@@ -5006,7 +5137,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('input', _extends2({}, restProps, { id: this.id, type: this.type, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
+			React.createElement('input', _extends({}, restProps, { id: this.id, type: this.type, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
 			React.createElement(
 				'span',
 				{ className: 'validation-error' },
@@ -5025,7 +5156,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('input', _extends2({}, restProps, { id: this.id, type: 'text', onChange: this.changeValue, value: this.getValue() || '', className: 'form-control autocomplete',
+			React.createElement('input', _extends({}, restProps, { id: this.id, type: 'text', onChange: this.changeValue, value: this.getValue() || '', className: 'form-control autocomplete',
 				'data-source': source })),
 			React.createElement('input', { type: 'hidden', name: this.props.name }),
 			React.createElement(
@@ -5046,7 +5177,7 @@ var Input = React.createClass({
 			React.createElement(
 				'label',
 				{ className: labelClassName, htmlFor: name },
-				React.createElement('input', _extends2({}, restProps, { id: this.id, type: this.type, name: name, onChange: this.changeValue, className: this.type })),
+				React.createElement('input', _extends({}, restProps, { id: this.id, type: this.type, name: name, onChange: this.changeValue, className: this.type })),
 				this.props.title
 			)
 		);
@@ -5076,7 +5207,7 @@ var Input = React.createClass({
 					React.createElement(
 						'label',
 						{ htmlFor: itemname },
-						React.createElement('input', _extends2({}, restProps, { type: type, name: name, id: itemname, value: value, className: type, onChange: changeValue })),
+						React.createElement('input', _extends({}, restProps, { type: type, name: name, id: itemname, value: value, className: type, onChange: changeValue })),
 						item.label
 					)
 				);
@@ -5087,7 +5218,7 @@ var Input = React.createClass({
 	renderButton: function renderButton() {
 		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'onClick', 'disabled']);
 		this.className = 'btn btn-default ' + (this.props.className ? this.props.className : '');
-		return React.createElement('input', _extends2({}, restProps, { id: this.id, name: this.props.name, type: this.type, value: this.getValue() || '', className: this.className, onClick: this.props.onClick, disabled: this.props.disabled }));
+		return React.createElement('input', _extends({}, restProps, { id: this.id, name: this.props.name, type: this.type, value: this.getValue() || '', className: this.className, onClick: this.props.onClick, disabled: this.props.disabled }));
 	},
 	renderTextarea: function renderTextarea() {
 		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'cols', 'rows']);
@@ -5099,7 +5230,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('textarea', _extends2({}, restProps, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
+			React.createElement('textarea', _extends({}, restProps, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
 				cols: this.props.cols, rows: this.props.rows })),
 			React.createElement(
 				'span',
@@ -5134,7 +5265,7 @@ var Input = React.createClass({
 			),
 			React.createElement(
 				'select',
-				_extends2({}, restProps, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control', disabled: this.props.disabled }),
+				_extends({}, restProps, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control', disabled: this.props.disabled }),
 				placeholder,
 				this.props.options.map(function (item, i) {
 					var label = optionLabel.bind(item)();
@@ -5142,7 +5273,7 @@ var Input = React.createClass({
 					var props = optionAttrs.bind(item)();
 					return React.createElement(
 						'option',
-						_extends2({ key: i }, props, { value: value }),
+						_extends({ key: i }, props, { value: value }),
 						label
 					);
 				})
@@ -5165,7 +5296,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('input', _extends2({}, restProps, { id: this.id, type: this.type, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
+			React.createElement('input', _extends({}, restProps, { id: this.id, type: this.type, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
 			React.createElement(
 				'span',
 				{ className: 'validation-error' },
@@ -5184,7 +5315,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement('input', _extends2({}, restProps, { id: this.id, type: 'file', name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
+			React.createElement('input', _extends({}, restProps, { id: this.id, type: 'file', name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
 				accept: 'image/*' })),
 			React.createElement(
 				'span',
@@ -5205,7 +5336,7 @@ var Input = React.createClass({
 				{ htmlFor: this.props.name },
 				this.props.title
 			),
-			React.createElement(_switch2.default, _extends2({}, restProps, { id: this.id, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
+			React.createElement(_switch2.default, _extends({}, restProps, { id: this.id, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
 			React.createElement(
 				'span',
 				{ className: 'validation-error' },
@@ -5237,7 +5368,6 @@ var FormView = React.createClass({
 	submit: function submit(model) {
 		submitForm($(ReactDOM.findDOMNode(this)).find('form').get(0));
 	},
-
 	render: function render() {
 		var className = 'form-view ' + (this.props.className ? this.props.className : '');
 		var initialState = this.props.initialState;
@@ -5302,15 +5432,6 @@ exports.default = FormView;
 'use strict';
 
 //
-var _extends = Object.assign || function (target) {
-	for (var i = 1; i < arguments.length; i++) {
-		var source = arguments[i];for (var key in source) {
-			if (Object.prototype.hasOwnProperty.call(source, key)) {
-				target[key] = source[key];
-			}
-		}
-	}return target;
-};
 function _objectWithoutProperties(obj, keys) {
 	var target = {};for (var i in obj) {
 		if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
@@ -5435,6 +5556,17 @@ Object.defineProperty(exports, "__esModule", {
  */
 var UserBox = React.createClass({
 	displayName: 'UserBox',
+
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LISTITEM_EVENT, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.EventEmitter.on(Dispatcher.events.LISTITEM_EVENT, this.refresh);
+	},
 	onChatClick: function onChatClick(e) {
 		if (!isCurrentUser(this.props.user)) {
 			console.log('TODO start conversation!!');
@@ -5445,17 +5577,19 @@ var UserBox = React.createClass({
 			console.log('TODO follow user!!');
 		}
 	},
-
 	render: function render() {
 		var user = this.props.user;
 		if (user) {
-			var className = 'userbox ' + (this.props.className ? this.props.className : '');
-			var avatar = user && user.avatar ? user.avatar : 'http://media.ezsell.com/noavatar' + (user.gender == 'MALE' ? 'man' : 'woman');
+			var _isGuest = sessionManager.get('isGuest', true);
+			var _isCurrentUser = isCurrentUser(user);
+
+			var className = 'userbox ' + getPropValue(this.props, 'className');
+			var iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
+			var iconChatTitle = _isGuest ? ' Please login' : _isCurrentUser ? 'Cannot chat to yourself' : '';
+			var iconFollowClassName = 'icon icon-follow' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
+			var iconFollowTitle = _isGuest ? ' Please login' : _isCurrentUser ? 'Cannot follow yourself' : '';
+			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman');
 			var href = '/' + user.name;
-			var iconChatClassName = 'icon icon-chat' + (isGuest || isCurrentUser(user) ? ' icon-disabled' : '');
-			var iconChatTitle = isGuest ? ' Please login' : isCurrentUser(user) ? 'Cannot chat to yourself' : '';
-			var iconFollowClassName = 'icon icon-follow' + (isGuest || isCurrentUser(user) ? ' icon-disabled' : '');
-			var iconFollowTitle = isGuest ? ' Please login' : isCurrentUser(user) ? 'Cannot follow yourself' : '';
 			return React.createElement(
 				'div',
 				{ className: className },
@@ -5472,9 +5606,8 @@ var UserBox = React.createClass({
 				React.createElement('a', { className: iconChatClassName, onClick: this.onChatClick, title: iconChatTitle }),
 				React.createElement('a', { className: iconFollowClassName, onClick: this.onFollowClick, title: iconFollowTitle })
 			);
-		} else {
-			return null;
 		}
+		return null;
 	}
 });
 

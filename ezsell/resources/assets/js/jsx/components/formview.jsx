@@ -1,10 +1,7 @@
 import Formsy from 'formsy-react';
 import Switch from './switch.jsx';
 //
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 //
 Formsy.addValidationRule('notEqualsField', function (values, value, field) {
 	return value != values[field];
@@ -288,7 +285,7 @@ var FormView = React.createClass({
 	submit(model) {
 		submitForm($(ReactDOM.findDOMNode(this)).find('form').get(0));
 	},
-	render : function() {
+	render(){
 		const className = 'form-view ' + (this.props.className?this.props.className:'');
 		const initialState = this.props.initialState;
 		const formrender = this.props.formrender;

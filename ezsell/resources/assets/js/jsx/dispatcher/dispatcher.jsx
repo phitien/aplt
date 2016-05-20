@@ -4,11 +4,32 @@ import Events from 'events';
 //
 class EventEmitter extends Events {}
 var eventEmitter = new EventEmitter();
-var EVENT = 'listchange';
+eventEmitter.setMaxListeners(Infinity);
 //
 var Dispatcher = new Flux.Dispatcher();
+Dispatcher.events = {
+	APPL_EVENT: 'applevent',
+	LIST_EVENT: 'listevent',
+	LISTITEM_EVENT: 'listitemevent',
+	ITEM_EVENT: 'listitemevent',
+	USER_EVENT: 'userevent'
+};
+
 Dispatcher.register(function(action) {
-	eventEmitter.emit(EVENT);
+	console.log(action.actionType);
+	switch (action.actionType) {
+		case Constants.CATITEMS:
+		case Constants.USERITEMS:
+		case Constants.ITEMDETAILS:
+			eventEmitter.emit(Dispatcher.events.APPL_EVENT);
+			break;
+		
+		case Constants.ITEMUPDATE:
+			eventEmitter.emit(Dispatcher.events.LISTITEM_EVENT);
+			break;
+	}
+	//eventEmitter.emit(Dispatcher.events.LIST_EVENT);
+	//eventEmitter.emit(Dispatcher.events.USER_EVENT);
 });
 //
 var Constants = KeyMirror({
@@ -18,67 +39,91 @@ var Constants = KeyMirror({
 	ITEMUPDATE: null
 });
 var Actions = {
-	catitems: function(data) {
+	catitems: function(_data) {
 		Dispatcher.dispatch({
 			actionType: Constants.CATITEMS,
-			data: data
+			data: _data
 		});
 	},
-	useritems: function(data) {
+	useritems: function(_data) {
 		Dispatcher.dispatch({
 			actionType: Constants.USERITEMS,
-			data: data
+			data: _data
 		});
 	},
-	itemdetails: function(data) {
+	itemdetails: function(_data) {
 		Dispatcher.dispatch({
 			actionType: Constants.ITEMDETAILS,
-			data: data
+			data: _data
 		});
 	},
-	itemupdate: function(data) {
+	itemupdate: function(_data) {
 		Dispatcher.dispatch({
 			actionType: Constants.ITEMUPDATE,
-			data: data
+			data: _data
 		});
 	}
 };
-var _list = window.data ? window.data : null;
+var _list = null;
+var _details = null;
+
+if (sessionManager.isListPage()) 
+	_list = sessionManager.get('data');
+else
+	_details = sessionManager.get('data');
 
 Dispatcher.Constants = Constants;
 Dispatcher.Actions = Actions;
 Dispatcher.EventEmitter = eventEmitter;
+
 Dispatcher.item = function(id) {
-	for (var i=0; i < _list.paginate.data.length; i++) {
-		if (_list.paginate.data[i].id == id) {
-			return _list.paginate.data[i];
-		}
-	}
+	if (_details) 
+		return _details.itemdetails;
+	if (_list)
+		for (var i=0; i < _list.paginate.data.length; i++) 
+			if (_list.paginate.data[i].id == id) 
+				return _list.paginate.data[i];
+	return null;
 };
 Dispatcher.list = function() {return _list;};
-Dispatcher.emit = function(_data) {
-	if (_data.catitems || _data.useritems || _data.itemdetails) {
-		_list = Object.assign({}, _list, _data);
-		if (data.catitems) {
-			Actions.catitems(_list);
-		}
-		else if (data.useritems) {
-			Actions.useritems(_list);
-		}
-		else if (data.itemdetails) {
-			Actions.itemdetails(_list);
-		}
-	}
-	else {
-		for (var i=0; i < _list.paginate.data.length; i++) {
-			if (_list.paginate.data[i].id == _data.id) {
-				_list.paginate.data[i] = Object.assign(_list.paginate.data[i], _data);
-				Actions.itemupdate(_list.paginate.data[i]);
-				break;
+Dispatcher.details = function() {return _details;};
+
+Dispatcher.emit = function(event, _data) {
+	switch (event) {
+		case this.events.APPL_EVENT:
+		case this.events.LIST_EVENT:
+			if (_data.catitems || _data.useritems) {//for the lists
+				_list = _data;
+				sessionManager.set('data', _list);
+				if (_list.catitems) {
+					Actions.catitems(_list);
+				}
+				else if (_list.useritems) {
+					Actions.useritems(_list);
+				}
 			}
-		}
+			else if (_data.itemdetails) {//for the detail page
+				_details = Object.assign({}, _data);
+				sessionManager.set('data', _details);
+				Actions.itemdetails(_details);
+			}
+			break;
+
+		case this.events.LISTITEM_EVENT:
+			if (_data.id) {
+				for (var i=0; i < _list.paginate.data.length; i++) {
+					if (_list.paginate.data[i].id == _data.id) {
+						_list.paginate.data[i] = Object.assign(_list.paginate.data[i], _data);
+						sessionManager.set('data', _list);
+						Actions.itemupdate(_list.paginate.data[i]);
+						break;
+					}
+				}
+			}
+			break;
 	}
 };
-Dispatcher.EVENT = EVENT;
 
-export default Dispatcher;
+window.Dispatcher = Dispatcher;
+
+export default window.Dispatcher;

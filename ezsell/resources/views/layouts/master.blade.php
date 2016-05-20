@@ -16,14 +16,14 @@ $appMessage = isset ( $appMessage ) ? $appMessage : '';
 
 @section('variables')
 @parent
-		var currentLocation = {!! $location !!};
-		var usecode = {!! $usecode !!};
-		var MODES = {!! $MODES !!};
-		var mode = {!! $mode !!};
-		var appMessage = '{{ $appMessage }}';
-		var cats = {!! $cats !!};
-		var data = {!! isset($data) ? json_encode($data) : '{}' !!};
-		var mediaBaseUrl = '{!! $mediaBaseUrl !!}';
-		var noavatarman = '{!! $noavatarman !!}';
-		var noavatarwoman = '{!! $noavatarwoman !!}';
+		sessionManager.set('location', {!! $location !!});
+		sessionManager.set('usecode', {!! $usecode !!});
+		sessionManager.set('MODES', {!! $MODES !!});
+		sessionManager.set('mode', {!! $mode !!});
+		sessionManager.set('appMessage', '{{ $appMessage }}');
+		sessionManager.set('cats', {!! $cats !!});
+		sessionManager.set('data', {!! isset($data) ? json_encode($data) : '{}' !!});
+		sessionManager.set('mediaBaseUrl', '{!! $mediaBaseUrl !!}');
+		sessionManager.set('noavatarman', '{!! $noavatarman !!}');
+		sessionManager.set('noavatarwoman', '{!! $noavatarwoman !!}');
 @endsection

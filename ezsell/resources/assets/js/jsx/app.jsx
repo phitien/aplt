@@ -1,5 +1,8 @@
 import Application from './components/application.jsx';
 //
+Object.assign(window, {
+	Application: Application
+});
 $( document ).ready(function() {
 	$(document).keyup(function(e) {
 		if (e.keyCode == 27) {
@@ -9,11 +12,12 @@ $( document ).ready(function() {
 	//scroll to bottom to load more data
 	$(window).scroll(function() {
     	if($(window).scrollTop() == $(document).height() - $(window).height()) {
-    		if (data.paginate.next_page_url) {
-				ajax.get(data.paginate.next_page_url, function( _data ) {
-					if (_data && _data.data) {
-						_data.data.paginate.data = data.paginate.data.concat(_data.data.paginate.data);
-						Application.Dispatcher.emit(_data.data);
+    		var paginate = sessionManager.isListPage();
+    		if (paginate && paginate.next_page_url) {
+				ajax.get(paginate.next_page_url, function( _data ) {
+					if (_data && _data.data && _data.data.paginate) {
+						_data.data.paginate.data = paginate.data.concat(_data.data.paginate.data);
+						Dispatcher.emit(Dispatcher.events.APPL_EVENT, _data.data);
 					}
 				});
     		}
@@ -25,7 +29,7 @@ $( document ).ready(function() {
 	 * add CatMenu
 	 */
 	ReactDOM.render(React.createElement(CatMenu, { 
-		items: cats
+		items: sessionManager.get('cats')
 	/**
 	 * add mode switch
 	 */
@@ -33,18 +37,20 @@ $( document ).ready(function() {
 	ReactDOM.render(React.createElement(FormView, {
 		onMouseUp(e, checked) {
 			setMode(checked ? 1 : 0);
-			ajax.get(location.href, function( _data ) {
-				if (_data && _data.data) {
-					Application.Dispatcher.emit(_data.data);
-				}
-			});
+			if (sessionManager.isListPage()) {
+				ajax.get(location.href, function( _data ) {
+					if (_data && _data.data) {
+						Dispatcher.emit(Dispatcher.events.APPL_EVENT, _data.data);
+					}
+				});
+			}
 		},
 		formrender() {
 			return (
 				<FormView.Form className='form' method='get' encType='multipart/form-data'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 					<FormView.Input type='switch' name='mode' title={localization.mode}
-						defaultChecked={getMode() == MODES.SELL ? true : false} 
+						defaultChecked={getMode() == sessionManager.get('MODES').SELL ? true : false} 
 						checkedChildren={localization.sell}
         				unCheckedChildren={localization.buy}
         				onMouseUp={this.props.onMouseUp} />
@@ -52,22 +58,20 @@ $( document ).ready(function() {
 			); 
 		}
 	}), document.getElementById(extraDivId));
-	if (showLeft) {
+	if (sessionManager.get('showLeft', false)) {
 		ReactDOM.render(React.createElement(CatMenu, { 
-			items: cats,
+			items: sessionManager.get('cats'),
 			showRoot: false,
 			className: 'leftmenu'
 		}), document.getElementById(leftDivId));
 	}
 	
-	if (appMessage) {
+	if (sessionManager.get('appMessage')) {
 		showMessageDialog(appMessage);
 	}
 
 	ReactDOM.render(
-		<Application data={data} />, 
+		<Application data={sessionManager.get('data')} />, 
 		document.getElementById(centerDivId)
 	);
 });
-
-window.Application = Application;

@@ -2,6 +2,14 @@
  * UserBox defination
  */
 var UserBox = React.createClass({
+	refreshCount: 0,
+	refresh() {this.setState({refreshCount: this.refreshCount++});},
+	componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LISTITEM_EVENT, function() {});
+	},
+	componentDidMount() {
+		Dispatcher.EventEmitter.on(Dispatcher.events.LISTITEM_EVENT, this.refresh);
+	},
 	onChatClick(e) {
 		if (!isCurrentUser(this.props.user)) {
 			console.log('TODO start conversation!!');
@@ -12,17 +20,20 @@ var UserBox = React.createClass({
 			console.log('TODO follow user!!');
 		}
 	},
-	render : function() {
+	render(){
 		const user = this.props.user;
 		if (user) {
-			const className = 'userbox ' + (this.props.className ? this.props.className : '');
+			const _isGuest = sessionManager.get('isGuest', true);
+			const _isCurrentUser = isCurrentUser(user);
+
+			const className = 'userbox ' + getPropValue(this.props, 'className');
+			const iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
+			const iconChatTitle = _isGuest ? ' Please login' : _isCurrentUser ? 'Cannot chat to yourself' : '';
+			const iconFollowClassName = 'icon icon-follow' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
+			const iconFollowTitle = _isGuest ? ' Please login' : _isCurrentUser ? 'Cannot follow yourself' : '';
 			const avatar = user && user.avatar ? user.avatar : 
-				('http://media.ezsell.com/noavatar' + (user.gender == 'MALE' ? 'man' : 'woman'));
+				(user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman'));
 			const href = '/' + user.name; 
-			const iconChatClassName = 'icon icon-chat' + (isGuest || isCurrentUser(user) ? ' icon-disabled' : '');
-			const iconChatTitle = isGuest ? ' Please login' : isCurrentUser(user) ? 'Cannot chat to yourself' : '';
-			const iconFollowClassName = 'icon icon-follow' + (isGuest || isCurrentUser(user) ? ' icon-disabled' : '');
-			const iconFollowTitle = isGuest ? ' Please login' : isCurrentUser(user) ? 'Cannot follow yourself' : '';
 			return (
 				<div className={className}>
 					<img src={avatar} />
@@ -32,9 +43,7 @@ var UserBox = React.createClass({
 				</div>
 			);
 		}
-		else {
-			return null;
-		}  
+		return null;
 	}
 });
 

@@ -2,7 +2,7 @@ $( document ).ready(function() {
 	ReactDOM.render(React.createElement(FormView, {
 		formrender() {
 			var catoptions = [];
-			$(cats).each(function(i, root) {
+			$(sessionManager.get('cats', [])).each(function(i, root) {
 				$(root.children).each(function(j, cat) {
 					$(cat.children).each(function(k, subcat) {
 						catoptions.push({
@@ -13,10 +13,10 @@ $( document ).ready(function() {
 				});
 			});
 			var conditions = [{
-				label: 'New',
+				label: localization.new,
 				value: 1
 			},{
-				label: 'Used',
+				label: localization.used,
 				value: 0
 			}];
 			return (

@@ -3,40 +3,22 @@ import UserItemsList from './useritemlist.jsx';
 import ItemDetails from './itemdetails.jsx';
 
 import Dispatcher from '../dispatcher/dispatcher.jsx';
-window.Dispatcher = Dispatcher;
 //
 /**
  * Application defination
  */
 var Application = React.createClass({
-	getInitialState: function() {
-		return {
-			data: data
-		};
+	refreshCount: 0,
+	refresh() {this.setState({refreshCount: this.refreshCount++});},
+	componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.events.APPL_EVENT, function() {});
 	},
 	componentDidMount() {
-		var me = this;
-		Dispatcher.EventEmitter.on(Dispatcher.LIST_CHANGE, function() {
-			me.setState({
-				data: data
-			});
-		});
-		$('.datetimeformat').each(function () {
-			var me = $(this);
-			var text = me.text().trim();
-			me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
-		});
-		$('.currency-value').each(function () {
-			var me = $(this);
-			var text = me.text().trim();
-			me.text(format.currency(text));
-		});
-	},
-	componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.LIST_CHANGE, function() {});
+		Dispatcher.EventEmitter.on(Dispatcher.events.APPL_EVENT, this.refresh);
+		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	render() {
-		var data = this.state.data;
+		var data = sessionManager.get('data');
 		if (data) {
 			if (data.catitems) {
 				return (
@@ -58,5 +40,4 @@ var Application = React.createClass({
 	}
 });
 
-Application.Dispatcher = Dispatcher;
 export default Application;

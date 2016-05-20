@@ -63,7 +63,10 @@ return [
 				'send' => 'Send',
 				'new_email_should_be_different' => 'New email should be different',
 				'current_password' => 'Current password',
-				'new_password_should_be_different' => 'New password should be different' 
+				'new_password_should_be_different' => 'New password should be different',
+				'posted_at' => 'Posted:',
+				'edited_at' => 'Edited:',
+				'expires_at' => 'Expires:' 
 		],
 		'sentences' => [ 
 				'password_changed' => "Hehe mật khẩu đổi rồi đấy, an toàn rồi :D",

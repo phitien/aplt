@@ -6399,6 +6399,9 @@ var _application2 = _interopRequireDefault(_application);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //
+Object.assign(window, {
+	Application: _application2.default
+});
 $(document).ready(function () {
 	$(document).keyup(function (e) {
 		if (e.keyCode == 27) {
@@ -6408,11 +6411,12 @@ $(document).ready(function () {
 	//scroll to bottom to load more data
 	$(window).scroll(function () {
 		if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-			if (data.paginate.next_page_url) {
-				ajax.get(data.paginate.next_page_url, function (_data) {
-					if (_data && _data.data) {
-						_data.data.paginate.data = data.paginate.data.concat(_data.data.paginate.data);
-						_application2.default.Dispatcher.emit(_data.data);
+			var paginate = sessionManager.isListPage();
+			if (paginate && paginate.next_page_url) {
+				ajax.get(paginate.next_page_url, function (_data) {
+					if (_data && _data.data && _data.data.paginate) {
+						_data.data.paginate.data = paginate.data.concat(_data.data.paginate.data);
+						Dispatcher.emit(Dispatcher.events.APPL_EVENT, _data.data);
 					}
 				});
 			}
@@ -6422,7 +6426,7 @@ $(document).ready(function () {
   * add CatMenu
   */
 	ReactDOM.render(React.createElement(CatMenu, {
-		items: cats
+		items: sessionManager.get('cats')
 		/**
    * add mode switch
    */
@@ -6430,11 +6434,13 @@ $(document).ready(function () {
 	ReactDOM.render(React.createElement(FormView, {
 		onMouseUp: function onMouseUp(e, checked) {
 			setMode(checked ? 1 : 0);
-			ajax.get(location.href, function (_data) {
-				if (_data && _data.data) {
-					_application2.default.Dispatcher.emit(_data.data);
-				}
-			});
+			if (sessionManager.isListPage()) {
+				ajax.get(location.href, function (_data) {
+					if (_data && _data.data) {
+						Dispatcher.emit(Dispatcher.events.APPL_EVENT, _data.data);
+					}
+				});
+			}
 		},
 		formrender: function formrender() {
 			return React.createElement(
@@ -6442,29 +6448,27 @@ $(document).ready(function () {
 				{ className: 'form', method: 'get', encType: 'multipart/form-data',
 					onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
 				React.createElement(FormView.Input, { type: 'switch', name: 'mode', title: localization.mode,
-					defaultChecked: getMode() == MODES.SELL ? true : false,
+					defaultChecked: getMode() == sessionManager.get('MODES').SELL ? true : false,
 					checkedChildren: localization.sell,
 					unCheckedChildren: localization.buy,
 					onMouseUp: this.props.onMouseUp })
 			);
 		}
 	}), document.getElementById(extraDivId));
-	if (showLeft) {
+	if (sessionManager.get('showLeft', false)) {
 		ReactDOM.render(React.createElement(CatMenu, {
-			items: cats,
+			items: sessionManager.get('cats'),
 			showRoot: false,
 			className: 'leftmenu'
 		}), document.getElementById(leftDivId));
 	}
 
-	if (appMessage) {
+	if (sessionManager.get('appMessage')) {
 		showMessageDialog(appMessage);
 	}
 
-	ReactDOM.render(React.createElement(_application2.default, { data: data }), document.getElementById(centerDivId));
+	ReactDOM.render(React.createElement(_application2.default, { data: sessionManager.get('data') }), document.getElementById(centerDivId));
 });
-
-window.Application = _application2.default;
 
 },{"./components/application.jsx":131}],131:[function(require,module,exports){
 'use strict';
@@ -6491,7 +6495,6 @@ var _dispatcher2 = _interopRequireDefault(_dispatcher);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-window.Dispatcher = _dispatcher2.default;
 //
 /**
  * Application defination
@@ -6499,34 +6502,19 @@ window.Dispatcher = _dispatcher2.default;
 var Application = React.createClass({
 	displayName: 'Application',
 
-	getInitialState: function getInitialState() {
-		return {
-			data: data
-		};
-	},
-	componentDidMount: function componentDidMount() {
-		var me = this;
-		_dispatcher2.default.EventEmitter.on(_dispatcher2.default.LIST_CHANGE, function () {
-			me.setState({
-				data: data
-			});
-		});
-		$('.datetimeformat').each(function () {
-			var me = $(this);
-			var text = me.text().trim();
-			me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
-		});
-		$('.currency-value').each(function () {
-			var me = $(this);
-			var text = me.text().trim();
-			me.text(format.currency(text));
-		});
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		_dispatcher2.default.EventEmitter.removeListener(_dispatcher2.default.LIST_CHANGE, function () {});
+		_dispatcher2.default.EventEmitter.removeListener(_dispatcher2.default.events.APPL_EVENT, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		_dispatcher2.default.EventEmitter.on(_dispatcher2.default.events.APPL_EVENT, this.refresh);
+		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	render: function render() {
-		var data = this.state.data;
+		var data = sessionManager.get('data');
 		if (data) {
 			if (data.catitems) {
 				return React.createElement(_catitemlist2.default, { data: data, className: 'item-block-prices' });
@@ -6541,7 +6529,6 @@ var Application = React.createClass({
 	}
 });
 
-Application.Dispatcher = _dispatcher2.default;
 exports.default = Application;
 
 },{"../dispatcher/dispatcher.jsx":137,"./catitemlist.jsx":132,"./itemdetails.jsx":133,"./useritemlist.jsx":136}],132:[function(require,module,exports){
@@ -6568,78 +6555,77 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var CatItemList = React.createClass({
 	displayName: 'CatItemList',
 
-	getInitialState: function getInitialState() {
-		return {
-			data: Dispatcher.list()
-		};
-	},
-	componentDidMount: function componentDidMount() {
-		var me = this;
-		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
-			me.setState({
-				data: Dispatcher.list()
-			});
-		});
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function () {});
+		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LIST_EVENT, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.EventEmitter.on(Dispatcher.events.LIST_EVENT, this.refresh);
 	},
 	render: function render() {
-		var data = this.state.data;
-		var cat = data.catitems;
-		var items = data.paginate.data;
-		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
-		var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
-		return React.createElement(
-			'div',
-			{ className: className, id: this.id },
-			React.createElement(
-				'div',
-				{ className: 'cat-detail' },
-				React.createElement(
+		var data = Dispatcher.list();
+		if (data) {
+			var cat = data.catitems;
+			if (cat) {
+				var items = data.paginate.data;
+				this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
+				var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
+				return React.createElement(
 					'div',
-					{ className: 'cat-name' },
+					{ className: className, id: this.id },
 					React.createElement(
-						'label',
-						null,
-						cat.details.name
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'cat-title' },
-					React.createElement(
-						'label',
-						null,
-						cat.details.title
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'cat-description' },
-					React.createElement(
-						'p',
-						null,
-						cat.details.description
-					)
-				)
-			),
-			React.createElement(
-				'div',
-				{ className: 'row item-list' },
-				items.map(function (item, i) {
-					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
-					var userbox = isCurrentUser(item.user) ? null : React.createElement(UserBox, { user: item.user });
-					return React.createElement(
 						'div',
-						{ className: itemClassName, key: i },
-						React.createElement(_itemimage2.default, { item: item }),
-						React.createElement(_itemsummary2.default, { item: item, prices: 'original,now' }),
-						userbox
-					);
-				})
-			)
-		);
+						{ className: 'cat-detail' },
+						React.createElement(
+							'div',
+							{ className: 'cat-name' },
+							React.createElement(
+								'label',
+								null,
+								cat.details.name
+							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'cat-title' },
+							React.createElement(
+								'label',
+								null,
+								cat.details.title
+							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'cat-description' },
+							React.createElement(
+								'p',
+								null,
+								cat.details.description
+							)
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'row item-list' },
+						items.map(function (item, i) {
+							var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
+							var userbox = isCurrentUser(item.user) ? null : React.createElement(UserBox, { user: item.user });
+							return React.createElement(
+								'div',
+								{ className: itemClassName, key: i },
+								React.createElement(_itemimage2.default, { item: item }),
+								React.createElement(_itemsummary2.default, { item: item, prices: 'original,now' }),
+								userbox
+							);
+						})
+					)
+				);
+			}
+		}
+		return null;
 	}
 });
 
@@ -6667,22 +6653,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var ItemDetails = React.createClass({
 	displayName: 'ItemDetails',
-	getInitialState: function getInitialState() {
-		return {
-			item: this.props.data.itemdetails
-		};
+
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
 	},
 
-	componentDidMount: function componentDidMount() {
-		var me = this;
-		Dispatcher.EventEmitter.on(Dispatcher.CHANGE_EVENT, function () {
-			me.setState({
-				item: data.itemdetails
-			});
-		});
-	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.CHANGE_EVENT, function () {});
+		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LISTITEM_EVENT, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.EventEmitter.on(Dispatcher.events.LISTITEM_EVENT, this.refresh);
 	},
 	handleImageLoad: function handleImageLoad(event) {},
 	handlePlay: function handlePlay() {
@@ -6694,15 +6675,17 @@ var ItemDetails = React.createClass({
 	render: function render() {
 		var _this = this;
 
-		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
-		var className = 'item-details-wrapper ' + (this.props.className ? this.props.className : '');
-		var showThumbnails = this.props.showThumbnails ? this.props.showThumbnails : true;
-		var slideOnThumbnailHover = this.props.slideOnThumbnailHover ? this.props.slideOnThumbnailHover : true;
-		var showNav = this.props.showNav ? this.props.showNav : true;
-		var slideInterval = this.props.slideInterval ? this.props.slideInterval : 3000;
-		var images = [];
-		if (this.state.item.images) {
-			this.state.item.images.map(function (o, i) {
+		var data = Dispatcher.details();
+		if (data) {
+			var item = data.itemdetails;
+			this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
+			var className = 'item-details-wrapper ' + getPropValue(this.props, 'className', '');
+			var showThumbnails = getPropValue(this.props, 'showThumbnails', true);
+			var slideOnThumbnailHover = getPropValue(this.props, 'slideOnThumbnailHover', true);
+			var showNav = getPropValue(this.props, 'showNav', true);
+			var slideInterval = getPropValue(this.props, 'slideInterval', 3000);
+			var images = [];
+			item.images.map(function (o, i) {
 				images.push({
 					original: o.url,
 					thumbnail: o.url,
@@ -6710,108 +6693,47 @@ var ItemDetails = React.createClass({
 					description: o.description
 				});
 			});
-		}
-		var posted_at = React.createElement(
-			'div',
-			{ className: 'item-created' },
-			React.createElement(
-				'a',
-				null,
-				React.createElement(
-					'span',
-					null,
-					'Posted:'
-				),
-				React.createElement(
-					'span',
-					{ className: 'datetimeformat' },
-					this.state.item.created_at
-				)
-			)
-		);
-		var created = new Date(this.state.item.created_at);
-		var updated = new Date(this.state.item.updated_at);
-		if (+updated !== +created) {
-			posted_at = React.createElement(
+			var lines = item.description.split('\n');
+			return React.createElement(
 				'div',
-				{ className: 'item-date item-updated' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						null,
-						'Edited:'
-					),
-					React.createElement(
-						'span',
-						{ className: 'datetimeformat' },
-						this.state.item.updated_at
-					)
-				)
-			);
-		}
-		var expired_at = '';
-		if (this.state.item.deleted_at) {
-			expired_at = React.createElement(
-				'div',
-				{ className: 'item-date item-expired' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						null,
-						'Expire:'
-					),
-					React.createElement(
-						'span',
-						{ className: 'datetimeformat' },
-						this.state.item.deleted_at
-					)
-				)
-			);
-		}
-		var showLink = false;
-		var lines = this.state.item.description.split('\n');
-		return React.createElement(
-			'div',
-			{ className: className, id: this.id },
-			React.createElement(
-				'div',
-				{ className: 'row item-detail' },
+				{ className: className, id: this.id },
 				React.createElement(
 					'div',
-					{ className: 'col-xs-6 col-md-7' },
-					React.createElement(_itemsummary2.default, { item: this.state.item, showLink: showLink, prices: 'original,now' }),
+					{ className: 'row item-detail' },
 					React.createElement(
 						'div',
-						{ className: 'item-description' },
-						lines.map(function (o, i) {
-							return React.createElement(
-								'p',
-								{ key: i },
-								o
-							);
-						})
+						{ className: 'col-xs-6 col-md-7' },
+						React.createElement(_itemsummary2.default, { item: item, showLink: false, prices: 'original,now' }),
+						React.createElement(
+							'div',
+							{ className: 'item-description' },
+							lines.map(function (o, i) {
+								return React.createElement(
+									'p',
+									{ key: i },
+									o
+								);
+							})
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'col-xs-6 col-md-5 item-gallery sensitive' },
+						React.createElement(_reactImageGallery2.default, {
+							ref: function ref(i) {
+								return _this._imageGallery = i;
+							},
+							items: images,
+							slideInterval: slideInterval,
+							handleImageLoad: this.handleImageLoad,
+							showThumbnails: showThumbnails,
+							slideOnThumbnailHover: slideOnThumbnailHover,
+							showNav: showNav })
 					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'col-xs-6 col-md-5 item-gallery sensitive' },
-					React.createElement(_reactImageGallery2.default, {
-						ref: function ref(i) {
-							return _this._imageGallery = i;
-						},
-						items: images,
-						slideInterval: slideInterval,
-						handleImageLoad: this.handleImageLoad,
-						showThumbnails: showThumbnails,
-						slideOnThumbnailHover: slideOnThumbnailHover,
-						showNav: showNav })
 				)
-			)
-		);
+			);
+		}
+		return null;
 	}
 });
 
@@ -6829,52 +6751,53 @@ Object.defineProperty(exports, "__esModule", {
 var ItemImage = React.createClass({
 	displayName: 'ItemImage',
 
-	getInitialState: function getInitialState() {
-		return {
-			item: Dispatcher.item(this.props.item.id)
-		};
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LISTITEM_EVENT, function () {});
 	},
 	componentDidMount: function componentDidMount() {
-		var me = this;
-		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
-			me.setState({
-				item: Dispatcher.item(me.props.item.id)
-			});
-		});
-	},
-	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function () {});
+		Dispatcher.EventEmitter.on(Dispatcher.events.LISTITEM_EVENT, this.refresh);
 	},
 	onClick: function onClick(e) {
+		var isGuest = sessionManager.get('isGuest', true);
+		var user = sessionManager.get('user');
 		if (!isGuest && user && user.id) {
-			var id = usecode ? this.props.item.code : this.props.item.id;
+			var item = Dispatcher.item(this.props.item.id);
+			var id = sessionManager.get('usecode') ? item.code : item.id;
 			if (id) {
 				ajax.post('/like', function (o) {
-					Dispatcher.emit(o.data);
+					Dispatcher.emit(Dispatcher.events.LISTITEM_EVENT, o.data);
 				}, { id: id, user_id: user.id });
 			}
 		}
 	},
 	render: function render() {
-		var item = this.state.item ? this.state.item : this.props.item;
-		var className = 'item-firstimage ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
-		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-		var href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
-		var iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : '');
-		return React.createElement(
-			'div',
-			{ className: className },
-			React.createElement(
+		var item = Dispatcher.item(this.props.item.id);
+		if (item) {
+			var className = 'item-firstimage ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
+			var iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : '');
+			var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
+			var href = showLink ? '/item/' + (sessionManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			return React.createElement(
 				'div',
-				{ className: 'item-firstimage-wrapper' },
+				{ className: className },
 				React.createElement(
-					'a',
-					{ href: href },
-					React.createElement('img', { src: item.images[0].url })
-				),
-				React.createElement('a', { className: iconClassName, onClick: this.onClick })
-			)
-		);
+					'div',
+					{ className: 'item-firstimage-wrapper' },
+					React.createElement(
+						'a',
+						{ href: href },
+						React.createElement('img', { src: item.images[0].url })
+					),
+					React.createElement('a', { className: iconClassName, onClick: this.onClick })
+				)
+			);
+		}
+		return null;
 	}
 });
 
@@ -6892,153 +6815,90 @@ Object.defineProperty(exports, "__esModule", {
 var ItemSummary = React.createClass({
 	displayName: 'ItemSummary',
 
-	getInitialState: function getInitialState() {
-		return {
-			item: Dispatcher.item(this.props.item.id)
-		};
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LISTITEM_EVENT, function () {});
 	},
 	componentDidMount: function componentDidMount() {
-		var me = this;
-		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
-			me.setState({
-				item: Dispatcher.item(me.props.item.id)
-			});
-		});
-	},
-	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function () {});
+		Dispatcher.EventEmitter.on(Dispatcher.events.LISTITEM_EVENT, this.refresh);
 	},
 	render: function render() {
-		var item = this.state.item ? this.state.item : this.props.item;
-		var prices = this.props.hasOwnProperty('prices') ? this.props.prices.split(',') : ['original', 'sale', 'now'];
-		var className = 'item-summary ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
-		var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-		var href = showLink ? '/item/' + (usecode ? item.code : item.id) : 'javascript:void(0);';
-		var posted_at = React.createElement(
-			'div',
-			{ className: 'item-created' },
-			React.createElement(
-				'a',
-				null,
-				React.createElement(
-					'span',
-					{ className: 'label posted-label' },
-					'Posted:'
-				),
-				React.createElement(
-					'span',
-					{ className: 'datetimeformat' },
-					item.created_at
-				)
-			)
-		);
+		var item = Dispatcher.item(this.props.item.id);
+		if (item) {
+			var prices = getPropValue(this.props, 'prices', 'original,sale,now').split(',');
+			var className = 'item-summary ' + getPropValue(this.props, 'className', '') + (item.liked ? ' liked' : ' unliked');
+			var iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
+			var showLink = getPropValue(this.props, 'showLink', true);
+			var href = showLink ? '/item/' + (sessionManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			var price_list = React.createElement(
+				'div',
+				{ className: 'item-prices' },
+				prices.map(function (o, i) {
+					var pclassName = 'item-price item-' + o + 'price';
+					var pvalue = item[o + 'price'];
+					return React.createElement(
+						'div',
+						{ className: pclassName, key: i },
+						React.createElement(
+							'span',
+							{ className: 'currency-sign' },
+							sessionManager.get('location').currency
+						),
+						React.createElement(
+							'span',
+							{ className: 'currency-value' },
+							pvalue
+						),
+						React.createElement(
+							'span',
+							{ className: 'label' },
+							o[0].toUpperCase() + o.slice(1)
+						)
+					);
+				})
+			);
 
-		var created = new Date(item.created_at);
-		var updated = new Date(item.updated_at);
-		if (+updated !== +created) {
-			posted_at = React.createElement(
+			return React.createElement(
 				'div',
-				{ className: 'item-date item-updated' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label edited-label' },
-						'Edited:'
-					),
-					React.createElement(
-						'span',
-						{ className: 'datetimeformat' },
-						item.updated_at
-					)
-				)
-			);
-		}
-		var expired_at = '';
-		if (item.deleted_at) {
-			expired_at = React.createElement(
-				'div',
-				{ className: 'item-date item-expired' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label expired-label' },
-						'Expire:'
-					),
-					React.createElement(
-						'span',
-						{ className: 'datetimeformat' },
-						item.deleted_at
-					)
-				)
-			);
-		}
-		var price_list = React.createElement(
-			'div',
-			{ className: 'item-prices' },
-			prices.map(function (o, i) {
-				var pclassName = 'item-price item-' + o + 'price';
-				var pvalue = item[o + 'price'];
-				return React.createElement(
-					'div',
-					{ className: pclassName, key: i },
-					React.createElement(
-						'span',
-						{ className: 'currency-sign' },
-						currentLocation.currency
-					),
-					React.createElement(
-						'span',
-						{ className: 'currency-value' },
-						pvalue
-					),
-					React.createElement(
-						'span',
-						{ className: 'label' },
-						o[0].toUpperCase() + o.slice(1)
-					)
-				);
-			})
-		);
-		var iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
-		return React.createElement(
-			'div',
-			{ className: className },
-			React.createElement(
-				'div',
-				{ className: 'item-title' },
-				React.createElement(
-					'a',
-					{ href: href },
-					React.createElement(
-						'span',
-						null,
-						item.title
-					)
-				)
-			),
-			posted_at,
-			expired_at,
-			React.createElement(
-				'div',
-				{ className: item.is_new ? 'new' : 'used' },
-				item.is_new ? 'New' : 'Used'
-			),
-			price_list,
-			React.createElement(
-				'div',
-				{ className: 'likes' },
+				{ className: className },
 				React.createElement(
 					'div',
-					{ className: 'amount' },
-					item.likes
+					{ className: 'item-title' },
+					React.createElement(
+						'a',
+						{ href: href },
+						React.createElement(
+							'span',
+							null,
+							item.title
+						)
+					)
 				),
-				React.createElement('div', { className: iconClassName })
-			)
-		);
+				ui.getItemPostedOrEdited(item),
+				ui.getItemExpires(item),
+				React.createElement(
+					'div',
+					{ className: item.is_new ? 'new' : 'used' },
+					item.is_new ? 'New' : 'Used'
+				),
+				price_list,
+				React.createElement(
+					'div',
+					{ className: 'likes' },
+					React.createElement(
+						'div',
+						{ className: 'amount' },
+						item.likes
+					),
+					React.createElement('div', { className: iconClassName })
+				)
+			);
+		}
+		return null;
 	}
 });
 
@@ -7067,69 +6927,66 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var UserItemList = React.createClass({
 	displayName: 'UserItemList',
 
-	getInitialState: function getInitialState() {
-		return {
-			data: Dispatcher.list()
-		};
-	},
-	componentDidMount: function componentDidMount() {
-		var me = this;
-		Dispatcher.EventEmitter.on(Dispatcher.EVENT, function () {
-			me.setState({
-				data: Dispatcher.list()
-			});
-		});
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.EVENT, function () {});
+		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LIST_EVENT, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.EventEmitter.on(Dispatcher.events.LIST_EVENT, this.refresh);
 	},
 	render: function render() {
-		var data = this.state.data;
-		var user = data.useritems;
-		var items = data.paginate.data;
-		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
-		var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
-		return React.createElement(
-			'div',
-			{ className: className, id: this.id },
-			React.createElement(
-				'div',
-				{ className: 'user-detail' },
-				React.createElement(
+		var data = Dispatcher.list();
+		if (data) {
+			var user = data.useritems;
+			if (user) {
+				var items = data.paginate.data;
+				this.id = this.id ? this.id : this.props.id ? this.props.id : uuid('item-list');
+				var className = 'item-list-wrapper ' + (this.props.className ? this.props.className : '');
+				return React.createElement(
 					'div',
-					{ className: 'user-name' },
+					{ className: className, id: this.id },
 					React.createElement(
-						'label',
-						null,
-						user.displayname
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'user-description' },
-					React.createElement(
-						'p',
-						null,
-						user.description
-					)
-				)
-			),
-			React.createElement(
-				'div',
-				{ className: 'row item-list' },
-				items.map(function (item, i) {
-					var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
-					var userbox = isCurrentUser(item.user) ? null : React.createElement(UserBox, { user: item.user });
-					return React.createElement(
 						'div',
-						{ className: itemClassName, key: i },
-						React.createElement(_itemimage2.default, { item: item }),
-						React.createElement(_itemsummary2.default, { item: item, prices: 'original,now' }),
-						userbox
-					);
-				})
-			)
-		);
+						{ className: 'user-detail' },
+						React.createElement(
+							'div',
+							{ className: 'user-name' },
+							React.createElement(
+								'label',
+								null,
+								user.displayname
+							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'user-description' },
+							React.createElement(
+								'p',
+								null,
+								user.description
+							)
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'row item-list' },
+						items.map(function (item, i) {
+							var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
+							return React.createElement(
+								'div',
+								{ className: itemClassName, key: i },
+								React.createElement(_itemimage2.default, { item: item }),
+								React.createElement(_itemsummary2.default, { item: item, prices: 'original,now' })
+							);
+						})
+					)
+				);
+			}
+		}
+		return null;
 	}
 });
 
@@ -7177,11 +7034,32 @@ var EventEmitter = function (_Events) {
 }(_events2.default);
 
 var eventEmitter = new EventEmitter();
-var EVENT = 'listchange';
+eventEmitter.setMaxListeners(Infinity);
 //
 var Dispatcher = new _flux2.default.Dispatcher();
+Dispatcher.events = {
+	APPL_EVENT: 'applevent',
+	LIST_EVENT: 'listevent',
+	LISTITEM_EVENT: 'listitemevent',
+	ITEM_EVENT: 'listitemevent',
+	USER_EVENT: 'userevent'
+};
+
 Dispatcher.register(function (action) {
-	eventEmitter.emit(EVENT);
+	console.log(action.actionType);
+	switch (action.actionType) {
+		case Constants.CATITEMS:
+		case Constants.USERITEMS:
+		case Constants.ITEMDETAILS:
+			eventEmitter.emit(Dispatcher.events.APPL_EVENT);
+			break;
+
+		case Constants.ITEMUPDATE:
+			eventEmitter.emit(Dispatcher.events.LISTITEM_EVENT);
+			break;
+	}
+	//eventEmitter.emit(Dispatcher.events.LIST_EVENT);
+	//eventEmitter.emit(Dispatcher.events.USER_EVENT);
 });
 //
 var Constants = (0, _keymirror2.default)({
@@ -7191,69 +7069,92 @@ var Constants = (0, _keymirror2.default)({
 	ITEMUPDATE: null
 });
 var Actions = {
-	catitems: function catitems(data) {
+	catitems: function catitems(_data) {
 		Dispatcher.dispatch({
 			actionType: Constants.CATITEMS,
-			data: data
+			data: _data
 		});
 	},
-	useritems: function useritems(data) {
+	useritems: function useritems(_data) {
 		Dispatcher.dispatch({
 			actionType: Constants.USERITEMS,
-			data: data
+			data: _data
 		});
 	},
-	itemdetails: function itemdetails(data) {
+	itemdetails: function itemdetails(_data) {
 		Dispatcher.dispatch({
 			actionType: Constants.ITEMDETAILS,
-			data: data
+			data: _data
 		});
 	},
-	itemupdate: function itemupdate(data) {
+	itemupdate: function itemupdate(_data) {
 		Dispatcher.dispatch({
 			actionType: Constants.ITEMUPDATE,
-			data: data
+			data: _data
 		});
 	}
 };
-var _list = window.data ? window.data : null;
+var _list = null;
+var _details = null;
+
+if (sessionManager.isListPage()) _list = sessionManager.get('data');else _details = sessionManager.get('data');
 
 Dispatcher.Constants = Constants;
 Dispatcher.Actions = Actions;
 Dispatcher.EventEmitter = eventEmitter;
+
 Dispatcher.item = function (id) {
-	for (var i = 0; i < _list.paginate.data.length; i++) {
-		if (_list.paginate.data[i].id == id) {
-			return _list.paginate.data[i];
-		}
-	}
+	if (_details) return _details.itemdetails;
+	if (_list) for (var i = 0; i < _list.paginate.data.length; i++) {
+		if (_list.paginate.data[i].id == id) return _list.paginate.data[i];
+	}return null;
 };
 Dispatcher.list = function () {
 	return _list;
 };
-Dispatcher.emit = function (_data) {
-	if (_data.catitems || _data.useritems || _data.itemdetails) {
-		_list = Object.assign({}, _list, _data);
-		if (data.catitems) {
-			Actions.catitems(_list);
-		} else if (data.useritems) {
-			Actions.useritems(_list);
-		} else if (data.itemdetails) {
-			Actions.itemdetails(_list);
-		}
-	} else {
-		for (var i = 0; i < _list.paginate.data.length; i++) {
-			if (_list.paginate.data[i].id == _data.id) {
-				_list.paginate.data[i] = Object.assign(_list.paginate.data[i], _data);
-				Actions.itemupdate(_list.paginate.data[i]);
-				break;
+Dispatcher.details = function () {
+	return _details;
+};
+
+Dispatcher.emit = function (event, _data) {
+	switch (event) {
+		case this.events.APPL_EVENT:
+		case this.events.LIST_EVENT:
+			if (_data.catitems || _data.useritems) {
+				//for the lists
+				_list = _data;
+				sessionManager.set('data', _list);
+				if (_list.catitems) {
+					Actions.catitems(_list);
+				} else if (_list.useritems) {
+					Actions.useritems(_list);
+				}
+			} else if (_data.itemdetails) {
+				//for the detail page
+				_details = Object.assign({}, _data);
+				sessionManager.set('data', _details);
+				Actions.itemdetails(_details);
 			}
-		}
+			break;
+
+		case this.events.LISTITEM_EVENT:
+			if (_data.id) {
+				for (var i = 0; i < _list.paginate.data.length; i++) {
+					if (_list.paginate.data[i].id == _data.id) {
+						_list.paginate.data[i] = Object.assign(_list.paginate.data[i], _data);
+						sessionManager.set('data', _list);
+						Actions.itemupdate(_list.paginate.data[i]);
+						break;
+					}
+				}
+			}
+			break;
 	}
 };
-Dispatcher.EVENT = EVENT;
 
-exports.default = Dispatcher;
+window.Dispatcher = Dispatcher;
+
+exports.default = window.Dispatcher;
 
 },{"events":95,"flux":91,"keymirror":94}]},{},[130]);
 

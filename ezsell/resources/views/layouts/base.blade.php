@@ -58,36 +58,37 @@ Html::script('js/jquery-migrate-1.2.1.min.js', ['type' =>
 'text/javascript']) }} {{ Html::script('js/jquery-dateFormat.min.js',
 ['type' => 'text/javascript']) }} {{
 Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
+{{ Html::script('js/common.js', ['type' => 'text/javascript']) }}
 <script type="text/javascript">
 		//localization
-		var localization = {!! $localization !!};
+		const localization = {!! $localization !!};
 		//divs ids
-		var navigationDivId = 'navigation';
-		var containerDivId = 'container';
-		var leftDivId = 'left';
-		var centerDivId = 'center';
-		var rightDivId = 'right';
-		var footerDivId = 'footer';
-		var formContainerDivId = 'form-container';
-		var extraDivId = 'extra';
-		var catmenuDivId = 'catmenu';
+		const navigationDivId = 'navigation';
+		const containerDivId = 'container';
+		const leftDivId = 'left';
+		const centerDivId = 'center';
+		const rightDivId = 'right';
+		const footerDivId = 'footer';
+		const formContainerDivId = 'form-container';
+		const extraDivId = 'extra';
+		const catmenuDivId = 'catmenu';
 		//some basic variables
-		var showBanner = {!! $showBanner ? 'true' : 'false' !!};
-		var showLeft = {!! $leftCols ? 'true' : 'false' !!};
-		var showRight = {!! $rightCols ? 'true' : 'false' !!};
+		sessionManager.set('showBanner', {!! $showBanner ? 'true' : 'false' !!});
+		sessionManager.set('showLeft', {!! $leftCols ? 'true' : 'false' !!});
+		sessionManager.set('showRight', {!! $rightCols ? 'true' : 'false' !!});
 		//user
-		var user = {!! $user !!};
-		var isGuest = {!! $isGuest ? 'true' : 'false' !!};
+		sessionManager.set('user', {!! $user !!});
+		sessionManager.set('isGuest', {!! $isGuest ? 'true' : 'false' !!});
 		//some extra variables
 @yield('variables')
 		//start socket connection
-		var socket = io.connect('http://localhost:8890');
+		const socket = io.connect('http://localhost:8890');
 		socket.on('message', function (data) {
 			$( "#messages" ).append( "<p>"+data+"</p>" );
 		});
 	</script>
-{{ Html::script('js/common.js', ['type' => 'text/javascript']) }} {{
-Html::script('js/app.js', ['type' => 'text/javascript']) }}
+
+{{ Html::script('js/app.js', ['type' => 'text/javascript']) }}
 @yield('scripts')
 </head>
 <body class="{{ $isGuest ? 'guest' : 'user' }}">
