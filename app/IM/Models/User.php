@@ -177,8 +177,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 		return array_merge ( $attributes, [ 
 				'displayname' => $this->getDisplayName (),
 				'extension' => $this->extension ()->all (),
-				'followers' => count ( $this->followers ),
-				'following' => count ( $this->following ) 
+				'followers' => $this->followers->lists('id'),
+				'following' => $this->following->lists('id') 
 		] );
 	}
 	protected function getDisplayName() {

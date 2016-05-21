@@ -2,13 +2,14 @@
  * ItemImage defination
  */
 var ItemImage = React.createClass({
+	eventName: Dispatcher.Events.UPDATE_ITEM,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount: function() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LISTITEM_EVENT, function() {});
+		Dispatcher.EventEmitter.removeListener(this.eventName, function() {});
 	},
 	componentDidMount: function() {
-		Dispatcher.EventEmitter.on(Dispatcher.events.LISTITEM_EVENT, this.refresh);
+		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
 	},
 	onClick(e) {
 		const isGuest = sessionManager.get('isGuest', true);
@@ -18,13 +19,13 @@ var ItemImage = React.createClass({
 			var id = sessionManager.get('usecode') ? item.code : item.id;
 			if (id) {
 				ajax.post('/like', function(o) {
-					Dispatcher.emit(Dispatcher.events.LISTITEM_EVENT, o.data);
+					Dispatcher.emit(Dispatcher.Events.LISTITEM_EVENT, o.data);
 				}, {id: id, user_id: user.id});
 			}
 		}
 	},
 	render() {
-		const item = Dispatcher.item(this.props.item.id);
+		const item = Dispatcher.Store.get(this.eventName, this.props.item.id);
 		if (item) {
 			const className = 'item-firstimage ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
 			const iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : ''); 

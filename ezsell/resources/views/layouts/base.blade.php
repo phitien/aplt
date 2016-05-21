@@ -72,6 +72,7 @@ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
 		const formContainerDivId = 'form-container';
 		const extraDivId = 'extra';
 		const catmenuDivId = 'catmenu';
+		const chatbarDivId = 'chatbar';
 		//some basic variables
 		sessionManager.set('showBanner', {!! $showBanner ? 'true' : 'false' !!});
 		sessionManager.set('showLeft', {!! $leftCols ? 'true' : 'false' !!});
@@ -79,19 +80,40 @@ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
 		//user
 		sessionManager.set('user', {!! $user !!});
 		sessionManager.set('isGuest', {!! $isGuest ? 'true' : 'false' !!});
+		sessionManager.set('socket_io_uri', 'http://localhost:8890');
+		sessionManager.set('clientKey', '');
+		sessionManager.set('socket_id', '');
 		//some extra variables
 @yield('variables')
 		//start socket connection
-		const socket = io.connect('http://localhost:8890');
+		const socket = io.connect(sessionManager.get('socket_io_uri'));
+		socket.on('connect', function () {
+			if (sessionManager.isLogged()) {
+				sessionManager.set('clientKey', sessionManager.get('user').id + '+' + location.hostname);
+				socket.emit('join', sessionManager.get('clientKey'));
+			}
+		});
+		socket.on('accepted', function (socket_id) {
+			sessionManager.set('socket_id', socket_id);
+		});
 		socket.on('message', function (data) {
-			$( "#messages" ).append( "<p>"+data+"</p>" );
+			Dispatcher.emit(Dispatcher.Events.UPDATE_MESSAGE, data);
+		});
+		socket.on('messagesent', function (data) {
+			Dispatcher.emit(Dispatcher.Events.UPDATE_MESSAGE, data);
+		});
+		socket.on('notification', function (data) {
+			Dispatcher.emit(Dispatcher.Events.UPDATE_NOTIFICATION, data);
+		});
+		socket.on('disconnect', function () {
+			console.log('disconnected');
 		});
 	</script>
 
 {{ Html::script('js/app.js', ['type' => 'text/javascript']) }}
 @yield('scripts')
 </head>
-<body class="{{ $isGuest ? 'guest' : 'user' }}">
+<body class="{{ $isGuest ? 'guest' : 'user' }}" id='viewport'>
 	<div class="container-fluid row clearfix" id="navigation-replacement">
 	</div>
 	@if ($showBanner)
@@ -110,15 +132,7 @@ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
 			@yield('right')</div>
 		@endif
 	</div>
-	<div class="container-fluid row clearfix" id="footer">
-		<div id="messages"></div>
-		<div id="sendmessages">
-			<input type="text" name="message"
-				onkeypress="javascript:if (event.keyCode==13) {$(this).next('input').click();}" />
-			<input type="button" value="send" onclick="sendMessage(this)"
-				class="btn" />
-		</div>
-	</div>
+	<div class="container-fluid row clearfix" id="footer"></div>
 	@section('navigation')
 	<div class="container-fluid row clearfix" id="navigation">
 		<div class="container clearfix">
@@ -137,6 +151,8 @@ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
 			</div>
 		</div>
 	</div>
+	<div class="container-fluid row clearfix" id="chatbar"></div>
+
 	@show @yield('bottomscripts')
 	<div class="clearfix"></div>
 </body>

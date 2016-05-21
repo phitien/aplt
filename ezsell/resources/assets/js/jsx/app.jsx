@@ -17,7 +17,7 @@ $( document ).ready(function() {
 				ajax.get(paginate.next_page_url, function( _data ) {
 					if (_data && _data.data && _data.data.paginate) {
 						_data.data.paginate.data = paginate.data.concat(_data.data.paginate.data);
-						Dispatcher.emit(Dispatcher.events.APPL_EVENT, _data.data);
+						Dispatcher.emit(Dispatcher.Events.UPDATE_APPLICATION, _data.data);
 					}
 				});
     		}
@@ -37,13 +37,13 @@ $( document ).ready(function() {
 	ReactDOM.render(React.createElement(FormView, {
 		onMouseUp(e, checked) {
 			setMode(checked ? 1 : 0);
-			if (sessionManager.isListPage()) {
-				ajax.get(location.href, function( _data ) {
+			ajax.get(location.href, function( _data ) {
+				if (_data && sessionManager.isListPage()) {
 					if (_data && _data.data) {
-						Dispatcher.emit(Dispatcher.events.APPL_EVENT, _data.data);
+						Dispatcher.emit(Dispatcher.Events.UPDATE_APPLICATION, _data.data);
 					}
-				});
-			}
+				}
+			});
 		},
 		formrender() {
 			return (
@@ -70,8 +70,6 @@ $( document ).ready(function() {
 		showMessageDialog(appMessage);
 	}
 
-	ReactDOM.render(
-		<Application data={sessionManager.get('data')} />, 
-		document.getElementById(centerDivId)
-	);
+	ReactDOM.render(<Application />, document.getElementById(centerDivId));
+	ReactDOM.render(<ChatBar />, document.getElementById(chatbarDivId));
 });

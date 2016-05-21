@@ -5,16 +5,18 @@ import ItemImage from './itemimage.jsx';
  * CatItemList defination
  */
 var CatItemList = React.createClass({
+	eventName: Dispatcher.Events.UPDATE_CATITEMS,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LIST_EVENT, function() {});
+		Dispatcher.EventEmitter.removeListener(this.eventName, function() {});
 	},
 	componentDidMount() {
-		Dispatcher.EventEmitter.on(Dispatcher.events.LIST_EVENT, this.refresh);
+		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
+		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	render() {
-		var data = Dispatcher.list();
+		const data = Dispatcher.Store.get(this.eventName);
 		if (data) {
 			const cat = data.catitems;
 			if (cat) {

@@ -7,10 +7,11 @@ var ItemDetails = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount: function() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LISTITEM_EVENT, function() {});
+		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.LISTITEM_EVENT, function() {});
 	},
 	componentDidMount: function() {
-		Dispatcher.EventEmitter.on(Dispatcher.events.LISTITEM_EVENT, this.refresh);
+		Dispatcher.EventEmitter.on(Dispatcher.Events.LISTITEM_EVENT, this.refresh);
+		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	handleImageLoad(event) {
 	},

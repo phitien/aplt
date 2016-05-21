@@ -8,31 +8,32 @@ import Dispatcher from '../dispatcher/dispatcher.jsx';
  * Application defination
  */
 var Application = React.createClass({
+	eventName: Dispatcher.Events.UPDATE_APPLICATION,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.events.APPL_EVENT, function() {});
+		Dispatcher.EventEmitter.removeListener(this.eventName, function() {});
 	},
 	componentDidMount() {
-		Dispatcher.EventEmitter.on(Dispatcher.events.APPL_EVENT, this.refresh);
-		ui.plugins.format($(ReactDOM.findDOMNode(this)));
+		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
+		Dispatcher.emit(this.eventName, sessionManager.get('rawdata'));
 	},
 	render() {
-		var data = sessionManager.get('data');
+		const data = Dispatcher.Store.get(this.eventName);
 		if (data) {
 			if (data.catitems) {
 				return (
-					<CatItemsList data={data} className='item-block-prices' />
+					<CatItemsList className='item-block-prices' />
 				);
 			}
 			else if (data.useritems) {
 				return (
-					<UserItemsList data={data} className='item-block-prices' />
+					<UserItemsList className='item-block-prices' />
 				);
 			}
 			if (data.itemdetails) {
 				return (
-					<ItemDetails data={data} className='item-block-prices' />
+					<ItemDetails className='item-block-prices' />
 				);
 			}
 		}

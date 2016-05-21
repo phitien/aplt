@@ -22,7 +22,7 @@ $appMessage = isset ( $appMessage ) ? $appMessage : '';
 		sessionManager.set('mode', {!! $mode !!});
 		sessionManager.set('appMessage', '{{ $appMessage }}');
 		sessionManager.set('cats', {!! $cats !!});
-		sessionManager.set('data', {!! isset($data) ? json_encode($data) : '{}' !!});
+		sessionManager.set('rawdata', {!! isset($data) ? json_encode($data) : '{}' !!});
 		sessionManager.set('mediaBaseUrl', '{!! $mediaBaseUrl !!}');
 		sessionManager.set('noavatarman', '{!! $noavatarman !!}');
 		sessionManager.set('noavatarwoman', '{!! $noavatarwoman !!}');

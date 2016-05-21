@@ -2,16 +2,17 @@
  * ItemSummary defination
  */
 var ItemSummary = React.createClass({
+	eventName: Dispatcher.Events.UPDATE_ITEM,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount: function() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LISTITEM_EVENT, function() {});
+		Dispatcher.EventEmitter.removeListener(this.eventName, function() {});
 	},
 	componentDidMount: function() {
-		Dispatcher.EventEmitter.on(Dispatcher.events.LISTITEM_EVENT, this.refresh);
+		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
 	},
 	render() {
-		const item = Dispatcher.item(this.props.item.id);
+		const item = Dispatcher.Store.get(this.eventName, this.props.item.id);
 		if (item) {
 			const prices = getPropValue(this.props, 'prices', 'original,sale,now').split(',');
 			const className = 'item-summary ' + getPropValue(this.props, 'className', '') + (item.liked ? ' liked' : ' unliked');

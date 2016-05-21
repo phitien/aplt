@@ -39,6 +39,14 @@ trait  InfoTrait {
 				if ($info) {
 					return $this->jsonResponse ( 'user_info', $info );
 				}
+			} else {
+				$email = $request->input ( 'email' );
+				if ($email) {
+					$info = Info::where ( 'email', $email )->first ();
+					if ($info) {
+						return $this->jsonResponse ( 'user_info', $info );
+					}
+				}
 			}
 		}
 		return $this->jsonResponse ( 'no_user_found' );

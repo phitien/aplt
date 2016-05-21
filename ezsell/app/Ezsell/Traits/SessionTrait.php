@@ -5,7 +5,7 @@ namespace App\Ezsell\Traits;
 use App\Ezsell\Config;
 use App\User;
 use Exception;
-
+use App\Ezsell\Helper;
 trait SessionTrait {
 	/**
 	 *
@@ -26,10 +26,10 @@ trait SessionTrait {
 	 * @return string $_userInfoFromRequest
 	 */
 	protected static function getUserInfoFromRequest() {
-		if (! \App\Ezsell\Helper::$_userInfoFromRequest) {
-			\App\Ezsell\Helper::$_userInfoFromRequest = static::param ( Config::SESSION_KEY );
+		if (! Helper::$_userInfoFromRequest) {
+			Helper::$_userInfoFromRequest = static::param ( Config::SESSION_KEY );
 		}
-		return \App\Ezsell\Helper::$_userInfoFromRequest;
+		return Helper::$_userInfoFromRequest;
 	}
 	/**
 	 *
@@ -37,14 +37,14 @@ trait SessionTrait {
 	 * @return string $_userInfoFromRequest
 	 */
 	protected static function setUserInfoFromRequest($userInfoFromRequest) {
-		\App\Ezsell\Helper::$_userInfoFromRequest = $userInfoFromRequest;
+		Helper::$_userInfoFromRequest = $userInfoFromRequest;
 	}
 	/**
 	 *
 	 * @return \App\User
 	 */
 	public static function getUser($throwExceptionIfNotFound = false) {
-		if (! \App\Ezsell\Helper::$_user) {
+		if (! Helper::$_user) {
 			if (static::getToken ()) {
 				try {
 					// try to get user info by sending get user profile api to im
@@ -53,16 +53,16 @@ trait SessionTrait {
 				}
 			}
 			// if no user found, set it to guest
-			if (! \App\Ezsell\Helper::$_user)
-				\App\Ezsell\Helper::$_user = User::getGuest ();
+			if (! Helper::$_user)
+				Helper::$_user = User::getGuest ();
 		}
-		return \App\Ezsell\Helper::$_user;
+		return Helper::$_user;
 	}
 	/**
 	 *
 	 * @param User $user        	
 	 */
 	protected static function setUser(User $user) {
-		\App\Ezsell\Helper::$_user = $user;
+		Helper::$_user = $user;
 	}
 }

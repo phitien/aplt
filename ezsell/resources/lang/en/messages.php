@@ -66,7 +66,14 @@ return [
 				'new_password_should_be_different' => 'New password should be different',
 				'posted_at' => 'Posted:',
 				'edited_at' => 'Edited:',
-				'expires_at' => 'Expires:' 
+				'expires_at' => 'Expires:',
+				'please_login_first' => 'Please login first',
+				'cannot_follow_yourself' => 'Cannot follow yourself',
+				'cannot_chat_with_yourself' => 'Cannot chat with yourself',
+				'unfollow' => 'Unfollow', 
+				'close_sign' => 'x',
+				'minimize_sign' => '-',
+				'maximize_sign' => '^'
 		],
 		'sentences' => [ 
 				'password_changed' => "Hehe mật khẩu đổi rồi đấy, an toàn rồi :D",
@@ -86,6 +93,8 @@ return [
 				'profile_update_failed' => "Hỏng rồi, update có vài lỗi, lý do vì :reason. Thử lại phát đi.",
 				'registered' => "Hehe đăng ký ok rồi đấy, đăng nhập email và activate account ngay đi :).",
 				'register_failed' => "Hỏng rồi, không đăng ký được, lý do vì :reason. Thử lại phát đi.",
+				'follow_failed' => "Some error orcurs. Please try again later.",
+				'unfollow_failed' => "Some error orcurs. Please try again later.",
 				'register_email_subject' => 'Welcome to EZSell',
 				'register_email_title' => 'Welcome to EZSell',
 				'code_sending_email_subject' => 'Activation Re-send',
@@ -93,8 +102,5 @@ return [
 				'email_changing_email_subject' => 'Email changed',
 				'email_changing_email_title' => 'Email changed',
 				'email_subject_prefix' => "[EZSell] ",
-				'mode' => 'Mode',
-				'mode' => 'Mode',
-				'mode' => 'Mode' 
 		] 
 ];

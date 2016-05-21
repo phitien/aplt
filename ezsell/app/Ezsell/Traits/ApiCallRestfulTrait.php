@@ -5,7 +5,24 @@ namespace App\Ezsell\Traits;
 trait ApiCallRestfulTrait {
 	/**
 	 *
-	 * @param array $data[email,email_confirmation,password,password_confirmation]        	
+	 * @param string $id        	
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	protected static function apiCallUnfollow(string $id) {
+		return static::restful_post ( "api/unfollow/{$id}" );
+	}
+	/**
+	 *
+	 * @param string $id        	
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	protected static function apiCallFollow(string $id) {
+		return static::restful_post ( "api/follow/{$id}" );
+	}
+	/**
+	 *
+	 * @param array $data
+	 *        	contains either ids of users or 1 user name or email [ids=>'1,2'] or [code=>'username'] or [email=>'email']
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
 	protected static function apiCallInfo(array $data = []) {

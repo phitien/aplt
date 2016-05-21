@@ -9,6 +9,7 @@
 .border-bottom {@extend .border;border-bottom-style: $border-style;}
 .border-left {@extend .border;border-left-style: $border-style;}
 .border-all {@extend .border-top, .border-right, .border-bottom, .border-left;}
+.border-none {border: none;}
 
 .grounded-s {border-radius: $ssmall;}
 .grounded-m {border-radius: $smedium;}
@@ -213,7 +214,7 @@ a:hover {text-decoration: none !important;}
 		left: 38px;
 		display: none;
 	}
-	a.icon-follow {
+	a.icon-follow,a.icon-unfollow {
 		position: absolute;
 		bottom: 1px;
 		left: 12px;
@@ -241,4 +242,85 @@ a:hover {text-decoration: none !important;}
 			left: 28px;
 		}
 	} 		
+}
+
+$chatbar-width: auto;
+$chatbar-height: 322px;
+$chatbox-width: 250px;
+$chatbox-height: $chatbar-height;
+$chatbox-header-height: 32px;
+$chatbox-header-padding: 3px;
+$chatbox-send-height: 32px;
+$chatbox-messages-height: $chatbox-height - $chatbox-header-height - $chatbox-send-height; 
+$chatbox-text-width: 165px;
+/** CHATBOX **/
+#chatbar {
+	position: fixed; bottom: 0;right: $sbig;
+	.chatbar {
+		width: $chatbar-width;height: $chatbar-height;background-color: transparent;
+		.chatbox {
+			@extend .border-all;
+			position: relative;
+			vertical-align: top;overflow: hidden;
+			border-radius: $sbig;
+			margin: 0 2px;
+			width: $chatbox-width;height: $chatbox-height;background-color: lightgray;
+			float: right;
+			.header {
+				top: 0; position: absolute; left: 0;width: 100%;border-top-left-radius: $sbig;border-top-right-radius: $sbig;
+				height: $chatbox-header-height;background-color: lightblue;color: white;
+				padding: $ssmall $sbig;overflow: hidden;
+				.name {float: left}
+				.maximize {@extend .icon,.border-all;float: right;}
+				.minimize {@extend .icon,.border-all;float: right;}
+				.close {@extend .icon,.border-all;float: right;}
+			}
+			.messages {
+				top: $chatbox-header-height; position: absolute; left: 0;width: 100%;border-top-left-radius: $sbig;border-top-right-radius: $sbig;
+				padding: $ssmall $sbig;
+				font-size: $fsmall;
+				height: $chatbox-messages-height;
+				overflow-x: hidden;
+				overflow-y: auto;
+				.chatitem {
+				    display: inline-block;
+				    line-height: 20px;
+				    padding: 2px $smedium;
+				    border-radius: $ssmall;
+				    clear: both;
+				    margin: $ssmall;
+				}
+				.myitem {
+					@extend .chatitem;
+				    text-align: right;
+				    background-color: white;
+				    float: right;
+				}
+				.heritem,.hisitem {
+					@extend .chatitem;
+				    text-align: left;
+				    background-color: darkgray;
+				    float: left;
+				}
+			}
+			.send {
+				bottom: 0; position: absolute; left: 0;width: 100%;border-bottom-left-radius: $sbig;border-bottom-right-radius: $sbig;
+				height: $chatbox-send-height;
+				padding: $ssmall $sbig;background-color:white;
+				font-size: $fsmall;vertical-align: top;text-align: left;
+				input[type=text] {
+					@extend .border-all,.no-margin-padding;
+					float: left;line-height: 26px;height: 26px;
+					width: $chatbox-text-width;
+				}
+				input[type=button] {
+					@extend .border-all,.no-margin-padding;
+					float: right;line-height: 26px;height: 26px;
+					width: 53px;
+					background-color: white;
+					color: black;
+				}
+			}
+		}
+	}
 }

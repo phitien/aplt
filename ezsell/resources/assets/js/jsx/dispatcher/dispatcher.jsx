@@ -2,125 +2,167 @@ import Flux from 'flux';
 import KeyMirror from 'keymirror';
 import Events from 'events';
 //
-class EventEmitter extends Events {}
-var eventEmitter = new EventEmitter();
-eventEmitter.setMaxListeners(Infinity);
-//
 var Dispatcher = new Flux.Dispatcher();
-Dispatcher.events = {
-	APPL_EVENT: 'applevent',
-	LIST_EVENT: 'listevent',
-	LISTITEM_EVENT: 'listitemevent',
-	ITEM_EVENT: 'listitemevent',
-	USER_EVENT: 'userevent'
-};
+//
+class EventEmitter extends Events {}
+Dispatcher.EventEmitter = new EventEmitter();
+Dispatcher.EventEmitter.setMaxListeners(Infinity);
+//
+Dispatcher.Events = KeyMirror({
+	UPDATE_APPLICATION: null,
+	UPDATE_CATITEMS: null,
+	UPDATE_USERITEMS: null,
+	UPDATE_ITEMDETAILS: null,
+	UPDATE_ITEM: null,
+	UPDATE_USER: null,
+	UPDATE_MESSAGE: null,
+	UPDATE_CHATBOX: null,
+	UPDATE_CHATBAR: null,
+	ADD_CHATBOX: null
+});
+
+Dispatcher.Store = (function() {
+	var _data = {
+		application: null,
+		catitems: null,
+		useritems: null,
+		itemdetails: null,
+		lastUpdatedUser: '',
+		lastMessage: '',
+		chatusers: []
+	};
+	function getChatUser(user_id) {
+		for (var i=0; i < _data.chatusers.length; i++) {
+			if (_data.chatusers[i].id == user_id) {
+				return _data.chatusers[i];
+			}
+		}
+		return null;
+	}
+	function setChatUser(user_id, user) {
+		for (var i=0; i < _data.chatusers.length; i++) {
+			if (_data.chatusers[i].id == user_id) {
+				_data.chatusers[i] = user;
+				break;
+			}
+		}
+	}
+	return {
+		get: function(actionType) {
+			switch(actionType) {
+				case Dispatcher.Events.UPDATE_APPLICATION:
+					return _data.application;
+				case Dispatcher.Events.UPDATE_CATITEMS:
+					return _data.catitems;;
+				case Dispatcher.Events.UPDATE_USERITEMS:
+					return _data.useritems;
+				case Dispatcher.Events.UPDATE_ITEMDETAILS:
+					return _data.itemdetails;
+					break;
+				case Dispatcher.Events.UPDATE_ITEM:
+					var item_id = arguments[1];
+					if (item_id) {
+						for (var i=0; i < _data.catitems.paginate.data.length; i++) {
+							if (_data.catitems.paginate.data[i].id == item_id) {
+								return _data.catitems.paginate.data[i];
+							}
+						}
+						for (var i=0; i < _data.useritems.paginate.data.length; i++) {
+							if (_data.useritems.paginate.data[i].id == item_id) {
+								return _data.useritems.paginate.data[i];
+							}
+						}
+					}
+					return null;
+				case Dispatcher.Events.UPDATE_USER:
+					return _data.lastUpdatedUser;
+				case Dispatcher.Events.UPDATE_MESSAGE:
+					return _data.lastMessage;
+				case Dispatcher.Events.UPDATE_CHATBOX:
+					return getChatUser(arguments[1]);
+				case Dispatcher.Events.ADD_CHATBOX:
+				case Dispatcher.Events.UPDATE_CHATBAR:
+					return _data.chatusers;
+			}
+		},
+		set: function(actionType,  data) {
+			switch(actionType) {
+				case Dispatcher.Events.UPDATE_APPLICATION:
+					_data.application = data;
+					if (_data.application.catitems) 
+						_data.catitems = _data.application;
+					else if (_data.application.useritems) 
+						_data.useritems = _data.application;
+					else if (_data.application.itemdetails) 
+						_data.itemdetails = _data.application;
+					break;
+				case Dispatcher.Events.UPDATE_CATITEMS:
+					_data.catitems = data;
+					break;
+				case Dispatcher.Events.UPDATE_USERITEMS:
+					_data.useritems = data;
+					break;
+				case Dispatcher.Events.UPDATE_ITEMDETAILS:
+					_data.itemdetails = data;
+					break;
+				case Dispatcher.Events.UPDATE_ITEM:
+					if (data && data.id) {
+						for (var i=0; i < _data.catitems.paginate.data.length; i++) {
+							if (_data.catitems.paginate.data[i].id == data.id) {
+								_data.catitems.paginate.data[i] = Object.assign(_data.catitems.paginate.data[i], data);
+								break;
+							}
+						}
+						for (var i=0; i < _data.useritems.paginate.data.length; i++) {
+							if (_data.useritems.paginate.data[i].id == data.id) {
+								_data.useritems.paginate.data[i] = Object.assign(_data.useritems.paginate.data[i], data);
+								break;
+							}
+						}
+					}
+					break;
+				case Dispatcher.Events.UPDATE_USER:
+					_data.lastUpdatedUser = data;
+					break;
+				case Dispatcher.Events.UPDATE_MESSAGE:
+					var json = JSON.parse(data);
+					if (json && json.user) {
+						_data.lastMessage = json;
+						var user = getChatUser(json.user.id);
+						if (!user) {
+							Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user);
+						}
+					}
+					break;
+				case Dispatcher.Events.ADD_CHATBOX:
+					if (data && data.id && data.displayname && _data.chatusers.indexOf(data) < 0) {
+						var user = getChatUser(data.id);
+						if (!user)
+							_data.chatusers.push(data);
+					}
+					actionType = Dispatcher.Events.UPDATE_CHATBAR;
+					break;
+			}
+			sessionManager.set('data', _data);
+			Dispatcher.dispatch({
+				actionType: actionType,
+				data: Dispatcher.Store.get(actionType)
+			});
+		}
+	};
+})();
 
 Dispatcher.register(function(action) {
-	console.log(action.actionType);
-	switch (action.actionType) {
-		case Constants.CATITEMS:
-		case Constants.USERITEMS:
-		case Constants.ITEMDETAILS:
-			eventEmitter.emit(Dispatcher.events.APPL_EVENT);
-			break;
-		
-		case Constants.ITEMUPDATE:
-			eventEmitter.emit(Dispatcher.events.LISTITEM_EVENT);
-			break;
-	}
-	//eventEmitter.emit(Dispatcher.events.LIST_EVENT);
-	//eventEmitter.emit(Dispatcher.events.USER_EVENT);
+	//console.log(action.actionType, Dispatcher.Store.get(action.actionType));
+	Dispatcher.EventEmitter.emit(action.actionType, Dispatcher.Store.get(action.actionType));
 });
-//
-var Constants = KeyMirror({
-	CATITEMS: null,
-	USERITEMS: null,
-	ITEMDETAILS: null,
-	ITEMUPDATE: null
-});
-var Actions = {
-	catitems: function(_data) {
-		Dispatcher.dispatch({
-			actionType: Constants.CATITEMS,
-			data: _data
-		});
-	},
-	useritems: function(_data) {
-		Dispatcher.dispatch({
-			actionType: Constants.USERITEMS,
-			data: _data
-		});
-	},
-	itemdetails: function(_data) {
-		Dispatcher.dispatch({
-			actionType: Constants.ITEMDETAILS,
-			data: _data
-		});
-	},
-	itemupdate: function(_data) {
-		Dispatcher.dispatch({
-			actionType: Constants.ITEMUPDATE,
-			data: _data
-		});
+
+Dispatcher.emit = function(actionType, _data) {
+	if (Dispatcher.Events.hasOwnProperty(actionType)) {
+		Dispatcher.Store.set(actionType, _data)
 	}
-};
-var _list = null;
-var _details = null;
-
-if (sessionManager.isListPage()) 
-	_list = sessionManager.get('data');
-else
-	_details = sessionManager.get('data');
-
-Dispatcher.Constants = Constants;
-Dispatcher.Actions = Actions;
-Dispatcher.EventEmitter = eventEmitter;
-
-Dispatcher.item = function(id) {
-	if (_details) 
-		return _details.itemdetails;
-	if (_list)
-		for (var i=0; i < _list.paginate.data.length; i++) 
-			if (_list.paginate.data[i].id == id) 
-				return _list.paginate.data[i];
-	return null;
-};
-Dispatcher.list = function() {return _list;};
-Dispatcher.details = function() {return _details;};
-
-Dispatcher.emit = function(event, _data) {
-	switch (event) {
-		case this.events.APPL_EVENT:
-		case this.events.LIST_EVENT:
-			if (_data.catitems || _data.useritems) {//for the lists
-				_list = _data;
-				sessionManager.set('data', _list);
-				if (_list.catitems) {
-					Actions.catitems(_list);
-				}
-				else if (_list.useritems) {
-					Actions.useritems(_list);
-				}
-			}
-			else if (_data.itemdetails) {//for the detail page
-				_details = Object.assign({}, _data);
-				sessionManager.set('data', _details);
-				Actions.itemdetails(_details);
-			}
-			break;
-
-		case this.events.LISTITEM_EVENT:
-			if (_data.id) {
-				for (var i=0; i < _list.paginate.data.length; i++) {
-					if (_list.paginate.data[i].id == _data.id) {
-						_list.paginate.data[i] = Object.assign(_list.paginate.data[i], _data);
-						sessionManager.set('data', _list);
-						Actions.itemupdate(_list.paginate.data[i]);
-						break;
-					}
-				}
-			}
-			break;
+	else {
+		console.log('Dispatcher does not support this action ' + actionType);
 	}
 };
 

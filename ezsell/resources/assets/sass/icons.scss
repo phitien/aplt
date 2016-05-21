@@ -1,7 +1,7 @@
 /**
  * Icons
  */
-.icon {display: block;height: $icon-size;width: $icon-size;cursor: pointer;display: inline-block;
+.icon {display: block;height: $icon-size;width: $icon-size;cursor: pointer;display: inline-block;text-align: center;vertical-align: middle;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-color:transparent;
@@ -25,4 +25,8 @@
 .icon-follow {
 	@extend .icon;
 	background-image: url('../images/icon-pin-16.png');
+}
+.icon-unfollow {
+	@extend .icon;
+	background-image: url('../images/icon-unpin-16.png');
 }

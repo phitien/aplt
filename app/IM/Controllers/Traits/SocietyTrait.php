@@ -34,7 +34,7 @@ trait SocietyTrait {
 			return $this->jsonResponse ( 'cannot_find_user', 'User not found', Response::HTTP_BAD_REQUEST );
 		}
 		if ($this->user ()->follow ( $user ))
-			return $this->jsonResponse ( 'follow_successfully', '' );
+			return $this->jsonResponse ( 'follow_successfully', $this->user () );
 		else
 			return $this->jsonResponse ( 'follow_unsuccessfully', 'Some error occurs.', Response::HTTP_BAD_REQUEST );
 	}
@@ -49,7 +49,7 @@ trait SocietyTrait {
 			return $this->jsonResponse ( 'cannot_find_user', 'User not found', Response::HTTP_BAD_REQUEST );
 		}
 		if ($this->user ()->unfollow ( $user ))
-			return $this->jsonResponse ( 'unfollow_successfully', '' );
+			return $this->jsonResponse ( 'unfollow_successfully', $this->user () );
 		else
 			return $this->jsonResponse ( 'unfollow_unsuccessfully', 'Some error occurs.', Response::HTTP_BAD_REQUEST );
 	}
@@ -64,7 +64,7 @@ trait SocietyTrait {
 			return $this->jsonResponse ( 'cannot_find_user', 'User not found', Response::HTTP_BAD_REQUEST );
 		}
 		if ($this->user ()->accept ( $user ))
-			return $this->jsonResponse ( 'accept_successfully', '' );
+			return $this->jsonResponse ( 'accept_successfully', $this->user () );
 		else
 			return $this->jsonResponse ( 'accept_unsuccessfully', 'Some error occurs.', Response::HTTP_BAD_REQUEST );
 	}
@@ -79,7 +79,7 @@ trait SocietyTrait {
 			return $this->jsonResponse ( 'cannot_find_user', 'User not found', Response::HTTP_BAD_REQUEST );
 		}
 		if ($this->user ()->refuse ( $user ))
-			return $this->jsonResponse ( 'refuse_successfully', '' );
+			return $this->jsonResponse ( 'refuse_successfully', $this->user () );
 		else
 			return $this->jsonResponse ( 'refuse_unsuccessfully', 'Some error occurs.', Response::HTTP_BAD_REQUEST );
 	}

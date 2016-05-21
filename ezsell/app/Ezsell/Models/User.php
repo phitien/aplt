@@ -58,7 +58,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 			'quote',
 			'description',
 			'baseUrl',
-			'json' 
+			'json',
+			'followers',
+			'following' 
 	];
 	
 	/**

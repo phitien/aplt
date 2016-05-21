@@ -7,10 +7,11 @@ var UserItemList = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.events.LIST_EVENT, function() {});
+		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.LIST_EVENT, function() {});
 	},
 	componentDidMount() {
-		Dispatcher.EventEmitter.on(Dispatcher.events.LIST_EVENT, this.refresh);
+		Dispatcher.EventEmitter.on(Dispatcher.Events.LIST_EVENT, this.refresh);
+		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	render() {
 		var data = Dispatcher.list();

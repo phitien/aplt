@@ -2717,3 +2717,9 @@ Stack trace:
 #5 /Users/phitien/im/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(155): Illuminate\Session\Middleware\StartSession->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
 #6 /Users/phitien/im/public/index.php(58): Illuminate\Foundation\Http\Kernel->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\JsonResponse))
 #7 {main}  
+[2016-05-20 18:05:08] local.ERROR: Symfony\Component\Debug\Exception\FatalErrorException: Method App\User::__toString() must not throw an exception in /Users/phitien/im/app/IM/Traits/ResponseTrait.php:0
+Stack trace:
+#0 {main}  
+[2016-05-20 18:05:30] local.ERROR: Symfony\Component\Debug\Exception\FatalErrorException: Method App\User::__toString() must not throw an exception in /Users/phitien/im/app/IM/Traits/ResponseTrait.php:0
+Stack trace:
+#0 {main}  

@@ -1,14 +1,23 @@
+import Dispatcher from './dispatcher/dispatcher.jsx';
 import CatMenu from './components/catmenu.jsx';
 import FormView from './components/formview.jsx';
 import UserBox from './components/userbox.jsx';
+import ChatBar from './components/chatbar.jsx';
 //
 /**
  * Some common functions
  */
 Object.assign(window, {
+	Dispatcher: Dispatcher,
 	CatMenu: CatMenu,
 	FormView: FormView,
 	UserBox: UserBox,
+	ChatBar: ChatBar,
+	engine: (function() {
+		$.getJSON('//ip-api.com/json?callback=?', function(data) {
+			window.clientIP = data.query;
+		});
+	})(),
 	sensitive: 'input,select,textarea,img,.sensitive',
 	getPropValue: function(props, name, defaultValue) {
 		if (props.hasOwnProperty(name))
@@ -19,9 +28,14 @@ Object.assign(window, {
 		var me = this;
 		var _data = {};
 		return {
+			isLogged: function() {
+				if (!this.get('isGuest', true))
+					return this.get('user');
+				return false;
+			},
 			isListPage: function () {
-				if (this.has('data'))
-					return this.get('data').paginate;
+				if (this.has('rawdata'))
+					return this.get('rawdata').paginate;
 				return false;
 			},
 			has: function(name) {
@@ -50,6 +64,9 @@ Object.assign(window, {
 			}
 		};
 	})(),
+	ip: function() {
+		return clientIP;
+	},
 	uuid: function (prefix) {
 		return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 	},
@@ -66,6 +83,20 @@ Object.assign(window, {
 		var user = sessionManager.get('user');
 		if (user && user.id == _user.id) {
 			return true;
+		}
+		return false;
+	},
+	isFollowingTo: function(_user) {
+		var user = sessionManager.get('user');
+		if (user && !sessionManager.get('isGuest')) {
+			return user.following.indexOf(_user.id) >= 0;
+		}
+		return false;
+	},
+	isFollowerOf: function(_user) {
+		var user = sessionManager.get('user');
+		if (user && !sessionManager.get('isGuest')) {
+			return user.followers.indexOf(_user.id) >= 0;
 		}
 		return false;
 	},
@@ -284,12 +315,14 @@ Object.assign(window, {
 			toggleElement($('#form-container'));
 		}
 	},
-	sendMessage: function(e) {
-		var message = $(e).prev('input').val();
+	sendMessage: function(message, chatbox) {
 		if (message) {
-			ajax.post('/sendmessage', function() {
-				$(e).prev('input').val('');
-			}, {'message': message});
+			const user = chatbox.props.user;
+			if (user && sessionManager.isLogged()) {
+				ajax.post('/sendmessage', function() {
+					chatbox.messageSentCallbalk(message);
+				}, {'message': message, code: user.id});
+			}
 		}
 	},
 	ui: {
