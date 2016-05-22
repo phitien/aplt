@@ -11,14 +11,7 @@ $showBanner = false;
 	{{ Html::script('js/pages/buyitem.js', ['type' => 'text/javascript']) }}
 @endsection
 
-@section('left')
+@section('variables')
 @parent
-@endsection
-
-@section('center')
-@parent
-@endsection
-
-@section('right')
-@parent
+		sessionManager.set('page', 'BuyItemPage');
 @endsection

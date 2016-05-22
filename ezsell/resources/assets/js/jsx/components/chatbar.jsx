@@ -7,17 +7,17 @@ var ChatBar = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(this.eventName, function() {});
-		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.ADD_CHATBOX, function() {});
+		Dispatcher.removeListener(this.eventName, function() {});
+		Dispatcher.removeListener(Dispatcher.Events.ADD_CHATBOX, function() {});
 	},
 	componentDidMount() {
-		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
-		Dispatcher.EventEmitter.on(Dispatcher.Events.ADD_CHATBOX, this.refresh);
+		Dispatcher.addListener(this.eventName, this.refresh);
+		Dispatcher.addListener(Dispatcher.Events.ADD_CHATBOX, this.refresh);
 	},
 	render(){
 		const users = Dispatcher.Store.get(this.eventName);
 		if (users && users.length) {
-			const className = 'chatbar ' + getPropValue(this.props, 'className', '');
+			const className = 'chatbar ' + util.getAttr(this.props, 'className', '');
 			return (
 				<div className={className}>
 					{users.map(function (user, i) {
@@ -31,4 +31,5 @@ var ChatBar = React.createClass({
 	}
 });
 
-export default ChatBar;
+window.ChatBar = ChatBar;
+export default window.ChatBar;

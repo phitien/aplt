@@ -1,4 +1,130 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/assign"), __esModule: true };
+},{"core-js/library/fn/object/assign":14}],2:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/create"), __esModule: true };
+},{"core-js/library/fn/object/create":15}],3:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/define-property"), __esModule: true };
+},{"core-js/library/fn/object/define-property":16}],4:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/get-prototype-of"), __esModule: true };
+},{"core-js/library/fn/object/get-prototype-of":17}],5:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/object/set-prototype-of"), __esModule: true };
+},{"core-js/library/fn/object/set-prototype-of":18}],6:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/symbol"), __esModule: true };
+},{"core-js/library/fn/symbol":19}],7:[function(require,module,exports){
+module.exports = { "default": require("core-js/library/fn/symbol/iterator"), __esModule: true };
+},{"core-js/library/fn/symbol/iterator":20}],8:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+},{}],9:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _defineProperty = require("babel-runtime/core-js/object/define-property");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+},{"babel-runtime/core-js/object/define-property":3}],10:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _setPrototypeOf = require("babel-runtime/core-js/object/set-prototype-of");
+
+var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
+
+var _create = require("babel-runtime/core-js/object/create");
+
+var _create2 = _interopRequireDefault(_create);
+
+var _typeof2 = require("babel-runtime/helpers/typeof");
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
+  }
+
+  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
+};
+},{"babel-runtime/core-js/object/create":2,"babel-runtime/core-js/object/set-prototype-of":5,"babel-runtime/helpers/typeof":12}],11:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _typeof2 = require("babel-runtime/helpers/typeof");
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
+};
+},{"babel-runtime/helpers/typeof":12}],12:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+var _iterator = require("babel-runtime/core-js/symbol/iterator");
+
+var _iterator2 = _interopRequireDefault(_iterator);
+
+var _symbol = require("babel-runtime/core-js/symbol");
+
+var _symbol2 = _interopRequireDefault(_symbol);
+
+var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+} : function (obj) {
+  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+};
+},{"babel-runtime/core-js/symbol":6,"babel-runtime/core-js/symbol/iterator":7}],13:[function(require,module,exports){
 /*!
   Copyright (c) 2016 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -48,7 +174,1101 @@
 	}
 }());
 
-},{}],2:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
+require('../../modules/es6.object.assign');
+module.exports = require('../../modules/_core').Object.assign;
+},{"../../modules/_core":26,"../../modules/es6.object.assign":81}],15:[function(require,module,exports){
+require('../../modules/es6.object.create');
+var $Object = require('../../modules/_core').Object;
+module.exports = function create(P, D){
+  return $Object.create(P, D);
+};
+},{"../../modules/_core":26,"../../modules/es6.object.create":82}],16:[function(require,module,exports){
+require('../../modules/es6.object.define-property');
+var $Object = require('../../modules/_core').Object;
+module.exports = function defineProperty(it, key, desc){
+  return $Object.defineProperty(it, key, desc);
+};
+},{"../../modules/_core":26,"../../modules/es6.object.define-property":83}],17:[function(require,module,exports){
+require('../../modules/es6.object.get-prototype-of');
+module.exports = require('../../modules/_core').Object.getPrototypeOf;
+},{"../../modules/_core":26,"../../modules/es6.object.get-prototype-of":84}],18:[function(require,module,exports){
+require('../../modules/es6.object.set-prototype-of');
+module.exports = require('../../modules/_core').Object.setPrototypeOf;
+},{"../../modules/_core":26,"../../modules/es6.object.set-prototype-of":85}],19:[function(require,module,exports){
+require('../../modules/es6.symbol');
+require('../../modules/es6.object.to-string');
+require('../../modules/es7.symbol.async-iterator');
+require('../../modules/es7.symbol.observable');
+module.exports = require('../../modules/_core').Symbol;
+},{"../../modules/_core":26,"../../modules/es6.object.to-string":86,"../../modules/es6.symbol":88,"../../modules/es7.symbol.async-iterator":89,"../../modules/es7.symbol.observable":90}],20:[function(require,module,exports){
+require('../../modules/es6.string.iterator');
+require('../../modules/web.dom.iterable');
+module.exports = require('../../modules/_wks-ext').f('iterator');
+},{"../../modules/_wks-ext":78,"../../modules/es6.string.iterator":87,"../../modules/web.dom.iterable":91}],21:[function(require,module,exports){
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+},{}],22:[function(require,module,exports){
+module.exports = function(){ /* empty */ };
+},{}],23:[function(require,module,exports){
+var isObject = require('./_is-object');
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+},{"./_is-object":42}],24:[function(require,module,exports){
+// false -> Array#indexOf
+// true  -> Array#includes
+var toIObject = require('./_to-iobject')
+  , toLength  = require('./_to-length')
+  , toIndex   = require('./_to-index');
+module.exports = function(IS_INCLUDES){
+  return function($this, el, fromIndex){
+    var O      = toIObject($this)
+      , length = toLength(O.length)
+      , index  = toIndex(fromIndex, length)
+      , value;
+    // Array#includes uses SameValueZero equality algorithm
+    if(IS_INCLUDES && el != el)while(length > index){
+      value = O[index++];
+      if(value != value)return true;
+    // Array#toIndex ignores holes, Array#includes - not
+    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
+      if(O[index] === el)return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+},{"./_to-index":70,"./_to-iobject":72,"./_to-length":73}],25:[function(require,module,exports){
+var toString = {}.toString;
+
+module.exports = function(it){
+  return toString.call(it).slice(8, -1);
+};
+},{}],26:[function(require,module,exports){
+var core = module.exports = {version: '2.3.0'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+},{}],27:[function(require,module,exports){
+// optional / simple context binding
+var aFunction = require('./_a-function');
+module.exports = function(fn, that, length){
+  aFunction(fn);
+  if(that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function(/* ...args */){
+    return fn.apply(that, arguments);
+  };
+};
+},{"./_a-function":21}],28:[function(require,module,exports){
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function(it){
+  if(it == undefined)throw TypeError("Can't call method on  " + it);
+  return it;
+};
+},{}],29:[function(require,module,exports){
+// Thank's IE8 for his funny defineProperty
+module.exports = !require('./_fails')(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_fails":34}],30:[function(require,module,exports){
+var isObject = require('./_is-object')
+  , document = require('./_global').document
+  // in old IE typeof document.createElement is 'object'
+  , is = isObject(document) && isObject(document.createElement);
+module.exports = function(it){
+  return is ? document.createElement(it) : {};
+};
+},{"./_global":35,"./_is-object":42}],31:[function(require,module,exports){
+// IE 8- don't enum bug keys
+module.exports = (
+  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+).split(',');
+},{}],32:[function(require,module,exports){
+// all enumerable object keys, includes symbols
+var getKeys = require('./_object-keys')
+  , gOPS    = require('./_object-gops')
+  , pIE     = require('./_object-pie');
+module.exports = function(it){
+  var result     = getKeys(it)
+    , getSymbols = gOPS.f;
+  if(getSymbols){
+    var symbols = getSymbols(it)
+      , isEnum  = pIE.f
+      , i       = 0
+      , key;
+    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
+  } return result;
+};
+},{"./_object-gops":57,"./_object-keys":60,"./_object-pie":61}],33:[function(require,module,exports){
+var global    = require('./_global')
+  , core      = require('./_core')
+  , ctx       = require('./_ctx')
+  , hide      = require('./_hide')
+  , PROTOTYPE = 'prototype';
+
+var $export = function(type, name, source){
+  var IS_FORCED = type & $export.F
+    , IS_GLOBAL = type & $export.G
+    , IS_STATIC = type & $export.S
+    , IS_PROTO  = type & $export.P
+    , IS_BIND   = type & $export.B
+    , IS_WRAP   = type & $export.W
+    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+    , expProto  = exports[PROTOTYPE]
+    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+    , key, own, out;
+  if(IS_GLOBAL)source = name;
+  for(key in source){
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if(own && key in exports)continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function(C){
+      var F = function(a, b, c){
+        if(this instanceof C){
+          switch(arguments.length){
+            case 0: return new C;
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if(IS_PROTO){
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library` 
+module.exports = $export;
+},{"./_core":26,"./_ctx":27,"./_global":35,"./_hide":37}],34:[function(require,module,exports){
+module.exports = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
+  }
+};
+},{}],35:[function(require,module,exports){
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+},{}],36:[function(require,module,exports){
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function(it, key){
+  return hasOwnProperty.call(it, key);
+};
+},{}],37:[function(require,module,exports){
+var dP         = require('./_object-dp')
+  , createDesc = require('./_property-desc');
+module.exports = require('./_descriptors') ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+},{"./_descriptors":29,"./_object-dp":52,"./_property-desc":63}],38:[function(require,module,exports){
+module.exports = require('./_global').document && document.documentElement;
+},{"./_global":35}],39:[function(require,module,exports){
+module.exports = !require('./_descriptors') && !require('./_fails')(function(){
+  return Object.defineProperty(require('./_dom-create')('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
+},{"./_descriptors":29,"./_dom-create":30,"./_fails":34}],40:[function(require,module,exports){
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+var cof = require('./_cof');
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+  return cof(it) == 'String' ? it.split('') : Object(it);
+};
+},{"./_cof":25}],41:[function(require,module,exports){
+// 7.2.2 IsArray(argument)
+var cof = require('./_cof');
+module.exports = Array.isArray || function isArray(arg){
+  return cof(arg) == 'Array';
+};
+},{"./_cof":25}],42:[function(require,module,exports){
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+},{}],43:[function(require,module,exports){
+'use strict';
+var create         = require('./_object-create')
+  , descriptor     = require('./_property-desc')
+  , setToStringTag = require('./_set-to-string-tag')
+  , IteratorPrototype = {};
+
+// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+require('./_hide')(IteratorPrototype, require('./_wks')('iterator'), function(){ return this; });
+
+module.exports = function(Constructor, NAME, next){
+  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
+  setToStringTag(Constructor, NAME + ' Iterator');
+};
+},{"./_hide":37,"./_object-create":51,"./_property-desc":63,"./_set-to-string-tag":66,"./_wks":79}],44:[function(require,module,exports){
+'use strict';
+var LIBRARY        = require('./_library')
+  , $export        = require('./_export')
+  , redefine       = require('./_redefine')
+  , hide           = require('./_hide')
+  , has            = require('./_has')
+  , Iterators      = require('./_iterators')
+  , $iterCreate    = require('./_iter-create')
+  , setToStringTag = require('./_set-to-string-tag')
+  , getPrototypeOf = require('./_object-gpo')
+  , ITERATOR       = require('./_wks')('iterator')
+  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+  , FF_ITERATOR    = '@@iterator'
+  , KEYS           = 'keys'
+  , VALUES         = 'values';
+
+var returnThis = function(){ return this; };
+
+module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+  $iterCreate(Constructor, NAME, next);
+  var getMethod = function(kind){
+    if(!BUGGY && kind in proto)return proto[kind];
+    switch(kind){
+      case KEYS: return function keys(){ return new Constructor(this, kind); };
+      case VALUES: return function values(){ return new Constructor(this, kind); };
+    } return function entries(){ return new Constructor(this, kind); };
+  };
+  var TAG        = NAME + ' Iterator'
+    , DEF_VALUES = DEFAULT == VALUES
+    , VALUES_BUG = false
+    , proto      = Base.prototype
+    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
+    , $default   = $native || getMethod(DEFAULT)
+    , $entries   = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined
+    , $anyNative = NAME == 'Array' ? proto.entries || $native : $native
+    , methods, key, IteratorPrototype;
+  // Fix native
+  if($anyNative){
+    IteratorPrototype = getPrototypeOf($anyNative.call(new Base));
+    if(IteratorPrototype !== Object.prototype){
+      // Set @@toStringTag to native iterators
+      setToStringTag(IteratorPrototype, TAG, true);
+      // fix for some old engines
+      if(!LIBRARY && !has(IteratorPrototype, ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+    }
+  }
+  // fix Array#{values, @@iterator}.name in V8 / FF
+  if(DEF_VALUES && $native && $native.name !== VALUES){
+    VALUES_BUG = true;
+    $default = function values(){ return $native.call(this); };
+  }
+  // Define iterator
+  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+    hide(proto, ITERATOR, $default);
+  }
+  // Plug for library
+  Iterators[NAME] = $default;
+  Iterators[TAG]  = returnThis;
+  if(DEFAULT){
+    methods = {
+      values:  DEF_VALUES ? $default : getMethod(VALUES),
+      keys:    IS_SET     ? $default : getMethod(KEYS),
+      entries: $entries
+    };
+    if(FORCED)for(key in methods){
+      if(!(key in proto))redefine(proto, key, methods[key]);
+    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+  }
+  return methods;
+};
+},{"./_export":33,"./_has":36,"./_hide":37,"./_iter-create":43,"./_iterators":46,"./_library":48,"./_object-gpo":58,"./_redefine":64,"./_set-to-string-tag":66,"./_wks":79}],45:[function(require,module,exports){
+module.exports = function(done, value){
+  return {value: value, done: !!done};
+};
+},{}],46:[function(require,module,exports){
+module.exports = {};
+},{}],47:[function(require,module,exports){
+var getKeys   = require('./_object-keys')
+  , toIObject = require('./_to-iobject');
+module.exports = function(object, el){
+  var O      = toIObject(object)
+    , keys   = getKeys(O)
+    , length = keys.length
+    , index  = 0
+    , key;
+  while(length > index)if(O[key = keys[index++]] === el)return key;
+};
+},{"./_object-keys":60,"./_to-iobject":72}],48:[function(require,module,exports){
+module.exports = true;
+},{}],49:[function(require,module,exports){
+var META     = require('./_uid')('meta')
+  , isObject = require('./_is-object')
+  , has      = require('./_has')
+  , setDesc  = require('./_object-dp').f
+  , id       = 0;
+var isExtensible = Object.isExtensible || function(){
+  return true;
+};
+var FREEZE = !require('./_fails')(function(){
+  return isExtensible(Object.preventExtensions({}));
+});
+var setMeta = function(it){
+  setDesc(it, META, {value: {
+    i: 'O' + ++id, // object ID
+    w: {}          // weak collections IDs
+  }});
+};
+var fastKey = function(it, create){
+  // return primitive with prefix
+  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if(!has(it, META)){
+    // can't set metadata to uncaught frozen object
+    if(!isExtensible(it))return 'F';
+    // not necessary to add metadata
+    if(!create)return 'E';
+    // add missing metadata
+    setMeta(it);
+  // return object ID
+  } return it[META].i;
+};
+var getWeak = function(it, create){
+  if(!has(it, META)){
+    // can't set metadata to uncaught frozen object
+    if(!isExtensible(it))return true;
+    // not necessary to add metadata
+    if(!create)return false;
+    // add missing metadata
+    setMeta(it);
+  // return hash weak collections IDs
+  } return it[META].w;
+};
+// add metadata on freeze-family methods calling
+var onFreeze = function(it){
+  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
+  return it;
+};
+var meta = module.exports = {
+  KEY:      META,
+  NEED:     false,
+  fastKey:  fastKey,
+  getWeak:  getWeak,
+  onFreeze: onFreeze
+};
+},{"./_fails":34,"./_has":36,"./_is-object":42,"./_object-dp":52,"./_uid":76}],50:[function(require,module,exports){
+'use strict';
+// 19.1.2.1 Object.assign(target, source, ...)
+var getKeys  = require('./_object-keys')
+  , gOPS     = require('./_object-gops')
+  , pIE      = require('./_object-pie')
+  , toObject = require('./_to-object')
+  , IObject  = require('./_iobject')
+  , $assign  = Object.assign;
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = !$assign || require('./_fails')(function(){
+  var A = {}
+    , B = {}
+    , S = Symbol()
+    , K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function(k){ B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
+  var T     = toObject(target)
+    , aLen  = arguments.length
+    , index = 1
+    , getSymbols = gOPS.f
+    , isEnum     = pIE.f;
+  while(aLen > index){
+    var S      = IObject(arguments[index++])
+      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
+      , length = keys.length
+      , j      = 0
+      , key;
+    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
+  } return T;
+} : $assign;
+},{"./_fails":34,"./_iobject":40,"./_object-gops":57,"./_object-keys":60,"./_object-pie":61,"./_to-object":74}],51:[function(require,module,exports){
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+var anObject    = require('./_an-object')
+  , dPs         = require('./_object-dps')
+  , enumBugKeys = require('./_enum-bug-keys')
+  , IE_PROTO    = require('./_shared-key')('IE_PROTO')
+  , Empty       = function(){ /* empty */ }
+  , PROTOTYPE   = 'prototype';
+
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var createDict = function(){
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = require('./_dom-create')('iframe')
+    , i      = enumBugKeys.length
+    , gt     = '>'
+    , iframeDocument;
+  iframe.style.display = 'none';
+  require('./_html').appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write('<script>document.F=Object</script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
+  return createDict();
+};
+
+module.exports = Object.create || function create(O, Properties){
+  var result;
+  if(O !== null){
+    Empty[PROTOTYPE] = anObject(O);
+    result = new Empty;
+    Empty[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = createDict();
+  return Properties === undefined ? result : dPs(result, Properties);
+};
+},{"./_an-object":23,"./_dom-create":30,"./_enum-bug-keys":31,"./_html":38,"./_object-dps":53,"./_shared-key":67}],52:[function(require,module,exports){
+var anObject       = require('./_an-object')
+  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
+  , toPrimitive    = require('./_to-primitive')
+  , dP             = Object.defineProperty;
+
+exports.f = require('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes){
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if(IE8_DOM_DEFINE)try {
+    return dP(O, P, Attributes);
+  } catch(e){ /* empty */ }
+  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+  if('value' in Attributes)O[P] = Attributes.value;
+  return O;
+};
+},{"./_an-object":23,"./_descriptors":29,"./_ie8-dom-define":39,"./_to-primitive":75}],53:[function(require,module,exports){
+var dP       = require('./_object-dp')
+  , anObject = require('./_an-object')
+  , getKeys  = require('./_object-keys');
+
+module.exports = require('./_descriptors') ? Object.defineProperties : function defineProperties(O, Properties){
+  anObject(O);
+  var keys   = getKeys(Properties)
+    , length = keys.length
+    , i = 0
+    , P;
+  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
+  return O;
+};
+},{"./_an-object":23,"./_descriptors":29,"./_object-dp":52,"./_object-keys":60}],54:[function(require,module,exports){
+var pIE            = require('./_object-pie')
+  , createDesc     = require('./_property-desc')
+  , toIObject      = require('./_to-iobject')
+  , toPrimitive    = require('./_to-primitive')
+  , has            = require('./_has')
+  , IE8_DOM_DEFINE = require('./_ie8-dom-define')
+  , gOPD           = Object.getOwnPropertyDescriptor;
+
+exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor(O, P){
+  O = toIObject(O);
+  P = toPrimitive(P, true);
+  if(IE8_DOM_DEFINE)try {
+    return gOPD(O, P);
+  } catch(e){ /* empty */ }
+  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
+};
+},{"./_descriptors":29,"./_has":36,"./_ie8-dom-define":39,"./_object-pie":61,"./_property-desc":63,"./_to-iobject":72,"./_to-primitive":75}],55:[function(require,module,exports){
+// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+var toIObject = require('./_to-iobject')
+  , gOPN      = require('./_object-gopn').f
+  , toString  = {}.toString;
+
+var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
+  ? Object.getOwnPropertyNames(window) : [];
+
+var getWindowNames = function(it){
+  try {
+    return gOPN(it);
+  } catch(e){
+    return windowNames.slice();
+  }
+};
+
+module.exports.f = function getOwnPropertyNames(it){
+  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+};
+
+},{"./_object-gopn":56,"./_to-iobject":72}],56:[function(require,module,exports){
+// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+var $keys      = require('./_object-keys-internal')
+  , hiddenKeys = require('./_enum-bug-keys').concat('length', 'prototype');
+
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
+  return $keys(O, hiddenKeys);
+};
+},{"./_enum-bug-keys":31,"./_object-keys-internal":59}],57:[function(require,module,exports){
+exports.f = Object.getOwnPropertySymbols;
+},{}],58:[function(require,module,exports){
+// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+var has         = require('./_has')
+  , toObject    = require('./_to-object')
+  , IE_PROTO    = require('./_shared-key')('IE_PROTO')
+  , ObjectProto = Object.prototype;
+
+module.exports = Object.getPrototypeOf || function(O){
+  O = toObject(O);
+  if(has(O, IE_PROTO))return O[IE_PROTO];
+  if(typeof O.constructor == 'function' && O instanceof O.constructor){
+    return O.constructor.prototype;
+  } return O instanceof Object ? ObjectProto : null;
+};
+},{"./_has":36,"./_shared-key":67,"./_to-object":74}],59:[function(require,module,exports){
+var has          = require('./_has')
+  , toIObject    = require('./_to-iobject')
+  , arrayIndexOf = require('./_array-includes')(false)
+  , IE_PROTO     = require('./_shared-key')('IE_PROTO');
+
+module.exports = function(object, names){
+  var O      = toIObject(object)
+    , i      = 0
+    , result = []
+    , key;
+  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
+  // Don't enum bug & hidden keys
+  while(names.length > i)if(has(O, key = names[i++])){
+    ~arrayIndexOf(result, key) || result.push(key);
+  }
+  return result;
+};
+},{"./_array-includes":24,"./_has":36,"./_shared-key":67,"./_to-iobject":72}],60:[function(require,module,exports){
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys       = require('./_object-keys-internal')
+  , enumBugKeys = require('./_enum-bug-keys');
+
+module.exports = Object.keys || function keys(O){
+  return $keys(O, enumBugKeys);
+};
+},{"./_enum-bug-keys":31,"./_object-keys-internal":59}],61:[function(require,module,exports){
+exports.f = {}.propertyIsEnumerable;
+},{}],62:[function(require,module,exports){
+// most Object methods by ES6 should accept primitives
+var $export = require('./_export')
+  , core    = require('./_core')
+  , fails   = require('./_fails');
+module.exports = function(KEY, exec){
+  var fn  = (core.Object || {})[KEY] || Object[KEY]
+    , exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+};
+},{"./_core":26,"./_export":33,"./_fails":34}],63:[function(require,module,exports){
+module.exports = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
+},{}],64:[function(require,module,exports){
+module.exports = require('./_hide');
+},{"./_hide":37}],65:[function(require,module,exports){
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+/* eslint-disable no-proto */
+var isObject = require('./_is-object')
+  , anObject = require('./_an-object');
+var check = function(O, proto){
+  anObject(O);
+  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
+};
+module.exports = {
+  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+    function(test, buggy, set){
+      try {
+        set = require('./_ctx')(Function.call, require('./_object-gopd').f(Object.prototype, '__proto__').set, 2);
+        set(test, []);
+        buggy = !(test instanceof Array);
+      } catch(e){ buggy = true; }
+      return function setPrototypeOf(O, proto){
+        check(O, proto);
+        if(buggy)O.__proto__ = proto;
+        else set(O, proto);
+        return O;
+      };
+    }({}, false) : undefined),
+  check: check
+};
+},{"./_an-object":23,"./_ctx":27,"./_is-object":42,"./_object-gopd":54}],66:[function(require,module,exports){
+var def = require('./_object-dp').f
+  , has = require('./_has')
+  , TAG = require('./_wks')('toStringTag');
+
+module.exports = function(it, tag, stat){
+  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+};
+},{"./_has":36,"./_object-dp":52,"./_wks":79}],67:[function(require,module,exports){
+var shared = require('./_shared')('keys')
+  , uid    = require('./_uid');
+module.exports = function(key){
+  return shared[key] || (shared[key] = uid(key));
+};
+},{"./_shared":68,"./_uid":76}],68:[function(require,module,exports){
+var global = require('./_global')
+  , SHARED = '__core-js_shared__'
+  , store  = global[SHARED] || (global[SHARED] = {});
+module.exports = function(key){
+  return store[key] || (store[key] = {});
+};
+},{"./_global":35}],69:[function(require,module,exports){
+var toInteger = require('./_to-integer')
+  , defined   = require('./_defined');
+// true  -> String#at
+// false -> String#codePointAt
+module.exports = function(TO_STRING){
+  return function(that, pos){
+    var s = String(defined(that))
+      , i = toInteger(pos)
+      , l = s.length
+      , a, b;
+    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+    a = s.charCodeAt(i);
+    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+      ? TO_STRING ? s.charAt(i) : a
+      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+  };
+};
+},{"./_defined":28,"./_to-integer":71}],70:[function(require,module,exports){
+var toInteger = require('./_to-integer')
+  , max       = Math.max
+  , min       = Math.min;
+module.exports = function(index, length){
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+},{"./_to-integer":71}],71:[function(require,module,exports){
+// 7.1.4 ToInteger
+var ceil  = Math.ceil
+  , floor = Math.floor;
+module.exports = function(it){
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+},{}],72:[function(require,module,exports){
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = require('./_iobject')
+  , defined = require('./_defined');
+module.exports = function(it){
+  return IObject(defined(it));
+};
+},{"./_defined":28,"./_iobject":40}],73:[function(require,module,exports){
+// 7.1.15 ToLength
+var toInteger = require('./_to-integer')
+  , min       = Math.min;
+module.exports = function(it){
+  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
+},{"./_to-integer":71}],74:[function(require,module,exports){
+// 7.1.13 ToObject(argument)
+var defined = require('./_defined');
+module.exports = function(it){
+  return Object(defined(it));
+};
+},{"./_defined":28}],75:[function(require,module,exports){
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = require('./_is-object');
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S){
+  if(!isObject(it))return it;
+  var fn, val;
+  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+},{"./_is-object":42}],76:[function(require,module,exports){
+var id = 0
+  , px = Math.random();
+module.exports = function(key){
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+},{}],77:[function(require,module,exports){
+var global         = require('./_global')
+  , core           = require('./_core')
+  , LIBRARY        = require('./_library')
+  , wksExt         = require('./_wks-ext')
+  , defineProperty = require('./_object-dp').f;
+module.exports = function(name){
+  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
+  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
+};
+},{"./_core":26,"./_global":35,"./_library":48,"./_object-dp":52,"./_wks-ext":78}],78:[function(require,module,exports){
+exports.f = require('./_wks');
+},{"./_wks":79}],79:[function(require,module,exports){
+var store      = require('./_shared')('wks')
+  , uid        = require('./_uid')
+  , Symbol     = require('./_global').Symbol
+  , USE_SYMBOL = typeof Symbol == 'function';
+
+var $exports = module.exports = function(name){
+  return store[name] || (store[name] =
+    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
+};
+
+$exports.store = store;
+},{"./_global":35,"./_shared":68,"./_uid":76}],80:[function(require,module,exports){
+'use strict';
+var addToUnscopables = require('./_add-to-unscopables')
+  , step             = require('./_iter-step')
+  , Iterators        = require('./_iterators')
+  , toIObject        = require('./_to-iobject');
+
+// 22.1.3.4 Array.prototype.entries()
+// 22.1.3.13 Array.prototype.keys()
+// 22.1.3.29 Array.prototype.values()
+// 22.1.3.30 Array.prototype[@@iterator]()
+module.exports = require('./_iter-define')(Array, 'Array', function(iterated, kind){
+  this._t = toIObject(iterated); // target
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , kind  = this._k
+    , index = this._i++;
+  if(!O || index >= O.length){
+    this._t = undefined;
+    return step(1);
+  }
+  if(kind == 'keys'  )return step(0, index);
+  if(kind == 'values')return step(0, O[index]);
+  return step(0, [index, O[index]]);
+}, 'values');
+
+// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+Iterators.Arguments = Iterators.Array;
+
+addToUnscopables('keys');
+addToUnscopables('values');
+addToUnscopables('entries');
+},{"./_add-to-unscopables":22,"./_iter-define":44,"./_iter-step":45,"./_iterators":46,"./_to-iobject":72}],81:[function(require,module,exports){
+// 19.1.3.1 Object.assign(target, source)
+var $export = require('./_export');
+
+$export($export.S + $export.F, 'Object', {assign: require('./_object-assign')});
+},{"./_export":33,"./_object-assign":50}],82:[function(require,module,exports){
+var $export = require('./_export')
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', {create: require('./_object-create')});
+},{"./_export":33,"./_object-create":51}],83:[function(require,module,exports){
+var $export = require('./_export');
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', {defineProperty: require('./_object-dp').f});
+},{"./_descriptors":29,"./_export":33,"./_object-dp":52}],84:[function(require,module,exports){
+// 19.1.2.9 Object.getPrototypeOf(O)
+var toObject        = require('./_to-object')
+  , $getPrototypeOf = require('./_object-gpo');
+
+require('./_object-sap')('getPrototypeOf', function(){
+  return function getPrototypeOf(it){
+    return $getPrototypeOf(toObject(it));
+  };
+});
+},{"./_object-gpo":58,"./_object-sap":62,"./_to-object":74}],85:[function(require,module,exports){
+// 19.1.3.19 Object.setPrototypeOf(O, proto)
+var $export = require('./_export');
+$export($export.S, 'Object', {setPrototypeOf: require('./_set-proto').set});
+},{"./_export":33,"./_set-proto":65}],86:[function(require,module,exports){
+
+},{}],87:[function(require,module,exports){
+'use strict';
+var $at  = require('./_string-at')(true);
+
+// 21.1.3.27 String.prototype[@@iterator]()
+require('./_iter-define')(String, 'String', function(iterated){
+  this._t = String(iterated); // target
+  this._i = 0;                // next index
+// 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , index = this._i
+    , point;
+  if(index >= O.length)return {value: undefined, done: true};
+  point = $at(O, index);
+  this._i += point.length;
+  return {value: point, done: false};
+});
+},{"./_iter-define":44,"./_string-at":69}],88:[function(require,module,exports){
+'use strict';
+// ECMAScript 6 symbols shim
+var global         = require('./_global')
+  , has            = require('./_has')
+  , DESCRIPTORS    = require('./_descriptors')
+  , $export        = require('./_export')
+  , redefine       = require('./_redefine')
+  , META           = require('./_meta').KEY
+  , $fails         = require('./_fails')
+  , shared         = require('./_shared')
+  , setToStringTag = require('./_set-to-string-tag')
+  , uid            = require('./_uid')
+  , wks            = require('./_wks')
+  , wksExt         = require('./_wks-ext')
+  , wksDefine      = require('./_wks-define')
+  , keyOf          = require('./_keyof')
+  , enumKeys       = require('./_enum-keys')
+  , isArray        = require('./_is-array')
+  , anObject       = require('./_an-object')
+  , toIObject      = require('./_to-iobject')
+  , toPrimitive    = require('./_to-primitive')
+  , createDesc     = require('./_property-desc')
+  , _create        = require('./_object-create')
+  , gOPNExt        = require('./_object-gopn-ext')
+  , $GOPD          = require('./_object-gopd')
+  , $DP            = require('./_object-dp')
+  , $keys          = require('./_object-keys')
+  , gOPD           = $GOPD.f
+  , dP             = $DP.f
+  , gOPN           = gOPNExt.f
+  , $Symbol        = global.Symbol
+  , $JSON          = global.JSON
+  , _stringify     = $JSON && $JSON.stringify
+  , PROTOTYPE      = 'prototype'
+  , HIDDEN         = wks('_hidden')
+  , TO_PRIMITIVE   = wks('toPrimitive')
+  , isEnum         = {}.propertyIsEnumerable
+  , SymbolRegistry = shared('symbol-registry')
+  , AllSymbols     = shared('symbols')
+  , ObjectProto    = Object[PROTOTYPE]
+  , USE_NATIVE     = typeof $Symbol == 'function'
+  , QObject        = global.QObject;
+// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
+var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
+
+// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+var setSymbolDesc = DESCRIPTORS && $fails(function(){
+  return _create(dP({}, 'a', {
+    get: function(){ return dP(this, 'a', {value: 7}).a; }
+  })).a != 7;
+}) ? function(it, key, D){
+  var protoDesc = gOPD(ObjectProto, key);
+  if(protoDesc)delete ObjectProto[key];
+  dP(it, key, D);
+  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
+} : dP;
+
+var wrap = function(tag){
+  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
+  sym._k = tag;
+  return sym;
+};
+
+var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
+  return typeof it == 'symbol';
+} : function(it){
+  return it instanceof $Symbol;
+};
+
+var $defineProperty = function defineProperty(it, key, D){
+  anObject(it);
+  key = toPrimitive(key, true);
+  anObject(D);
+  if(has(AllSymbols, key)){
+    if(!D.enumerable){
+      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
+      it[HIDDEN][key] = true;
+    } else {
+      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
+      D = _create(D, {enumerable: createDesc(0, false)});
+    } return setSymbolDesc(it, key, D);
+  } return dP(it, key, D);
+};
+var $defineProperties = function defineProperties(it, P){
+  anObject(it);
+  var keys = enumKeys(P = toIObject(P))
+    , i    = 0
+    , l = keys.length
+    , key;
+  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
+  return it;
+};
+var $create = function create(it, P){
+  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+};
+var $propertyIsEnumerable = function propertyIsEnumerable(key){
+  var E = isEnum.call(this, key = toPrimitive(key, true));
+  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
+};
+var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
+  var D = gOPD(it = toIObject(it), key = toPrimitive(key, true));
+  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+  return D;
+};
+var $getOwnPropertyNames = function getOwnPropertyNames(it){
+  var names  = gOPN(toIObject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i)if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
+  return result;
+};
+var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
+  var names  = gOPN(toIObject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i)if(has(AllSymbols, key = names[i++]))result.push(AllSymbols[key]);
+  return result;
+};
+
+// 19.4.1.1 Symbol([description])
+if(!USE_NATIVE){
+  $Symbol = function Symbol(){
+    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
+    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
+    DESCRIPTORS && setter && setSymbolDesc(ObjectProto, tag, {
+      configurable: true,
+      set: function(value){
+        if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+        setSymbolDesc(this, tag, createDesc(1, value));
+      }
+    });
+    return wrap(tag);
+  };
+  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
+    return this._k;
+  });
+
+  $GOPD.f = $getOwnPropertyDescriptor;
+  $DP.f   = $defineProperty;
+  require('./_object-gopn').f = gOPNExt.f = $getOwnPropertyNames;
+  require('./_object-pie').f  = $propertyIsEnumerable;
+  require('./_object-gops').f = $getOwnPropertySymbols;
+
+  if(DESCRIPTORS && !require('./_library')){
+    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+  }
+
+  wksExt.f = function(name){
+    return wrap(wks(name));
+  }
+}
+
+$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
+
+for(var symbols = (
+  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
+  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
+).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
+
+for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
+
+$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
+  // 19.4.2.1 Symbol.for(key)
+  'for': function(key){
+    return has(SymbolRegistry, key += '')
+      ? SymbolRegistry[key]
+      : SymbolRegistry[key] = $Symbol(key);
+  },
+  // 19.4.2.5 Symbol.keyFor(sym)
+  keyFor: function keyFor(key){
+    if(isSymbol(key))return keyOf(SymbolRegistry, key);
+    throw TypeError(key + ' is not a symbol!');
+  },
+  useSetter: function(){ setter = true; },
+  useSimple: function(){ setter = false; }
+});
+
+$export($export.S + $export.F * !USE_NATIVE, 'Object', {
+  // 19.1.2.2 Object.create(O [, Properties])
+  create: $create,
+  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+  defineProperty: $defineProperty,
+  // 19.1.2.3 Object.defineProperties(O, Properties)
+  defineProperties: $defineProperties,
+  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+  // 19.1.2.7 Object.getOwnPropertyNames(O)
+  getOwnPropertyNames: $getOwnPropertyNames,
+  // 19.1.2.8 Object.getOwnPropertySymbols(O)
+  getOwnPropertySymbols: $getOwnPropertySymbols
+});
+
+// 24.3.2 JSON.stringify(value [, replacer [, space]])
+$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
+  var S = $Symbol();
+  // MS Edge converts symbol values to JSON as {}
+  // WebKit converts symbol values to JSON as null
+  // V8 throws on boxed symbols
+  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+})), 'JSON', {
+  stringify: function stringify(it){
+    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
+    var args = [it]
+      , i    = 1
+      , replacer, $replacer;
+    while(arguments.length > i)args.push(arguments[i++]);
+    replacer = args[1];
+    if(typeof replacer == 'function')$replacer = replacer;
+    if($replacer || !isArray(replacer))replacer = function(key, value){
+      if($replacer)value = $replacer.call(this, key, value);
+      if(!isSymbol(value))return value;
+    };
+    args[1] = replacer;
+    return _stringify.apply($JSON, args);
+  }
+});
+
+// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
+$Symbol[PROTOTYPE][TO_PRIMITIVE] || require('./_hide')($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+// 19.4.3.5 Symbol.prototype[@@toStringTag]
+setToStringTag($Symbol, 'Symbol');
+// 20.2.1.9 Math[@@toStringTag]
+setToStringTag(Math, 'Math', true);
+// 24.3.3 JSON[@@toStringTag]
+setToStringTag(global.JSON, 'JSON', true);
+},{"./_an-object":23,"./_descriptors":29,"./_enum-keys":32,"./_export":33,"./_fails":34,"./_global":35,"./_has":36,"./_hide":37,"./_is-array":41,"./_keyof":47,"./_library":48,"./_meta":49,"./_object-create":51,"./_object-dp":52,"./_object-gopd":54,"./_object-gopn":56,"./_object-gopn-ext":55,"./_object-gops":57,"./_object-keys":60,"./_object-pie":61,"./_property-desc":63,"./_redefine":64,"./_set-to-string-tag":66,"./_shared":68,"./_to-iobject":72,"./_to-primitive":75,"./_uid":76,"./_wks":79,"./_wks-define":77,"./_wks-ext":78}],89:[function(require,module,exports){
+require('./_wks-define')('asyncIterator');
+},{"./_wks-define":77}],90:[function(require,module,exports){
+require('./_wks-define')('observable');
+},{"./_wks-define":77}],91:[function(require,module,exports){
+require('./es6.array.iterator');
+var global        = require('./_global')
+  , hide          = require('./_hide')
+  , Iterators     = require('./_iterators')
+  , TO_STRING_TAG = require('./_wks')('toStringTag');
+
+for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
+  var NAME       = collections[i]
+    , Collection = global[NAME]
+    , proto      = Collection && Collection.prototype;
+  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
+  Iterators[NAME] = Iterators.Array;
+}
+},{"./_global":35,"./_hide":37,"./_iterators":46,"./_wks":79,"./es6.array.iterator":80}],92:[function(require,module,exports){
 /**
  * Copyright (c) 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -60,7 +1280,7 @@
 
 module.exports.Dispatcher = require('./lib/Dispatcher');
 
-},{"./lib/Dispatcher":3}],3:[function(require,module,exports){
+},{"./lib/Dispatcher":93}],93:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2014-2015, Facebook, Inc.
@@ -294,7 +1514,7 @@ var Dispatcher = (function () {
 
 module.exports = Dispatcher;
 }).call(this,require('_process'))
-},{"_process":14,"fbjs/lib/invariant":4}],4:[function(require,module,exports){
+},{"_process":105,"fbjs/lib/invariant":94}],94:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -346,7 +1566,7 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":14}],5:[function(require,module,exports){
+},{"_process":105}],95:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -381,7 +1601,7 @@ module.exports = function () {
   };
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Mixin.js":7,"react":44}],6:[function(require,module,exports){
+},{"./Mixin.js":97,"react":138}],96:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -414,7 +1634,7 @@ module.exports = function (Component) {
   });
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Mixin.js":7,"react":44}],7:[function(require,module,exports){
+},{"./Mixin.js":97,"react":138}],97:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -591,7 +1811,7 @@ module.exports = {
   }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./utils.js":9,"react":44}],8:[function(require,module,exports){
+},{"./utils.js":99,"react":138}],98:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1054,7 +2274,7 @@ if (!global.exports && !global.module && (!global.define || !global.define.amd))
 
 module.exports = Formsy;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Decorator.js":5,"./HOC.js":6,"./Mixin.js":7,"./utils.js":9,"./validationRules.js":10,"form-data-to-object":11,"react":44}],9:[function(require,module,exports){
+},{"./Decorator.js":95,"./HOC.js":96,"./Mixin.js":97,"./utils.js":99,"./validationRules.js":100,"form-data-to-object":101,"react":138}],99:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -1110,7 +2330,7 @@ module.exports = {
     return null;
   }
 };
-},{}],10:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 'use strict';
 
 var _isExisty = function _isExisty(value) {
@@ -1191,7 +2411,7 @@ var validations = {
 };
 
 module.exports = validations;
-},{}],11:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 function toObj(source) {
   return Object.keys(source).reduce(function (output, key) {
     var parentKey = key.match(/[^\[]*/i);
@@ -1238,7 +2458,10 @@ module.exports = {
   fromObj: fromObj,
   toObj: toObj
 }
-},{}],12:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
+/*! jquery-dateFormat 18-05-2015 */
+var DateFormat={};!function(a){var b=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],c=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],d=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],e=["January","February","March","April","May","June","July","August","September","October","November","December"],f={Jan:"01",Feb:"02",Mar:"03",Apr:"04",May:"05",Jun:"06",Jul:"07",Aug:"08",Sep:"09",Oct:"10",Nov:"11",Dec:"12"},g=/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d{0,3}[Z\-+]?(\d{2}:?\d{2})?/;a.format=function(){function a(a){return b[parseInt(a,10)]||a}function h(a){return c[parseInt(a,10)]||a}function i(a){var b=parseInt(a,10)-1;return d[b]||a}function j(a){var b=parseInt(a,10)-1;return e[b]||a}function k(a){return f[a]||a}function l(a){var b,c,d,e,f,g=a,h="";return-1!==g.indexOf(".")&&(e=g.split("."),g=e[0],h=e[e.length-1]),f=g.split(":"),3===f.length?(b=f[0],c=f[1],d=f[2].replace(/\s.+/,"").replace(/[a-z]/gi,""),g=g.replace(/\s.+/,"").replace(/[a-z]/gi,""),{time:g,hour:b,minute:c,second:d,millis:h}):{time:"",hour:"",minute:"",second:"",millis:""}}function m(a,b){for(var c=b-String(a).length,d=0;c>d;d++)a="0"+a;return a}return{parseDate:function(a){var b,c,d={date:null,year:null,month:null,dayOfMonth:null,dayOfWeek:null,time:null};if("number"==typeof a)return this.parseDate(new Date(a));if("function"==typeof a.getFullYear)d.year=String(a.getFullYear()),d.month=String(a.getMonth()+1),d.dayOfMonth=String(a.getDate()),d.time=l(a.toTimeString()+"."+a.getMilliseconds());else if(-1!=a.search(g))b=a.split(/[T\+-]/),d.year=b[0],d.month=b[1],d.dayOfMonth=b[2],d.time=l(b[3].split(".")[0]);else switch(b=a.split(" "),6===b.length&&isNaN(b[5])&&(b[b.length]="()"),b.length){case 6:d.year=b[5],d.month=k(b[1]),d.dayOfMonth=b[2],d.time=l(b[3]);break;case 2:c=b[0].split("-"),d.year=c[0],d.month=c[1],d.dayOfMonth=c[2],d.time=l(b[1]);break;case 7:case 9:case 10:d.year=b[3],d.month=k(b[1]),d.dayOfMonth=b[2],d.time=l(b[4]);break;case 1:c=b[0].split(""),d.year=c[0]+c[1]+c[2]+c[3],d.month=c[5]+c[6],d.dayOfMonth=c[8]+c[9],d.time=l(c[13]+c[14]+c[15]+c[16]+c[17]+c[18]+c[19]+c[20]);break;default:return null}return d.date=d.time?new Date(d.year,d.month-1,d.dayOfMonth,d.time.hour,d.time.minute,d.time.second,d.time.millis):new Date(d.year,d.month-1,d.dayOfMonth),d.dayOfWeek=String(d.date.getDay()),d},date:function(b,c){try{var d=this.parseDate(b);if(null===d)return b;for(var e,f=d.year,g=d.month,k=d.dayOfMonth,l=d.dayOfWeek,n=d.time,o="",p="",q="",r=!1,s=0;s<c.length;s++){var t=c.charAt(s),u=c.charAt(s+1);if(r)"'"==t?(p+=""===o?"'":o,o="",r=!1):o+=t;else switch(o+=t,q="",o){case"ddd":p+=a(l),o="";break;case"dd":if("d"===u)break;p+=m(k,2),o="";break;case"d":if("d"===u)break;p+=parseInt(k,10),o="";break;case"D":k=1==k||21==k||31==k?parseInt(k,10)+"st":2==k||22==k?parseInt(k,10)+"nd":3==k||23==k?parseInt(k,10)+"rd":parseInt(k,10)+"th",p+=k,o="";break;case"MMMM":p+=j(g),o="";break;case"MMM":if("M"===u)break;p+=i(g),o="";break;case"MM":if("M"===u)break;p+=m(g,2),o="";break;case"M":if("M"===u)break;p+=parseInt(g,10),o="";break;case"y":case"yyy":if("y"===u)break;p+=o,o="";break;case"yy":if("y"===u)break;p+=String(f).slice(-2),o="";break;case"yyyy":p+=f,o="";break;case"HH":p+=m(n.hour,2),o="";break;case"H":if("H"===u)break;p+=parseInt(n.hour,10),o="";break;case"hh":e=0===parseInt(n.hour,10)?12:n.hour<13?n.hour:n.hour-12,p+=m(e,2),o="";break;case"h":if("h"===u)break;e=0===parseInt(n.hour,10)?12:n.hour<13?n.hour:n.hour-12,p+=parseInt(e,10),o="";break;case"mm":p+=m(n.minute,2),o="";break;case"m":if("m"===u)break;p+=n.minute,o="";break;case"ss":p+=m(n.second.substring(0,2),2),o="";break;case"s":if("s"===u)break;p+=n.second,o="";break;case"S":case"SS":if("S"===u)break;p+=o,o="";break;case"SSS":var v="000"+n.millis.substring(0,3);p+=v.substring(v.length-3),o="";break;case"a":p+=n.hour>=12?"PM":"AM",o="";break;case"p":p+=n.hour>=12?"p.m.":"a.m.",o="";break;case"E":p+=h(l),o="";break;case"'":o="",r=!0;break;default:p+=t,o=""}}return p+=q}catch(w){return console&&console.log&&console.log(w),b}},prettyDate:function(a){var b,c,d;return("string"==typeof a||"number"==typeof a)&&(b=new Date(a)),"object"==typeof a&&(b=new Date(a.toString())),c=((new Date).getTime()-b.getTime())/1e3,d=Math.floor(c/86400),isNaN(d)||0>d?void 0:60>c?"just now":120>c?"1 minute ago":3600>c?Math.floor(c/60)+" minutes ago":7200>c?"1 hour ago":86400>c?Math.floor(c/3600)+" hours ago":1===d?"Yesterday":7>d?d+" days ago":31>d?Math.ceil(d/7)+" weeks ago":d>=31?"more than 5 weeks ago":void 0},toBrowserTimeZone:function(a,b){return this.date(new Date(a),b||"MM/dd/yyyy HH:mm:ss")}}}()}(DateFormat),function(a){a.format=DateFormat.format}(jQuery);
+},{}],103:[function(require,module,exports){
 /**
  * Copyright 2013-2014 Facebook, Inc.
  *
@@ -1293,7 +2516,7 @@ var keyMirror = function(obj) {
 
 module.exports = keyMirror;
 
-},{}],13:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1596,7 +2819,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],14:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1692,7 +2915,1071 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],15:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = require('babel-runtime/helpers/inherits');
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactSwipeable = require('react-swipeable');
+
+var _reactSwipeable2 = _interopRequireDefault(_reactSwipeable);
+
+var _screenfull = require('screenfull');
+
+var _screenfull2 = _interopRequireDefault(_screenfull);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MIN_INTERVAL = 500;
+
+function throttle(func, wait) {
+  var context = void 0,
+      args = void 0,
+      result = void 0;
+  var timeout = null;
+  var previous = 0;
+
+  var later = function later() {
+    previous = new Date().getTime();
+    timeout = null;
+    result = func.apply(context, args);
+    if (!timeout) context = args = null;
+  };
+  return function () {
+    var now = new Date().getTime();
+    var remaining = wait - (now - previous);
+    context = this;
+    args = arguments;
+    if (remaining <= 0 || remaining > wait) {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      previous = now;
+      result = func.apply(context, args);
+      if (!timeout) context = args = null;
+    } else if (!timeout) {
+      timeout = setTimeout(later, remaining);
+    }
+    return result;
+  };
+}
+
+var ImageGallery = function (_React$Component) {
+  (0, _inherits3.default)(ImageGallery, _React$Component);
+
+  function ImageGallery(props) {
+    (0, _classCallCheck3.default)(this, ImageGallery);
+
+    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ImageGallery).call(this, props));
+
+    _this.state = {
+      currentIndex: props.startIndex,
+      thumbsTranslateX: 0,
+      offsetPercentage: 0,
+      galleryWidth: 0
+    };
+
+    _this._slideLeft = throttle(_this._slideLeft, MIN_INTERVAL, true);
+    _this._slideRight = throttle(_this._slideRight, MIN_INTERVAL, true);
+    _this._handleResize = _this._handleResize.bind(_this);
+    _this._handleKeyDown = _this._handleKeyDown.bind(_this);
+    return _this;
+  }
+
+  (0, _createClass3.default)(ImageGallery, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      if (prevState.galleryWidth !== this.state.galleryWidth || prevProps.showThumbnails !== this.props.showThumbnails) {
+
+        // adjust thumbnail container when window width is adjusted
+        this._setThumbsTranslateX(-this._getThumbsTranslateX(this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
+      }
+
+      if (prevState.currentIndex !== this.state.currentIndex) {
+        if (this.props.onSlide) {
+          this.props.onSlide(this.state.currentIndex);
+        }
+
+        this._updateThumbnailTranslateX(prevState);
+      }
+    }
+  }, {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this._thumbnailDelay = 300;
+      this._ghotClickDelay = 600;
+      this._preventGhostClick = false;
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      window.setTimeout(function () {
+        _this2._handleResize(), 300;
+      });
+      if (this.props.autoPlay) {
+        this.play();
+      }
+      window.addEventListener('keydown', this._handleKeyDown);
+      window.addEventListener('resize', this._handleResize);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      window.removeEventListener('keydown', this._handleKeyDown);
+      window.removeEventListener('resize', this._handleResize);
+      if (this._intervalId) {
+        window.clearInterval(this._intervalId);
+        this._intervalId = null;
+      }
+    }
+  }, {
+    key: 'play',
+    value: function play() {
+      var _this3 = this;
+
+      var callback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      if (this._intervalId) {
+        return;
+      }
+      var slideInterval = this.props.slideInterval;
+
+      this._intervalId = window.setInterval(function () {
+        if (!_this3.state.hovering) {
+          if (!_this3.props.infinite && !_this3._canSlideRight()) {
+            _this3.pause();
+          } else {
+            _this3.slideToIndex(_this3.state.currentIndex + 1);
+          }
+        }
+      }, slideInterval > MIN_INTERVAL ? slideInterval : MIN_INTERVAL);
+
+      if (this.props.onPlay && callback) {
+        this.props.onPlay(this.state.currentIndex);
+      }
+    }
+  }, {
+    key: 'pause',
+    value: function pause() {
+      var callback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      if (this._intervalId) {
+        window.clearInterval(this._intervalId);
+        this._intervalId = null;
+      }
+
+      if (this.props.onPause && callback) {
+        this.props.onPause(this.state.currentIndex);
+      }
+    }
+  }, {
+    key: 'fullScreen',
+    value: function fullScreen() {
+      if (_screenfull2.default.enabled) {
+        if (!_screenfull2.default.isFullscreen) {
+          _screenfull2.default.request(this._imageGallery);
+        } else {
+          _screenfull2.default.exit();
+        }
+      }
+    }
+  }, {
+    key: 'slideToIndex',
+    value: function slideToIndex(index, event) {
+      var slideCount = this.props.items.length - 1;
+      var currentIndex = index;
+
+      if (index < 0) {
+        currentIndex = slideCount;
+      } else if (index > slideCount) {
+        currentIndex = 0;
+      }
+
+      this.setState({
+        previousIndex: this.state.currentIndex,
+        currentIndex: currentIndex,
+        offsetPercentage: 0,
+        style: {
+          transition: 'transform .45s ease-out'
+        }
+      });
+
+      if (event) {
+        if (this._intervalId) {
+          // user event, while playing, reset interval
+          this.pause(false);
+          this.play(false);
+        }
+      }
+    }
+  }, {
+    key: '_wrapClick',
+    value: function _wrapClick(func) {
+      var _this4 = this;
+
+      if (typeof func === 'function') {
+        return function (event) {
+          if (_this4._preventGhostClick === true) {
+            return;
+          }
+          func(event);
+        };
+      }
+    }
+  }, {
+    key: '_touchEnd',
+    value: function _touchEnd() {
+      var _this5 = this;
+
+      this._preventGhostClick = true;
+      this._preventGhostClickTimer = window.setTimeout(function () {
+        _this5._preventGhostClick = false;
+        _this5._preventGhostClickTimer = null;
+      }, this._ghotClickDelay);
+    }
+  }, {
+    key: '_handleResize',
+    value: function _handleResize() {
+      if (this._imageGallery) {
+        this.setState({ galleryWidth: this._imageGallery.offsetWidth });
+      }
+    }
+  }, {
+    key: '_handleKeyDown',
+    value: function _handleKeyDown(event) {
+      var LEFT_ARROW = 37;
+      var RIGHT_ARROW = 39;
+      var key = parseInt(event.keyCode || event.which || 0);
+
+      switch (key) {
+        case LEFT_ARROW:
+          if (this._canSlideLeft() && !this._intervalId) {
+            this._slideLeft();
+          }
+          break;
+        case RIGHT_ARROW:
+          if (this._canSlideRight() && !this._intervalId) {
+            this._slideRight();
+          }
+          break;
+      }
+    }
+  }, {
+    key: '_handleMouseOverThumbnails',
+    value: function _handleMouseOverThumbnails(index) {
+      var _this6 = this;
+
+      if (this.props.slideOnThumbnailHover) {
+        this.setState({ hovering: true });
+        if (this._thumbnailTimer) {
+          window.clearTimeout(this._thumbnailTimer);
+          this._thumbnailTimer = null;
+        }
+        this._thumbnailTimer = window.setTimeout(function () {
+          _this6.slideToIndex(index);
+        }, this._thumbnailDelay);
+      }
+    }
+  }, {
+    key: '_handleMouseLeaveThumbnails',
+    value: function _handleMouseLeaveThumbnails() {
+      if (this._thumbnailTimer) {
+        window.clearTimeout(this._thumbnailTimer);
+        this._thumbnailTimer = null;
+        if (this.props.autoPlay === true) {
+          this.play(false);
+        }
+      }
+      this.setState({ hovering: false });
+    }
+  }, {
+    key: '_handleMouseOver',
+    value: function _handleMouseOver() {
+      this.setState({ hovering: true });
+    }
+  }, {
+    key: '_handleMouseLeave',
+    value: function _handleMouseLeave() {
+      this.setState({ hovering: false });
+    }
+  }, {
+    key: '_handleImageError',
+    value: function _handleImageError(event) {
+      if (this.props.defaultImage && event.target.src.indexOf(this.props.defaultImage) === -1) {
+        event.target.src = this.props.defaultImage;
+      }
+    }
+  }, {
+    key: '_handleOnSwiped',
+    value: function _handleOnSwiped(ev, x, y, isFlick) {
+      this.setState({ isFlick: isFlick });
+    }
+  }, {
+    key: '_handleOnSwipedTo',
+    value: function _handleOnSwipedTo(index) {
+      var slideTo = this.state.currentIndex;
+      if (Math.abs(this.state.offsetPercentage) > 30 || this.state.isFlick) {
+        slideTo += index;
+      }
+
+      if (index < 0) {
+        if (!this._canSlideLeft()) {
+          slideTo = this.state.currentIndex;
+        }
+      } else {
+        if (!this._canSlideRight()) {
+          slideTo = this.state.currentIndex;
+        }
+      }
+
+      this.slideToIndex(slideTo);
+    }
+  }, {
+    key: '_handleSwiping',
+    value: function _handleSwiping(index, _, delta) {
+      var offsetPercentage = index * (delta / this.state.galleryWidth * 100);
+      this.setState({ offsetPercentage: offsetPercentage, style: {} });
+    }
+  }, {
+    key: '_canNavigate',
+    value: function _canNavigate() {
+      return this.props.items.length >= 2;
+    }
+  }, {
+    key: '_canSlideLeft',
+    value: function _canSlideLeft() {
+      if (this.props.infinite) {
+        return true;
+      } else {
+        return this.state.currentIndex > 0;
+      }
+    }
+  }, {
+    key: '_canSlideRight',
+    value: function _canSlideRight() {
+      if (this.props.infinite) {
+        return true;
+      } else {
+        return this.state.currentIndex < this.props.items.length - 1;
+      }
+    }
+  }, {
+    key: '_updateThumbnailTranslateX',
+    value: function _updateThumbnailTranslateX(prevState) {
+      if (this.state.currentIndex === 0) {
+        this._setThumbsTranslateX(0);
+      } else {
+        var indexDifference = Math.abs(prevState.currentIndex - this.state.currentIndex);
+        var scrollX = this._getThumbsTranslateX(indexDifference);
+        if (scrollX > 0) {
+          if (prevState.currentIndex < this.state.currentIndex) {
+            this._setThumbsTranslateX(this.state.thumbsTranslateX - scrollX);
+          } else if (prevState.currentIndex > this.state.currentIndex) {
+            this._setThumbsTranslateX(this.state.thumbsTranslateX + scrollX);
+          }
+        }
+      }
+    }
+  }, {
+    key: '_setThumbsTranslateX',
+    value: function _setThumbsTranslateX(thumbsTranslateX) {
+      this.setState({ thumbsTranslateX: thumbsTranslateX });
+    }
+  }, {
+    key: '_getThumbsTranslateX',
+    value: function _getThumbsTranslateX(indexDifference) {
+      if (this.props.disableThumbnailScroll) {
+        return 0;
+      }
+
+      if (this._thumbnails) {
+        if (this._thumbnails.scrollWidth <= this.state.galleryWidth) {
+          return 0;
+        }
+        var totalThumbnails = this._thumbnails.children.length;
+        // total scroll-x required to see the last thumbnail
+        var totalScrollX = this._thumbnails.scrollWidth - this.state.galleryWidth;
+        // scroll-x required per index change
+        var perIndexScrollX = totalScrollX / (totalThumbnails - 1);
+
+        return indexDifference * perIndexScrollX;
+      }
+    }
+  }, {
+    key: '_getAlignmentClassName',
+    value: function _getAlignmentClassName(index) {
+      var currentIndex = this.state.currentIndex;
+
+      var alignment = '';
+      var LEFT = 'left';
+      var CENTER = 'center';
+      var RIGHT = 'right';
+
+      switch (index) {
+        case currentIndex - 1:
+          alignment = ' ' + LEFT;
+          break;
+        case currentIndex:
+          alignment = ' ' + CENTER;
+          break;
+        case currentIndex + 1:
+          alignment = ' ' + RIGHT;
+          break;
+      }
+
+      if (this.props.items.length >= 3 && this.props.infinite) {
+        if (index === 0 && currentIndex === this.props.items.length - 1) {
+          // set first slide as right slide if were sliding right from last slide
+          alignment = ' ' + RIGHT;
+        } else if (index === this.props.items.length - 1 && currentIndex === 0) {
+          // set last slide as left slide if were sliding left from first slide
+          alignment = ' ' + LEFT;
+        }
+      }
+
+      return alignment;
+    }
+  }, {
+    key: '_getSlideStyle',
+    value: function _getSlideStyle(index) {
+      var _state = this.state;
+      var currentIndex = _state.currentIndex;
+      var offsetPercentage = _state.offsetPercentage;
+
+      var basetranslateX = -100 * currentIndex;
+      var totalSlides = this.props.items.length - 1;
+
+      var translateX = basetranslateX + index * 100 + offsetPercentage;
+      var zIndex = 1;
+
+      if (this.props.infinite && this.props.items.length > 1) {
+        if (currentIndex === 0 && index === totalSlides) {
+          // make the last slide the slide before the first
+          translateX = -100 + offsetPercentage;
+        } else if (currentIndex === totalSlides && index === 0) {
+          // make the first slide the slide after the last
+          translateX = 100 + offsetPercentage;
+        }
+      }
+
+      // current index has more zIndex so slides wont fly by toggling infinite
+      if (index === currentIndex) {
+        zIndex = 3;
+      } else if (index === this.state.previousIndex) {
+        zIndex = 2;
+      }
+
+      var translate3d = 'translate3d(' + translateX + '%, 0, 0)';
+
+      return {
+        WebkitTransform: translate3d,
+        MozTransform: translate3d,
+        msTransform: translate3d,
+        OTransform: translate3d,
+        transform: translate3d,
+        zIndex: zIndex
+      };
+    }
+  }, {
+    key: '_getThumbnailStyle',
+    value: function _getThumbnailStyle() {
+      var translate3d = 'translate3d(' + this.state.thumbsTranslateX + 'px, 0, 0)';
+      return {
+        WebkitTransform: translate3d,
+        MozTransform: translate3d,
+        msTransform: translate3d,
+        OTransform: translate3d,
+        transform: translate3d
+      };
+    }
+  }, {
+    key: '_slideLeft',
+    value: function _slideLeft() {
+      this.slideToIndex(this.state.currentIndex - 1);
+    }
+  }, {
+    key: '_slideRight',
+    value: function _slideRight() {
+      this.slideToIndex(this.state.currentIndex + 1);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this7 = this;
+
+      var currentIndex = this.state.currentIndex;
+
+      var thumbnailStyle = this._getThumbnailStyle();
+
+      var slideLeft = this._slideLeft.bind(this);
+      var slideRight = this._slideRight.bind(this);
+
+      var slides = [];
+      var thumbnails = [];
+      var bullets = [];
+
+      this.props.items.map(function (item, index) {
+        var alignment = _this7._getAlignmentClassName(index);
+        var originalClass = item.originalClass ? ' ' + item.originalClass : '';
+        var thumbnailClass = item.thumbnailClass ? ' ' + item.thumbnailClass : '';
+
+        var onImageError = _this7._handleImageError;
+        if (_this7.props.onImageError) {
+          onImageError = _this7.props.onImageError;
+        }
+        var slide = _react2.default.createElement(
+          'div',
+          {
+            key: index,
+            className: 'image-gallery-slide' + alignment + originalClass,
+            style: (0, _assign2.default)(_this7._getSlideStyle(index), _this7.state.style),
+            onClick: _this7._wrapClick(_this7.props.onClick),
+            onTouchStart: _this7.props.onClick,
+            onTouchEnd: _this7._touchEnd.bind(_this7)
+          },
+          _react2.default.createElement(
+            'div',
+            { className: 'image-gallery-image' },
+            _react2.default.createElement('img', {
+              src: item.original,
+              alt: item.originalAlt,
+              onLoad: _this7.props.onImageLoad,
+              onError: onImageError.bind(_this7)
+            }),
+            item.description && _react2.default.createElement(
+              'span',
+              { className: 'image-gallery-description' },
+              item.description
+            )
+          )
+        );
+
+        if (_this7.props.lazyLoad) {
+          if (alignment) {
+            slides.push(slide);
+          }
+        } else {
+          slides.push(slide);
+        }
+
+        var onThumbnailError = _this7._handleImageError;
+        if (_this7.props.onThumbnailError) {
+          onThumbnailError = _this7.props.onThumbnailError;
+        }
+
+        if (_this7.props.showThumbnails) {
+          thumbnails.push(_react2.default.createElement(
+            'a',
+            {
+              onMouseOver: _this7._handleMouseOverThumbnails.bind(_this7, index),
+              onMouseLeave: _this7._handleMouseLeaveThumbnails.bind(_this7, index),
+              key: index,
+              className: 'image-gallery-thumbnail' + (currentIndex === index ? ' active' : '') + thumbnailClass,
+
+              onTouchStart: _this7.slideToIndex.bind(_this7, index),
+              onTouchEnd: _this7._touchEnd.bind(_this7),
+              onClick: _this7._wrapClick(_this7.slideToIndex.bind(_this7, index)) },
+            _react2.default.createElement('img', {
+              src: item.thumbnail,
+              alt: item.thumbnailAlt,
+              onError: onThumbnailError.bind(_this7) })
+          ));
+        }
+
+        if (_this7.props.showBullets) {
+          bullets.push(_react2.default.createElement('li', {
+            key: index,
+            className: 'image-gallery-bullet ' + (currentIndex === index ? 'active' : ''),
+
+            onTouchStart: _this7.slideToIndex.bind(_this7, index),
+            onTouchEnd: _this7._touchEnd.bind(_this7),
+            onClick: _this7._wrapClick(_this7.slideToIndex.bind(_this7, index)) }));
+        }
+      });
+
+      return _react2.default.createElement(
+        'section',
+        { ref: function ref(i) {
+            return _this7._imageGallery = i;
+          }, className: 'image-gallery' },
+        _react2.default.createElement(
+          'div',
+          {
+            onMouseOver: this._handleMouseOver.bind(this),
+            onMouseLeave: this._handleMouseLeave.bind(this),
+            className: 'image-gallery-content' },
+          this._canNavigate() ? [this.props.showNav && _react2.default.createElement(
+            'span',
+            { key: 'navigation' },
+            this._canSlideLeft() && _react2.default.createElement('a', {
+              className: 'image-gallery-left-nav',
+              onTouchStart: slideLeft,
+              onTouchEnd: this._touchEnd.bind(this),
+              onClick: this._wrapClick(slideLeft) }),
+            this._canSlideRight() && _react2.default.createElement('a', {
+              className: 'image-gallery-right-nav',
+              onTouchStart: slideRight,
+              onTouchEnd: this._touchEnd.bind(this),
+              onClick: this._wrapClick(slideRight) })
+          ), _react2.default.createElement(
+            _reactSwipeable2.default,
+            {
+              className: 'image-gallery-swipe',
+              key: 'swipeable',
+              delta: 1,
+              onSwipingLeft: this._handleSwiping.bind(this, -1),
+              onSwipingRight: this._handleSwiping.bind(this, 1),
+              onSwiped: this._handleOnSwiped.bind(this),
+              onSwipedLeft: this._handleOnSwipedTo.bind(this, 1),
+              onSwipedRight: this._handleOnSwipedTo.bind(this, -1)
+            },
+            _react2.default.createElement(
+              'div',
+              { className: 'image-gallery-slides' },
+              slides
+            )
+          )] : _react2.default.createElement(
+            'div',
+            { className: 'image-gallery-slides' },
+            slides
+          ),
+          this.props.showBullets && _react2.default.createElement(
+            'div',
+            { className: 'image-gallery-bullets' },
+            _react2.default.createElement(
+              'ul',
+              { className: 'image-gallery-bullets-container' },
+              bullets
+            )
+          ),
+          this.props.showIndex && _react2.default.createElement(
+            'div',
+            { className: 'image-gallery-index' },
+            _react2.default.createElement(
+              'span',
+              { className: 'image-gallery-index-current' },
+              this.state.currentIndex + 1
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'image-gallery-index-separator' },
+              this.props.indexSeparator
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'image-gallery-index-total' },
+              this.props.items.length
+            )
+          )
+        ),
+        this.props.showThumbnails && _react2.default.createElement(
+          'div',
+          { className: 'image-gallery-thumbnails' },
+          _react2.default.createElement(
+            'div',
+            {
+              ref: function ref(t) {
+                return _this7._thumbnails = t;
+              },
+              className: 'image-gallery-thumbnails-container',
+              style: thumbnailStyle },
+            thumbnails
+          )
+        )
+      );
+    }
+  }]);
+  return ImageGallery;
+}(_react2.default.Component);
+
+exports.default = ImageGallery;
+
+
+ImageGallery.propTypes = {
+  items: _react2.default.PropTypes.array.isRequired,
+  showNav: _react2.default.PropTypes.bool,
+  autoPlay: _react2.default.PropTypes.bool,
+  lazyLoad: _react2.default.PropTypes.bool,
+  infinite: _react2.default.PropTypes.bool,
+  showIndex: _react2.default.PropTypes.bool,
+  showBullets: _react2.default.PropTypes.bool,
+  showThumbnails: _react2.default.PropTypes.bool,
+  slideOnThumbnailHover: _react2.default.PropTypes.bool,
+  disableThumbnailScroll: _react2.default.PropTypes.bool,
+  defaultImage: _react2.default.PropTypes.string,
+  indexSeparator: _react2.default.PropTypes.string,
+  startIndex: _react2.default.PropTypes.number,
+  slideInterval: _react2.default.PropTypes.number,
+  onSlide: _react2.default.PropTypes.func,
+  onPause: _react2.default.PropTypes.func,
+  onPlay: _react2.default.PropTypes.func,
+  onClick: _react2.default.PropTypes.func,
+  onImageLoad: _react2.default.PropTypes.func,
+  onImageError: _react2.default.PropTypes.func,
+  onThumbnailError: _react2.default.PropTypes.func
+};
+
+ImageGallery.defaultProps = {
+  items: [],
+  showNav: true,
+  autoPlay: false,
+  lazyLoad: false,
+  infinite: true,
+  showIndex: false,
+  showBullets: false,
+  showThumbnails: true,
+  slideOnThumbnailHover: false,
+  disableThumbnailScroll: false,
+  indexSeparator: ' / ',
+  startIndex: 0,
+  slideInterval: 3000
+};
+},{"babel-runtime/core-js/object/assign":1,"babel-runtime/core-js/object/get-prototype-of":4,"babel-runtime/helpers/classCallCheck":8,"babel-runtime/helpers/createClass":9,"babel-runtime/helpers/inherits":10,"babel-runtime/helpers/possibleConstructorReturn":11,"react":138,"react-swipeable":107,"screenfull":108}],107:[function(require,module,exports){
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var React = require('react');
+
+var Swipeable = React.createClass({
+  displayName: 'Swipeable',
+
+  propTypes: {
+    onSwiped: React.PropTypes.func,
+    onSwiping: React.PropTypes.func,
+    onSwipingUp: React.PropTypes.func,
+    onSwipingRight: React.PropTypes.func,
+    onSwipingDown: React.PropTypes.func,
+    onSwipingLeft: React.PropTypes.func,
+    onSwipedUp: React.PropTypes.func,
+    onSwipedRight: React.PropTypes.func,
+    onSwipedDown: React.PropTypes.func,
+    onSwipedLeft: React.PropTypes.func,
+    flickThreshold: React.PropTypes.number,
+    delta: React.PropTypes.number,
+    preventDefaultTouchmoveEvent: React.PropTypes.bool
+  },
+
+  getInitialState: function getInitialState() {
+    return {
+      x: null,
+      y: null,
+      swiping: false,
+      start: 0
+    };
+  },
+
+  getDefaultProps: function getDefaultProps() {
+    return {
+      flickThreshold: 0.6,
+      delta: 10,
+      preventDefaultTouchmoveEvent: true
+    };
+  },
+
+  calculatePos: function calculatePos(e) {
+    var x = e.changedTouches[0].clientX;
+    var y = e.changedTouches[0].clientY;
+
+    var xd = this.state.x - x;
+    var yd = this.state.y - y;
+
+    var axd = Math.abs(xd);
+    var ayd = Math.abs(yd);
+
+    var time = Date.now() - this.state.start;
+    var velocity = Math.sqrt(axd * axd + ayd * ayd) / time;
+
+    return {
+      deltaX: xd,
+      deltaY: yd,
+      absX: axd,
+      absY: ayd,
+      velocity: velocity
+    };
+  },
+
+  touchStart: function touchStart(e) {
+    if (e.touches.length > 1) {
+      return;
+    }
+    this.setState({
+      start: Date.now(),
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      swiping: false
+    });
+  },
+
+  touchMove: function touchMove(e) {
+    if (!this.state.x || !this.state.y || e.touches.length > 1) {
+      return;
+    }
+
+    var cancelPageSwipe = false;
+    var pos = this.calculatePos(e);
+
+    if (pos.absX < this.props.delta && pos.absY < this.props.delta) {
+      return;
+    }
+
+    if (this.props.onSwiping) {
+      this.props.onSwiping(e, pos.deltaX, pos.deltaY, pos.absX, pos.absY, pos.velocity);
+    }
+
+    if (pos.absX > pos.absY) {
+      if (pos.deltaX > 0) {
+        if (this.props.onSwipingLeft || this.props.onSwipedLeft) {
+          this.props.onSwipingLeft && this.props.onSwipingLeft(e, pos.absX);
+          cancelPageSwipe = true;
+        }
+      } else {
+        if (this.props.onSwipingRight || this.props.onSwipedRight) {
+          this.props.onSwipingRight && this.props.onSwipingRight(e, pos.absX);
+          cancelPageSwipe = true;
+        }
+      }
+    } else {
+      if (pos.deltaY > 0) {
+        if (this.props.onSwipingUp || this.props.onSwipedUp) {
+          this.props.onSwipingUp && this.props.onSwipingUp(e, pos.absY);
+          cancelPageSwipe = true;
+        }
+      } else {
+        if (this.props.onSwipingDown || this.props.onSwipedDown) {
+          this.props.onSwipingDown && this.props.onSwipingDown(e, pos.absY);
+          cancelPageSwipe = true;
+        }
+      }
+    }
+
+    this.setState({ swiping: true });
+
+    if (cancelPageSwipe && this.props.preventDefaultTouchmoveEvent) {
+      e.preventDefault();
+    }
+  },
+
+  touchEnd: function touchEnd(ev) {
+    if (this.state.swiping) {
+      var pos = this.calculatePos(ev);
+
+      var isFlick = pos.velocity > this.props.flickThreshold;
+
+      this.props.onSwiped && this.props.onSwiped(ev, pos.deltaX, pos.deltaY, isFlick);
+
+      if (pos.absX > pos.absY) {
+        if (pos.deltaX > 0) {
+          this.props.onSwipedLeft && this.props.onSwipedLeft(ev, pos.deltaX, isFlick);
+        } else {
+          this.props.onSwipedRight && this.props.onSwipedRight(ev, pos.deltaX, isFlick);
+        }
+      } else {
+        if (pos.deltaY > 0) {
+          this.props.onSwipedUp && this.props.onSwipedUp(ev, pos.deltaY, isFlick);
+        } else {
+          this.props.onSwipedDown && this.props.onSwipedDown(ev, pos.deltaY, isFlick);
+        }
+      }
+    }
+
+    this.setState(this.getInitialState());
+  },
+
+  render: function render() {
+    return React.createElement(
+      'div',
+      _extends({}, this.props, {
+        onTouchStart: this.touchStart,
+        onTouchMove: this.touchMove,
+        onTouchEnd: this.touchEnd }),
+      this.props.children
+    );
+  }
+});
+
+module.exports = Swipeable;
+},{"react":138}],108:[function(require,module,exports){
+/*!
+* screenfull
+* v3.0.0 - 2015-11-24
+* (c) Sindre Sorhus; MIT License
+*/
+(function () {
+	'use strict';
+
+	var isCommonjs = typeof module !== 'undefined' && module.exports;
+	var keyboardAllowed = typeof Element !== 'undefined' && 'ALLOW_KEYBOARD_INPUT' in Element;
+
+	var fn = (function () {
+		var val;
+		var valLength;
+
+		var fnMap = [
+			[
+				'requestFullscreen',
+				'exitFullscreen',
+				'fullscreenElement',
+				'fullscreenEnabled',
+				'fullscreenchange',
+				'fullscreenerror'
+			],
+			// new WebKit
+			[
+				'webkitRequestFullscreen',
+				'webkitExitFullscreen',
+				'webkitFullscreenElement',
+				'webkitFullscreenEnabled',
+				'webkitfullscreenchange',
+				'webkitfullscreenerror'
+
+			],
+			// old WebKit (Safari 5.1)
+			[
+				'webkitRequestFullScreen',
+				'webkitCancelFullScreen',
+				'webkitCurrentFullScreenElement',
+				'webkitCancelFullScreen',
+				'webkitfullscreenchange',
+				'webkitfullscreenerror'
+
+			],
+			[
+				'mozRequestFullScreen',
+				'mozCancelFullScreen',
+				'mozFullScreenElement',
+				'mozFullScreenEnabled',
+				'mozfullscreenchange',
+				'mozfullscreenerror'
+			],
+			[
+				'msRequestFullscreen',
+				'msExitFullscreen',
+				'msFullscreenElement',
+				'msFullscreenEnabled',
+				'MSFullscreenChange',
+				'MSFullscreenError'
+			]
+		];
+
+		var i = 0;
+		var l = fnMap.length;
+		var ret = {};
+
+		for (; i < l; i++) {
+			val = fnMap[i];
+			if (val && val[1] in document) {
+				for (i = 0, valLength = val.length; i < valLength; i++) {
+					ret[fnMap[0][i]] = val[i];
+				}
+				return ret;
+			}
+		}
+
+		return false;
+	})();
+
+	var screenfull = {
+		request: function (elem) {
+			var request = fn.requestFullscreen;
+
+			elem = elem || document.documentElement;
+
+			// Work around Safari 5.1 bug: reports support for
+			// keyboard in fullscreen even though it doesn't.
+			// Browser sniffing, since the alternative with
+			// setTimeout is even worse.
+			if (/5\.1[\.\d]* Safari/.test(navigator.userAgent)) {
+				elem[request]();
+			} else {
+				elem[request](keyboardAllowed && Element.ALLOW_KEYBOARD_INPUT);
+			}
+		},
+		exit: function () {
+			document[fn.exitFullscreen]();
+		},
+		toggle: function (elem) {
+			if (this.isFullscreen) {
+				this.exit();
+			} else {
+				this.request(elem);
+			}
+		},
+		raw: fn
+	};
+
+	if (!fn) {
+		if (isCommonjs) {
+			module.exports = false;
+		} else {
+			window.screenfull = false;
+		}
+
+		return;
+	}
+
+	Object.defineProperties(screenfull, {
+		isFullscreen: {
+			get: function () {
+				return Boolean(document[fn.fullscreenElement]);
+			}
+		},
+		element: {
+			enumerable: true,
+			get: function () {
+				return document[fn.fullscreenElement];
+			}
+		},
+		enabled: {
+			enumerable: true,
+			get: function () {
+				// Coerce to boolean in case of old WebKit
+				return Boolean(document[fn.fullscreenEnabled]);
+			}
+		}
+	});
+
+	if (isCommonjs) {
+		module.exports = screenfull;
+	} else {
+		window.screenfull = screenfull;
+	}
+})();
+
+},{}],109:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -1814,7 +4101,7 @@ var PooledClass = {
 
 module.exports = PooledClass;
 }).call(this,require('_process'))
-},{"_process":14,"fbjs/lib/invariant":38}],16:[function(require,module,exports){
+},{"_process":105,"fbjs/lib/invariant":132}],110:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -1904,7 +4191,7 @@ var React = {
 
 module.exports = React;
 }).call(this,require('_process'))
-},{"./ReactChildren":17,"./ReactClass":18,"./ReactComponent":19,"./ReactDOMFactories":21,"./ReactElement":23,"./ReactElementValidator":24,"./ReactPropTypes":30,"./ReactVersion":31,"./onlyChild":34,"_process":14,"fbjs/lib/warning":42,"object-assign":43}],17:[function(require,module,exports){
+},{"./ReactChildren":111,"./ReactClass":112,"./ReactComponent":113,"./ReactDOMFactories":115,"./ReactElement":117,"./ReactElementValidator":118,"./ReactPropTypes":124,"./ReactVersion":125,"./onlyChild":128,"_process":105,"fbjs/lib/warning":136,"object-assign":137}],111:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -2088,7 +4375,7 @@ var ReactChildren = {
 };
 
 module.exports = ReactChildren;
-},{"./PooledClass":15,"./ReactElement":23,"./traverseAllChildren":35,"fbjs/lib/emptyFunction":36}],18:[function(require,module,exports){
+},{"./PooledClass":109,"./ReactElement":117,"./traverseAllChildren":129,"fbjs/lib/emptyFunction":130}],112:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -2814,7 +5101,7 @@ var ReactClass = {
 
 module.exports = ReactClass;
 }).call(this,require('_process'))
-},{"./ReactComponent":19,"./ReactElement":23,"./ReactNoopUpdateQueue":27,"./ReactPropTypeLocationNames":28,"./ReactPropTypeLocations":29,"_process":14,"fbjs/lib/emptyObject":37,"fbjs/lib/invariant":38,"fbjs/lib/keyMirror":39,"fbjs/lib/keyOf":40,"fbjs/lib/warning":42,"object-assign":43}],19:[function(require,module,exports){
+},{"./ReactComponent":113,"./ReactElement":117,"./ReactNoopUpdateQueue":121,"./ReactPropTypeLocationNames":122,"./ReactPropTypeLocations":123,"_process":105,"fbjs/lib/emptyObject":131,"fbjs/lib/invariant":132,"fbjs/lib/keyMirror":133,"fbjs/lib/keyOf":134,"fbjs/lib/warning":136,"object-assign":137}],113:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -2938,7 +5225,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactComponent;
 }).call(this,require('_process'))
-},{"./ReactInstrumentation":25,"./ReactNoopUpdateQueue":27,"./canDefineProperty":32,"_process":14,"fbjs/lib/emptyObject":37,"fbjs/lib/invariant":38,"fbjs/lib/warning":42}],20:[function(require,module,exports){
+},{"./ReactInstrumentation":119,"./ReactNoopUpdateQueue":121,"./canDefineProperty":126,"_process":105,"fbjs/lib/emptyObject":131,"fbjs/lib/invariant":132,"fbjs/lib/warning":136}],114:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -2970,7 +5257,7 @@ var ReactCurrentOwner = {
 };
 
 module.exports = ReactCurrentOwner;
-},{}],21:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -3149,7 +5436,7 @@ var ReactDOMFactories = mapObject({
 
 module.exports = ReactDOMFactories;
 }).call(this,require('_process'))
-},{"./ReactElement":23,"./ReactElementValidator":24,"_process":14,"fbjs/lib/mapObject":41}],22:[function(require,module,exports){
+},{"./ReactElement":117,"./ReactElementValidator":118,"_process":105,"fbjs/lib/mapObject":135}],116:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -3224,7 +5511,7 @@ ReactDebugTool.addDevtool(ReactInvalidSetStateWarningDevTool);
 
 module.exports = ReactDebugTool;
 }).call(this,require('_process'))
-},{"./ReactInvalidSetStateWarningDevTool":26,"_process":14,"fbjs/lib/warning":42}],23:[function(require,module,exports){
+},{"./ReactInvalidSetStateWarningDevTool":120,"_process":105,"fbjs/lib/warning":136}],117:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -3514,7 +5801,7 @@ ReactElement.isValidElement = function (object) {
 
 module.exports = ReactElement;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":20,"./canDefineProperty":32,"_process":14,"fbjs/lib/warning":42,"object-assign":43}],24:[function(require,module,exports){
+},{"./ReactCurrentOwner":114,"./canDefineProperty":126,"_process":105,"fbjs/lib/warning":136,"object-assign":137}],118:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-present, Facebook, Inc.
@@ -3798,7 +6085,7 @@ var ReactElementValidator = {
 
 module.exports = ReactElementValidator;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":20,"./ReactElement":23,"./ReactPropTypeLocationNames":28,"./ReactPropTypeLocations":29,"./canDefineProperty":32,"./getIteratorFn":33,"_process":14,"fbjs/lib/invariant":38,"fbjs/lib/warning":42}],25:[function(require,module,exports){
+},{"./ReactCurrentOwner":114,"./ReactElement":117,"./ReactPropTypeLocationNames":122,"./ReactPropTypeLocations":123,"./canDefineProperty":126,"./getIteratorFn":127,"_process":105,"fbjs/lib/invariant":132,"fbjs/lib/warning":136}],119:[function(require,module,exports){
 /**
  * Copyright 2016-present, Facebook, Inc.
  * All rights reserved.
@@ -3815,7 +6102,7 @@ module.exports = ReactElementValidator;
 var ReactDebugTool = require('./ReactDebugTool');
 
 module.exports = { debugTool: ReactDebugTool };
-},{"./ReactDebugTool":22}],26:[function(require,module,exports){
+},{"./ReactDebugTool":116}],120:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2016-present, Facebook, Inc.
@@ -3854,7 +6141,7 @@ var ReactInvalidSetStateWarningDevTool = {
 
 module.exports = ReactInvalidSetStateWarningDevTool;
 }).call(this,require('_process'))
-},{"_process":14,"fbjs/lib/warning":42}],27:[function(require,module,exports){
+},{"_process":105,"fbjs/lib/warning":136}],121:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2015-present, Facebook, Inc.
@@ -3952,7 +6239,7 @@ var ReactNoopUpdateQueue = {
 
 module.exports = ReactNoopUpdateQueue;
 }).call(this,require('_process'))
-},{"_process":14,"fbjs/lib/warning":42}],28:[function(require,module,exports){
+},{"_process":105,"fbjs/lib/warning":136}],122:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -3979,7 +6266,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = ReactPropTypeLocationNames;
 }).call(this,require('_process'))
-},{"_process":14}],29:[function(require,module,exports){
+},{"_process":105}],123:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4002,7 +6289,7 @@ var ReactPropTypeLocations = keyMirror({
 });
 
 module.exports = ReactPropTypeLocations;
-},{"fbjs/lib/keyMirror":39}],30:[function(require,module,exports){
+},{"fbjs/lib/keyMirror":133}],124:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4383,7 +6670,7 @@ function getClassName(propValue) {
 }
 
 module.exports = ReactPropTypes;
-},{"./ReactElement":23,"./ReactPropTypeLocationNames":28,"./getIteratorFn":33,"fbjs/lib/emptyFunction":36}],31:[function(require,module,exports){
+},{"./ReactElement":117,"./ReactPropTypeLocationNames":122,"./getIteratorFn":127,"fbjs/lib/emptyFunction":130}],125:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4398,7 +6685,7 @@ module.exports = ReactPropTypes;
 'use strict';
 
 module.exports = '15.0.1';
-},{}],32:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -4425,7 +6712,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = canDefineProperty;
 }).call(this,require('_process'))
-},{"_process":14}],33:[function(require,module,exports){
+},{"_process":105}],127:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4466,7 +6753,7 @@ function getIteratorFn(maybeIterable) {
 }
 
 module.exports = getIteratorFn;
-},{}],34:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -4502,7 +6789,7 @@ function onlyChild(children) {
 
 module.exports = onlyChild;
 }).call(this,require('_process'))
-},{"./ReactElement":23,"_process":14,"fbjs/lib/invariant":38}],35:[function(require,module,exports){
+},{"./ReactElement":117,"_process":105,"fbjs/lib/invariant":132}],129:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -4694,7 +6981,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":20,"./ReactElement":23,"./getIteratorFn":33,"_process":14,"fbjs/lib/invariant":38,"fbjs/lib/warning":42}],36:[function(require,module,exports){
+},{"./ReactCurrentOwner":114,"./ReactElement":117,"./getIteratorFn":127,"_process":105,"fbjs/lib/invariant":132,"fbjs/lib/warning":136}],130:[function(require,module,exports){
 "use strict";
 
 /**
@@ -4732,7 +7019,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],37:[function(require,module,exports){
+},{}],131:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -4754,7 +7041,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":14}],38:[function(require,module,exports){
+},{"_process":105}],132:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -4806,7 +7093,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":14}],39:[function(require,module,exports){
+},{"_process":105}],133:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -4856,7 +7143,7 @@ var keyMirror = function (obj) {
 
 module.exports = keyMirror;
 }).call(this,require('_process'))
-},{"./invariant":38,"_process":14}],40:[function(require,module,exports){
+},{"./invariant":132,"_process":105}],134:[function(require,module,exports){
 "use strict";
 
 /**
@@ -4891,7 +7178,7 @@ var keyOf = function (oneKeyObj) {
 };
 
 module.exports = keyOf;
-},{}],41:[function(require,module,exports){
+},{}],135:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -4942,7 +7229,7 @@ function mapObject(object, callback, context) {
 }
 
 module.exports = mapObject;
-},{}],42:[function(require,module,exports){
+},{}],136:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -5001,7 +7288,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":36,"_process":14}],43:[function(require,module,exports){
+},{"./emptyFunction":130,"_process":105}],137:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -5042,25 +7329,284 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],44:[function(require,module,exports){
+},{}],138:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./lib/React');
 
-},{"./lib/React":16}],45:[function(require,module,exports){
+},{"./lib/React":110}],139:[function(require,module,exports){
+"use strict";
+
+/*! jQuery Migrate v1.2.1 | (c) 2005, 2013 jQuery Foundation, Inc. and other contributors | jquery.org/license */
+jQuery.migrateMute === void 0 && (jQuery.migrateMute = !0), function (e, t, n) {
+  function r(n) {
+    var r = t.console;i[n] || (i[n] = !0, e.migrateWarnings.push(n), r && r.warn && !e.migrateMute && (r.warn("JQMIGRATE: " + n), e.migrateTrace && r.trace && r.trace()));
+  }function a(t, a, i, o) {
+    if (Object.defineProperty) try {
+      return Object.defineProperty(t, a, { configurable: !0, enumerable: !0, get: function get() {
+          return r(o), i;
+        }, set: function set(e) {
+          r(o), i = e;
+        } }), n;
+    } catch (s) {}e._definePropertyBroken = !0, t[a] = i;
+  }var i = {};e.migrateWarnings = [], !e.migrateMute && t.console && t.console.log && t.console.log("JQMIGRATE: Logging is active"), e.migrateTrace === n && (e.migrateTrace = !0), e.migrateReset = function () {
+    i = {}, e.migrateWarnings.length = 0;
+  }, "BackCompat" === document.compatMode && r("jQuery is not compatible with Quirks Mode");var o = e("<input/>", { size: 1 }).attr("size") && e.attrFn,
+      s = e.attr,
+      u = e.attrHooks.value && e.attrHooks.value.get || function () {
+    return null;
+  },
+      c = e.attrHooks.value && e.attrHooks.value.set || function () {
+    return n;
+  },
+      l = /^(?:input|button)$/i,
+      d = /^[238]$/,
+      p = /^(?:autofocus|autoplay|async|checked|controls|defer|disabled|hidden|loop|multiple|open|readonly|required|scoped|selected)$/i,
+      f = /^(?:checked|selected)$/i;a(e, "attrFn", o || {}, "jQuery.attrFn is deprecated"), e.attr = function (t, a, i, u) {
+    var c = a.toLowerCase(),
+        g = t && t.nodeType;return u && (4 > s.length && r("jQuery.fn.attr( props, pass ) is deprecated"), t && !d.test(g) && (o ? a in o : e.isFunction(e.fn[a]))) ? e(t)[a](i) : ("type" === a && i !== n && l.test(t.nodeName) && t.parentNode && r("Can't change the 'type' of an input or button in IE 6/7/8"), !e.attrHooks[c] && p.test(c) && (e.attrHooks[c] = { get: function get(t, r) {
+        var a,
+            i = e.prop(t, r);return i === !0 || "boolean" != typeof i && (a = t.getAttributeNode(r)) && a.nodeValue !== !1 ? r.toLowerCase() : n;
+      }, set: function set(t, n, r) {
+        var a;return n === !1 ? e.removeAttr(t, r) : (a = e.propFix[r] || r, a in t && (t[a] = !0), t.setAttribute(r, r.toLowerCase())), r;
+      } }, f.test(c) && r("jQuery.fn.attr('" + c + "') may use property instead of attribute")), s.call(e, t, a, i));
+  }, e.attrHooks.value = { get: function get(e, t) {
+      var n = (e.nodeName || "").toLowerCase();return "button" === n ? u.apply(this, arguments) : ("input" !== n && "option" !== n && r("jQuery.fn.attr('value') no longer gets properties"), t in e ? e.value : null);
+    }, set: function set(e, t) {
+      var a = (e.nodeName || "").toLowerCase();return "button" === a ? c.apply(this, arguments) : ("input" !== a && "option" !== a && r("jQuery.fn.attr('value', val) no longer sets properties"), e.value = t, n);
+    } };var g,
+      h,
+      v = e.fn.init,
+      m = e.parseJSON,
+      y = /^([^<]*)(<[\w\W]+>)([^>]*)$/;e.fn.init = function (t, n, a) {
+    var i;return t && "string" == typeof t && !e.isPlainObject(n) && (i = y.exec(e.trim(t))) && i[0] && ("<" !== t.charAt(0) && r("$(html) HTML strings must start with '<' character"), i[3] && r("$(html) HTML text after last tag is ignored"), "#" === i[0].charAt(0) && (r("HTML string cannot start with a '#' character"), e.error("JQMIGRATE: Invalid selector string (XSS)")), n && n.context && (n = n.context), e.parseHTML) ? v.call(this, e.parseHTML(i[2], n, !0), n, a) : v.apply(this, arguments);
+  }, e.fn.init.prototype = e.fn, e.parseJSON = function (e) {
+    return e || null === e ? m.apply(this, arguments) : (r("jQuery.parseJSON requires a valid JSON string"), null);
+  }, e.uaMatch = function (e) {
+    e = e.toLowerCase();var t = /(chrome)[ \/]([\w.]+)/.exec(e) || /(webkit)[ \/]([\w.]+)/.exec(e) || /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(e) || /(msie) ([\w.]+)/.exec(e) || 0 > e.indexOf("compatible") && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(e) || [];return { browser: t[1] || "", version: t[2] || "0" };
+  }, e.browser || (g = e.uaMatch(navigator.userAgent), h = {}, g.browser && (h[g.browser] = !0, h.version = g.version), h.chrome ? h.webkit = !0 : h.webkit && (h.safari = !0), e.browser = h), a(e, "browser", e.browser, "jQuery.browser is deprecated"), e.sub = function () {
+    function t(e, n) {
+      return new t.fn.init(e, n);
+    }e.extend(!0, t, this), t.superclass = this, t.fn = t.prototype = this(), t.fn.constructor = t, t.sub = this.sub, t.fn.init = function (r, a) {
+      return a && a instanceof e && !(a instanceof t) && (a = t(a)), e.fn.init.call(this, r, a, n);
+    }, t.fn.init.prototype = t.fn;var n = t(document);return r("jQuery.sub() is deprecated"), t;
+  }, e.ajaxSetup({ converters: { "text json": e.parseJSON } });var b = e.fn.data;e.fn.data = function (t) {
+    var a,
+        i,
+        o = this[0];return !o || "events" !== t || 1 !== arguments.length || (a = e.data(o, t), i = e._data(o, t), a !== n && a !== i || i === n) ? b.apply(this, arguments) : (r("Use of jQuery.fn.data('events') is deprecated"), i);
+  };var j = /\/(java|ecma)script/i,
+      w = e.fn.andSelf || e.fn.addBack;e.fn.andSelf = function () {
+    return r("jQuery.fn.andSelf() replaced by jQuery.fn.addBack()"), w.apply(this, arguments);
+  }, e.clean || (e.clean = function (t, a, i, o) {
+    a = a || document, a = !a.nodeType && a[0] || a, a = a.ownerDocument || a, r("jQuery.clean() is deprecated");var s,
+        u,
+        c,
+        l,
+        d = [];if (e.merge(d, e.buildFragment(t, a).childNodes), i) for (c = function c(e) {
+      return !e.type || j.test(e.type) ? o ? o.push(e.parentNode ? e.parentNode.removeChild(e) : e) : i.appendChild(e) : n;
+    }, s = 0; null != (u = d[s]); s++) {
+      e.nodeName(u, "script") && c(u) || (i.appendChild(u), u.getElementsByTagName !== n && (l = e.grep(e.merge([], u.getElementsByTagName("script")), c), d.splice.apply(d, [s + 1, 0].concat(l)), s += l.length));
+    }return d;
+  });var Q = e.event.add,
+      x = e.event.remove,
+      k = e.event.trigger,
+      N = e.fn.toggle,
+      T = e.fn.live,
+      M = e.fn.die,
+      S = "ajaxStart|ajaxStop|ajaxSend|ajaxComplete|ajaxError|ajaxSuccess",
+      C = RegExp("\\b(?:" + S + ")\\b"),
+      H = /(?:^|\s)hover(\.\S+|)\b/,
+      A = function A(t) {
+    return "string" != typeof t || e.event.special.hover ? t : (H.test(t) && r("'hover' pseudo-event is deprecated, use 'mouseenter mouseleave'"), t && t.replace(H, "mouseenter$1 mouseleave$1"));
+  };e.event.props && "attrChange" !== e.event.props[0] && e.event.props.unshift("attrChange", "attrName", "relatedNode", "srcElement"), e.event.dispatch && a(e.event, "handle", e.event.dispatch, "jQuery.event.handle is undocumented and deprecated"), e.event.add = function (e, t, n, a, i) {
+    e !== document && C.test(t) && r("AJAX events should be attached to document: " + t), Q.call(this, e, A(t || ""), n, a, i);
+  }, e.event.remove = function (e, t, n, r, a) {
+    x.call(this, e, A(t) || "", n, r, a);
+  }, e.fn.error = function () {
+    var e = Array.prototype.slice.call(arguments, 0);return r("jQuery.fn.error() is deprecated"), e.splice(0, 0, "error"), arguments.length ? this.bind.apply(this, e) : (this.triggerHandler.apply(this, e), this);
+  }, e.fn.toggle = function (t, n) {
+    if (!e.isFunction(t) || !e.isFunction(n)) return N.apply(this, arguments);r("jQuery.fn.toggle(handler, handler...) is deprecated");var a = arguments,
+        i = t.guid || e.guid++,
+        o = 0,
+        s = function s(n) {
+      var r = (e._data(this, "lastToggle" + t.guid) || 0) % o;return e._data(this, "lastToggle" + t.guid, r + 1), n.preventDefault(), a[r].apply(this, arguments) || !1;
+    };for (s.guid = i; a.length > o;) {
+      a[o++].guid = i;
+    }return this.click(s);
+  }, e.fn.live = function (t, n, a) {
+    return r("jQuery.fn.live() is deprecated"), T ? T.apply(this, arguments) : (e(this.context).on(t, this.selector, n, a), this);
+  }, e.fn.die = function (t, n) {
+    return r("jQuery.fn.die() is deprecated"), M ? M.apply(this, arguments) : (e(this.context).off(t, this.selector || "**", n), this);
+  }, e.event.trigger = function (e, t, n, a) {
+    return n || C.test(e) || r("Global events are undocumented and deprecated"), k.call(this, e, t, n || document, a);
+  }, e.each(S.split("|"), function (t, n) {
+    e.event.special[n] = { setup: function setup() {
+        var t = this;return t !== document && (e.event.add(document, n + "." + e.guid, function () {
+          e.event.trigger(n, null, t, !0);
+        }), e._data(this, n, e.guid++)), !1;
+      }, teardown: function teardown() {
+        return this !== document && e.event.remove(document, n + "." + e._data(this, n)), !1;
+      } };
+  });
+}(jQuery, window);
+
+},{}],140:[function(require,module,exports){
 'use strict';
+
+/*!
+ * jquery.base64.js 0.1 - https://github.com/yckart/jquery.base64.js
+ * Makes Base64 en & -decoding simpler as it is.
+ *
+ * Based upon: https://gist.github.com/Yaffle/1284012
+ *
+ * Copyright (c) 2012 Yannick Albert (http://yckart.com)
+ * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
+ * 2013/02/10
+ **/
+;(function ($) {
+
+    var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+        a256 = '',
+        r64 = [256],
+        r256 = [256],
+        i = 0;
+
+    var UTF8 = {
+
+        /**
+         * Encode multi-byte Unicode string into utf-8 multiple single-byte characters
+         * (BMP / basic multilingual plane only)
+         *
+         * Chars in range U+0080 - U+07FF are encoded in 2 chars, U+0800 - U+FFFF in 3 chars
+         *
+         * @param {String} strUni Unicode string to be encoded as UTF-8
+         * @returns {String} encoded string
+         */
+        encode: function encode(strUni) {
+            // use regular expressions & String.replace callback function for better efficiency
+            // than procedural approaches
+            var strUtf = strUni.replace(/[\u0080-\u07ff]/g, // U+0080 - U+07FF => 2 bytes 110yyyyy, 10zzzzzz
+            function (c) {
+                var cc = c.charCodeAt(0);
+                return String.fromCharCode(0xc0 | cc >> 6, 0x80 | cc & 0x3f);
+            }).replace(/[\u0800-\uffff]/g, // U+0800 - U+FFFF => 3 bytes 1110xxxx, 10yyyyyy, 10zzzzzz
+            function (c) {
+                var cc = c.charCodeAt(0);
+                return String.fromCharCode(0xe0 | cc >> 12, 0x80 | cc >> 6 & 0x3F, 0x80 | cc & 0x3f);
+            });
+            return strUtf;
+        },
+
+        /**
+         * Decode utf-8 encoded string back into multi-byte Unicode characters
+         *
+         * @param {String} strUtf UTF-8 string to be decoded back to Unicode
+         * @returns {String} decoded string
+         */
+        decode: function decode(strUtf) {
+            // note: decode 3-byte chars first as decoded 2-byte strings could appear to be 3-byte char!
+            var strUni = strUtf.replace(/[\u00e0-\u00ef][\u0080-\u00bf][\u0080-\u00bf]/g, // 3-byte chars
+            function (c) {
+                // (note parentheses for precence)
+                var cc = (c.charCodeAt(0) & 0x0f) << 12 | (c.charCodeAt(1) & 0x3f) << 6 | c.charCodeAt(2) & 0x3f;
+                return String.fromCharCode(cc);
+            }).replace(/[\u00c0-\u00df][\u0080-\u00bf]/g, // 2-byte chars
+            function (c) {
+                // (note parentheses for precence)
+                var cc = (c.charCodeAt(0) & 0x1f) << 6 | c.charCodeAt(1) & 0x3f;
+                return String.fromCharCode(cc);
+            });
+            return strUni;
+        }
+    };
+
+    while (i < 256) {
+        var c = String.fromCharCode(i);
+        a256 += c;
+        r256[i] = i;
+        r64[i] = b64.indexOf(c);
+        ++i;
+    }
+
+    function code(s, discard, alpha, beta, w1, w2) {
+        s = String(s);
+        var buffer = 0,
+            i = 0,
+            length = s.length,
+            result = '',
+            bitsInBuffer = 0;
+
+        while (i < length) {
+            var c = s.charCodeAt(i);
+            c = c < 256 ? alpha[c] : -1;
+
+            buffer = (buffer << w1) + c;
+            bitsInBuffer += w1;
+
+            while (bitsInBuffer >= w2) {
+                bitsInBuffer -= w2;
+                var tmp = buffer >> bitsInBuffer;
+                result += beta.charAt(tmp);
+                buffer ^= tmp << bitsInBuffer;
+            }
+            ++i;
+        }
+        if (!discard && bitsInBuffer > 0) result += beta.charAt(buffer << w2 - bitsInBuffer);
+        return result;
+    }
+
+    var Plugin = $.base64 = function (dir, input, encode) {
+        return input ? Plugin[dir](input, encode) : dir ? null : this;
+    };
+
+    Plugin.btoa = Plugin.encode = function (plain, utf8encode) {
+        plain = Plugin.raw === false || Plugin.utf8encode || utf8encode ? UTF8.encode(plain) : plain;
+        plain = code(plain, false, r256, b64, 8, 6);
+        return plain + '===='.slice(plain.length % 4 || 4);
+    };
+
+    Plugin.atob = Plugin.decode = function (coded, utf8decode) {
+        coded = String(coded).split('=');
+        var i = coded.length;
+        do {
+            --i;
+            coded[i] = code(coded[i], true, r64, a256, 6, 8);
+        } while (i > 0);
+        coded = coded.join('');
+        return Plugin.raw === false || Plugin.utf8decode || utf8decode ? UTF8.decode(coded) : coded;
+    };
+})(jQuery);
+
+},{}],141:[function(require,module,exports){
+'use strict';
+
+var _util = require('./util.jsx');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _session = require('./session.jsx');
+
+var _session2 = _interopRequireDefault(_session);
+
+var _ui = require('./ui.jsx');
+
+var _ui2 = _interopRequireDefault(_ui);
 
 var _dispatcher = require('./dispatcher/dispatcher.jsx');
 
 var _dispatcher2 = _interopRequireDefault(_dispatcher);
 
+var _formview = require('./mixins/formview.jsx');
+
+var _formview2 = _interopRequireDefault(_formview);
+
+var _modeswitch = require('./components/modeswitch.jsx');
+
+var _modeswitch2 = _interopRequireDefault(_modeswitch);
+
 var _catmenu = require('./components/catmenu.jsx');
 
 var _catmenu2 = _interopRequireDefault(_catmenu);
-
-var _formview = require('./components/formview.jsx');
-
-var _formview2 = _interopRequireDefault(_formview);
 
 var _userbox = require('./components/userbox.jsx');
 
@@ -5070,302 +7616,69 @@ var _chatbar = require('./components/chatbar.jsx');
 
 var _chatbar2 = _interopRequireDefault(_chatbar);
 
+var _itemimage = require('./components/itemimage.jsx');
+
+var _itemimage2 = _interopRequireDefault(_itemimage);
+
+var _itemsummary = require('./components/itemsummary.jsx');
+
+var _itemsummary2 = _interopRequireDefault(_itemsummary);
+
+var _reactImageGallery = require('react-image-gallery');
+
+var _reactImageGallery2 = _interopRequireDefault(_reactImageGallery);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+require('../jquery.base64.js');
+require('../jquery-migrate-1.2.1.min.js');
+require('../../../../node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js');
+//
+
+//
+
+//
+
+//
 
 //
 /**
  * Some common functions
  */
 Object.assign(window, {
-	Dispatcher: _dispatcher2.default,
-	CatMenu: _catmenu2.default,
-	FormView: _formview2.default,
-	UserBox: _userbox2.default,
-	ChatBar: _chatbar2.default,
-	engine: function () {
-		$.getJSON('//ip-api.com/json?callback=?', function (data) {
-			window.clientIP = data.query;
-		});
-	}(),
-	sensitive: 'input,select,textarea,img,.sensitive',
-	getPropValue: function getPropValue(props, name, defaultValue) {
-		if (props.hasOwnProperty(name)) return props[name];
-		return defaultValue;
-	},
-	sessionManager: function () {
-		var me = this;
-		var _data = {};
-		return {
-			isLogged: function isLogged() {
-				if (!this.get('isGuest', true)) return this.get('user');
-				return false;
-			},
-			isListPage: function isListPage() {
-				if (this.has('rawdata')) return this.get('rawdata').paginate;
-				return false;
-			},
-			has: function has(name) {
-				return _data.hasOwnProperty(name);
-			},
-			get: function get(name, defaultValue) {
-				if (this.has(name)) return _data[name];
-				return defaultValue;
-			},
-			set: function set(name, value) {
-				_data[name] = value;
-				return this;
-			},
-			assign: function assign(name, value) {
-				if (this.has(name)) Object.assign(_data[name], value);else _data[name] = Object.assign({}, value);
-				return this;
-			},
-			remove: function remove(name) {
-				if (this.has(name)) delete _data[name];
-				return this;
-			}
-		};
-	}(),
-	ip: function ip() {
-		return clientIP;
-	},
-	uuid: function uuid(prefix) {
-		return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
-	},
-	token: function token() {
-		return $('meta[name="csrf-token"]').attr('content');
-	},
+
+	ImageGallery: _reactImageGallery2.default,
+
 	getMode: function getMode() {
 		return sessionManager.get('mode');
 	},
 	setMode: function setMode(mode) {
 		sessionManager.set('mode', mode);
 	},
+
+
+	sensitive: 'input,select,textarea,img,.sensitive',
+
 	isCurrentUser: function isCurrentUser(_user) {
-		var user = sessionManager.get('user');
+		var user = sessionManager.user();
 		if (user && user.id == _user.id) {
 			return true;
 		}
 		return false;
 	},
 	isFollowingTo: function isFollowingTo(_user) {
-		var user = sessionManager.get('user');
+		var user = sessionManager.user();
 		if (user && !sessionManager.get('isGuest')) {
 			return user.following.indexOf(_user.id) >= 0;
 		}
 		return false;
 	},
 	isFollowerOf: function isFollowerOf(_user) {
-		var user = sessionManager.get('user');
+		var user = sessionManager.user();
 		if (user && !sessionManager.get('isGuest')) {
 			return user.followers.indexOf(_user.id) >= 0;
 		}
 		return false;
-	},
-	format: {
-		currency: function currency(v) {
-			var n = parseFloat(v) != NaN ? parseFloat(v) : 0;
-			return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-		},
-		time: function time(v, format) {
-			return $.format.date(v, sessionManager.get('location').timeformat);
-		},
-		date: function date(v, format) {
-			return $.format.date(v, format ? format : sessionManager.get('location').dateformat);
-		},
-		datetime: function datetime(v, format) {
-			return $.format.date(v, format ? format : sessionManager.get('location').datetimeformat);
-		},
-		prettyDate: function prettyDate(v) {
-			return $.format.prettyDate(v);
-		}
-	},
-	submitForm: function submitForm(form) {
-		$('<input>').attr({
-			type: 'hidden',
-			name: '_token',
-			value: token()
-		}).appendTo(form);
-		$('<input>').attr({
-			type: 'hidden',
-			name: 'redirect',
-			value: location.href
-		}).appendTo(form);
-		form.submit();
-	},
-	ajax: {
-		exe: function exe(url, success, data, type) {
-			$.ajax({
-				type: type ? type : 'GET',
-				url: url,
-				data: Object.assign({ '_token': token(), 'mode': getMode() }, data),
-				success: success
-			});
-		},
-		get: function get(url, success, data) {
-			this.exe(url, success, data, 'GET');
-		},
-		post: function post(url, success, data) {
-			this.exe(url, success, data, 'POST');
-		},
-		put: function put(url, success, data) {
-			this.exe(url, success, data, 'PUT');
-		},
-		delete: function _delete(url, success, data) {
-			this.exe(url, success, data, 'DELETE');
-		}
-	},
-	showMessageDialog: function showMessageDialog(msg, title, btn, callback) {
-		btn = btn ? btn : localization.ok;
-		title = title ? title : localization.message;
-		var buttons = {};
-		buttons[btn] = function () {
-			$(this).dialog('close');
-			$(this).remove();
-			if (callback) {
-				callback();
-			}
-		};
-		$('<div></div>').dialog({
-			modal: true,
-			title: title,
-			closeOnEscape: false,
-			open: function open(e, ui) {
-				$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
-				$(this).html(msg);
-			},
-			buttons: buttons
-		}); //end confirm dialog
-	},
-	expandMenu: function expandMenu(e) {
-		var menu = $(e).next('ul');
-		toggleElement(menu);
-	},
-	hideMenus: function hideMenus() {
-		slideUp($('.sensitive'));
-	},
-	toggleElement: function toggleElement(e) {
-		if (e.css('display') == 'none') slideDown(e);else slideUp(e);
-	},
-	slideDown: function slideDown(e) {
-		e.slideDown();
-		e.css('visibility', 'visible');
-		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
-	},
-	slideUp: function slideUp(e) {
-		e.slideUp(function () {
-			$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'visible');
-			e.css('visibility', 'hidden');
-		});
-	},
-	hideClassName: function hideClassName(classNameToHide, exceptions) {
-		$('.' + classNameToHide).not(exceptions).hide();
-	},
-	showLoginForm: function showLoginForm(e) {
-		if (!window.currentForm || window.currentForm != 'login') {
-			$('#form-container').hide();
-			window.currentForm = 'login';
-			ReactDOM.render(React.createElement(_formview2.default, {
-				formrender: function formrender() {
-					return React.createElement(
-						_formview2.default.Form,
-						{ className: 'form', method: 'post', action: '/login', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
-							onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
-						React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
-							validationError: localization.invalid_email }),
-						React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: localization.password,
-							validationError: localization.invalid_password }),
-						React.createElement(_formview2.default.Input, { type: 'checkbox', name: 'remember', title: localization.remember_me }),
-						React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: localization.login, className: 'center-block' })
-					);
-				}
-			}), document.getElementById('form-container'), function () {
-				toggleElement($('#form-container'));
-			});
-		} else {
-			toggleElement($('#form-container'));
-		}
-	},
-	showRegistrationForm: function showRegistrationForm(e) {
-		if (!window.currentForm || window.currentForm != 'register') {
-			$('#form-container').hide();
-			window.currentForm = 'register';
-			ReactDOM.render(React.createElement(_formview2.default, {
-				formrender: function formrender() {
-					return React.createElement(
-						_formview2.default.Form,
-						{ className: 'form', method: 'post', action: '/register', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
-							onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
-						React.createElement(_formview2.default.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
-							validationError: localization.invalid_email }),
-						React.createElement(_formview2.default.Input, { type: 'email', name: 'email_confirmation', title: localization.email_confirmation, validations: 'equalsField:email',
-							validationError: localization.email_confirmation_not_matched }),
-						React.createElement(_formview2.default.Input, { type: 'password', required: true, name: 'password', title: localization.password, validations: 'isPassword',
-							validationError: localization.password_rules }),
-						React.createElement(_formview2.default.Input, { type: 'password', name: 'password_confirmation', title: localization.password_confirmation, validations: 'equalsField:password',
-							validationError: localization.password_confirmation_not_matched }),
-						React.createElement(_formview2.default.Input, { name: 'btn-submit', type: 'submit', disabled: !this.state.canSubmit, value: localization.register, className: 'center-block' })
-					);
-				}
-			}), document.getElementById('form-container'), function () {
-				toggleElement($('#form-container'));
-			});
-		} else {
-			toggleElement($('#form-container'));
-		}
-	},
-	showLocationForm: function showLocationForm(e) {
-		if (!window.currentForm || window.currentForm != 'location') {
-			$('#form-container').hide();
-			window.currentForm = 'location';
-			ReactDOM.render(React.createElement(_formview2.default, {
-				initialState: {
-					value: '',
-					locations: [],
-					loading: false
-				},
-				onValidSubmit: function onValidSubmit(model) {},
-				formrender: function formrender() {
-					return React.createElement(
-						_formview2.default.Form,
-						{ className: 'form', method: 'post', action: '/location' },
-						React.createElement(_formview2.default.Input, { type: 'autocomplete', name: 'location', title: localization.location, source: '/searchlocation', className: 'center-block',
-							value: sessionManager.get('location').name, placeholder: localization.please_type_location })
-					);
-				}
-			}), document.getElementById('form-container'), function () {
-				$('.autocomplete').each(function (i, e) {
-					var _source = e.getAttribute('data-source');
-					$(e).autocomplete({
-						source: function source(request, response) {
-							ajax.get(_source, function (data) {
-								var items = [];
-								$.each(data.data, function (i, v) {
-									items.push({
-										id: v.id,
-										label: v.fullname
-									});
-								});
-								response(items);
-							}, {
-								q: request.term
-							});
-						},
-						minLength: 2,
-						select: function select(event, ui) {
-							if (ui && ui.item) {
-								this.setAttribute('data-value', ui.item);
-								var id = ui.item.id;
-								this.nextSibling.value = id;
-								if (id && id != sessionManager.get('location').id) submitForm($(this).parents('form:first'));else toggleElement($('#form-container'));
-							}
-						}
-					});
-				});
-				toggleElement($('#form-container'));
-			});
-		} else {
-			toggleElement($('#form-container'));
-		}
 	},
 	sendMessage: function sendMessage(message, chatbox) {
 		if (message) {
@@ -5376,138 +7689,10 @@ Object.assign(window, {
 				}, { 'message': message, code: user.id });
 			}
 		}
-	},
-	ui: {
-		getItemExpires: function getItemExpires(item) {
-			return item.deleted_at ? expired_at = React.createElement(
-				'div',
-				{ className: 'item-date item-expired' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label expired-label' },
-						localization.expires_at
-					),
-					React.createElement(
-						'span',
-						{ className: 'prettydateformat' },
-						item.deleted_at
-					)
-				)
-			) : null;
-		},
-		getItemPostedOrEdited: function getItemPostedOrEdited(item) {
-			var created = new Date(item.created_at);
-			var updated = new Date(item.updated_at);
-			return +updated !== +created ? React.createElement(
-				'div',
-				{ className: 'item-date item-updated' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label edited-label' },
-						localization.edited_at
-					),
-					React.createElement(
-						'span',
-						{ className: 'prettydateformat' },
-						item.updated_at
-					)
-				)
-			) : React.createElement(
-				'div',
-				{ className: 'item-date item-created' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label posted-label' },
-						localization.posted_at
-					),
-					React.createElement(
-						'span',
-						{ className: 'prettydateformat' },
-						item.created_at
-					)
-				)
-			);
-		},
-		plugins: {
-			format: function (_format) {
-				function format(_x) {
-					return _format.apply(this, arguments);
-				}
-
-				format.toString = function () {
-					return _format.toString();
-				};
-
-				return format;
-			}(function ($container) {
-				if (!$container) {
-					$('.prettydateformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
-					});
-					$('.dateformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.date(text));
-					});
-					$('.timeformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.time(text));
-					});
-					$('.datetimeformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.datetime(text));
-					});
-					$('.currency-value').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.currency(text));
-					});
-				} else {
-					$container.find('.prettydateformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
-					});
-					$container.find('.dateformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.date(text));
-					});
-					$container.find('.timeformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.time(text));
-					});
-					$container.find('.datetimeformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.datetime(text));
-					});
-					$container.find('.currency-value').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.currency(text));
-					});
-				}
-			})
-		}
 	}
 });
 
-},{"./components/catmenu.jsx":46,"./components/chatbar.jsx":47,"./components/formview.jsx":49,"./components/userbox.jsx":51,"./dispatcher/dispatcher.jsx":52}],46:[function(require,module,exports){
+},{"../../../../node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js":102,"../jquery-migrate-1.2.1.min.js":139,"../jquery.base64.js":140,"./components/catmenu.jsx":142,"./components/chatbar.jsx":143,"./components/itemimage.jsx":145,"./components/itemsummary.jsx":146,"./components/modeswitch.jsx":147,"./components/userbox.jsx":149,"./dispatcher/dispatcher.jsx":150,"./mixins/formview.jsx":151,"./session.jsx":152,"./ui.jsx":153,"./util.jsx":154,"react-image-gallery":106}],142:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5639,7 +7824,7 @@ var MenuItem = React.createClass({
 var Menu = React.createClass({
 	displayName: 'Menu',
 	render: function render() {
-		var className = getPropValue(this.props, 'className', '');
+		var className = util.getAttr(this.props, 'className', '');
 		var me = this;
 		return React.createElement(
 			'ul',
@@ -5670,8 +7855,8 @@ var CatMenu = React.createClass({
 		return '';
 	},
 	render: function render() {
-		var className = 'catmenu ' + getPropValue(this.props, 'className', '');
-		var showRoot = getPropValue(this.props, 'showRoot', true);
+		var className = 'catmenu ' + util.getAttr(this.props, 'className', '');
+		var showRoot = util.getAttr(this.props, 'showRoot', true);
 		var items = showRoot ? this.props.items : this.props.items[0].children;
 		return React.createElement(Menu, { className: className, items: items,
 			getText: this.getText,
@@ -5682,9 +7867,11 @@ var CatMenu = React.createClass({
 //
 CatMenu.Menu = Menu;
 CatMenu.MenuItem = MenuItem;
-exports.default = CatMenu;
 
-},{}],47:[function(require,module,exports){
+window.CatMenu = CatMenu;
+exports.default = window.CatMenu;
+
+},{}],143:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5709,17 +7896,17 @@ var ChatBar = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(this.eventName, function () {});
-		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.ADD_CHATBOX, function () {});
+		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(Dispatcher.Events.ADD_CHATBOX, function () {});
 	},
 	componentDidMount: function componentDidMount() {
-		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
-		Dispatcher.EventEmitter.on(Dispatcher.Events.ADD_CHATBOX, this.refresh);
+		Dispatcher.addListener(this.eventName, this.refresh);
+		Dispatcher.addListener(Dispatcher.Events.ADD_CHATBOX, this.refresh);
 	},
 	render: function render() {
 		var users = Dispatcher.Store.get(this.eventName);
 		if (users && users.length) {
-			var className = 'chatbar ' + getPropValue(this.props, 'className', '');
+			var className = 'chatbar ' + util.getAttr(this.props, 'className', '');
 			return React.createElement(
 				'div',
 				{ className: className },
@@ -5733,9 +7920,10 @@ var ChatBar = React.createClass({
 	}
 });
 
-exports.default = ChatBar;
+window.ChatBar = ChatBar;
+exports.default = window.ChatBar;
 
-},{"./chatbox.jsx":48}],48:[function(require,module,exports){
+},{"./chatbox.jsx":144}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5753,14 +7941,14 @@ var ChatBox = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.UPDATE_USER, function () {});
-		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.UPDATE_MESSAGE, function () {});
-		Dispatcher.EventEmitter.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(Dispatcher.Events.UPDATE_USER, function () {});
+		Dispatcher.removeListener(Dispatcher.Events.UPDATE_MESSAGE, function () {});
+		Dispatcher.removeListener(this.eventName, function () {});
 	},
 	componentDidMount: function componentDidMount() {
-		Dispatcher.EventEmitter.on(Dispatcher.Events.UPDATE_USER, this.refresh);
-		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
-		Dispatcher.EventEmitter.on(Dispatcher.Events.UPDATE_MESSAGE, this.addMessage);
+		Dispatcher.addListener(Dispatcher.Events.UPDATE_USER, this.refresh);
+		Dispatcher.addListener(this.eventName, this.refresh);
+		Dispatcher.addListener(Dispatcher.Events.UPDATE_MESSAGE, this.addMessage);
 	},
 	onKeyPress: function onKeyPress(e) {
 		if (e.which == 13) {
@@ -5774,15 +7962,19 @@ var ChatBox = React.createClass({
 		sendMessage(message, this);
 	},
 	messageSentCallbalk: function messageSentCallbalk(message, user) {
-		//do nothing
+		var $o = $(ReactDOM.findDOMNode(this));
+		//add sent message
+		$o.find('.messages').append('<div class="myitem">' + message + '</div>');
+		//clear textbox
+		$o.find('input[type=text]').val('');
 	},
 	addMessage: function addMessage(data) {
-		var $o = $(ReactDOM.findDOMNode(this));
-		if (data.message && data.user) {
-			var _isCurrentUser = isCurrentUser(data.user);
-			var classname = _isCurrentUser ? 'myitem' : data.user.gender == 'MALE' ? 'hisitem' : 'heritem';
-			$o.find('.messages').append('<div class="' + classname + ' myitem">' + data.message + '</div>');
-			if (_isCurrentUser) $o.find('input[type=text]').val('');
+		var user = Dispatcher.Store.get(this.eventName, this.props.user.id);
+		var _isCurrentUser = isCurrentUser(data.user);
+		if (!_isCurrentUser && data.message && data.user && data.user.id == user.id) {
+			var $o = $(ReactDOM.findDOMNode(this));
+			var classname = data.user.gender == 'MALE' ? 'hisitem' : 'heritem';
+			$o.find('.messages').append('<div class="' + classname + '">' + data.message + '</div>');
 		}
 	},
 	render: function render() {
@@ -5793,7 +7985,7 @@ var ChatBox = React.createClass({
 			var _isFollowingTo = isFollowingTo(user);
 			var _isFollowerOf = isFollowerOf(user);
 
-			var className = 'chatbox ' + getPropValue(this.props, 'className', '');
+			var className = 'chatbox ' + util.getAttr(this.props, 'className', '');
 			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman');
 			var href = '/' + user.name;
 			return React.createElement(
@@ -5839,9 +8031,668 @@ var ChatBox = React.createClass({
 	}
 });
 
-exports.default = ChatBox;
+window.ChatBox = ChatBox;
+exports.default = window.ChatBox;
 
-},{}],49:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * ItemImage defination
+ */
+var ItemImage = React.createClass({
+	displayName: 'ItemImage',
+
+	eventName: Dispatcher.Events.UPDATE_ITEM,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	onClick: function onClick(e) {
+		var isGuest = sessionManager.get('isGuest', true);
+		var user = sessionManager.user();
+		if (!isGuest && user && user.id) {
+			var item = Dispatcher.item(this.props.item.id);
+			var id = sessionManager.get('usecode') ? item.code : item.id;
+			if (id) {
+				ajax.post('/like', function (o) {
+					Dispatcher.emit(Dispatcher.Events.UPDATE_ITEMDETAILSPAGE, o.data);
+				}, { id: id, user_id: user.id });
+			}
+		}
+	},
+	render: function render() {
+		var item = Dispatcher.Store.get(this.eventName, this.props.item.id);
+		if (item) {
+			var className = 'item-firstimage ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
+			var iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : '');
+			var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
+			var href = showLink ? '/item/' + (sessionManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			return React.createElement(
+				'div',
+				{ className: className },
+				React.createElement(
+					'div',
+					{ className: 'item-firstimage-wrapper' },
+					React.createElement(
+						'a',
+						{ href: href },
+						React.createElement('img', { src: item.images[0].url })
+					),
+					React.createElement('a', { className: iconClassName, onClick: this.onClick })
+				)
+			);
+		}
+		return null;
+	}
+});
+
+window.ItemImage = ItemImage;
+exports.default = window.ItemImage;
+
+},{}],146:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * ItemSummary defination
+ */
+var ItemSummary = React.createClass({
+	displayName: 'ItemSummary',
+
+	eventName: Dispatcher.Events.UPDATE_ITEM,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		var item = Dispatcher.Store.get(this.eventName, this.props.item.id);
+		if (item) {
+			var prices = util.getAttr(this.props, 'prices', 'original,sale,now').split(',');
+			var className = 'item-summary ' + util.getAttr(this.props, 'className', '') + (item.liked ? ' liked' : ' unliked');
+			var iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
+			var showLink = util.getAttr(this.props, 'showLink', true);
+			var href = showLink ? '/item/' + (sessionManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			var price_list = React.createElement(
+				'div',
+				{ className: 'item-prices' },
+				prices.map(function (o, i) {
+					var pclassName = 'item-price item-' + o + 'price';
+					var pvalue = item[o + 'price'];
+					return React.createElement(
+						'div',
+						{ className: pclassName, key: i },
+						React.createElement(
+							'span',
+							{ className: 'currency-sign' },
+							sessionManager.location().currency
+						),
+						React.createElement(
+							'span',
+							{ className: 'currency-value' },
+							pvalue
+						),
+						React.createElement(
+							'span',
+							{ className: 'label' },
+							o[0].toUpperCase() + o.slice(1)
+						)
+					);
+				})
+			);
+
+			return React.createElement(
+				'div',
+				{ className: className },
+				React.createElement(
+					'div',
+					{ className: 'item-title' },
+					React.createElement(
+						'a',
+						{ href: href },
+						React.createElement(
+							'span',
+							null,
+							item.title
+						)
+					)
+				),
+				ui.getItemPostedOrEdited(item),
+				ui.getItemExpires(item),
+				React.createElement(
+					'div',
+					{ className: item.is_new ? 'new' : 'used' },
+					item.is_new ? 'New' : 'Used'
+				),
+				price_list,
+				React.createElement(
+					'div',
+					{ className: 'likes' },
+					React.createElement(
+						'div',
+						{ className: 'amount' },
+						item.likes
+					),
+					React.createElement('div', { className: iconClassName })
+				)
+			);
+		}
+		return null;
+	}
+});
+
+window.ItemSummary = ItemSummary;
+exports.default = window.ItemSummary;
+
+},{}],147:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * ModeSwitch defination
+ */
+var ModeSwitch = React.createClass({
+	displayName: 'ModeSwitch',
+
+	mixins: [FormView],
+	onMouseUp: function onMouseUp(e, checked) {
+		setMode(checked ? 1 : 0);
+		ajax.get(location.href, function (_data) {
+			if (_data && sessionManager.isListPage()) {
+				if (_data && _data.data) {
+					Dispatcher.emit(Dispatcher.Events.UPDATE_APPLICATION, _data.data);
+				}
+			}
+		});
+	},
+	render: function render() {
+		return React.createElement(
+			FormView.Form,
+			{ className: 'form', method: 'get', encType: 'multipart/form-data',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(FormView.Input, { type: 'switch', name: 'mode', title: localization.mode,
+				defaultChecked: getMode() == sessionManager.get('MODES').SELL ? true : false,
+				checkedChildren: localization.sell,
+				unCheckedChildren: localization.buy,
+				onMouseUp: this.props.onMouseUp })
+		);
+	}
+});
+
+window.ModeSwitch = ModeSwitch;
+exports.default = window.ModeSwitch;
+
+},{}],148:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+//
+function _objectWithoutProperties(obj, keys) {
+	var target = {};for (var i in obj) {
+		if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
+	}return target;
+}
+function _defineProperty(obj, key, value) {
+	if (key in obj) {
+		Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+	} else {
+		obj[key] = value;
+	}return obj;
+}
+//
+var classNames = require('classnames');
+//
+function noop() {}
+var Switch = React.createClass({
+	displayName: 'Switch',
+
+	propTypes: {
+		className: React.PropTypes.string,
+		prefixCls: React.PropTypes.string,
+		disabled: React.PropTypes.bool,
+		checkedChildren: React.PropTypes.any,
+		unCheckedChildren: React.PropTypes.any,
+		onChange: React.PropTypes.func,
+		onMouseUp: React.PropTypes.func
+	},
+	getDefaultProps: function getDefaultProps() {
+		return {
+			prefixCls: 'rc-switch',
+			checkedChildren: null,
+			unCheckedChildren: null,
+			className: '',
+			defaultChecked: false,
+			onChange: noop
+		};
+	},
+	getInitialState: function getInitialState() {
+		var props = this.props;
+		var checked = false;
+		if ('checked' in props) {
+			checked = !!props.checked;
+		} else {
+			checked = !!props.defaultChecked;
+		}
+		return {
+			checked: checked
+		};
+	},
+	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+		if ('checked' in nextProps) {
+			this.setState({
+				checked: !!nextProps.checked
+			});
+		}
+	},
+	setChecked: function setChecked(e) {
+		var checked = !this.state.checked;
+		$(e.currentTarget).find('input[type=hidden]').val(checked ? 1 : '');
+		if (!('checked' in this.props)) {
+			this.setState({
+				checked: checked
+			});
+		}
+		this.props.onChange(checked);
+		if (this.props.onMouseUp) {
+			this.props.onMouseUp(e, checked);
+		}
+	},
+	toggle: function toggle(e) {
+		this.setChecked(e);
+	},
+	handleKeyDown: function handleKeyDown(e) {
+		if (e.keyCode === 37) {
+			this.setChecked(false);
+		}
+		if (e.keyCode === 39) {
+			this.setChecked(true);
+		}
+	},
+	render: function render() {
+		var _classNames;
+
+		var _props = this.props;
+		var className = _props.className;
+		var prefixCls = _props.prefixCls;
+		var disabled = _props.disabled;
+		var checkedChildren = _props.checkedChildren;
+		var unCheckedChildren = _props.unCheckedChildren;
+
+		var restProps = _objectWithoutProperties(_props, ['name', 'id', 'className', 'prefixCls', 'disabled', 'checkedChildren', 'unCheckedChildren']);
+
+		var checked = this.state.checked;
+		var switchClassName = classNames((_classNames = {}, _defineProperty(_classNames, className, !!className), _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-checked', checked), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _classNames));
+
+		return React.createElement(
+			'span',
+			{ className: switchClassName,
+				onKeyDown: this.handleKeyDown,
+				onClick: disabled ? noop : this.toggle },
+			React.createElement(
+				'span',
+				{ className: prefixCls + '-inner' },
+				checked ? checkedChildren : unCheckedChildren
+			),
+			React.createElement('input', { type: 'hidden', id: _props.id, name: _props.name })
+		);
+	}
+});
+
+window.Switch = Switch;
+exports.default = window.Switch;
+
+},{"classnames":13}],149:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * UserBox defination
+ */
+var UserBox = React.createClass({
+	displayName: 'UserBox',
+
+	eventName: Dispatcher.Events.UPDATE_ITEM,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(Dispatcher.Events.USER_EVENT, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+		Dispatcher.addListener(Dispatcher.Events.UPDATE_USER, this.refresh);
+	},
+	onChatClick: function onChatClick(e) {
+		var user = this.props.user;
+		if (user) {
+			var _isGuest = sessionManager.get('isGuest', true);
+			var _isCurrentUser = isCurrentUser(user);
+			if (!_isGuest && !_isCurrentUser) {
+				Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user);
+			}
+		}
+	},
+	onFollowClick: function onFollowClick(e) {
+		var user = this.props.user;
+		if (user) {
+			var _isGuest = sessionManager.get('isGuest', true);
+			var _isCurrentUser = isCurrentUser(user);
+			if (!_isGuest && !_isCurrentUser) {
+				var _isFollowingTo = isFollowingTo(user);
+				if (_isFollowingTo) {
+					//unfollow
+					ajax.post('/unfollow/' + user.id, function (o) {
+						Dispatcher.emit(Dispatcher.Events.USER_EVENT, o.data);
+					});
+				} else {
+					//follow
+					ajax.post('/follow/' + user.id, function (o) {
+						Dispatcher.emit(Dispatcher.Events.USER_EVENT, o.data);
+					});
+				}
+			}
+		}
+	},
+	render: function render() {
+		var user = this.props.user;
+		if (user) {
+			var _isGuest = sessionManager.get('isGuest', true);
+			var _isCurrentUser = isCurrentUser(user);
+			var _isFollowingTo = isFollowingTo(user);
+
+			var className = 'userbox ' + util.getAttr(this.props, 'className', '');
+			var iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
+			var iconChatTitle = _isGuest ? localization.please_login_first : _isCurrentUser ? localization.cannot_chat_with_yourself : 'Send message';
+			var iconFollowClassName = 'icon ' + (_isFollowingTo ? 'icon-unfollow' : 'icon-follow') + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
+			var iconFollowTitle = _isGuest ? localization.please_login_first : _isCurrentUser ? localization.cannot_follow_yourself : _isFollowingTo ? localization.unfollow : '';
+			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman');
+			var href = '/' + user.name;
+			return React.createElement(
+				'div',
+				{ className: className },
+				React.createElement('img', { src: avatar }),
+				React.createElement(
+					'a',
+					{ className: 'user-name', href: href },
+					React.createElement(
+						'span',
+						null,
+						user.displayname
+					)
+				),
+				React.createElement('a', { className: iconChatClassName, onClick: this.onChatClick, title: iconChatTitle }),
+				React.createElement('a', { className: iconFollowClassName, onClick: this.onFollowClick, title: iconFollowTitle })
+			);
+		}
+		return null;
+	}
+});
+
+window.UserBox = UserBox;
+exports.default = window.UserBox;
+
+},{}],150:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _flux = require('flux');
+
+var _flux2 = _interopRequireDefault(_flux);
+
+var _keymirror = require('keymirror');
+
+var _keymirror2 = _interopRequireDefault(_keymirror);
+
+var _events = require('events');
+
+var _events2 = _interopRequireDefault(_events);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+//
+var Dispatcher = new _flux2.default.Dispatcher();
+//
+
+var EventEmitter = function (_Events) {
+	_inherits(EventEmitter, _Events);
+
+	function EventEmitter() {
+		_classCallCheck(this, EventEmitter);
+
+		return _possibleConstructorReturn(this, Object.getPrototypeOf(EventEmitter).apply(this, arguments));
+	}
+
+	return EventEmitter;
+}(_events2.default);
+
+Dispatcher.EventEmitter = new EventEmitter();
+Dispatcher.EventEmitter.setMaxListeners(Infinity);
+//
+Dispatcher.Events = (0, _keymirror2.default)({
+	UPDATE_APPLICATION: null,
+	UPDATE_HOMEPAGE: null,
+	UPDATE_CATITEMSPAGE: null,
+	UPDATE_USERITEMSPAGE: null,
+	UPDATE_ITEMDETAILSPAGE: null,
+	UPDATE_LOGINPAGE: null,
+	UPDATE_CHANGEACCOUNTPAGE: null,
+	UPDATE_SENDACTIVATIONPAGE: null,
+	UPDATE_REGISTERPAGE: null,
+	UPDATE_CHANGELOCATIONPAGE: null,
+
+	UPDATE_ITEM: null,
+	UPDATE_USER: null,
+	UPDATE_MESSAGE: null,
+	UPDATE_CHATBOX: null,
+	UPDATE_CHATBAR: null,
+	ADD_CHATBOX: null
+});
+
+Dispatcher.Store = function () {
+	var _data = {
+		application: null,
+		catitems: null,
+		useritems: null,
+		itemdetails: null,
+		lastUpdatedUser: '',
+		lastMessage: '',
+		chatusers: []
+	};
+	function getChatUser(user_id) {
+		for (var i = 0; i < _data.chatusers.length; i++) {
+			if (_data.chatusers[i].id == user_id) {
+				return _data.chatusers[i];
+			}
+		}
+		return null;
+	}
+	function setChatUser(user_id, user) {
+		for (var i = 0; i < _data.chatusers.length; i++) {
+			if (_data.chatusers[i].id == user_id) {
+				_data.chatusers[i] = user;
+				break;
+			}
+		}
+	}
+	return {
+		get: function get(actionType) {
+			switch (actionType) {
+				case Dispatcher.Events.UPDATE_APPLICATION:
+					return _data.application;
+				case Dispatcher.Events.UPDATE_CATITEMSPAGE:
+					return _data.catitems;;
+				case Dispatcher.Events.UPDATE_USERITEMSPAGE:
+					return _data.useritems;
+				case Dispatcher.Events.UPDATE_ITEMDETAILSPAGE:
+					return _data.itemdetails;
+					break;
+				case Dispatcher.Events.UPDATE_ITEM:
+					var item_id = arguments[1];
+					if (item_id) {
+						if (_data.catitems) {
+							for (var i = 0; i < _data.catitems.paginate.data.length; i++) {
+								if (_data.catitems.paginate.data[i].id == item_id) {
+									return _data.catitems.paginate.data[i];
+								}
+							}
+						} else if (_data.useritems) {
+							for (var i = 0; i < _data.useritems.paginate.data.length; i++) {
+								if (_data.useritems.paginate.data[i].id == item_id) {
+									return _data.useritems.paginate.data[i];
+								}
+							}
+						} else if (_data.itemdetails) {
+							return _data.itemdetails.itemdetails;
+						}
+					}
+					return null;
+				case Dispatcher.Events.UPDATE_USER:
+					return _data.lastUpdatedUser;
+				case Dispatcher.Events.UPDATE_MESSAGE:
+					return _data.lastMessage;
+				case Dispatcher.Events.UPDATE_CHATBOX:
+					return getChatUser(arguments[1]);
+				case Dispatcher.Events.ADD_CHATBOX:
+				case Dispatcher.Events.UPDATE_CHATBAR:
+					return _data.chatusers;
+			}
+		},
+		set: function set(actionType, data) {
+			switch (actionType) {
+				case Dispatcher.Events.UPDATE_APPLICATION:
+					_data.application = data;
+					if (_data.application.catitems) _data.catitems = _data.application;else if (_data.application.useritems) _data.useritems = _data.application;else if (_data.application.itemdetails) _data.itemdetails = _data.application;
+					break;
+				case Dispatcher.Events.UPDATE_CATITEMSPAGE:
+					_data.catitems = data;
+					break;
+				case Dispatcher.Events.UPDATE_USERITEMSPAGE:
+					_data.useritems = data;
+					break;
+				case Dispatcher.Events.UPDATE_ITEMDETAILSPAGE:
+					_data.itemdetails = data;
+					break;
+				case Dispatcher.Events.UPDATE_ITEM:
+					if (data && data.id) {
+						if (_data.catitems) {
+							for (var i = 0; i < _data.catitems.paginate.data.length; i++) {
+								if (_data.catitems.paginate.data[i].id == data.id) {
+									_data.catitems.paginate.data[i] = Object.assign(_data.catitems.paginate.data[i], data);
+									break;
+								}
+							}
+						} else if (_data.useritems) {
+							for (var i = 0; i < _data.useritems.paginate.data.length; i++) {
+								if (_data.useritems.paginate.data[i].id == data.id) {
+									_data.useritems.paginate.data[i] = Object.assign(_data.useritems.paginate.data[i], data);
+									break;
+								}
+							}
+						} else if (_data.itemdetails) {
+							_data.itemdetails.itemdetails = data;
+						}
+					}
+					break;
+				case Dispatcher.Events.UPDATE_USER:
+					_data.lastUpdatedUser = data;
+					break;
+				case Dispatcher.Events.UPDATE_MESSAGE:
+					var json = JSON.parse(data);
+					if (json && json.user) {
+						_data.lastMessage = json;
+						var user = getChatUser(json.user.id);
+						if (!user && !isCurrentUser(json.user)) {
+							Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, json.user);
+						}
+					}
+					break;
+				case Dispatcher.Events.ADD_CHATBOX:
+					if (data && data.id && data.displayname && _data.chatusers.indexOf(data) < 0) {
+						var user = getChatUser(data.id);
+						if (!user) _data.chatusers.push(data);
+					}
+					actionType = Dispatcher.Events.UPDATE_CHATBAR;
+					break;
+			}
+			sessionManager.set('data', _data);
+			Dispatcher.dispatch({
+				actionType: actionType,
+				data: Dispatcher.Store.get(actionType)
+			});
+		}
+	};
+}();
+
+Dispatcher.register(function (action) {
+	//console.log(action.actionType, Dispatcher.Store.get(action.actionType));
+	Dispatcher.EventEmitter.emit(action.actionType, Dispatcher.Store.get(action.actionType));
+});
+
+Dispatcher.emit = function (actionType, _data) {
+	if (Dispatcher.Events.hasOwnProperty(actionType)) {
+		return Dispatcher.Store.set(actionType, _data);
+	} else {
+		console.log('Dispatcher does not support this action ' + actionType);
+	}
+};
+
+Dispatcher.addListener = function (actionType, callback) {
+	if (Dispatcher.Events.hasOwnProperty(actionType)) {
+		return Dispatcher.EventEmitter.on(actionType, callback);
+	} else {
+		console.log('Dispatcher does not support this action ' + actionType);
+	}
+};
+
+Dispatcher.removeListener = function (actionType, callback) {
+	if (Dispatcher.Events.hasOwnProperty(actionType)) {
+		return Dispatcher.EventEmitter.removeListener(actionType, callback);
+	} else {
+		console.log('Dispatcher does not support this action ' + actionType);
+	}
+};
+
+window.Dispatcher = Dispatcher;
+
+exports.default = window.Dispatcher;
+
+},{"events":104,"flux":92,"keymirror":103}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5854,7 +8705,7 @@ var _formsyReact = require('formsy-react');
 
 var _formsyReact2 = _interopRequireDefault(_formsyReact);
 
-var _switch = require('./switch.jsx');
+var _switch = require('../components/switch.jsx');
 
 var _switch2 = _interopRequireDefault(_switch);
 
@@ -5944,7 +8795,7 @@ var Input = React.createClass({
 	render: function render() {
 		this.className = 'form-group ' + (this.props.className || '') + ' ' + (this.showRequired() ? 'required' : this.showError() ? 'error' : '');
 		this.type = this.props.type ? this.props.type.toLowerCase() : 'text';
-		this.id = this.id ? this.id : this.props.id ? this.props.id : uuid(this.type + '_');
+		this.id = this.id ? this.id : this.props.id ? this.props.id : util.uuid(this.type + '_');
 
 		switch (this.type) {
 			case 'hidden':
@@ -6019,7 +8870,7 @@ var Input = React.createClass({
 	},
 	renderCheckboxRadio: function renderCheckboxRadio() {
 		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
-		var name = this.props.name ? this.props.name : uuid('radiolist_');
+		var name = this.props.name ? this.props.name : util.uuid('radiolist_');
 		this.className += ' ' + this.type;
 		var labelClassName = 'form-' + this.type + '-label';
 		return React.createElement(
@@ -6035,7 +8886,7 @@ var Input = React.createClass({
 	},
 	renderCheckboxRadioList: function renderCheckboxRadioList() {
 		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
-		var name = this.props.name ? this.props.name : uuid('radiolist_');
+		var name = this.props.name ? this.props.name : util.uuid('radiolist_');
 		var type = this.type == 'checkboxlist' ? 'checkbox' : 'radio';
 		this.className += ' ' + this.type;
 		var changeValue = this.changeValue;
@@ -6199,12 +9050,13 @@ var Input = React.createClass({
 /**
  * FormView defination
  */
-var FormView = React.createClass({
-	displayName: 'FormView',
+exports.default = window.FormView = {
+	Input: Input,
+	Form: _formsyReact2.default.Form,
 	getInitialState: function getInitialState() {
-		var state = this.props.initialState || {};
-		state['canSubmit'] = false;
-		return state;
+		return {
+			canSubmit: false
+		};
 	},
 	enableButton: function enableButton() {
 		this.setState({
@@ -6217,470 +9069,442 @@ var FormView = React.createClass({
 		});
 	},
 	submit: function submit(model) {
-		submitForm($(ReactDOM.findDOMNode(this)).find('form').get(0));
-	},
-	render: function render() {
-		var className = 'form-view ' + (this.props.className ? this.props.className : '');
-		var initialState = this.props.initialState;
-		var formrender = this.props.formrender;
-		var form = formrender.bind(this)();
-		return React.createElement(
-			'div',
-			{ className: className },
-			form
-		);
-	}
-});
-
-FormView.showImagesPreview = function (input, previewContainer) {
-	if (input.files && input.files.length > 0) {
-		var cols = parseInt($(input).attr('cols')) != NaN ? parseInt($(input).attr('cols')) : 4;
-		var cls = 1;
-		if (cols == 2 || cols == 3 || cols == 4 || cols == 6) {
-			cls = 12 / cols;
-		}
-		var name = input.name.replace('[]', '');
-		var previewDiv = previewContainer ? $(input).parents('form').find(previewContainer) : $(input).parent().find('.image-preview');
-		previewDiv.attr('data-file-id', input.id);
-		previewDiv.html('');
-		var count = 0;
-		for (var i in input.files) {
-			var item = input.files[i];
-			if (item instanceof Blob) {
-				var reader = new FileReader();
-				reader.image = item;
-				reader.onload = function (e) {
-					var img = new Image();
-					img.image = this.image;
-					img.onload = function (e) {
-						var html = "<div class='image-preview-item col-xs-6 col-md-" + cls + "'>" + "<input type='text' name='" + name + "-title[" + this.image.name + "]' placeholder='Caption' class='form-control' />" + "<img src='" + this.src + "' />" + "<textarea name='" + name + "-description[" + this.image.name + "]' placeholder='Description' class='form-control' row='6'></textarea>" + "<div class='image-info'>(" + this.width + " x " + this.height + ")</div>" + "<input class='btn btn-default image-remove' type='button' value='Remove' onclick='FormView.removeImagePreview(this)' />" + "</div>";
-						if (count > 0 && count % cols == cols - 1) {
-							html += "<div class='clearfix'></div>";
-						}
-						previewDiv.append(html);
-						previewDiv.show();
-						count++;
-					};
-					$(img).attr('src', this.result);
-				};
-				reader.readAsDataURL(item);
-			}
-		}
-	}
-}, FormView.removeImagePreview = function (e) {
-	var container = $(e).parent().parent();
-	$(e).parent().remove();
-	if (!container.find('.image-preview-item').length) {
-		$('#' + container.attr('data-file-id')).val('');
-	}
-};
-FormView.Input = Input;
-FormView.Form = _formsyReact2.default.Form;
-
-exports.default = FormView;
-
-},{"./switch.jsx":50,"formsy-react":8}],50:[function(require,module,exports){
-'use strict';
-
-//
-function _objectWithoutProperties(obj, keys) {
-	var target = {};for (var i in obj) {
-		if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
-	}return target;
-}
-function _defineProperty(obj, key, value) {
-	if (key in obj) {
-		Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-	} else {
-		obj[key] = value;
-	}return obj;
-}
-//
-var classNames = require('classnames');
-//
-function noop() {}
-var Switch = React.createClass({
-	displayName: 'Switch',
-
-	propTypes: {
-		className: React.PropTypes.string,
-		prefixCls: React.PropTypes.string,
-		disabled: React.PropTypes.bool,
-		checkedChildren: React.PropTypes.any,
-		unCheckedChildren: React.PropTypes.any,
-		onChange: React.PropTypes.func,
-		onMouseUp: React.PropTypes.func
-	},
-	getDefaultProps: function getDefaultProps() {
-		return {
-			prefixCls: 'rc-switch',
-			checkedChildren: null,
-			unCheckedChildren: null,
-			className: '',
-			defaultChecked: false,
-			onChange: noop
-		};
-	},
-	getInitialState: function getInitialState() {
-		var props = this.props;
-		var checked = false;
-		if ('checked' in props) {
-			checked = !!props.checked;
+		var form = ReactDOM.findDOMNode(this);
+		if (form.tagName.toLowerCase() == 'form') {
+			submitForm(form);
 		} else {
-			checked = !!props.defaultChecked;
-		}
-		return {
-			checked: checked
-		};
-	},
-	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-		if ('checked' in nextProps) {
-			this.setState({
-				checked: !!nextProps.checked
-			});
+			submitForm($(form).find('form').get(0));
 		}
 	},
-	setChecked: function setChecked(e) {
-		var checked = !this.state.checked;
-		$(e.currentTarget).find('input[type=hidden]').val(checked ? 1 : '');
-		if (!('checked' in this.props)) {
-			this.setState({
-				checked: checked
-			});
-		}
-		this.props.onChange(checked);
-		if (this.props.onMouseUp) {
-			this.props.onMouseUp(e, checked);
-		}
-	},
-	toggle: function toggle(e) {
-		this.setChecked(e);
-	},
-	handleKeyDown: function handleKeyDown(e) {
-		if (e.keyCode === 37) {
-			this.setChecked(false);
-		}
-		if (e.keyCode === 39) {
-			this.setChecked(true);
-		}
-	},
-	render: function render() {
-		var _classNames;
-
-		var _props = this.props;
-		var className = _props.className;
-		var prefixCls = _props.prefixCls;
-		var disabled = _props.disabled;
-		var checkedChildren = _props.checkedChildren;
-		var unCheckedChildren = _props.unCheckedChildren;
-
-		var restProps = _objectWithoutProperties(_props, ['name', 'id', 'className', 'prefixCls', 'disabled', 'checkedChildren', 'unCheckedChildren']);
-
-		var checked = this.state.checked;
-		var switchClassName = classNames((_classNames = {}, _defineProperty(_classNames, className, !!className), _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-checked', checked), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _classNames));
-
-		return React.createElement(
-			'span',
-			{ className: switchClassName,
-				onKeyDown: this.handleKeyDown,
-				onClick: disabled ? noop : this.toggle },
-			React.createElement(
-				'span',
-				{ className: prefixCls + '-inner' },
-				checked ? checkedChildren : unCheckedChildren
-			),
-			React.createElement('input', { type: 'hidden', id: _props.id, name: _props.name })
-		);
-	}
-});
-
-module.exports = Switch;
-
-},{"classnames":1}],51:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-/**
- * UserBox defination
- */
-var UserBox = React.createClass({
-	displayName: 'UserBox',
-
-	eventName: Dispatcher.Events.UPDATE_ITEM,
-	refreshCount: 0,
-	refresh: function refresh() {
-		this.setState({ refreshCount: this.refreshCount++ });
-	},
-	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(this.eventName, function () {});
-		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.USER_EVENT, function () {});
-	},
-	componentDidMount: function componentDidMount() {
-		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
-		Dispatcher.EventEmitter.on(Dispatcher.Events.UPDATE_USER, this.refresh);
-	},
-	onChatClick: function onChatClick(e) {
-		var user = this.props.user;
-		if (user) {
-			var _isGuest = sessionManager.get('isGuest', true);
-			var _isCurrentUser = isCurrentUser(user);
-			if (!_isGuest && !_isCurrentUser) {
-				Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user);
+	showImagesPreview: function showImagesPreview(input, previewContainer) {
+		if (input.files && input.files.length > 0) {
+			var cols = parseInt($(input).attr('cols')) != NaN ? parseInt($(input).attr('cols')) : 4;
+			var cls = 1;
+			if (cols == 2 || cols == 3 || cols == 4 || cols == 6) {
+				cls = 12 / cols;
 			}
-		}
-	},
-	onFollowClick: function onFollowClick(e) {
-		var user = this.props.user;
-		if (user) {
-			var _isGuest = sessionManager.get('isGuest', true);
-			var _isCurrentUser = isCurrentUser(user);
-			if (!_isGuest && !_isCurrentUser) {
-				var _isFollowingTo = isFollowingTo(user);
-				if (_isFollowingTo) {
-					//unfollow
-					ajax.post('/unfollow/' + user.id, function (o) {
-						Dispatcher.emit(Dispatcher.Events.USER_EVENT, o.data);
-					});
-				} else {
-					//follow
-					ajax.post('/follow/' + user.id, function (o) {
-						Dispatcher.emit(Dispatcher.Events.USER_EVENT, o.data);
-					});
+			var name = input.name.replace('[]', '');
+			var previewDiv = previewContainer ? $(input).parents('form').find(previewContainer) : $(input).parent().find('.image-preview');
+			previewDiv.attr('data-file-id', input.id);
+			previewDiv.html('');
+			var count = 0;
+			for (var i in input.files) {
+				var item = input.files[i];
+				if (item instanceof Blob) {
+					var reader = new FileReader();
+					reader.image = item;
+					reader.onload = function (e) {
+						var img = new Image();
+						img.image = this.image;
+						img.onload = function (e) {
+							var html = "<div class='image-preview-item col-xs-6 col-md-" + cls + "'>" + "<input type='text' name='" + name + "-title[" + this.image.name + "]' placeholder='Caption' class='form-control' />" + "<img src='" + this.src + "' />" + "<textarea name='" + name + "-description[" + this.image.name + "]' placeholder='Description' class='form-control' row='6'></textarea>" + "<div class='image-info'>(" + this.width + " x " + this.height + ")</div>" + "<input class='btn btn-default image-remove' type='button' value='Remove' onclick='FormView.removeImagePreview(this)' />" + "</div>";
+							if (count > 0 && count % cols == cols - 1) {
+								html += "<div class='clearfix'></div>";
+							}
+							previewDiv.append(html);
+							previewDiv.show();
+							count++;
+						};
+						$(img).attr('src', this.result);
+					};
+					reader.readAsDataURL(item);
 				}
 			}
 		}
 	},
-	render: function render() {
-		var user = this.props.user;
-		if (user) {
-			var _isGuest = sessionManager.get('isGuest', true);
-			var _isCurrentUser = isCurrentUser(user);
-			var _isFollowingTo = isFollowingTo(user);
-
-			var className = 'userbox ' + getPropValue(this.props, 'className', '');
-			var iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
-			var iconChatTitle = _isGuest ? localization.please_login_first : _isCurrentUser ? localization.cannot_chat_with_yourself : 'Send message';
-			var iconFollowClassName = 'icon ' + (_isFollowingTo ? 'icon-unfollow' : 'icon-follow') + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
-			var iconFollowTitle = _isGuest ? localization.please_login_first : _isCurrentUser ? localization.cannot_follow_yourself : _isFollowingTo ? localization.unfollow : '';
-			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman');
-			var href = '/' + user.name;
-			return React.createElement(
-				'div',
-				{ className: className },
-				React.createElement('img', { src: avatar }),
-				React.createElement(
-					'a',
-					{ className: 'user-name', href: href },
-					React.createElement(
-						'span',
-						null,
-						user.displayname
-					)
-				),
-				React.createElement('a', { className: iconChatClassName, onClick: this.onChatClick, title: iconChatTitle }),
-				React.createElement('a', { className: iconFollowClassName, onClick: this.onFollowClick, title: iconFollowTitle })
-			);
+	removeImagePreview: function removeImagePreview(e) {
+		var container = $(e).parent().parent();
+		$(e).parent().remove();
+		if (!container.find('.image-preview-item').length) {
+			$('#' + container.attr('data-file-id')).val('');
 		}
-		return null;
-	}
-});
-
-exports.default = UserBox;
-
-},{}],52:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _flux = require('flux');
-
-var _flux2 = _interopRequireDefault(_flux);
-
-var _keymirror = require('keymirror');
-
-var _keymirror2 = _interopRequireDefault(_keymirror);
-
-var _events = require('events');
-
-var _events2 = _interopRequireDefault(_events);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-//
-var Dispatcher = new _flux2.default.Dispatcher();
-//
-
-var EventEmitter = function (_Events) {
-	_inherits(EventEmitter, _Events);
-
-	function EventEmitter() {
-		_classCallCheck(this, EventEmitter);
-
-		return _possibleConstructorReturn(this, Object.getPrototypeOf(EventEmitter).apply(this, arguments));
-	}
-
-	return EventEmitter;
-}(_events2.default);
-
-Dispatcher.EventEmitter = new EventEmitter();
-Dispatcher.EventEmitter.setMaxListeners(Infinity);
-//
-Dispatcher.Events = (0, _keymirror2.default)({
-	UPDATE_APPLICATION: null,
-	UPDATE_CATITEMS: null,
-	UPDATE_USERITEMS: null,
-	UPDATE_ITEMDETAILS: null,
-	UPDATE_ITEM: null,
-	UPDATE_USER: null,
-	UPDATE_MESSAGE: null,
-	UPDATE_CHATBOX: null,
-	UPDATE_CHATBAR: null,
-	ADD_CHATBOX: null
-});
-
-Dispatcher.Store = function () {
-	var _data = {
-		application: null,
-		catitems: null,
-		useritems: null,
-		itemdetails: null,
-		lastUpdatedUser: '',
-		lastMessage: '',
-		chatusers: []
-	};
-	return {
-		get: function get(actionType) {
-			switch (actionType) {
-				case Dispatcher.Events.UPDATE_APPLICATION:
-					return _data.application;
-				case Dispatcher.Events.UPDATE_CATITEMS:
-					return _data.catitems;;
-				case Dispatcher.Events.UPDATE_USERITEMS:
-					return _data.useritems;
-				case Dispatcher.Events.UPDATE_ITEMDETAILS:
-					return _data.itemdetails;
-					break;
-				case Dispatcher.Events.UPDATE_ITEM:
-					var item_id = arguments[1];
-					if (item_id) {
-						for (var i = 0; i < _data.catitems.paginate.data.length; i++) {
-							if (_data.catitems.paginate.data[i].id == item_id) {
-								return _data.catitems.paginate.data[i];
-							}
-						}
-						for (var i = 0; i < _data.useritems.paginate.data.length; i++) {
-							if (_data.useritems.paginate.data[i].id == item_id) {
-								return _data.useritems.paginate.data[i];
-							}
-						}
-					}
-					return null;
-				case Dispatcher.Events.UPDATE_USER:
-					return _data.lastUpdatedUser;
-				case Dispatcher.Events.UPDATE_MESSAGE:
-					return _data.lastMessage;
-				case Dispatcher.Events.UPDATE_CHATBOX:
-					var user_id = arguments[1];
-					if (user_id) {
-						for (var i = 0; i < _data.chatusers.length; i++) {
-							if (_data.chatusers[i].id == user_id) {
-								return _data.chatusers[i];
-							}
-						}
-					}
-					return null;
-				case Dispatcher.Events.ADD_CHATBOX:
-				case Dispatcher.Events.UPDATE_CHATBAR:
-					return _data.chatusers;
-			}
-		},
-		set: function set(actionType, data) {
-			switch (actionType) {
-				case Dispatcher.Events.UPDATE_APPLICATION:
-					_data.application = data;
-					if (_data.application.catitems) _data.catitems = _data.application;else if (_data.application.useritems) _data.useritems = _data.application;else if (_data.application.itemdetails) _data.itemdetails = _data.application;
-					break;
-				case Dispatcher.Events.UPDATE_CATITEMS:
-					_data.catitems = data;
-					break;
-				case Dispatcher.Events.UPDATE_USERITEMS:
-					_data.useritems = data;
-					break;
-				case Dispatcher.Events.UPDATE_ITEMDETAILS:
-					_data.itemdetails = data;
-					break;
-				case Dispatcher.Events.UPDATE_ITEM:
-					if (data && data.id) {
-						for (var i = 0; i < _data.catitems.paginate.data.length; i++) {
-							if (_data.catitems.paginate.data[i].id == data.id) {
-								_data.catitems.paginate.data[i] = Object.assign(_data.catitems.paginate.data[i], data);
-								break;
-							}
-						}
-						for (var i = 0; i < _data.useritems.paginate.data.length; i++) {
-							if (_data.useritems.paginate.data[i].id == data.id) {
-								_data.useritems.paginate.data[i] = Object.assign(_data.useritems.paginate.data[i], data);
-								break;
-							}
-						}
-					}
-					break;
-				case Dispatcher.Events.UPDATE_USER:
-					_data.lastUpdatedUser = data;
-					break;
-				case Dispatcher.Events.UPDATE_MESSAGE:
-					_data.lastMessage = JSON.parse(data);
-					break;
-				case Dispatcher.Events.ADD_CHATBOX:
-					if (data && data.id && data.displayname && _data.chatusers.indexOf(data) < 0) {
-						var exists = false;
-						for (var i = 0; i < _data.chatusers.length; i++) {
-							if (data.id == _data.chatuser[i].id) {
-								exists = true;
-								break;
-							}
-						}
-						if (!exists) _data.chatusers.push(data);
-					}
-					actionType = Dispatcher.Events.UPDATE_CHATBAR;
-					break;
-			}
-			sessionManager.set('data', _data);
-			Dispatcher.dispatch({
-				actionType: actionType,
-				data: Dispatcher.Store.get(actionType)
-			});
-		}
-	};
-}();
-
-Dispatcher.register(function (action) {
-	console.log(action.actionType, Dispatcher.Store.get(action.actionType));
-	Dispatcher.EventEmitter.emit(action.actionType, Dispatcher.Store.get(action.actionType));
-});
-
-Dispatcher.emit = function (actionType, _data) {
-	if (Dispatcher.Events.hasOwnProperty(actionType)) {
-		Dispatcher.Store.set(actionType, _data);
-	} else {
-		console.log('Dispatcher does not support this action ' + actionType);
 	}
 };
 
-window.Dispatcher = Dispatcher;
+},{"../components/switch.jsx":148,"formsy-react":98}],152:[function(require,module,exports){
+'use strict';
 
-exports.default = window.Dispatcher;
+/**
+ * Session manager
+ */
+Object.assign(window, {
+	sessionManager: function () {
+		var me = this;
+		var _data = {};
+		return {
+			location: function location() {
+				return _data.location;
+			},
+			cats: function cats() {
+				return _data.cats;
+			},
+			user: function user() {
+				return JSON.parse($.base64.decode(_data.user));
+			},
+			rawdata: function rawdata() {
+				return _data.rawdata;
+			},
+			getCurrentPage: function getCurrentPage() {
+				return _data.page;
+			},
+			isLogged: function isLogged() {
+				if (!this.get('isGuest', true)) return this.get('user');
+				return false;
+			},
+			isListPage: function isListPage() {
+				if (this.has('rawdata')) return this.get('rawdata').paginate;
+				return false;
+			},
+			has: function has(name) {
+				return _data.hasOwnProperty(name);
+			},
+			get: function get(name, defaultValue) {
+				if (this.has(name)) return _data[name];
+				return defaultValue;
+			},
+			set: function set(name, value) {
+				_data[name] = value;return this;
+			},
+			assign: function assign(name, value) {
+				if (this.has(name)) Object.assign(_data[name], value);else _data[name] = Object.assign({}, value);
+				return this;
+			},
+			remove: function remove(name) {
+				if (this.has(name)) delete _data[name];
+				return this;
+			}
+		};
+	}()
+});
 
-},{"events":13,"flux":2,"keymirror":12}]},{},[45]);
+},{}],153:[function(require,module,exports){
+'use strict';
+
+/**
+ * UI
+ */
+Object.assign(window, {
+	showLoginForm: function showLoginForm(e) {
+		if (!window.currentForm || window.currentForm != 'login') {
+			$('#form-container').hide();
+			window.currentForm = 'login';
+			ReactDOM.render(React.createElement(LoginPage, null), document.getElementById('form-container'), function () {
+				toggleElement($('#form-container'));
+			});
+		} else {
+			toggleElement($('#form-container'));
+		}
+	},
+	showRegistrationForm: function showRegistrationForm(e) {
+		if (!window.currentForm || window.currentForm != 'register') {
+			$('#form-container').hide();
+			window.currentForm = 'register';
+			ReactDOM.render(React.createElement(RegisterPage, null), document.getElementById('form-container'), function () {
+				toggleElement($('#form-container'));
+			});
+		} else {
+			toggleElement($('#form-container'));
+		}
+	},
+	showLocationForm: function showLocationForm(e) {
+		if (!window.currentForm || window.currentForm != 'location') {
+			$('#form-container').hide();
+			window.currentForm = 'location';
+			ReactDOM.render(React.createElement(ChangeLocationPage, null), document.getElementById('form-container'), function () {
+				toggleElement($('#form-container'));
+			});
+		} else {
+			toggleElement($('#form-container'));
+		}
+	},
+
+	ui: {
+		addEventHandlers: function addEventHandlers() {
+			$(document).keyup(function (e) {
+				if (e.keyCode == 27) {
+					hideMenus();
+				}
+			});
+			//scroll to bottom to load more data
+			$(window).scroll(function () {
+				if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+					var paginate = sessionManager.isListPage();
+					if (paginate && paginate.next_page_url) {
+						ajax.get(paginate.next_page_url, function (_data) {
+							if (_data && _data.data && _data.data.paginate) {
+								_data.data.paginate.data = paginate.data.concat(_data.data.paginate.data);
+								Dispatcher.emit(Dispatcher.Events.UPDATE_APPLICATION, _data.data);
+							}
+						});
+					}
+				} else if ($(window).scrollTop() == 0) {}
+			});
+		},
+		getItemExpires: function getItemExpires(item) {
+			return item.deleted_at ? expired_at = React.createElement(
+				'div',
+				{ className: 'item-date item-expired' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						{ className: 'label expired-label' },
+						localization.expires_at
+					),
+					React.createElement(
+						'span',
+						{ className: 'prettydateformat' },
+						item.deleted_at
+					)
+				)
+			) : null;
+		},
+		getItemPostedOrEdited: function getItemPostedOrEdited(item) {
+			var created = new Date(item.created_at);
+			var updated = new Date(item.updated_at);
+			return +updated !== +created ? React.createElement(
+				'div',
+				{ className: 'item-date item-updated' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						{ className: 'label edited-label' },
+						localization.edited_at
+					),
+					React.createElement(
+						'span',
+						{ className: 'prettydateformat' },
+						item.updated_at
+					)
+				)
+			) : React.createElement(
+				'div',
+				{ className: 'item-date item-created' },
+				React.createElement(
+					'a',
+					null,
+					React.createElement(
+						'span',
+						{ className: 'label posted-label' },
+						localization.posted_at
+					),
+					React.createElement(
+						'span',
+						{ className: 'prettydateformat' },
+						item.created_at
+					)
+				)
+			);
+		},
+
+		plugins: {
+			format: function (_format) {
+				function format(_x) {
+					return _format.apply(this, arguments);
+				}
+
+				format.toString = function () {
+					return _format.toString();
+				};
+
+				return format;
+			}(function ($container) {
+				if (!$container) {
+					$('.prettydateformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
+					});
+					$('.dateformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.date(text));
+					});
+					$('.timeformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.time(text));
+					});
+					$('.datetimeformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.datetime(text));
+					});
+					$('.currency-value').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.currency(text));
+					});
+				} else {
+					$container.find('.prettydateformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
+					});
+					$container.find('.dateformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.date(text));
+					});
+					$container.find('.timeformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.time(text));
+					});
+					$container.find('.datetimeformat').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.datetime(text));
+					});
+					$container.find('.currency-value').each(function () {
+						var me = $(this);
+						var text = me.text().trim();
+						me.text(format.currency(text));
+					});
+				}
+			})
+		}
+	},
+	submitForm: function submitForm(form) {
+		$('<input>').attr({
+			type: 'hidden',
+			name: '_token',
+			value: token()
+		}).appendTo(form);
+		$('<input>').attr({
+			type: 'hidden',
+			name: 'redirect',
+			value: location.href
+		}).appendTo(form);
+		form.submit();
+	},
+	showMessageDialog: function showMessageDialog(msg, title, btn, callback) {
+		btn = btn ? btn : localization.ok;
+		title = title ? title : localization.message;
+		var buttons = {};
+		buttons[btn] = function () {
+			$(this).dialog('close');
+			$(this).remove();
+			if (callback) {
+				callback();
+			}
+		};
+		$('<div></div>').dialog({
+			modal: true,
+			title: title,
+			closeOnEscape: false,
+			open: function open(e, ui) {
+				$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
+				$(this).html(msg);
+			},
+
+			buttons: buttons
+		}); //end confirm dialog
+	},
+	expandMenu: function expandMenu(e) {
+		var menu = $(e).next('ul');
+		toggleElement(menu);
+	},
+	hideMenus: function hideMenus() {
+		slideUp($('.sensitive'));
+	},
+	toggleElement: function toggleElement(e) {
+		if (e.css('display') == 'none') slideDown(e);else slideUp(e);
+	},
+	slideDown: function slideDown(e) {
+		e.slideDown();
+		e.css('visibility', 'visible');
+		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
+	},
+	slideUp: function slideUp(e) {
+		e.slideUp(function () {
+			$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'visible');
+			e.css('visibility', 'hidden');
+		});
+	},
+	hideClassName: function hideClassName(classNameToHide, exceptions) {
+		$('.' + classNameToHide).not(exceptions).hide();
+	}
+});
+
+},{}],154:[function(require,module,exports){
+'use strict';
+
+/**
+ * Util
+ */
+Object.assign(window, {
+	util: {
+		clientIP: null,
+		uuid: function uuid(prefix) {
+			return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+		},
+		ip: function ip() {
+			return this.clientIP;
+		},
+		getAttr: function getAttr(o, name, defaultValue) {
+			if (o.hasOwnProperty(name)) return o[name];
+			return defaultValue;
+		},
+		getClassName: function getClassName(o, defaultValue) {
+			if (o.hasOwnProperty('className')) return o['className'];
+			return defaultValue ? defaultValue : '';
+		}
+	},
+	engine: function () {
+		$.getJSON('//ip-api.com/json?callback=?', function (data) {
+			util.clientIP = data.query;
+		});
+	}(),
+	token: function token() {
+		return $('meta[name="csrf-token"]').attr('content');
+	},
+
+	format: {
+		currency: function currency(v) {
+			var n = parseFloat(v) != NaN ? parseFloat(v) : 0;
+			return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+		},
+		time: function time(v, format) {
+			return $.format.date(v, sessionManager.location().timeformat);
+		},
+		date: function date(v, format) {
+			return $.format.date(v, format ? format : sessionManager.location().dateformat);
+		},
+		datetime: function datetime(v, format) {
+			return $.format.date(v, format ? format : sessionManager.location().datetimeformat);
+		},
+		prettyDate: function prettyDate(v) {
+			return $.format.prettyDate(v);
+		}
+	},
+	ajax: {
+		exe: function exe(url, success, data, type) {
+			$.ajax({
+				type: type ? type : 'GET',
+				url: url,
+				data: Object.assign({ '_token': token(), 'mode': getMode() }, data),
+				success: success
+			});
+		},
+		get: function get(url, success, data) {
+			this.exe(url, success, data, 'GET');
+		},
+		post: function post(url, success, data) {
+			this.exe(url, success, data, 'POST');
+		},
+		put: function put(url, success, data) {
+			this.exe(url, success, data, 'PUT');
+		},
+		delete: function _delete(url, success, data) {
+			this.exe(url, success, data, 'DELETE');
+		}
+	}
+});
+
+},{}]},{},[141]);
 
 //# sourceMappingURL=common.js.map

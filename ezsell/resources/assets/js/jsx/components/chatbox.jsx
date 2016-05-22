@@ -6,14 +6,14 @@ var ChatBox = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.UPDATE_USER, function() {});
-		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.UPDATE_MESSAGE, function() {});
-		Dispatcher.EventEmitter.removeListener(this.eventName, function() {});
+		Dispatcher.removeListener(Dispatcher.Events.UPDATE_USER, function() {});
+		Dispatcher.removeListener(Dispatcher.Events.UPDATE_MESSAGE, function() {});
+		Dispatcher.removeListener(this.eventName, function() {});
 	},
 	componentDidMount() {
-		Dispatcher.EventEmitter.on(Dispatcher.Events.UPDATE_USER, this.refresh);
-		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
-		Dispatcher.EventEmitter.on(Dispatcher.Events.UPDATE_MESSAGE, this.addMessage);
+		Dispatcher.addListener(Dispatcher.Events.UPDATE_USER, this.refresh);
+		Dispatcher.addListener(this.eventName, this.refresh);
+		Dispatcher.addListener(Dispatcher.Events.UPDATE_MESSAGE, this.addMessage);
 	},
 	onKeyPress(e) {
 		if (e.which == 13) {
@@ -27,16 +27,19 @@ var ChatBox = React.createClass({
 		sendMessage(message, this);
 	},
 	messageSentCallbalk(message, user) {
-		//do nothing
+		var $o = $(ReactDOM.findDOMNode(this));
+		//add sent message
+		$o.find('.messages').append('<div class="myitem">' + message + '</div>');
+		//clear textbox
+		$o.find('input[type=text]').val('');
 	},
 	addMessage(data) {
-		var $o = $(ReactDOM.findDOMNode(this));
-		if (data.message && data.user) {
-			var _isCurrentUser = isCurrentUser(data.user);
-			var classname = _isCurrentUser ? 'myitem' : data.user.gender == 'MALE' ? 'hisitem' : 'heritem';
-			$o.find('.messages').append('<div class="' + classname + ' myitem">' + data.message + '</div>');
-			if (_isCurrentUser)
-				$o.find('input[type=text]').val('');
+		const user = Dispatcher.Store.get(this.eventName, this.props.user.id);
+		var _isCurrentUser = isCurrentUser(data.user);
+		if (!_isCurrentUser && data.message && data.user && data.user.id == user.id) {
+			var $o = $(ReactDOM.findDOMNode(this));
+			var classname = data.user.gender == 'MALE' ? 'hisitem' : 'heritem';
+			$o.find('.messages').append('<div class="' + classname + '">' + data.message + '</div>');
 		}
 	},
 	render(){
@@ -47,7 +50,7 @@ var ChatBox = React.createClass({
 			const _isFollowingTo = isFollowingTo(user);
 			const _isFollowerOf = isFollowerOf(user);
 
-			const className = 'chatbox ' + getPropValue(this.props, 'className', '');
+			const className = 'chatbox ' + util.getAttr(this.props, 'className', '');
 			const avatar = user && user.avatar ? user.avatar : 
 				(user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman'));
 			const href = '/' + user.name; 
@@ -74,4 +77,5 @@ var ChatBox = React.createClass({
 	}
 });
 
-export default ChatBox;
+window.ChatBox = ChatBox;
+export default window.ChatBox;

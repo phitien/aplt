@@ -205,7 +205,7 @@ a:hover {text-decoration: none !important;}
 	@extend .border-top;padding: $smedium 0 $ssmall;position: relative;
 	img {@extend .grounded-b; width: 40px;margin-right: $ssmall;}
 	a.user-name {
-		margin: $smedium;float: right;
+		margin: $smedium;
 		span {font-size: $fsmall;font-style: italic;color: lightskyblue;}
 	}
 	a.icon-chat {
@@ -231,18 +231,16 @@ a:hover {text-decoration: none !important;}
 .image-gallery-thumbnail img{@extend .grounded-s;max-height: 80px;}
 .image-gallery-image {background-color: $image-gallery-image-bg;}
 
-/** SWITCH **/
-.form-view {
-	.form-group {
-		.rc-switch {
-			@extend .no-margin-padding;
-			width: 50px;
-		}
-		.rc-switch-checked:after {
-			left: 28px;
-		}
-	} 		
-}
+/** MODE SWITCH **/
+.form-group {
+	.rc-switch {
+		@extend .no-margin-padding;
+		width: 50px;
+	}
+	.rc-switch-checked:after {
+		left: 28px;
+	}
+} 		
 
 $chatbar-width: auto;
 $chatbar-height: 322px;

@@ -6,12 +6,12 @@ var UserBox = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.EventEmitter.removeListener(this.eventName, function() {});
-		Dispatcher.EventEmitter.removeListener(Dispatcher.Events.USER_EVENT, function() {});
+		Dispatcher.removeListener(this.eventName, function() {});
+		Dispatcher.removeListener(Dispatcher.Events.USER_EVENT, function() {});
 	},
 	componentDidMount() {
-		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
-		Dispatcher.EventEmitter.on(Dispatcher.Events.UPDATE_USER, this.refresh);
+		Dispatcher.addListener(this.eventName, this.refresh);
+		Dispatcher.addListener(Dispatcher.Events.UPDATE_USER, this.refresh);
 	},
 	onChatClick(e) {
 		const user = this.props.user;
@@ -50,7 +50,7 @@ var UserBox = React.createClass({
 			const _isCurrentUser = isCurrentUser(user);
 			const _isFollowingTo = isFollowingTo(user);
 
-			const className = 'userbox ' + getPropValue(this.props, 'className', '');
+			const className = 'userbox ' + util.getAttr(this.props, 'className', '');
 			const iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
 			const iconChatTitle = _isGuest ? localization.please_login_first : 
 				_isCurrentUser ? localization.cannot_chat_with_yourself : 'Send message';
@@ -76,4 +76,5 @@ var UserBox = React.createClass({
 	}
 });
 
-export default UserBox;
+window.UserBox = UserBox;
+export default window.UserBox;

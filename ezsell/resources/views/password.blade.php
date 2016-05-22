@@ -2,19 +2,7 @@
 
 @section('title', 'EZSell - Change password')
 
-@section('scripts')
+@section('variables')
 @parent
-	{{ Html::script('js/pages/password.js', ['type' => 'text/javascript']) }}
-@endsection
-
-@section('left')
-@parent
-@endsection
-
-@section('center')
-@parent
-@endsection
-
-@section('right')
-@parent
+		sessionManager.set('page', 'ChangePasswordPage');
 @endsection

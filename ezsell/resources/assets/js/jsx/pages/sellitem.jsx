@@ -2,7 +2,7 @@ $( document ).ready(function() {
 	ReactDOM.render(React.createElement(FormView, {
 		formrender() {
 			var catoptions = [];
-			$(sessionManager.get('cats', [])).each(function(i, root) {
+			$(sessionManager.cats([])).each(function(i, root) {
 				$(root.children).each(function(j, cat) {
 					$(cat.children).each(function(k, subcat) {
 						catoptions.push({

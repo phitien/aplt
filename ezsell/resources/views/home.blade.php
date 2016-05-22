@@ -6,19 +6,7 @@ $showBanner = true;
 
 @section('title', 'EZSell - Home page')
 
-@section('scripts')
+@section('variables')
 @parent
-    {{ Html::script('js/pages/home.js', ['type' => 'text/javascript']) }}
-@endsection
-
-@section('left')
-@parent
-@endsection
-
-@section('center')
-@parent
-@endsection
-
-@section('right')
-@parent
+		sessionManager.set('page', 'HomePage');
 @endsection

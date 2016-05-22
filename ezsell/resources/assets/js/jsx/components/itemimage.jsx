@@ -6,20 +6,20 @@ var ItemImage = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount: function() {
-		Dispatcher.EventEmitter.removeListener(this.eventName, function() {});
+		Dispatcher.removeListener(this.eventName, function() {});
 	},
 	componentDidMount: function() {
-		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
+		Dispatcher.addListener(this.eventName, this.refresh);
 	},
 	onClick(e) {
 		const isGuest = sessionManager.get('isGuest', true);
-		const user = sessionManager.get('user');
+		const user = sessionManager.user();
 		if (!isGuest && user && user.id) {
 			const item = Dispatcher.item(this.props.item.id);
 			var id = sessionManager.get('usecode') ? item.code : item.id;
 			if (id) {
 				ajax.post('/like', function(o) {
-					Dispatcher.emit(Dispatcher.Events.LISTITEM_EVENT, o.data);
+					Dispatcher.emit(Dispatcher.Events.UPDATE_ITEMDETAILSPAGE, o.data);
 				}, {id: id, user_id: user.id});
 			}
 		}
@@ -44,4 +44,5 @@ var ItemImage = React.createClass({
 	}
 });
 
-export default ItemImage;
+window.ItemImage = ItemImage;
+export default window.ItemImage;

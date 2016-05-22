@@ -96,4 +96,5 @@ var Switch = React.createClass({
 	}
 });
 
-module.exports = Switch;
+window.Switch = Switch;
+export default window.Switch;

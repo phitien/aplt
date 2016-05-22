@@ -10,15 +10,22 @@ Dispatcher.EventEmitter.setMaxListeners(Infinity);
 //
 Dispatcher.Events = KeyMirror({
 	UPDATE_APPLICATION: null,
-	UPDATE_CATITEMS: null,
-	UPDATE_USERITEMS: null,
-	UPDATE_ITEMDETAILS: null,
+	UPDATE_HOMEPAGE: null,
+	UPDATE_CATITEMSPAGE: null,
+	UPDATE_USERITEMSPAGE: null,
+	UPDATE_ITEMDETAILSPAGE: null,
+	UPDATE_LOGINPAGE: null,
+	UPDATE_CHANGEACCOUNTPAGE: null,
+	UPDATE_SENDACTIVATIONPAGE: null,
+	UPDATE_REGISTERPAGE: null,
+	UPDATE_CHANGELOCATIONPAGE: null,
+	
 	UPDATE_ITEM: null,
 	UPDATE_USER: null,
 	UPDATE_MESSAGE: null,
 	UPDATE_CHATBOX: null,
 	UPDATE_CHATBAR: null,
-	ADD_CHATBOX: null
+	ADD_CHATBOX: null,
 });
 
 Dispatcher.Store = (function() {
@@ -52,25 +59,32 @@ Dispatcher.Store = (function() {
 			switch(actionType) {
 				case Dispatcher.Events.UPDATE_APPLICATION:
 					return _data.application;
-				case Dispatcher.Events.UPDATE_CATITEMS:
+				case Dispatcher.Events.UPDATE_CATITEMSPAGE:
 					return _data.catitems;;
-				case Dispatcher.Events.UPDATE_USERITEMS:
+				case Dispatcher.Events.UPDATE_USERITEMSPAGE:
 					return _data.useritems;
-				case Dispatcher.Events.UPDATE_ITEMDETAILS:
+				case Dispatcher.Events.UPDATE_ITEMDETAILSPAGE:
 					return _data.itemdetails;
 					break;
 				case Dispatcher.Events.UPDATE_ITEM:
 					var item_id = arguments[1];
 					if (item_id) {
-						for (var i=0; i < _data.catitems.paginate.data.length; i++) {
-							if (_data.catitems.paginate.data[i].id == item_id) {
-								return _data.catitems.paginate.data[i];
+						if (_data.catitems) {
+							for (var i=0; i < _data.catitems.paginate.data.length; i++) {
+								if (_data.catitems.paginate.data[i].id == item_id) {
+									return _data.catitems.paginate.data[i];
+								}
 							}
 						}
-						for (var i=0; i < _data.useritems.paginate.data.length; i++) {
-							if (_data.useritems.paginate.data[i].id == item_id) {
-								return _data.useritems.paginate.data[i];
+						else if (_data.useritems) {
+							for (var i=0; i < _data.useritems.paginate.data.length; i++) {
+								if (_data.useritems.paginate.data[i].id == item_id) {
+									return _data.useritems.paginate.data[i];
+								}
 							}
+						}
+						else if (_data.itemdetails) {
+							return _data.itemdetails.itemdetails;
 						}
 					}
 					return null;
@@ -96,28 +110,35 @@ Dispatcher.Store = (function() {
 					else if (_data.application.itemdetails) 
 						_data.itemdetails = _data.application;
 					break;
-				case Dispatcher.Events.UPDATE_CATITEMS:
+				case Dispatcher.Events.UPDATE_CATITEMSPAGE:
 					_data.catitems = data;
 					break;
-				case Dispatcher.Events.UPDATE_USERITEMS:
+				case Dispatcher.Events.UPDATE_USERITEMSPAGE:
 					_data.useritems = data;
 					break;
-				case Dispatcher.Events.UPDATE_ITEMDETAILS:
+				case Dispatcher.Events.UPDATE_ITEMDETAILSPAGE:
 					_data.itemdetails = data;
 					break;
 				case Dispatcher.Events.UPDATE_ITEM:
 					if (data && data.id) {
-						for (var i=0; i < _data.catitems.paginate.data.length; i++) {
-							if (_data.catitems.paginate.data[i].id == data.id) {
-								_data.catitems.paginate.data[i] = Object.assign(_data.catitems.paginate.data[i], data);
-								break;
+						if (_data.catitems) {
+							for (var i=0; i < _data.catitems.paginate.data.length; i++) {
+								if (_data.catitems.paginate.data[i].id == data.id) {
+									_data.catitems.paginate.data[i] = Object.assign(_data.catitems.paginate.data[i], data);
+									break;
+								}
 							}
 						}
-						for (var i=0; i < _data.useritems.paginate.data.length; i++) {
-							if (_data.useritems.paginate.data[i].id == data.id) {
-								_data.useritems.paginate.data[i] = Object.assign(_data.useritems.paginate.data[i], data);
-								break;
+						else if (_data.useritems) {
+							for (var i=0; i < _data.useritems.paginate.data.length; i++) {
+								if (_data.useritems.paginate.data[i].id == data.id) {
+									_data.useritems.paginate.data[i] = Object.assign(_data.useritems.paginate.data[i], data);
+									break;
+								}
 							}
+						}
+						else if (_data.itemdetails) {
+							_data.itemdetails.itemdetails = data;
 						}
 					}
 					break;
@@ -129,8 +150,8 @@ Dispatcher.Store = (function() {
 					if (json && json.user) {
 						_data.lastMessage = json;
 						var user = getChatUser(json.user.id);
-						if (!user) {
-							Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user);
+						if (!user && !isCurrentUser(json.user)) {
+							Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, json.user);
 						}
 					}
 					break;
@@ -159,7 +180,25 @@ Dispatcher.register(function(action) {
 
 Dispatcher.emit = function(actionType, _data) {
 	if (Dispatcher.Events.hasOwnProperty(actionType)) {
-		Dispatcher.Store.set(actionType, _data)
+		return Dispatcher.Store.set(actionType, _data);
+	}
+	else {
+		console.log('Dispatcher does not support this action ' + actionType);
+	}
+};
+
+Dispatcher.addListener = function(actionType, callback) {
+	if (Dispatcher.Events.hasOwnProperty(actionType)) {
+		return Dispatcher.EventEmitter.on(actionType, callback);
+	}
+	else {
+		console.log('Dispatcher does not support this action ' + actionType);
+	}
+};
+
+Dispatcher.removeListener = function(actionType, callback) {
+	if (Dispatcher.Events.hasOwnProperty(actionType)) {
+		return Dispatcher.EventEmitter.removeListener(actionType, callback);
 	}
 	else {
 		console.log('Dispatcher does not support this action ' + actionType);

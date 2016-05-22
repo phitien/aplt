@@ -7,18 +7,7 @@ $rightCols = 0;
 
 @section('title', 'EZSell - Category item list')
 
-@section('scripts')
+@section('variables')
 @parent
-@endsection
-
-@section('left')
-@parent
-@endsection
-
-@section('center')
-@parent
-@endsection
-
-@section('right')
-@parent
+		sessionManager.set('page', 'CatItemsPage');
 @endsection

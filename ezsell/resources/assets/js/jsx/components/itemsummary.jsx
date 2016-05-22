@@ -6,18 +6,18 @@ var ItemSummary = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount: function() {
-		Dispatcher.EventEmitter.removeListener(this.eventName, function() {});
+		Dispatcher.removeListener(this.eventName, function() {});
 	},
 	componentDidMount: function() {
-		Dispatcher.EventEmitter.on(this.eventName, this.refresh);
+		Dispatcher.addListener(this.eventName, this.refresh);
 	},
 	render() {
 		const item = Dispatcher.Store.get(this.eventName, this.props.item.id);
 		if (item) {
-			const prices = getPropValue(this.props, 'prices', 'original,sale,now').split(',');
-			const className = 'item-summary ' + getPropValue(this.props, 'className', '') + (item.liked ? ' liked' : ' unliked');
+			const prices = util.getAttr(this.props, 'prices', 'original,sale,now').split(',');
+			const className = 'item-summary ' + util.getAttr(this.props, 'className', '') + (item.liked ? ' liked' : ' unliked');
 			const iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
-			const showLink = getPropValue(this.props, 'showLink', true);
+			const showLink = util.getAttr(this.props, 'showLink', true);
 			const href = showLink ? '/item/' + (sessionManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
 			var price_list = 
 				<div className='item-prices'>{prices.map(function (o, i) {
@@ -25,7 +25,7 @@ var ItemSummary = React.createClass({
 					var pvalue = item[o + 'price'];
 					return (
 						<div className={pclassName} key={i}>
-							<span className='currency-sign'>{sessionManager.get('location').currency}</span>
+							<span className='currency-sign'>{sessionManager.location().currency}</span>
 							<span className='currency-value'>{pvalue}</span> 
 							<span className='label'>{o[0].toUpperCase() + o.slice(1)}</span>
 						</div>
@@ -53,4 +53,5 @@ var ItemSummary = React.createClass({
 	}
 });
 
-export default ItemSummary;
+window.ItemSummary = ItemSummary;
+export default window.ItemSummary;

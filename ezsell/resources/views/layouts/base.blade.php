@@ -52,13 +52,10 @@ Html::style('css/jquery-ui/themes/'.$theme.'/jquery-ui.min.css') }} {{
 Html::style('css/jquery-ui/themes/'.$theme.'/jquery.ui.theme.css') }} {{
 Html::style('css/app.css') }} @yield('css')
 <!-- JS -->
-{{ Html::script('js/libraries.js', ['type' => 'text/javascript']) }} {{
-Html::script('js/bootstrap.min.js', ['type' => 'text/javascript']) }} {{
-Html::script('js/jquery-migrate-1.2.1.min.js', ['type' =>
-'text/javascript']) }} {{ Html::script('js/jquery-dateFormat.min.js',
-['type' => 'text/javascript']) }} {{
-Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
-{{ Html::script('js/common.js', ['type' => 'text/javascript']) }}
+{{ Html::script('js/libraries.js', ['type' => 'text/javascript']) }}
+{{Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript'])
+}} {{Html::script('js/bootstrap.min.js', ['type' => 'text/javascript'])
+}} {{ Html::script('js/common.js', ['type' => 'text/javascript']) }}
 <script type="text/javascript">
 		//localization
 		const localization = {!! $localization !!};
@@ -78,7 +75,7 @@ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
 		sessionManager.set('showLeft', {!! $leftCols ? 'true' : 'false' !!});
 		sessionManager.set('showRight', {!! $rightCols ? 'true' : 'false' !!});
 		//user
-		sessionManager.set('user', {!! $user !!});
+		sessionManager.set('user', '{!! base64_encode ( ( string ) $user) !!}');
 		sessionManager.set('isGuest', {!! $isGuest ? 'true' : 'false' !!});
 		sessionManager.set('socket_io_uri', 'http://localhost:8890');
 		sessionManager.set('clientKey', '');
@@ -99,11 +96,8 @@ Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript']) }}
 		socket.on('message', function (data) {
 			Dispatcher.emit(Dispatcher.Events.UPDATE_MESSAGE, data);
 		});
-		socket.on('messagesent', function (data) {
-			Dispatcher.emit(Dispatcher.Events.UPDATE_MESSAGE, data);
-		});
 		socket.on('notification', function (data) {
-			Dispatcher.emit(Dispatcher.Events.UPDATE_NOTIFICATION, data);
+			Dispatcher.emit(Dispatcher.Events.UPDATE_NO, data);
 		});
 		socket.on('disconnect', function () {
 			console.log('disconnected');
