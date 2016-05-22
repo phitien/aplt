@@ -287,7 +287,7 @@ export default window.FormView = {
 		});
 	},
 	submit(model) {
-		var form = ReactDOM.findDOMNode(this);
+		var form = getRootDom(this);
 		if (form.tagName.toLowerCase() == 'form') {
 			submitForm(form);
 		}

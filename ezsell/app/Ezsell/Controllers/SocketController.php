@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use LRedis;
 use App\Ezsell\Models\Message;
 use App\Ezsell\Models\Item;
-use function GuzzleHttp\json_decode;
-use function Predis\object;
+use App\Ezsell\Config;
+use DB;
 
 class SocketController extends Controller {
 	/**
@@ -16,7 +16,8 @@ class SocketController extends Controller {
 	 */
 	protected $_locationMiddlewareOptions = [ 
 			'except' => [ 
-					'sendmessage' 
+					'sendmessage',
+					'messages' 
 			] 
 	];
 	public function sendmessage(Request $request) {
@@ -65,5 +66,49 @@ class SocketController extends Controller {
 			return $this->jsonResponse ( 'no_receiver_found' );
 		}
 		return $this->jsonResponse ( 'message_empty' );
+	}
+	public function messages(Request $request) {
+		return $this->process ( 'messages', func_get_args () );
+	}
+	protected function pajaxMessages(Request $request) {
+		$to = ( int ) $request->get ( 'code' );
+		$response = static::apiCallInfo ( [ 
+				'ids' => $to,
+				'first' => true 
+		] );
+		$touser = static::json_decode ( $response->getBody (), true ) ['data'];
+		if ($to && $touser) {
+			$from = static::getUser ();
+			if ($from && ! $from->isGuest ()) {
+				$messages = [ ];
+				$paginate = Message::where ( 'from_id', '=', $from->id )->where ( 'to_id', '=', $touser ['id'] )->
+
+				orWhere ( function ($query) use ($from, $touser) {
+					$query->where ( 'from_id', '=', $touser ['id'] )->where ( 'to_id', '=', $from->id );
+				} )->paginate ( Config::PAGE_SIZE );
+				
+				$items = $paginate->getCollection ();
+				
+				foreach ( $items as $item ) {
+					array_push ( $messages, $item->from_id == $from->id ? [ 
+							'receiver' => $from,
+							'message' => $item->content,
+							'created_at' => $item->created_at,
+							'status' => $item->status 
+					] : [ 
+							'sender' => $touser,
+							'message' => $item->content,
+							'created_at' => $item->created_at,
+							'status' => $item->status 
+					] );
+				}
+				return $this->jsonResponse ( 'list_messages', [ 
+						'messages' => $messages,
+						'paginate' => $paginate 
+				] );
+			}
+			return $this->jsonResponse ( 'no_user_found' );
+		}
+		return $this->jsonResponse ( 'no_receiver_found' );
 	}
 }

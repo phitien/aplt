@@ -35,13 +35,13 @@ a:hover {text-decoration: none !important;}
 	.new,.used {
 		@extend .grounded-s;
 		clear: both;
-	    display: block;
-	    float: left;
-	    margin-right: $sbig;
-	    border: 1px solid;
-	    padding: 2px $smedium;
-	    font-size: $fxsmall;
-	    margin-top: $ssmall;
+			display: block;
+			float: left;
+			margin-right: $sbig;
+			border: 1px solid;
+			padding: 2px $smedium;
+			font-size: $fxsmall;
+			margin-top: $ssmall;
 	}
 	.new {
 		border-color: $primary-color-opp;
@@ -242,10 +242,8 @@ a:hover {text-decoration: none !important;}
 	}
 } 		
 
-$chatbar-width: auto;
-$chatbar-height: 322px;
 $chatbox-width: 250px;
-$chatbox-height: $chatbar-height;
+$chatbox-height: 322px;
 $chatbox-header-height: 32px;
 $chatbox-header-padding: 3px;
 $chatbox-send-height: 32px;
@@ -255,57 +253,57 @@ $chatbox-text-width: 165px;
 #chatbar {
 	position: fixed; bottom: 0;right: $sbig;
 	.chatbar {
-		width: $chatbar-width;height: $chatbar-height;background-color: transparent;
+		background-color: transparent;
 		.chatbox {
 			@extend .border-all;
-			position: relative;
+			width: $chatbox-width;
 			vertical-align: top;overflow: hidden;
 			border-radius: $sbig;
 			margin: 0 2px;
-			width: $chatbox-width;height: $chatbox-height;background-color: lightgray;
+			background-color: lightgray;
 			float: right;
 			.header {
-				top: 0; position: absolute; left: 0;width: 100%;border-top-left-radius: $sbig;border-top-right-radius: $sbig;
-				height: $chatbox-header-height;background-color: lightblue;color: white;
+				width: 100%;height: $chatbox-header-height;
+				border-top-left-radius: $sbig;border-top-right-radius: $sbig;
+				background-color: lightblue;color: white;
 				padding: $ssmall $sbig;overflow: hidden;
 				.name {float: left}
-				.maximize {@extend .icon,.border-all;float: right;}
-				.minimize {@extend .icon,.border-all;float: right;}
-				.close {@extend .icon,.border-all;float: right;}
+				.close {@extend .icon,.border-all;}
+				.toggle {@extend .close;}
 			}
 			.messages {
-				top: $chatbox-header-height; position: absolute; left: 0;width: 100%;border-top-left-radius: $sbig;border-top-right-radius: $sbig;
+				width: 100%;height: $chatbox-messages-height;
+				border-top-left-radius: $sbig;border-top-right-radius: $sbig;
 				padding: $ssmall $sbig;
 				font-size: $fsmall;
-				height: $chatbox-messages-height;
 				overflow-x: hidden;
 				overflow-y: auto;
 				.chatitem {
-				    display: inline-block;
-				    max-width: 80%;
-				    line-height: 20px;
-				    padding: 2px $smedium;
-				    border-radius: $ssmall;
-				    clear: both;
-				    margin: $ssmall;
+						display: inline-block;
+						max-width: 80%;
+						line-height: 20px;
+						padding: 2px $smedium;
+						border-radius: $ssmall;
+						clear: both;
+						margin: $ssmall;
 					.status {
 						margin-top:5px;height: $smedium;width: $smedium;border-radius: $ssmall;background-color: $disabled-color; 
 					}
 				}
 				.myitem {
 					@extend .chatitem;
-				    text-align: right;
-				    background-color: white;
-				    float: right;
+						text-align: right;
+						background-color: white;
+						float: right;
 					.status {
 						float: right;margin-left: 3px;
 					}
 				}
 				.heritem,.hisitem {
 					@extend .chatitem;
-				    text-align: left;
-				    background-color: darkgray;
-				    float: left;
+						text-align: left;
+						background-color: darkgray;
+						float: left;
 					.status {
 						float: left;margin-right: 3px;
 					}
@@ -317,8 +315,8 @@ $chatbox-text-width: 165px;
 				}
 			}
 			.send {
-				bottom: 0; position: absolute; left: 0;width: 100%;border-bottom-left-radius: $sbig;border-bottom-right-radius: $sbig;
-				height: $chatbox-send-height;
+				width: 100%;height: $chatbox-send-height;
+				border-bottom-left-radius: $sbig;border-bottom-right-radius: $sbig;
 				padding: $ssmall $sbig;background-color:white;
 				font-size: $fsmall;vertical-align: top;text-align: left;
 				input[type=text] {

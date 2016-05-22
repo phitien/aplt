@@ -4,24 +4,55 @@
 var ChatBox = React.createClass({
 	eventName: Dispatcher.Events.UPDATE_CHATBOX,
 	refreshCount: 0,
-	refresh() {this.setState({refreshCount: this.refreshCount++});},
+	refresh() {
+		this.setState({refreshCount: this.refreshCount++});
+		this.scrollToBottom();
+	},
 	componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function() {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
+		Dispatcher.removeListener(Dispatcher.Events.SHOW_CHATBOX, this.showMe);
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
+		Dispatcher.addListener(Dispatcher.Events.SHOW_CHATBOX, this.showMe);
+		this.scrollToBottom();
+		this.getJQueryTextbox().focus();
+		
+		const user = Dispatcher.Store.get(this.eventName, this.props.user.id);
+		Dispatcher.emit(Dispatcher.Events.LOAD_RECENT_MESSAGES, user);
+	},
+	showMe() {
+		const user = Dispatcher.Store.get(Dispatcher.Events.SHOW_CHATBOX, this.props.user.id);
+		console.log(user, this.props.user.id);
+		console.log(user == this.props.user);
+		if (user && user.id == this.props.user.id)
+			this.show();
+	},
+	scrollToBottom() {
+		var d = this.getJQueryMessages();
+		d.scrollTop(d.prop('scrollHeight'));
+	},
+	getJQueryRoot() {
+		return $(getRootDom(this));
+	},
+	getJQueryTextbox() {
+		return this.getJQueryRoot().find('input[type=text]');
+	},
+	getJQueryMessages() {
+		return this.getJQueryRoot().find('.messages');
 	},
 	onKeyPress(e) {
 		if (e.which == 13) {
-			this.send(e.currentTarget.value);
-			$(e.currentTarget).val('');
+			this.send();
 		}
 	},
 	onSend(e) {
-		this.send($(e.currentTarget).parents().find('input[type=text]').val());
-		$(e.currentTarget).parents().find('input[type=text]').val('');
+		this.send();
 	},
-	send(message) {
+	send() {
+		var textbox = this.getJQueryTextbox();
+		var message = textbox.val();
+		textbox.val('');
 		const receiver = Dispatcher.Store.get(this.eventName, this.props.user.id);
 		if (receiver && message) {
 			if (sessionManager.isLogged()) {
@@ -30,6 +61,30 @@ var ChatBox = React.createClass({
 				}, {'message': message, code: receiver.id, id: receiver.itemId});
 			}
 		}
+	},
+	visible: true,
+	show() {
+		var me = this;
+		me.visible = true;
+		var chatbox = me.getJQueryRoot();
+		chatbox.find('.messages,.send').slideDown('slow', function() {
+			me.getJQueryTextbox().focus();
+		});
+	},
+	hide() {
+		var me = this;
+		me.visible = false;
+		var chatbox = me.getJQueryRoot();
+		chatbox.find('.messages,.send').slideUp('slow');
+	},
+	close(e) {
+		Dispatcher.emit(Dispatcher.Events.REMOVE_CHATBOX, Dispatcher.Store.get(this.eventName, this.props.user.id));
+	},
+	toggle(e) {
+		if (this.visible)
+			this.hide();
+		else 
+			this.show();
 	},
 	render(){
 		const user = Dispatcher.Store.get(this.eventName, this.props.user.id);
@@ -42,10 +97,9 @@ var ChatBox = React.createClass({
 			return (
 				<div className={className}>
 					<div className='header'>
-						<div className='name'>{user.displayname}</div>
-						<div className='close'>{localization.close_sign}</div>
-						<div className='minimize'>{localization.minimize_sign}</div>
-						<div className='maximize'>{localization.maximize_sign}</div>
+						<div className='name'><a href={href}><span>{user.displayname}</span></a></div>
+						<div className='close' onClick={this.close}>{localization.close_sign}</div>
+						<div className='toggle' onClick={this.toggle}>{localization.minimize_sign}</div>
 						<div className='clearfix'></div>
 					</div>
 					<div className='messages'>

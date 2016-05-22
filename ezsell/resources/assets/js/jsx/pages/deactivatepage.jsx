@@ -7,7 +7,7 @@ var DeactivatePage = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function() {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);

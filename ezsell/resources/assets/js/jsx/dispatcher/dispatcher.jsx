@@ -29,11 +29,18 @@ Dispatcher.Events = KeyMirror({
 	SENT_MESSAGE: null,
 	RECEIVED_MESSAGE: null,
 	
+	UPDATE_CATMENU: null,
 	UPDATE_ITEM: null,
 	UPDATE_USER: null,
-	UPDATE_CHATBOX: null,
+	
+	// MESSENGER EVENTS
 	UPDATE_CHATBAR: null,
+	UPDATE_CHATBOX: null,
 	ADD_CHATBOX: null,
+	SHOW_CHATBOX: null,
+	REMOVE_CHATBOX: null,
+	LOAD_RECENT_MESSAGES: null,
+	LOAD_OLD_MESSAGES: null,
 });
 
 Dispatcher.Store = (function() {
@@ -44,23 +51,29 @@ Dispatcher.Store = (function() {
 		itemdetails: null,
 		lastUpdatedUser: '',
 		lastMessage: '',
-		chatusers: []
+		chatusers: [],
+		currentchatuser: null
 	};
 	function getChatUser(user_id) {
-		for (var i=0; i < _data.chatusers.length; i++) {
-			if (_data.chatusers[i].id == user_id) {
-				return _data.chatusers[i];
+		if (_data.chatusers.length > 0) {
+			for (var i=0; i < _data.chatusers.length; i++) {
+				if (_data.chatusers[i].id == user_id) {
+					return _data.chatusers[i];
+				}
 			}
 		}
 		return null;
 	}
 	function setChatUser(user_id, user) {
-		for (var i=0; i < _data.chatusers.length; i++) {
-			if (_data.chatusers[i].id == user_id) {
-				_data.chatusers[i] = user;
-				break;
+		if (_data.chatusers.length > 0) {
+			for (var i=0; i < _data.chatusers.length; i++) {
+				if (_data.chatusers[i].id == user_id) {
+					_data.chatusers[i] = user;
+					return;
+				}
 			}
 		}
+		_data.chatusers.push(user);
 	}
 	return {
 		get: function(actionType) {
@@ -99,13 +112,14 @@ Dispatcher.Store = (function() {
 				case Dispatcher.Events.UPDATE_USER:
 					return _data.lastUpdatedUser;
 				case Dispatcher.Events.UPDATE_CHATBOX:
+				case Dispatcher.Events.SHOW_CHATBOX:
 					return getChatUser(arguments[1]);
-				case Dispatcher.Events.ADD_CHATBOX:
 				case Dispatcher.Events.UPDATE_CHATBAR:
 					return _data.chatusers;
 			}
 		},
 		set: function(actionType,  data, params) {
+			console.log('set', actionType, data);
 			switch(actionType) {
 				case Dispatcher.Events.UPDATE_APPLICATION:
 					_data.application = data;
@@ -115,15 +129,19 @@ Dispatcher.Store = (function() {
 						_data.useritems = _data.application;
 					else if (_data.application.itemdetails) 
 						_data.itemdetails = _data.application;
+					Dispatcher.dispatch({actionType: actionType, data: Dispatcher.Store.get(actionType)});
 					break;
 				case Dispatcher.Events.UPDATE_CATITEMSPAGE:
 					_data.catitems = data;
+					Dispatcher.dispatch({actionType: actionType, data: Dispatcher.Store.get(actionType)});
 					break;
 				case Dispatcher.Events.UPDATE_USERITEMSPAGE:
 					_data.useritems = data;
+					Dispatcher.dispatch({actionType: actionType, data: Dispatcher.Store.get(actionType)});
 					break;
 				case Dispatcher.Events.UPDATE_ITEMDETAILSPAGE:
 					_data.itemdetails = data;
+					Dispatcher.dispatch({actionType: actionType, data: Dispatcher.Store.get(actionType)});
 					break;
 				case Dispatcher.Events.UPDATE_ITEM:
 					if (data && data.id) {
@@ -147,9 +165,11 @@ Dispatcher.Store = (function() {
 							_data.itemdetails.itemdetails = data;
 						}
 					}
+					Dispatcher.dispatch({actionType: actionType, data: Dispatcher.Store.get(actionType)});
 					break;
 				case Dispatcher.Events.UPDATE_USER:
 					_data.lastUpdatedUser = data;
+					Dispatcher.dispatch({actionType: actionType, data: Dispatcher.Store.get(actionType)});
 					break;
 				case Dispatcher.Events.SENT_MESSAGE:
 					var receiver = data.receiver;
@@ -159,56 +179,82 @@ Dispatcher.Store = (function() {
 							if (!chattingUser.messages)
 								chattingUser.messages = [];
 							chattingUser.messages.push(data);
-							setChatUser(receiver.id, chattingUser);
-							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBOX);
+							_data.currentchatuser = chattingUser;
+							Dispatcher.dispatch({actionType: Dispatcher.Events.UPDATE_CHATBOX, data: _data.currentchatuser});
 						}
 					}
 					break;
 				case Dispatcher.Events.RECEIVED_MESSAGE:
-					var sender = data.sender
+					var sender = data.sender;
 					if (sender) {
 						var chattingUser = getChatUser(sender.id);
 						if (chattingUser) {
 							if (!chattingUser.messages)
 								chattingUser.messages = [];
 							chattingUser.messages.push(data);
-							setChatUser(sender.id, chattingUser);
-							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBOX);
+							Dispatcher.dispatch({actionType: Dispatcher.Events.UPDATE_CHATBOX, data: chattingUser});
+						}
+						else {
+							Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, sender);
 						}
 					}
 					break;
 				case Dispatcher.Events.ADD_CHATBOX:
-					if (data && data.id && data.displayname && _data.chatusers.indexOf(data) < 0) {
+					if (data && data.id && data.displayname) {
 						var user = getChatUser(data.id);
 						if (!user) {
 							if (params[2])
 								data.itemId = params[2];
 							_data.chatusers.push(data);
-						} 
+							_data.currentchatuser = getChatUser(data.id);
+							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBAR);
+						}
+						else {
+							_data.currentchatuser = user;
+							Dispatcher.dispatch({actionType: Dispatcher.Events.SHOW_CHATBOX, data: user});
+						}
 					}
-					actionType = Dispatcher.Events.UPDATE_CHATBAR;
+					break;
+				case Dispatcher.Events.LOAD_RECENT_MESSAGES:
+					var owner = sessionManager.isLogged();
+					if (owner && data && data.id && data.displayname) {
+						ajax.post('/messages', function(response) {
+							if (response.data) {
+								data.messages = response.data.messages;
+								data.paginate = response.data.paginate;
+								Dispatcher.dispatch({actionType: Dispatcher.Events.UPDATE_CHATBOX, data: data});
+							}
+						}, {code: data.id});
+					}
+					break;
+				case Dispatcher.Events.REMOVE_CHATBOX:
+					if (data && data.id && data.displayname) {
+						var index = _data.chatusers.indexOf(data);
+						if (index >= 0) {
+							_data.chatusers.splice(index, 1);
+							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBAR);
+						}
+					}
+					break;
+				case Dispatcher.Events.UPDATE_CHATBAR:
+					Dispatcher.dispatch({actionType: actionType, data: Dispatcher.Store.get(actionType)});
 					break;
 			}
 			sessionManager.set('data', _data);
-			Dispatcher.dispatch({
-				actionType: actionType,
-				data: Dispatcher.Store.get(actionType)
-			});
 		}
 	};
 })();
 
 Dispatcher.register(function(action) {
-	//console.log(action.actionType, Dispatcher.Store.get(action.actionType));
 	Dispatcher.EventEmitter.emit(action.actionType, Dispatcher.Store.get(action.actionType));
 });
 
-Dispatcher.emit = function(actionType, _data) {
+Dispatcher.emit = function(actionType, data) {
 	if (Dispatcher.Events.hasOwnProperty(actionType)) {
-		return Dispatcher.Store.set(actionType, _data, arguments);
+		return Dispatcher.Store.set(actionType, data, arguments);
 	}
 	else {
-		console.log('Dispatcher does not support this action ' + actionType);
+		throw('Dispatcher does not support this action ' + actionType);
 	}
 };
 
@@ -217,7 +263,7 @@ Dispatcher.addListener = function(actionType, callback) {
 		return Dispatcher.EventEmitter.on(actionType, callback);
 	}
 	else {
-		console.log('Dispatcher does not support this action ' + actionType);
+		throw('Dispatcher does not support this action ' + actionType);
 	}
 };
 
@@ -226,7 +272,7 @@ Dispatcher.removeListener = function(actionType, callback) {
 		return Dispatcher.EventEmitter.removeListener(actionType, callback);
 	}
 	else {
-		console.log('Dispatcher does not support this action ' + actionType);
+		throw('Dispatcher does not support this action ' + actionType);
 	}
 };
 

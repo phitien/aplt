@@ -108,6 +108,15 @@ const Menu = React.createClass({
  * CatMenu defination
  */
 const CatMenu = React.createClass({
+	eventName: Dispatcher.Events.UPDATE_CATMENU,
+	refreshCount: 0,
+	refresh() {this.setState({refreshCount: this.refreshCount++});},
+	componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
 	getText(_item) {
 		return _item.details ? _item.details.name : '';
 	},

@@ -7838,6 +7838,18 @@ var Menu = React.createClass({
  */
 var CatMenu = React.createClass({
 	displayName: 'CatMenu',
+
+	eventName: Dispatcher.Events.UPDATE_CATMENU,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
 	getText: function getText(_item) {
 		return _item.details ? _item.details.name : '';
 	},
@@ -7890,12 +7902,10 @@ var ChatBar = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
-		Dispatcher.removeListener(Dispatcher.Events.ADD_CHATBOX, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		Dispatcher.addListener(Dispatcher.Events.ADD_CHATBOX, this.refresh);
 	},
 	render: function render() {
 		var users = Dispatcher.Store.get(this.eventName);
@@ -7933,24 +7943,52 @@ var ChatBox = React.createClass({
 	refreshCount: 0,
 	refresh: function refresh() {
 		this.setState({ refreshCount: this.refreshCount++ });
+		this.scrollToBottom();
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
+		Dispatcher.removeListener(Dispatcher.Events.SHOW_CHATBOX, this.showMe);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
+		Dispatcher.addListener(Dispatcher.Events.SHOW_CHATBOX, this.showMe);
+		this.scrollToBottom();
+		this.getJQueryTextbox().focus();
+
+		var user = Dispatcher.Store.get(this.eventName, this.props.user.id);
+		Dispatcher.emit(Dispatcher.Events.LOAD_RECENT_MESSAGES, user);
+	},
+	showMe: function showMe() {
+		var user = Dispatcher.Store.get(Dispatcher.Events.SHOW_CHATBOX, this.props.user.id);
+		console.log(user, this.props.user.id);
+		console.log(user == this.props.user);
+		if (user && user.id == this.props.user.id) this.show();
+	},
+	scrollToBottom: function scrollToBottom() {
+		var d = this.getJQueryMessages();
+		d.scrollTop(d.prop('scrollHeight'));
+	},
+	getJQueryRoot: function getJQueryRoot() {
+		return $(getRootDom(this));
+	},
+	getJQueryTextbox: function getJQueryTextbox() {
+		return this.getJQueryRoot().find('input[type=text]');
+	},
+	getJQueryMessages: function getJQueryMessages() {
+		return this.getJQueryRoot().find('.messages');
 	},
 	onKeyPress: function onKeyPress(e) {
 		if (e.which == 13) {
-			this.send(e.currentTarget.value);
-			$(e.currentTarget).val('');
+			this.send();
 		}
 	},
 	onSend: function onSend(e) {
-		this.send($(e.currentTarget).parents().find('input[type=text]').val());
-		$(e.currentTarget).parents().find('input[type=text]').val('');
+		this.send();
 	},
-	send: function send(message) {
+	send: function send() {
+		var textbox = this.getJQueryTextbox();
+		var message = textbox.val();
+		textbox.val('');
 		var receiver = Dispatcher.Store.get(this.eventName, this.props.user.id);
 		if (receiver && message) {
 			if (sessionManager.isLogged()) {
@@ -7959,6 +7997,28 @@ var ChatBox = React.createClass({
 				}, { 'message': message, code: receiver.id, id: receiver.itemId });
 			}
 		}
+	},
+
+	visible: true,
+	show: function show() {
+		var me = this;
+		me.visible = true;
+		var chatbox = me.getJQueryRoot();
+		chatbox.find('.messages,.send').slideDown('slow', function () {
+			me.getJQueryTextbox().focus();
+		});
+	},
+	hide: function hide() {
+		var me = this;
+		me.visible = false;
+		var chatbox = me.getJQueryRoot();
+		chatbox.find('.messages,.send').slideUp('slow');
+	},
+	close: function close(e) {
+		Dispatcher.emit(Dispatcher.Events.REMOVE_CHATBOX, Dispatcher.Store.get(this.eventName, this.props.user.id));
+	},
+	toggle: function toggle(e) {
+		if (this.visible) this.hide();else this.show();
 	},
 	render: function render() {
 		var user = Dispatcher.Store.get(this.eventName, this.props.user.id);
@@ -7976,22 +8036,25 @@ var ChatBox = React.createClass({
 					React.createElement(
 						'div',
 						{ className: 'name' },
-						user.displayname
+						React.createElement(
+							'a',
+							{ href: href },
+							React.createElement(
+								'span',
+								null,
+								user.displayname
+							)
+						)
 					),
 					React.createElement(
 						'div',
-						{ className: 'close' },
+						{ className: 'close', onClick: this.close },
 						localization.close_sign
 					),
 					React.createElement(
 						'div',
-						{ className: 'minimize' },
+						{ className: 'toggle', onClick: this.toggle },
 						localization.minimize_sign
-					),
-					React.createElement(
-						'div',
-						{ className: 'maximize' },
-						localization.maximize_sign
 					),
 					React.createElement('div', { className: 'clearfix' })
 				),
@@ -8038,7 +8101,7 @@ var ItemImage = React.createClass({
 	},
 
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -8104,7 +8167,7 @@ var ItemSummary = React.createClass({
 	},
 
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -8206,11 +8269,11 @@ var MessageItem = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		ui.plugins.format($(ReactDOM.findDOMNode(this)));
+		ui.plugins.format($(getRootDom(this)));
 	},
 	toggleTime: function toggleTime(e) {
 		$(e.currentTarget).parents('.chatitem').find('.created').slideToggle();
@@ -8259,10 +8322,10 @@ var ModeSwitch = React.createClass({
 	mixins: [FormView],
 	onMouseUp: function onMouseUp(e, checked) {
 		setMode(checked ? 1 : 0);
-		ajax.get(location.href, function (_data) {
-			if (_data && sessionManager.isListPage()) {
-				if (_data && _data.data) {
-					Dispatcher.emit(Dispatcher.Events.UPDATE_APPLICATION, _data.data);
+		ajax.get(location.href, function (data) {
+			if (data && sessionManager.isListPage()) {
+				if (data && data.data) {
+					Dispatcher.emit(Dispatcher.Events.UPDATE_APPLICATION, data.data);
 				}
 			}
 		});
@@ -8276,7 +8339,7 @@ var ModeSwitch = React.createClass({
 				defaultChecked: getMode() == sessionManager.get('MODES').SELL ? true : false,
 				checkedChildren: localization.sell,
 				unCheckedChildren: localization.buy,
-				onMouseUp: this.props.onMouseUp })
+				onMouseUp: this.onMouseUp })
 		);
 	}
 });
@@ -8423,8 +8486,8 @@ var UserBox = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
-		Dispatcher.removeListener(Dispatcher.Events.USER_EVENT, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
+		Dispatcher.removeListener(Dispatcher.Events.UPDATE_USER, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -8451,12 +8514,12 @@ var UserBox = React.createClass({
 				if (_isFollowingTo) {
 					//unfollow
 					ajax.post('/unfollow/' + user.id, function (o) {
-						Dispatcher.emit(Dispatcher.Events.USER_EVENT, o.data);
+						Dispatcher.emit(Dispatcher.Events.UPDATE_USER, o.data);
 					});
 				} else {
 					//follow
 					ajax.post('/follow/' + user.id, function (o) {
-						Dispatcher.emit(Dispatcher.Events.USER_EVENT, o.data);
+						Dispatcher.emit(Dispatcher.Events.UPDATE_USER, o.data);
 					});
 				}
 			}
@@ -8567,11 +8630,18 @@ Dispatcher.Events = (0, _keymirror2.default)({
 	SENT_MESSAGE: null,
 	RECEIVED_MESSAGE: null,
 
+	UPDATE_CATMENU: null,
 	UPDATE_ITEM: null,
 	UPDATE_USER: null,
-	UPDATE_CHATBOX: null,
+
+	// MESSENGER EVENTS
 	UPDATE_CHATBAR: null,
-	ADD_CHATBOX: null
+	UPDATE_CHATBOX: null,
+	ADD_CHATBOX: null,
+	SHOW_CHATBOX: null,
+	REMOVE_CHATBOX: null,
+	LOAD_RECENT_MESSAGES: null,
+	LOAD_OLD_MESSAGES: null
 });
 
 Dispatcher.Store = function () {
@@ -8582,23 +8652,29 @@ Dispatcher.Store = function () {
 		itemdetails: null,
 		lastUpdatedUser: '',
 		lastMessage: '',
-		chatusers: []
+		chatusers: [],
+		currentchatuser: null
 	};
 	function getChatUser(user_id) {
-		for (var i = 0; i < _data.chatusers.length; i++) {
-			if (_data.chatusers[i].id == user_id) {
-				return _data.chatusers[i];
+		if (_data.chatusers.length > 0) {
+			for (var i = 0; i < _data.chatusers.length; i++) {
+				if (_data.chatusers[i].id == user_id) {
+					return _data.chatusers[i];
+				}
 			}
 		}
 		return null;
 	}
 	function setChatUser(user_id, user) {
-		for (var i = 0; i < _data.chatusers.length; i++) {
-			if (_data.chatusers[i].id == user_id) {
-				_data.chatusers[i] = user;
-				break;
+		if (_data.chatusers.length > 0) {
+			for (var i = 0; i < _data.chatusers.length; i++) {
+				if (_data.chatusers[i].id == user_id) {
+					_data.chatusers[i] = user;
+					return;
+				}
 			}
 		}
+		_data.chatusers.push(user);
 	}
 	return {
 		get: function get(actionType) {
@@ -8635,26 +8711,31 @@ Dispatcher.Store = function () {
 				case Dispatcher.Events.UPDATE_USER:
 					return _data.lastUpdatedUser;
 				case Dispatcher.Events.UPDATE_CHATBOX:
+				case Dispatcher.Events.SHOW_CHATBOX:
 					return getChatUser(arguments[1]);
-				case Dispatcher.Events.ADD_CHATBOX:
 				case Dispatcher.Events.UPDATE_CHATBAR:
 					return _data.chatusers;
 			}
 		},
 		set: function set(actionType, data, params) {
+			console.log('set', actionType, data);
 			switch (actionType) {
 				case Dispatcher.Events.UPDATE_APPLICATION:
 					_data.application = data;
 					if (_data.application.catitems) _data.catitems = _data.application;else if (_data.application.useritems) _data.useritems = _data.application;else if (_data.application.itemdetails) _data.itemdetails = _data.application;
+					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
 					break;
 				case Dispatcher.Events.UPDATE_CATITEMSPAGE:
 					_data.catitems = data;
+					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
 					break;
 				case Dispatcher.Events.UPDATE_USERITEMSPAGE:
 					_data.useritems = data;
+					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
 					break;
 				case Dispatcher.Events.UPDATE_ITEMDETAILSPAGE:
 					_data.itemdetails = data;
+					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
 					break;
 				case Dispatcher.Events.UPDATE_ITEM:
 					if (data && data.id) {
@@ -8676,9 +8757,11 @@ Dispatcher.Store = function () {
 							_data.itemdetails.itemdetails = data;
 						}
 					}
+					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
 					break;
 				case Dispatcher.Events.UPDATE_USER:
 					_data.lastUpdatedUser = data;
+					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
 					break;
 				case Dispatcher.Events.SENT_MESSAGE:
 					var receiver = data.receiver;
@@ -8687,8 +8770,8 @@ Dispatcher.Store = function () {
 						if (chattingUser) {
 							if (!chattingUser.messages) chattingUser.messages = [];
 							chattingUser.messages.push(data);
-							setChatUser(receiver.id, chattingUser);
-							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBOX);
+							_data.currentchatuser = chattingUser;
+							Dispatcher.dispatch({ actionType: Dispatcher.Events.UPDATE_CHATBOX, data: _data.currentchatuser });
 						}
 					}
 					break;
@@ -8699,41 +8782,65 @@ Dispatcher.Store = function () {
 						if (chattingUser) {
 							if (!chattingUser.messages) chattingUser.messages = [];
 							chattingUser.messages.push(data);
-							setChatUser(sender.id, chattingUser);
-							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBOX);
+							Dispatcher.dispatch({ actionType: Dispatcher.Events.UPDATE_CHATBOX, data: chattingUser });
+						} else {
+							Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, sender);
 						}
 					}
 					break;
 				case Dispatcher.Events.ADD_CHATBOX:
-					if (data && data.id && data.displayname && _data.chatusers.indexOf(data) < 0) {
+					if (data && data.id && data.displayname) {
 						var user = getChatUser(data.id);
 						if (!user) {
 							if (params[2]) data.itemId = params[2];
 							_data.chatusers.push(data);
+							_data.currentchatuser = getChatUser(data.id);
+							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBAR);
+						} else {
+							_data.currentchatuser = user;
+							Dispatcher.dispatch({ actionType: Dispatcher.Events.SHOW_CHATBOX, data: user });
 						}
 					}
-					actionType = Dispatcher.Events.UPDATE_CHATBAR;
+					break;
+				case Dispatcher.Events.LOAD_RECENT_MESSAGES:
+					var owner = sessionManager.isLogged();
+					if (owner && data && data.id && data.displayname) {
+						ajax.post('/messages', function (response) {
+							if (response.data) {
+								data.messages = response.data.messages;
+								data.paginate = response.data.paginate;
+								Dispatcher.dispatch({ actionType: Dispatcher.Events.UPDATE_CHATBOX, data: data });
+							}
+						}, { code: data.id });
+					}
+					break;
+				case Dispatcher.Events.REMOVE_CHATBOX:
+					if (data && data.id && data.displayname) {
+						var index = _data.chatusers.indexOf(data);
+						if (index >= 0) {
+							_data.chatusers.splice(index, 1);
+							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBAR);
+						}
+					}
+					break;
+				case Dispatcher.Events.UPDATE_CHATBAR:
+					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
 					break;
 			}
 			sessionManager.set('data', _data);
-			Dispatcher.dispatch({
-				actionType: actionType,
-				data: Dispatcher.Store.get(actionType)
-			});
 		}
 	};
 }();
 
 Dispatcher.register(function (action) {
-	//console.log(action.actionType, Dispatcher.Store.get(action.actionType));
 	Dispatcher.EventEmitter.emit(action.actionType, Dispatcher.Store.get(action.actionType));
 });
 
-Dispatcher.emit = function (actionType, _data) {
+Dispatcher.emit = function (actionType, data) {
 	if (Dispatcher.Events.hasOwnProperty(actionType)) {
-		return Dispatcher.Store.set(actionType, _data, arguments);
+		return Dispatcher.Store.set(actionType, data, arguments);
 	} else {
-		console.log('Dispatcher does not support this action ' + actionType);
+		throw 'Dispatcher does not support this action ' + actionType;
 	}
 };
 
@@ -8741,7 +8848,7 @@ Dispatcher.addListener = function (actionType, callback) {
 	if (Dispatcher.Events.hasOwnProperty(actionType)) {
 		return Dispatcher.EventEmitter.on(actionType, callback);
 	} else {
-		console.log('Dispatcher does not support this action ' + actionType);
+		throw 'Dispatcher does not support this action ' + actionType;
 	}
 };
 
@@ -8749,7 +8856,7 @@ Dispatcher.removeListener = function (actionType, callback) {
 	if (Dispatcher.Events.hasOwnProperty(actionType)) {
 		return Dispatcher.EventEmitter.removeListener(actionType, callback);
 	} else {
-		console.log('Dispatcher does not support this action ' + actionType);
+		throw 'Dispatcher does not support this action ' + actionType;
 	}
 };
 
@@ -9136,7 +9243,7 @@ exports.default = window.FormView = {
 		});
 	},
 	submit: function submit(model) {
-		var form = ReactDOM.findDOMNode(this);
+		var form = getRootDom(this);
 		if (form.tagName.toLowerCase() == 'form') {
 			submitForm(form);
 		} else {
@@ -9233,7 +9340,8 @@ Object.assign(window, {
 				return defaultValue;
 			},
 			set: function set(name, value) {
-				_data[name] = value;return this;
+				_data[name] = value;
+				return this;
 			},
 			assign: function assign(name, value) {
 				if (this.has(name)) Object.assign(_data[name], value);else _data[name] = Object.assign({}, value);
@@ -9254,6 +9362,9 @@ Object.assign(window, {
  * UI
  */
 Object.assign(window, {
+	getRootDom: function getRootDom(reactCpn) {
+		return ReactDOM.findDOMNode(reactCpn);
+	},
 	showLoginForm: function showLoginForm(e) {
 		if (!window.currentForm || window.currentForm != 'login') {
 			$('#form-container').hide();
@@ -9510,7 +9621,6 @@ Object.assign(window, {
 	l: function l(o, o2, o3, o4, o5, o6) {
 		console.log(o, o2, o3, o4, o5, o6, arguments);
 	},
-
 	util: {
 		clientIP: null,
 		uuid: function uuid(prefix) {
@@ -9536,7 +9646,6 @@ Object.assign(window, {
 	token: function token() {
 		return $('meta[name="csrf-token"]').attr('content');
 	},
-
 	format: {
 		currency: function currency(v) {
 			var n = parseFloat(v) != NaN ? parseFloat(v) : 0;
@@ -9560,7 +9669,10 @@ Object.assign(window, {
 			$.ajax({
 				type: type ? type : 'GET',
 				url: url,
-				data: Object.assign({ '_token': token(), 'mode': getMode() }, data),
+				data: Object.assign({
+					'_token': token(),
+					'mode': getMode()
+				}, data),
 				success: success
 			});
 		},
@@ -9573,7 +9685,7 @@ Object.assign(window, {
 		put: function put(url, success, data) {
 			this.exe(url, success, data, 'PUT');
 		},
-		delete: function _delete(url, success, data) {
+		del: function del(url, success, data) {
 			this.exe(url, success, data, 'DELETE');
 		}
 	}

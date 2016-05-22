@@ -2,6 +2,9 @@
  * UI
  */
 Object.assign(window, {
+	getRootDom(reactCpn) {
+		return ReactDOM.findDOMNode(reactCpn);
+	},
 	showLoginForm(e) {
 		if (!window.currentForm || window.currentForm != 'login') {
 			$('#form-container').hide();

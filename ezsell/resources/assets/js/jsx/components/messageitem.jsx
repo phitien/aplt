@@ -6,11 +6,11 @@ var MessageItem = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function() {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-        ui.plugins.format($(ReactDOM.findDOMNode(this)));
+        ui.plugins.format($(getRootDom(this)));
 	},
 	toggleTime(e) {
 		$(e.currentTarget).parents('.chatitem').find('.created').slideToggle();

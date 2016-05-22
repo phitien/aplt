@@ -6,8 +6,8 @@ var UserBox = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function() {});
-		Dispatcher.removeListener(Dispatcher.Events.USER_EVENT, function() {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
+		Dispatcher.removeListener(Dispatcher.Events.UPDATE_USER, this.refresh);
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -33,12 +33,12 @@ var UserBox = React.createClass({
 				const _isFollowingTo = isFollowingTo(user);
 				if (_isFollowingTo) {//unfollow
 					ajax.post('/unfollow/' + user.id, function(o) {
-						Dispatcher.emit(Dispatcher.Events.USER_EVENT, o.data);
+						Dispatcher.emit(Dispatcher.Events.UPDATE_USER, o.data);
 					});
 				}
 				else {//follow
 					ajax.post('/follow/' + user.id, function(o) {
-						Dispatcher.emit(Dispatcher.Events.USER_EVENT, o.data);
+						Dispatcher.emit(Dispatcher.Events.UPDATE_USER, o.data);
 					});
 				}
 			}

@@ -32,7 +32,5 @@ $( document ).ready(function() {
 	 */
 	ReactDOM.render(<ModeSwitch />, document.getElementById(extraDivId));
 	ReactDOM.render(<ChatBar />, document.getElementById(chatbarDivId));
-	ReactDOM.render(<Application />, document.getElementById(centerDivId), function() {
-		ui.plugins.format();
-	});
+	ReactDOM.render(<Application />, document.getElementById(centerDivId));
 });

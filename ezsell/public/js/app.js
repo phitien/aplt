@@ -78,9 +78,7 @@ $(document).ready(function () {
   */
 	ReactDOM.render(React.createElement(ModeSwitch, null), document.getElementById(extraDivId));
 	ReactDOM.render(React.createElement(ChatBar, null), document.getElementById(chatbarDivId));
-	ReactDOM.render(React.createElement(_application2.default, null), document.getElementById(centerDivId), function () {
-		ui.plugins.format();
-	});
+	ReactDOM.render(React.createElement(_application2.default, null), document.getElementById(centerDivId));
 });
 
 //
@@ -103,7 +101,7 @@ var Application = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -170,7 +168,7 @@ var BuyItemPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -251,10 +249,11 @@ var CatItemsPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
+		ui.plugins.format($(getRootDom(this)));
 	},
 	render: function render() {
 		var data = Dispatcher.Store.get(this.eventName);
@@ -341,7 +340,7 @@ var ChangeAccountPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -396,7 +395,7 @@ var ChangeEmailPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -458,7 +457,7 @@ var ChangeLocationPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -533,7 +532,7 @@ var ChangePasswordPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -586,7 +585,7 @@ var DeactivatePage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -629,7 +628,7 @@ var HomePage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -665,7 +664,7 @@ var ItemDetailsPage = React.createClass({
 	},
 
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -764,7 +763,7 @@ var LoginPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -779,9 +778,9 @@ var LoginPage = React.createClass({
 				'div',
 				{ className: className },
 				React.createElement(Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
-					validationError: localization.invalid_email, value: 'im.phitien@gmail.com' }),
+					validationError: localization.invalid_email, value: 'user@gmail.com' }),
 				React.createElement(Input, { type: 'password', required: true, name: 'password', title: localization.password,
-					validationError: localization.password_required }),
+					validationError: localization.password_required, value: 'user12' }),
 				React.createElement(Input, { type: 'checkbox', name: 'remember', title: localization.remember_me }),
 				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.login, className: 'center-block' })
 			)
@@ -811,7 +810,7 @@ var RegisterPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -861,7 +860,7 @@ var SellItemPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -942,7 +941,7 @@ var SendActivationPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
@@ -985,10 +984,11 @@ var UserItemsPage = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, function () {});
+		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
+		ui.plugins.format($(getRootDom(this)));
 	},
 	render: function render() {
 		var data = Dispatcher.Store.get(this.eventName);

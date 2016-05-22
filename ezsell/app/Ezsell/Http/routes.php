@@ -31,6 +31,7 @@ Route::any ( 'searchlocation', 'LocationController@searchlocation' );
  * chating actions
  */
 Route::post ( 'sendmessage', 'SocketController@sendmessage' );
+Route::post ( 'messages', 'SocketController@messages' );
 
 /**
  * item
