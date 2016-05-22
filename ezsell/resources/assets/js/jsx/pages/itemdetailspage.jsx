@@ -10,7 +10,6 @@ var ItemDetailsPage = React.createClass({
 	},
 	componentDidMount: function() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	handleImageLoad(event) {
 	},
@@ -25,11 +24,11 @@ var ItemDetailsPage = React.createClass({
 		if (data) {
 			var item = data.itemdetails;
 			this.id = this.id ? this.id : this.props.id ? this.props.id : util.uuid('item-list');
-			const className = 'item-details-wrapper ' + util.getAttr(this.props, 'className', '');
-			const showThumbnails = util.getAttr(this.props, 'showThumbnails', true);
-			const slideOnThumbnailHover = util.getAttr(this.props, 'slideOnThumbnailHover', true);
-			const showNav = util.getAttr(this.props, 'showNav', true);
-			const slideInterval = util.getAttr(this.props, 'slideInterval', 3000);
+			const className = 'item-details-wrapper ' + util.getClassName(this.props);
+			const showThumbnails = util.getAttr.bind(this.props)('showThumbnails', true);
+			const slideOnThumbnailHover = util.getAttr.bind(this.props)('slideOnThumbnailHover', true);
+			const showNav = util.getAttr.bind(this.props)('showNav', true);
+			const slideInterval = util.getAttr.bind(this.props)('slideInterval', 3000);
 			var images = [];
 			item.images.map(function (o, i) {
 				images.push({

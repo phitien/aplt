@@ -11,6 +11,7 @@ import FormView from './mixins/formview.jsx';
 //
 import ModeSwitch from './components/modeswitch.jsx';
 import CatMenu from './components/catmenu.jsx';
+import MessageItem from './components/messageitem.jsx';
 import UserBox from './components/userbox.jsx';
 import ChatBar from './components/chatbar.jsx';
 //
@@ -50,15 +51,5 @@ Object.assign(window, {
 			return user.followers.indexOf(_user.id) >= 0;
 		}
 		return false;
-	},
-	sendMessage(message, chatbox) {
-		if (message) {
-			const user = chatbox.props.user;
-			if (user && sessionManager.isLogged()) {
-				ajax.post('/sendmessage', function() {
-					chatbox.messageSentCallbalk(message);
-				}, {'message': message, code: user.id});
-			}
-		}
 	}
 });

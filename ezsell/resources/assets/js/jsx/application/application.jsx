@@ -11,8 +11,8 @@ var Application = React.createClass({
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
 		Dispatcher.emit(this.eventName, sessionManager.rawdata());
-		if (sessionManager.get('appMessage')) {
-			showMessageDialog(appMessage);
+		if (sessionManager.appMessage()) {
+			showMessageDialog(sessionManager.appMessage());
 		}
 	},
 	render() {
@@ -34,8 +34,18 @@ var Application = React.createClass({
 				return (<RegisterPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
 			case 'ChangeAccountPage':
 				return (<ChangeAccountPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
+			case 'ChangeEmailPage':
+				return (<ChangeEmailPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
+			case 'ChangePasswordPage':
+				return (<ChangePasswordPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
 			case 'SendActivationPage':
 				return (<SendActivationPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
+			case 'DeactivatePage':
+				return (<DeactivatePage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
+			case 'BuyItemPage':
+				return (<BuyItemPage />);
+			case 'SellItemPage':
+				return (<SellItemPage />);
 		}
 		return null;
 	}

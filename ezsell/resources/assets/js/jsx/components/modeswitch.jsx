@@ -15,14 +15,14 @@ var ModeSwitch = React.createClass({
 	},
 	render() { 
 		return (
-			<FormView.Form className='form' method='get' encType='multipart/form-data'
+			<Form className='form' method='get' encType='multipart/form-data'
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-				<FormView.Input type='switch' name='mode' title={localization.mode}
+				<Input type='switch' name='mode' title={localization.mode}
 					defaultChecked={getMode() == sessionManager.get('MODES').SELL ? true : false} 
 					checkedChildren={localization.sell}
     				unCheckedChildren={localization.buy}
     				onMouseUp={this.props.onMouseUp} />
-			</FormView.Form>
+			</Form>
 		); 
 	}
 });

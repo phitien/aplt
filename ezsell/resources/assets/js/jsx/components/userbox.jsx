@@ -15,11 +15,12 @@ var UserBox = React.createClass({
 	},
 	onChatClick(e) {
 		const user = this.props.user;
+		const itemId = this.props.itemId;
 		if (user) {
 			const _isGuest = sessionManager.get('isGuest', true);
 			const _isCurrentUser = isCurrentUser(user);
 			if (!_isGuest && !_isCurrentUser) {
-				Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user);
+				Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user, itemId);
 			}
 		}
 	},
@@ -50,7 +51,7 @@ var UserBox = React.createClass({
 			const _isCurrentUser = isCurrentUser(user);
 			const _isFollowingTo = isFollowingTo(user);
 
-			const className = 'userbox ' + util.getAttr(this.props, 'className', '');
+			const className = 'userbox ' + util.getClassName(this.props);
 			const iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
 			const iconChatTitle = _isGuest ? localization.please_login_first : 
 				_isCurrentUser ? localization.cannot_chat_with_yourself : 'Send message';

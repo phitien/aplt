@@ -24,12 +24,19 @@ trait  InfoTrait {
 			if (is_string ( $ids )) {
 				$ids = explode ( ',', $ids );
 				if ($ids) {
-					$users = Info::whereIn ( 'id', $ids )->get ();
-					$info = [ ];
-					foreach ( $users as $user ) {
-						$info [$user->id] = $user;
+					if ($request->input ( 'first' )) {
+						$info = Info::find ( $ids [0] );
+						if ($info) {
+							return $this->jsonResponse ( 'user_info', $info );
+						}
+					} else {
+						$users = Info::whereIn ( 'id', $ids )->get ();
+						$info = [ ];
+						foreach ( $users as $user ) {
+							$info [$user->id] = $user;
+						}
+						return $this->jsonResponse ( 'users_info', $info );
 					}
-					return $this->jsonResponse ( 'users_info', $info );
 				}
 			}
 		} else {

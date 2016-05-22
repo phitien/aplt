@@ -11,7 +11,6 @@ var CatItemsPage = React.createClass({
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	render() {
 		const data = Dispatcher.Store.get(this.eventName);
@@ -37,7 +36,7 @@ var CatItemsPage = React.createClass({
 						<div className='row item-list'>
 							{items.map(function (item, i) {
 								var itemClassName = 'col-xs-6 col-md-2 item ' + (i==0?'item-first':'');
-								var userbox = isCurrentUser(item.user) ? null : <UserBox user={item.user} />; 
+								var userbox = isCurrentUser(item.user) ? null : <UserBox user={item.user} itemId={item.id}/>; 
 								return (
 									<div className={itemClassName} key={i}>
 										<ItemImage item={item} />

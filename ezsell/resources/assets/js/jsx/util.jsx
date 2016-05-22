@@ -2,13 +2,16 @@
  * Util
  */
 Object.assign(window, {
+	l(o, o2, o3, o4, o5, o6){
+		console.log(o, o2, o3, o4, o5, o6, arguments);
+	},
 	util: {
 		clientIP: null,
 		uuid (prefix) {return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);},
 		ip() {return this.clientIP;},
-		getAttr(o, name, defaultValue) {
-			if (o.hasOwnProperty(name))
-				return o[name];
+		getAttr(name, defaultValue) {
+			if (this.hasOwnProperty(name))
+				return this[name];
 			return defaultValue;
 		},
 		getClassName(o, defaultValue) {
@@ -46,5 +49,5 @@ Object.assign(window, {
 		post(url, success, data) {this.exe(url, success, data, 'POST');},
 		put(url, success, data) {this.exe(url, success, data, 'PUT');},
 		delete(url, success, data) {this.exe(url, success, data, 'DELETE');}  
-	},
+	}
 });

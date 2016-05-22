@@ -89,7 +89,7 @@ const MenuItem = React.createClass({
  */
 const Menu = React.createClass({
 	render() {
-		const className = util.getAttr(this.props, 'className', '');
+		const className = util.getClassName(this.props);
 		const me = this;
 		return (
 			<ul className={className}>
@@ -125,8 +125,8 @@ const CatMenu = React.createClass({
 		return '';
 	},
 	render() {
-		const className = 'catmenu ' + util.getAttr(this.props, 'className', '');
-		const showRoot = util.getAttr(this.props, 'showRoot', true);
+		const className = 'catmenu ' + util.getClassName(this.props);
+		const showRoot = util.getAttr.bind(this.props)('showRoot', true);
 		const items = showRoot ? this.props.items : this.props.items[0].children;
 		return (
 			<Menu className={className} items={items} 

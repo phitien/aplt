@@ -6,54 +6,39 @@ var ChatBox = React.createClass({
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
-		Dispatcher.removeListener(Dispatcher.Events.UPDATE_USER, function() {});
-		Dispatcher.removeListener(Dispatcher.Events.UPDATE_MESSAGE, function() {});
 		Dispatcher.removeListener(this.eventName, function() {});
 	},
 	componentDidMount() {
-		Dispatcher.addListener(Dispatcher.Events.UPDATE_USER, this.refresh);
 		Dispatcher.addListener(this.eventName, this.refresh);
-		Dispatcher.addListener(Dispatcher.Events.UPDATE_MESSAGE, this.addMessage);
 	},
 	onKeyPress(e) {
 		if (e.which == 13) {
 			this.send(e.currentTarget.value);
+			$(e.currentTarget).val('');
 		}
 	},
 	onSend(e) {
 		this.send($(e.currentTarget).parents().find('input[type=text]').val());
+		$(e.currentTarget).parents().find('input[type=text]').val('');
 	},
 	send(message) {
-		sendMessage(message, this);
-	},
-	messageSentCallbalk(message, user) {
-		var $o = $(ReactDOM.findDOMNode(this));
-		//add sent message
-		$o.find('.messages').append('<div class="myitem">' + message + '</div>');
-		//clear textbox
-		$o.find('input[type=text]').val('');
-	},
-	addMessage(data) {
-		const user = Dispatcher.Store.get(this.eventName, this.props.user.id);
-		var _isCurrentUser = isCurrentUser(data.user);
-		if (!_isCurrentUser && data.message && data.user && data.user.id == user.id) {
-			var $o = $(ReactDOM.findDOMNode(this));
-			var classname = data.user.gender == 'MALE' ? 'hisitem' : 'heritem';
-			$o.find('.messages').append('<div class="' + classname + '">' + data.message + '</div>');
+		const receiver = Dispatcher.Store.get(this.eventName, this.props.user.id);
+		if (receiver && message) {
+			if (sessionManager.isLogged()) {
+				ajax.post('/sendmessage', function(response) {
+					Dispatcher.emit(Dispatcher.Events.SENT_MESSAGE, response.data);
+				}, {'message': message, code: receiver.id, id: receiver.itemId});
+			}
 		}
 	},
 	render(){
 		const user = Dispatcher.Store.get(this.eventName, this.props.user.id);
 		if (user) {
-			const _isGuest = sessionManager.get('isGuest', true);
-			const _isCurrentUser = isCurrentUser(user);
-			const _isFollowingTo = isFollowingTo(user);
-			const _isFollowerOf = isFollowerOf(user);
-
-			const className = 'chatbox ' + util.getAttr(this.props, 'className', '');
+			const className = 'chatbox ' + util.getClassName(this.props);
 			const avatar = user && user.avatar ? user.avatar : 
 				(user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman'));
 			const href = '/' + user.name; 
+			const messages = util.getAttr.bind(user)('messages', []);
 			return (
 				<div className={className}>
 					<div className='header'>
@@ -63,7 +48,11 @@ var ChatBox = React.createClass({
 						<div className='maximize'>{localization.maximize_sign}</div>
 						<div className='clearfix'></div>
 					</div>
-					<div className='messages'></div>
+					<div className='messages'>
+						{messages.map(function(item, i) {
+							return <MessageItem message={item} key={i} />;
+						})}
+					</div>
 					<div className='send'>
 						<input type='text' className='' onKeyPress={this.onKeyPress} />
 						<input type='button' value={localization.send} onClick={this.onSend} />

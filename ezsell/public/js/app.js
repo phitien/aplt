@@ -37,6 +37,26 @@ var _sendactivationpage = require('./pages/sendactivationpage.jsx');
 
 var _sendactivationpage2 = _interopRequireDefault(_sendactivationpage);
 
+var _deactivatepage = require('./pages/deactivatepage.jsx');
+
+var _deactivatepage2 = _interopRequireDefault(_deactivatepage);
+
+var _changeemailpage = require('./pages/changeemailpage.jsx');
+
+var _changeemailpage2 = _interopRequireDefault(_changeemailpage);
+
+var _changepasswordpage = require('./pages/changepasswordpage.jsx');
+
+var _changepasswordpage2 = _interopRequireDefault(_changepasswordpage);
+
+var _buyitempage = require('./pages/buyitempage.jsx');
+
+var _buyitempage2 = _interopRequireDefault(_buyitempage);
+
+var _sellitempage = require('./pages/sellitempage.jsx');
+
+var _sellitempage2 = _interopRequireDefault(_sellitempage);
+
 var _application = require('./application/application.jsx');
 
 var _application2 = _interopRequireDefault(_application);
@@ -57,12 +77,15 @@ $(document).ready(function () {
   * add mode switch
   */
 	ReactDOM.render(React.createElement(ModeSwitch, null), document.getElementById(extraDivId));
-	ReactDOM.render(React.createElement(_application2.default, null), document.getElementById(centerDivId));
 	ReactDOM.render(React.createElement(ChatBar, null), document.getElementById(chatbarDivId));
+	ReactDOM.render(React.createElement(_application2.default, null), document.getElementById(centerDivId), function () {
+		ui.plugins.format();
+	});
 });
+
 //
 
-},{"./application/application.jsx":2,"./pages/catitemspage.jsx":3,"./pages/changeaccountpage.jsx":4,"./pages/changelocationpage.jsx":5,"./pages/homepage.jsx":6,"./pages/itemdetailspage.jsx":7,"./pages/loginpage.jsx":8,"./pages/registerpage.jsx":9,"./pages/sendactivationpage.jsx":10,"./pages/useritemspage.jsx":11}],2:[function(require,module,exports){
+},{"./application/application.jsx":2,"./pages/buyitempage.jsx":3,"./pages/catitemspage.jsx":4,"./pages/changeaccountpage.jsx":5,"./pages/changeemailpage.jsx":6,"./pages/changelocationpage.jsx":7,"./pages/changepasswordpage.jsx":8,"./pages/deactivatepage.jsx":9,"./pages/homepage.jsx":10,"./pages/itemdetailspage.jsx":11,"./pages/loginpage.jsx":12,"./pages/registerpage.jsx":13,"./pages/sellitempage.jsx":14,"./pages/sendactivationpage.jsx":15,"./pages/useritemspage.jsx":16}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -85,8 +108,8 @@ var Application = React.createClass({
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
 		Dispatcher.emit(this.eventName, sessionManager.rawdata());
-		if (sessionManager.get('appMessage')) {
-			showMessageDialog(appMessage);
+		if (sessionManager.appMessage()) {
+			showMessageDialog(sessionManager.appMessage());
 		}
 	},
 	render: function render() {
@@ -108,8 +131,18 @@ var Application = React.createClass({
 				return React.createElement(RegisterPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
 			case 'ChangeAccountPage':
 				return React.createElement(ChangeAccountPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+			case 'ChangeEmailPage':
+				return React.createElement(ChangeEmailPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+			case 'ChangePasswordPage':
+				return React.createElement(ChangePasswordPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
 			case 'SendActivationPage':
 				return React.createElement(SendActivationPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+			case 'DeactivatePage':
+				return React.createElement(DeactivatePage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+			case 'BuyItemPage':
+				return React.createElement(BuyItemPage, null);
+			case 'SellItemPage':
+				return React.createElement(SellItemPage, null);
 		}
 		return null;
 	}
@@ -119,6 +152,87 @@ window.Application = Application;
 exports.default = window.Application;
 
 },{}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * BuyItemPage defination
+ */
+var BuyItemPage = React.createClass({
+	displayName: 'BuyItemPage',
+
+	mixins: [FormView],
+	eventName: Dispatcher.Events.UPDATE_BUYITEMPAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		var className = 'form row ' + util.getClassName(this.props);
+		var catoptions = [];
+		$(sessionManager.cats()).each(function (i, root) {
+			$(root.children).each(function (j, cat) {
+				$(cat.children).each(function (k, subcat) {
+					catoptions.push({
+						label: cat.details.name + ' >> ' + subcat.details.name,
+						value: subcat.id
+					});
+				});
+			});
+		});
+		var conditions = [{
+			label: localization.new,
+			value: 1
+		}, {
+			label: localization.used,
+			value: 0
+		}];
+		return React.createElement(
+			Form,
+			{ className: className, method: 'post', action: '/buyitem', encType: 'multipart/form-data',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: 'row' },
+				React.createElement(Input, { type: 'select', required: true, name: 'parent_id', title: localization.category, options: catoptions,
+					className: 'col-xs-6 col-md-5', placeholder: localization.select_category }),
+				React.createElement(Input, { type: 'image', required: true, name: 'files', title: localization.images, cols: '4', multiple: true, min: '1', max: '12',
+					className: 'col-xs-6 col-md-3', previewContainer: '.image-preview-container' }),
+				React.createElement(Input, { type: 'radiolist', name: 'is_new', required: true, title: localization.condition, options: conditions,
+					className: 'col-xs-6 col-md-4 inline-block-list' })
+			),
+			React.createElement(
+				'div',
+				{ className: 'row' },
+				React.createElement(Input, { type: 'text', required: true, name: 'title', title: localization.title,
+					className: 'col-xs-6 col-md-5', placeholder: localization.title_hint }),
+				React.createElement(Input, { type: 'date', name: 'deleted_at', title: localization.expire,
+					className: 'col-xs-6 col-md-3', min: format.date(new Date(), 'yyyy-MM-dd') }),
+				React.createElement(Input, { type: 'number', name: 'originalprice', title: localization.min_price,
+					className: 'col-xs-6 col-md-2', step: '0.1', min: '0', placeholder: '1.0' }),
+				React.createElement(Input, { type: 'number', name: 'nowprice', title: localization.max_price,
+					className: 'col-xs-6 col-md-2', step: '0.1', min: '0', placeholder: '1.0' })
+			),
+			React.createElement(Input, { type: 'textarea', name: 'description', title: localization.description, cols: '10', rows: '4', placeholder: localization.description_hint }),
+			React.createElement(Input, { type: 'hidden', required: true, name: 'is_selling', value: '0' }),
+			React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.buy, className: 'btn-fixed-right' }),
+			React.createElement('div', { className: 'row image-preview image-preview-container' })
+		);
+	}
+});
+
+window.BuyItemPage = BuyItemPage;
+exports.default = window.BuyItemPage;
+
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -141,7 +255,6 @@ var CatItemsPage = React.createClass({
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	render: function render() {
 		var data = Dispatcher.Store.get(this.eventName);
@@ -190,7 +303,7 @@ var CatItemsPage = React.createClass({
 						{ className: 'row item-list' },
 						items.map(function (item, i) {
 							var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
-							var userbox = isCurrentUser(item.user) ? null : React.createElement(UserBox, { user: item.user });
+							var userbox = isCurrentUser(item.user) ? null : React.createElement(UserBox, { user: item.user, itemId: item.id });
 							return React.createElement(
 								'div',
 								{ className: itemClassName, key: i },
@@ -210,7 +323,7 @@ var CatItemsPage = React.createClass({
 window.CatItemsPage = CatItemsPage;
 exports.default = window.CatItemsPage;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -236,27 +349,27 @@ var ChangeAccountPage = React.createClass({
 	formrender: function formrender() {
 		var className = util.getClassName(this.props);
 		return React.createElement(
-			FormView.Form,
+			Form,
 			{ className: 'form row', method: 'post', action: '/account',
 				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
 			React.createElement(
 				'div',
 				{ className: className },
-				React.createElement(FormView.Input, { type: 'password', required: true, name: 'current_password', title: localization.password,
+				React.createElement(Input, { type: 'password', required: true, name: 'current_password', title: localization.password,
 					validationError: localization.password_required }),
-				React.createElement(FormView.Input, { type: 'text', required: true, name: 'name', title: localization.account, validations: {
+				React.createElement(Input, { type: 'text', required: true, name: 'name', title: localization.account, validations: {
 						notEqualsIgnoreCase: sessionManager.user.name,
 						isAccountName: true
 					}, validationErrors: {
 						notEqualsIgnoreCase: localization.new_account_should_be_different,
 						isAccountName: localization.invalid_account
 					} }),
-				React.createElement(FormView.Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.change, className: 'center-block' })
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.change, className: 'center-block' })
 			)
 		);
 	},
 	render: function render() {
-		var className = 'change-account-form ' + util.getAttr(this.props, 'className', '');
+		var className = 'change-account-form ' + util.getClassName(this.props);
 		return React.createElement(FormView, { className: className, formrender: this.formrender });
 	}
 });
@@ -264,7 +377,60 @@ var ChangeAccountPage = React.createClass({
 window.ChangeAccountPage = ChangeAccountPage;
 exports.default = window.ChangeAccountPage;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * ChangeEmailPage defination
+ */
+var ChangeEmailPage = React.createClass({
+	displayName: 'ChangeEmailPage',
+
+	mixins: [FormView],
+	eventName: Dispatcher.Events.UPDATE_LOGINPAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		var className = util.getClassName(this.props);
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/email', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: className },
+				React.createElement(Input, { type: 'password', required: true, name: 'current_password', title: localization.password,
+					validationError: localization.password_required }),
+				React.createElement(Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: {
+						isEmail: true,
+						notEqualsIgnoreCase: sessionManager.user().email
+					}, validationErrors: {
+						isEmail: localization.invalid_email,
+						notEqualsIgnoreCase: localization.new_email_should_be_different
+					} }),
+				React.createElement(Input, { type: 'email', name: 'email_confirmation', title: localization.email_confirmation, validations: 'equalsField:email',
+					validationError: localization.email_confirmation_not_matched }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.change, className: 'center-block' })
+			)
+		);
+	}
+});
+
+window.ChangeEmailPage = ChangeEmailPage;
+exports.default = window.ChangeEmailPage;
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -332,13 +498,13 @@ var ChangeLocationPage = React.createClass({
 	render: function render() {
 		var className = util.getClassName(this.props);
 		return React.createElement(
-			FormView.Form,
+			Form,
 			{ className: 'form row', method: 'post', action: '/location', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
 				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
 			React.createElement(
 				'div',
 				{ className: className },
-				React.createElement(FormView.Input, { type: 'autocomplete', name: 'location', title: localization.location, source: '/searchlocation', className: 'center-block',
+				React.createElement(Input, { type: 'autocomplete', name: 'location', title: localization.location, source: '/searchlocation', className: 'center-block',
 					value: sessionManager.location().name, placeholder: localization.please_type_location })
 			)
 		);
@@ -348,7 +514,104 @@ var ChangeLocationPage = React.createClass({
 window.ChangeLocationPage = ChangeLocationPage;
 exports.default = window.ChangeLocationPage;
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * ChangePasswordPage defination
+ */
+var ChangePasswordPage = React.createClass({
+	displayName: 'ChangePasswordPage',
+
+	mixins: [FormView],
+	eventName: Dispatcher.Events.UPDATE_CHANGPASSWORDPAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		var className = util.getClassName(this.props);
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/password', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: className },
+				React.createElement(Input, { type: 'password', required: true, name: 'current_password', title: localization.current_password,
+					validationError: localization.password_required }),
+				React.createElement(Input, { type: 'password', required: true, name: 'password', title: 'New password', validations: {
+						notEqualsField: 'current_password',
+						isPassword: true
+					}, validationErrors: {
+						notEqualsField: localization.new_password_should_be_different,
+						isPasword: localization.password_rules
+					} }),
+				React.createElement(Input, { type: 'password', name: 'password_confirmation', title: localization.password_confirmation, validations: 'equalsField:password',
+					validationError: localization.password_confirmation_not_matched }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.change, className: 'center-block' })
+			)
+		);
+	}
+});
+
+window.ChangePasswordPage = ChangePasswordPage;
+exports.default = window.ChangePasswordPage;
+
+},{}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * DeactivatePage defination
+ */
+var DeactivatePage = React.createClass({
+	displayName: 'DeactivatePage',
+
+	mixins: [FormView],
+	eventName: Dispatcher.Events.UPDATE_DEACTIVATEPAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		var className = util.getClassName(this.props);
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/deactivate', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: className },
+				React.createElement(Input, { type: 'password', required: true, name: 'current_password', title: localization.password,
+					validationError: localization.password_required }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.deactivate, className: 'center-block' })
+			)
+		);
+	}
+});
+
+window.DeactivatePage = DeactivatePage;
+exports.default = window.DeactivatePage;
+
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -383,7 +646,7 @@ var HomePage = React.createClass({
 window.HomePage = HomePage;
 exports.default = window.HomePage;
 
-},{}],7:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -406,7 +669,6 @@ var ItemDetailsPage = React.createClass({
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	handleImageLoad: function handleImageLoad(event) {},
 	handlePlay: function handlePlay() {
@@ -422,11 +684,11 @@ var ItemDetailsPage = React.createClass({
 		if (data) {
 			var item = data.itemdetails;
 			this.id = this.id ? this.id : this.props.id ? this.props.id : util.uuid('item-list');
-			var className = 'item-details-wrapper ' + util.getAttr(this.props, 'className', '');
-			var showThumbnails = util.getAttr(this.props, 'showThumbnails', true);
-			var slideOnThumbnailHover = util.getAttr(this.props, 'slideOnThumbnailHover', true);
-			var showNav = util.getAttr(this.props, 'showNav', true);
-			var slideInterval = util.getAttr(this.props, 'slideInterval', 3000);
+			var className = 'item-details-wrapper ' + util.getClassName(this.props);
+			var showThumbnails = util.getAttr.bind(this.props)('showThumbnails', true);
+			var slideOnThumbnailHover = util.getAttr.bind(this.props)('slideOnThumbnailHover', true);
+			var showNav = util.getAttr.bind(this.props)('showNav', true);
+			var slideInterval = util.getAttr.bind(this.props)('slideInterval', 3000);
 			var images = [];
 			item.images.map(function (o, i) {
 				images.push({
@@ -483,7 +745,7 @@ var ItemDetailsPage = React.createClass({
 window.ItemDetailsPage = ItemDetailsPage;
 exports.default = window.ItemDetailsPage;
 
-},{}],8:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -510,18 +772,18 @@ var LoginPage = React.createClass({
 	render: function render() {
 		var className = util.getClassName(this.props);
 		return React.createElement(
-			FormView.Form,
+			Form,
 			{ className: 'form row', method: 'post', action: '/login', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
 				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
 			React.createElement(
 				'div',
 				{ className: className },
-				React.createElement(FormView.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
+				React.createElement(Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
 					validationError: localization.invalid_email, value: 'im.phitien@gmail.com' }),
-				React.createElement(FormView.Input, { type: 'password', required: true, name: 'password', title: localization.password,
+				React.createElement(Input, { type: 'password', required: true, name: 'password', title: localization.password,
 					validationError: localization.password_required }),
-				React.createElement(FormView.Input, { type: 'checkbox', name: 'remember', title: localization.remember_me }),
-				React.createElement(FormView.Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.login, className: 'center-block' })
+				React.createElement(Input, { type: 'checkbox', name: 'remember', title: localization.remember_me }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.login, className: 'center-block' })
 			)
 		);
 	}
@@ -530,7 +792,7 @@ var LoginPage = React.createClass({
 window.LoginPage = LoginPage;
 exports.default = window.LoginPage;
 
-},{}],9:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -557,21 +819,21 @@ var RegisterPage = React.createClass({
 	render: function render() {
 		var className = util.getClassName(this.props);
 		return React.createElement(
-			FormView.Form,
+			Form,
 			{ className: 'form row', method: 'post', action: '/register', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
 				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
 			React.createElement(
 				'div',
 				{ className: className },
-				React.createElement(FormView.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
+				React.createElement(Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
 					validationError: localization.invalid_email }),
-				React.createElement(FormView.Input, { type: 'email', name: 'email_confirmation', title: localization.email_confirmation, validations: 'equalsField:email',
+				React.createElement(Input, { type: 'email', name: 'email_confirmation', title: localization.email_confirmation, validations: 'equalsField:email',
 					validationError: localization.email_confirmation_not_matched }),
-				React.createElement(FormView.Input, { type: 'password', required: true, name: 'password', title: localization.password, validations: 'isPassword',
+				React.createElement(Input, { type: 'password', required: true, name: 'password', title: localization.password, validations: 'isPassword',
 					validationError: localization.password_rules }),
-				React.createElement(FormView.Input, { type: 'password', name: 'password_confirmation', title: localization.password_confirmation, validations: 'equalsField:password',
+				React.createElement(Input, { type: 'password', name: 'password_confirmation', title: localization.password_confirmation, validations: 'equalsField:password',
 					validationError: localization.password_confirmation_not_matched }),
-				React.createElement(FormView.Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.register, className: 'center-block' })
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.register, className: 'center-block' })
 			)
 		);
 	}
@@ -580,7 +842,88 @@ var RegisterPage = React.createClass({
 window.RegisterPage = RegisterPage;
 exports.default = window.RegisterPage;
 
-},{}],10:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
+ * SellItemPage defination
+ */
+var SellItemPage = React.createClass({
+	displayName: 'SellItemPage',
+
+	mixins: [FormView],
+	eventName: Dispatcher.Events.UPDATE_BUYITEMPAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		var className = 'form row ' + util.getClassName(this.props);
+		var catoptions = [];
+		$(sessionManager.cats([])).each(function (i, root) {
+			$(root.children).each(function (j, cat) {
+				$(cat.children).each(function (k, subcat) {
+					catoptions.push({
+						label: cat.details.name + ' >> ' + subcat.details.name,
+						value: subcat.id
+					});
+				});
+			});
+		});
+		var conditions = [{
+			label: localization.new,
+			value: 1
+		}, {
+			label: localization.used,
+			value: 0
+		}];
+		return React.createElement(
+			Form,
+			{ className: className, method: 'post', action: '/sellitem', encType: 'multipart/form-data',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: 'row' },
+				React.createElement(Input, { type: 'select', required: true, name: 'parent_id', title: localization.category, options: catoptions,
+					className: 'col-xs-6 col-md-5', placeholder: localization.select_category }),
+				React.createElement(Input, { type: 'image', required: true, name: 'files', title: localization.images, cols: '4', multiple: true, min: '1', max: '12',
+					className: 'col-xs-6 col-md-3', previewContainer: '.image-preview-container' }),
+				React.createElement(Input, { type: 'radiolist', name: 'is_new', required: true, title: localization.condition, options: conditions,
+					className: 'col-xs-6 col-md-4 inline-block-list' })
+			),
+			React.createElement(
+				'div',
+				{ className: 'row' },
+				React.createElement(Input, { type: 'text', required: true, name: 'title', title: localization.title,
+					className: 'col-xs-6 col-md-5', placeholder: localization.title_hint }),
+				React.createElement(Input, { type: 'date', name: 'deleted_at', title: localization.expire,
+					className: 'col-xs-6 col-md-3', min: format.date(new Date(), 'yyyy-MM-dd') }),
+				React.createElement(Input, { type: 'number', name: 'originalprice', title: localization.original_price,
+					className: 'col-xs-6 col-md-2', step: '0.1', min: '0', placeholder: '1.0' }),
+				React.createElement(Input, { type: 'number', name: 'nowprice', title: localization.now_price,
+					className: 'col-xs-6 col-md-2', step: '0.1', min: '0', placeholder: '1.0' })
+			),
+			React.createElement(Input, { type: 'textarea', name: 'description', title: localization.description, cols: '10', rows: '4', placeholder: localization.description_hint }),
+			React.createElement(Input, { type: 'hidden', required: true, name: 'is_selling', value: '1' }),
+			React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.sell, className: 'btn-fixed-right' }),
+			React.createElement('div', { className: 'row image-preview image-preview-container' })
+		);
+	}
+});
+
+window.SellItemPage = SellItemPage;
+exports.default = window.SellItemPage;
+
+},{}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -607,15 +950,15 @@ var SendActivationPage = React.createClass({
 	render: function render() {
 		var className = util.getClassName(this.props);
 		return React.createElement(
-			FormView.Form,
+			Form,
 			{ className: 'form row', method: 'post', action: '/code', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
 				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
 			React.createElement(
 				'div',
 				{ className: className },
-				React.createElement(FormView.Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
+				React.createElement(Input, { type: 'email', required: true, name: 'email', title: localization.email, validations: 'isEmail',
 					validationError: localization.invalid_email }),
-				React.createElement(FormView.Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.send, className: 'center-block' })
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: localization.send, className: 'center-block' })
 			)
 		);
 	}
@@ -624,7 +967,7 @@ var SendActivationPage = React.createClass({
 window.SendActivationPage = SendActivationPage;
 exports.default = window.SendActivationPage;
 
-},{}],11:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -646,7 +989,6 @@ var UserItemsPage = React.createClass({
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	render: function render() {
 		var data = Dispatcher.Store.get(this.eventName);

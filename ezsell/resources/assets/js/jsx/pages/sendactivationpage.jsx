@@ -15,14 +15,14 @@ var SendActivationPage = React.createClass({
 	render() {
 		const className = util.getClassName(this.props);
 		return (
-			<FormView.Form className='form row' method='post' action='/code' autocomplete='off' onkeypress='return event.keyCode != 13;'
+			<Form className='form row' method='post' action='/code' autocomplete='off' onkeypress='return event.keyCode != 13;'
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 				<div className={className}>
-					<FormView.Input type='email' required name='email' title={localization.email} validations='isEmail' 
+					<Input type='email' required name='email' title={localization.email} validations='isEmail' 
 						validationError={localization.invalid_email} />
-					<FormView.Input type='submit' name='btn-submit' disabled={!this.state.canSubmit} value={localization.send} className='center-block' />
+					<Input type='submit' name='btn-submit' disabled={!this.state.canSubmit} value={localization.send} className='center-block' />
 				</div>
-			</FormView.Form>
+			</Form>
 		); 
 	}
 });

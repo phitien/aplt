@@ -44,9 +44,13 @@ Formsy.addValidationRule('isAccountName', function (values, value) {
 	return false;
 });
 /**
+ * Form defination
+ */
+window.Form = Formsy.Form;
+/**
  * Input defination
  */
-const Input = React.createClass({
+window.Input = React.createClass({
 	mixins: [Formsy.Mixin],
 	className: '',
 	type: 'text',
@@ -264,11 +268,9 @@ const Input = React.createClass({
 	}
 });
 /**
- * FormView defination
+ * FormView mixin defination
  */
 export default window.FormView = {
-	Input: Input,
-	Form: Formsy.Form,
 	getInitialState() {
 		return {
 			canSubmit: false

@@ -56,13 +56,13 @@ var ChangeLocationPage = React.createClass({
 	render() {
 		const className = util.getClassName(this.props);
 		return (
-			<FormView.Form className='form row' method='post' action='/location' autocomplete='off' onkeypress='return event.keyCode != 13;'
+			<Form className='form row' method='post' action='/location' autocomplete='off' onkeypress='return event.keyCode != 13;'
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
 				<div className={className}>
-					<FormView.Input type='autocomplete' name='location' title={localization.location} source='/searchlocation' className='center-block' 
+					<Input type='autocomplete' name='location' title={localization.location} source='/searchlocation' className='center-block' 
 						value={sessionManager.location().name} placeholder={localization.please_type_location} />
 				</div>
-			</FormView.Form>
+			</Form>
 		); 
 	}
 });

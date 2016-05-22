@@ -10,7 +10,6 @@ var UserItemsPage = React.createClass({
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		ui.plugins.format($(ReactDOM.findDOMNode(this)));
 	},
 	render() {
 		const data = Dispatcher.Store.get(this.eventName);

@@ -16,13 +16,21 @@ Dispatcher.Events = KeyMirror({
 	UPDATE_ITEMDETAILSPAGE: null,
 	UPDATE_LOGINPAGE: null,
 	UPDATE_CHANGEACCOUNTPAGE: null,
+	UPDATE_CHANGEEMAILPAGE: null,
+	UPDATE_CHANGPASSWORDPAGE: null,
 	UPDATE_SENDACTIVATIONPAGE: null,
 	UPDATE_REGISTERPAGE: null,
 	UPDATE_CHANGELOCATIONPAGE: null,
+	UPDATE_DEACTIVATEPAGE: null,
+	UPDATE_BUYITEMPAGE: null,
+	UPDATE_SELLITEMPAGE: null,
+	UPDATE_MESSAGE: null,
+	
+	SENT_MESSAGE: null,
+	RECEIVED_MESSAGE: null,
 	
 	UPDATE_ITEM: null,
 	UPDATE_USER: null,
-	UPDATE_MESSAGE: null,
 	UPDATE_CHATBOX: null,
 	UPDATE_CHATBAR: null,
 	ADD_CHATBOX: null,
@@ -90,8 +98,6 @@ Dispatcher.Store = (function() {
 					return null;
 				case Dispatcher.Events.UPDATE_USER:
 					return _data.lastUpdatedUser;
-				case Dispatcher.Events.UPDATE_MESSAGE:
-					return _data.lastMessage;
 				case Dispatcher.Events.UPDATE_CHATBOX:
 					return getChatUser(arguments[1]);
 				case Dispatcher.Events.ADD_CHATBOX:
@@ -99,7 +105,7 @@ Dispatcher.Store = (function() {
 					return _data.chatusers;
 			}
 		},
-		set: function(actionType,  data) {
+		set: function(actionType,  data, params) {
 			switch(actionType) {
 				case Dispatcher.Events.UPDATE_APPLICATION:
 					_data.application = data;
@@ -145,21 +151,40 @@ Dispatcher.Store = (function() {
 				case Dispatcher.Events.UPDATE_USER:
 					_data.lastUpdatedUser = data;
 					break;
-				case Dispatcher.Events.UPDATE_MESSAGE:
-					var json = JSON.parse(data);
-					if (json && json.user) {
-						_data.lastMessage = json;
-						var user = getChatUser(json.user.id);
-						if (!user && !isCurrentUser(json.user)) {
-							Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, json.user);
+				case Dispatcher.Events.SENT_MESSAGE:
+					var receiver = data.receiver;
+					if (receiver) {
+						var chattingUser = getChatUser(receiver.id);
+						if (chattingUser) {
+							if (!chattingUser.messages)
+								chattingUser.messages = [];
+							chattingUser.messages.push(data);
+							setChatUser(receiver.id, chattingUser);
+							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBOX);
+						}
+					}
+					break;
+				case Dispatcher.Events.RECEIVED_MESSAGE:
+					var sender = data.sender
+					if (sender) {
+						var chattingUser = getChatUser(sender.id);
+						if (chattingUser) {
+							if (!chattingUser.messages)
+								chattingUser.messages = [];
+							chattingUser.messages.push(data);
+							setChatUser(sender.id, chattingUser);
+							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBOX);
 						}
 					}
 					break;
 				case Dispatcher.Events.ADD_CHATBOX:
 					if (data && data.id && data.displayname && _data.chatusers.indexOf(data) < 0) {
 						var user = getChatUser(data.id);
-						if (!user)
+						if (!user) {
+							if (params[2])
+								data.itemId = params[2];
 							_data.chatusers.push(data);
+						} 
 					}
 					actionType = Dispatcher.Events.UPDATE_CHATBAR;
 					break;
@@ -180,7 +205,7 @@ Dispatcher.register(function(action) {
 
 Dispatcher.emit = function(actionType, _data) {
 	if (Dispatcher.Events.hasOwnProperty(actionType)) {
-		return Dispatcher.Store.set(actionType, _data);
+		return Dispatcher.Store.set(actionType, _data, arguments);
 	}
 	else {
 		console.log('Dispatcher does not support this action ' + actionType);

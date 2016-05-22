@@ -29,11 +29,7 @@ class Item extends Model {
 			'deleted_at' 
 	];
 	protected $hidden = [ ];
-	protected $dates = [ 
-			'created_at',
-			'updated_at',
-			'deleted_at' 
-	];
+	protected $dates = [ ];
 	protected $casts = [ 
 			'active' => 'boolean',
 			'is_selling' => 'boolean',

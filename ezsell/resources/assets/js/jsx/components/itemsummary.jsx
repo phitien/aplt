@@ -14,10 +14,10 @@ var ItemSummary = React.createClass({
 	render() {
 		const item = Dispatcher.Store.get(this.eventName, this.props.item.id);
 		if (item) {
-			const prices = util.getAttr(this.props, 'prices', 'original,sale,now').split(',');
-			const className = 'item-summary ' + util.getAttr(this.props, 'className', '') + (item.liked ? ' liked' : ' unliked');
+			const prices = util.getAttr.bind(this.props)('prices', 'original,sale,now').split(',');
+			const className = 'item-summary ' + util.getClassName(this.props) + (item.liked ? ' liked' : ' unliked');
 			const iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
-			const showLink = util.getAttr(this.props, 'showLink', true);
+			const showLink = util.getAttr.bind(this.props)('showLink', true);
 			const href = showLink ? '/item/' + (sessionManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
 			var price_list = 
 				<div className='item-prices'>{prices.map(function (o, i) {

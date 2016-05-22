@@ -17,7 +17,7 @@ var ChatBar = React.createClass({
 	render(){
 		const users = Dispatcher.Store.get(this.eventName);
 		if (users && users.length) {
-			const className = 'chatbar ' + util.getAttr(this.props, 'className', '');
+			const className = 'chatbar ' + util.getClassName(this.props);
 			return (
 				<div className={className}>
 					{users.map(function (user, i) {

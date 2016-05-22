@@ -7,6 +7,12 @@ import LoginPage from './pages/loginpage.jsx';
 import RegisterPage from './pages/registerpage.jsx';
 import ChangeAccountPage from './pages/changeaccountpage.jsx';
 import SendActivationPage from './pages/sendactivationpage.jsx';
+import DeactivatePage from './pages/deactivatepage.jsx';
+import ChangeEmailPage from './pages/changeemailpage.jsx';
+import ChangePasswordPage from './pages/changepasswordpage.jsx';
+import BuyItemPage from './pages/buyitempage.jsx';
+import SellItemPage from './pages/sellitempage.jsx';
+
 //
 import Application from './application/application.jsx';
 //
@@ -25,6 +31,8 @@ $( document ).ready(function() {
 	 * add mode switch
 	 */
 	ReactDOM.render(<ModeSwitch />, document.getElementById(extraDivId));
-	ReactDOM.render(<Application />, document.getElementById(centerDivId));
 	ReactDOM.render(<ChatBar />, document.getElementById(chatbarDivId));
+	ReactDOM.render(<Application />, document.getElementById(centerDivId), function() {
+		ui.plugins.format();
+	});
 });

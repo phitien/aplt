@@ -86,15 +86,15 @@ Html::style('css/app.css') }} @yield('css')
 		const socket = io.connect(sessionManager.get('socket_io_uri'));
 		socket.on('connect', function () {
 			if (sessionManager.isLogged()) {
-				sessionManager.set('clientKey', sessionManager.get('user').id + '+' + location.hostname);
+				sessionManager.set('clientKey', sessionManager.user().id + '+' + location.hostname);
 				socket.emit('join', sessionManager.get('clientKey'));
 			}
 		});
 		socket.on('accepted', function (socket_id) {
 			sessionManager.set('socket_id', socket_id);
 		});
-		socket.on('message', function (data) {
-			Dispatcher.emit(Dispatcher.Events.UPDATE_MESSAGE, data);
+		socket.on('message', function (message) {
+			Dispatcher.emit(Dispatcher.Events.RECEIVED_MESSAGE, JSON.parse(message));
 		});
 		socket.on('notification', function (data) {
 			Dispatcher.emit(Dispatcher.Events.UPDATE_NO, data);

@@ -6,6 +6,9 @@ Object.assign(window, {
 		var me = this;
 		var _data = {};
 		return {
+			appMessage() {
+				return _data.appMessage;
+			},
 			location() {
 				return _data.location;
 			},
@@ -23,7 +26,7 @@ Object.assign(window, {
 			},
 			isLogged() {
 				if (!this.get('isGuest', true))
-					return this.get('user');
+					return this.user();
 				return false;
 			},
 			isListPage() {

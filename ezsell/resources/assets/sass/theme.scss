@@ -62,7 +62,7 @@ a:hover {text-decoration: none !important;}
 			span {
 				font-style: italic;
 				font-size: $fsmall;
-				color: gainsboro !important;
+				color: $disabled-color !important;
 			}
 			.datetimeformat {
 				margin-left: 3px; 
@@ -106,7 +106,7 @@ a:hover {text-decoration: none !important;}
 		float: right;clear: right;line-height: $icon-size;
 		font-size: $fsmall;margin: $smedium $smedium $smedium 0;
 		.amount {
-			display: inline-block;vertical-align: top;margin-right: $sxsmall;color: gainsboro;font-style: italic;
+			display: inline-block;vertical-align: top;margin-right: $sxsmall;color: $disabled-color;font-style: italic;
 		}
 		.amount::before {
 			content: '( '
@@ -282,23 +282,38 @@ $chatbox-text-width: 165px;
 				overflow-y: auto;
 				.chatitem {
 				    display: inline-block;
+				    max-width: 80%;
 				    line-height: 20px;
 				    padding: 2px $smedium;
 				    border-radius: $ssmall;
 				    clear: both;
 				    margin: $ssmall;
+					.status {
+						margin-top:5px;height: $smedium;width: $smedium;border-radius: $ssmall;background-color: $disabled-color; 
+					}
 				}
 				.myitem {
 					@extend .chatitem;
 				    text-align: right;
 				    background-color: white;
 				    float: right;
+					.status {
+						float: right;margin-left: 3px;
+					}
 				}
 				.heritem,.hisitem {
 					@extend .chatitem;
 				    text-align: left;
 				    background-color: darkgray;
 				    float: left;
+					.status {
+						float: left;margin-right: 3px;
+					}
+				}
+				.created {
+					color: $disabled-color;
+					font-size: $fxsmall;
+					display: none;
 				}
 			}
 			.send {

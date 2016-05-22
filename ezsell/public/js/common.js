@@ -7608,6 +7608,10 @@ var _catmenu = require('./components/catmenu.jsx');
 
 var _catmenu2 = _interopRequireDefault(_catmenu);
 
+var _messageitem = require('./components/messageitem.jsx');
+
+var _messageitem2 = _interopRequireDefault(_messageitem);
+
 var _userbox = require('./components/userbox.jsx');
 
 var _userbox2 = _interopRequireDefault(_userbox);
@@ -7679,20 +7683,10 @@ Object.assign(window, {
 			return user.followers.indexOf(_user.id) >= 0;
 		}
 		return false;
-	},
-	sendMessage: function sendMessage(message, chatbox) {
-		if (message) {
-			var user = chatbox.props.user;
-			if (user && sessionManager.isLogged()) {
-				ajax.post('/sendmessage', function () {
-					chatbox.messageSentCallbalk(message);
-				}, { 'message': message, code: user.id });
-			}
-		}
 	}
 });
 
-},{"../../../../node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js":102,"../jquery-migrate-1.2.1.min.js":139,"../jquery.base64.js":140,"./components/catmenu.jsx":142,"./components/chatbar.jsx":143,"./components/itemimage.jsx":145,"./components/itemsummary.jsx":146,"./components/modeswitch.jsx":147,"./components/userbox.jsx":149,"./dispatcher/dispatcher.jsx":150,"./mixins/formview.jsx":151,"./session.jsx":152,"./ui.jsx":153,"./util.jsx":154,"react-image-gallery":106}],142:[function(require,module,exports){
+},{"../../../../node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js":102,"../jquery-migrate-1.2.1.min.js":139,"../jquery.base64.js":140,"./components/catmenu.jsx":142,"./components/chatbar.jsx":143,"./components/itemimage.jsx":145,"./components/itemsummary.jsx":146,"./components/messageitem.jsx":147,"./components/modeswitch.jsx":148,"./components/userbox.jsx":150,"./dispatcher/dispatcher.jsx":151,"./mixins/formview.jsx":152,"./session.jsx":153,"./ui.jsx":154,"./util.jsx":155,"react-image-gallery":106}],142:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7824,7 +7818,7 @@ var MenuItem = React.createClass({
 var Menu = React.createClass({
 	displayName: 'Menu',
 	render: function render() {
-		var className = util.getAttr(this.props, 'className', '');
+		var className = util.getClassName(this.props);
 		var me = this;
 		return React.createElement(
 			'ul',
@@ -7855,8 +7849,8 @@ var CatMenu = React.createClass({
 		return '';
 	},
 	render: function render() {
-		var className = 'catmenu ' + util.getAttr(this.props, 'className', '');
-		var showRoot = util.getAttr(this.props, 'showRoot', true);
+		var className = 'catmenu ' + util.getClassName(this.props);
+		var showRoot = util.getAttr.bind(this.props)('showRoot', true);
 		var items = showRoot ? this.props.items : this.props.items[0].children;
 		return React.createElement(Menu, { className: className, items: items,
 			getText: this.getText,
@@ -7906,7 +7900,7 @@ var ChatBar = React.createClass({
 	render: function render() {
 		var users = Dispatcher.Store.get(this.eventName);
 		if (users && users.length) {
-			var className = 'chatbar ' + util.getAttr(this.props, 'className', '');
+			var className = 'chatbar ' + util.getClassName(this.props);
 			return React.createElement(
 				'div',
 				{ className: className },
@@ -7941,53 +7935,38 @@ var ChatBox = React.createClass({
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
-		Dispatcher.removeListener(Dispatcher.Events.UPDATE_USER, function () {});
-		Dispatcher.removeListener(Dispatcher.Events.UPDATE_MESSAGE, function () {});
 		Dispatcher.removeListener(this.eventName, function () {});
 	},
 	componentDidMount: function componentDidMount() {
-		Dispatcher.addListener(Dispatcher.Events.UPDATE_USER, this.refresh);
 		Dispatcher.addListener(this.eventName, this.refresh);
-		Dispatcher.addListener(Dispatcher.Events.UPDATE_MESSAGE, this.addMessage);
 	},
 	onKeyPress: function onKeyPress(e) {
 		if (e.which == 13) {
 			this.send(e.currentTarget.value);
+			$(e.currentTarget).val('');
 		}
 	},
 	onSend: function onSend(e) {
 		this.send($(e.currentTarget).parents().find('input[type=text]').val());
+		$(e.currentTarget).parents().find('input[type=text]').val('');
 	},
 	send: function send(message) {
-		sendMessage(message, this);
-	},
-	messageSentCallbalk: function messageSentCallbalk(message, user) {
-		var $o = $(ReactDOM.findDOMNode(this));
-		//add sent message
-		$o.find('.messages').append('<div class="myitem">' + message + '</div>');
-		//clear textbox
-		$o.find('input[type=text]').val('');
-	},
-	addMessage: function addMessage(data) {
-		var user = Dispatcher.Store.get(this.eventName, this.props.user.id);
-		var _isCurrentUser = isCurrentUser(data.user);
-		if (!_isCurrentUser && data.message && data.user && data.user.id == user.id) {
-			var $o = $(ReactDOM.findDOMNode(this));
-			var classname = data.user.gender == 'MALE' ? 'hisitem' : 'heritem';
-			$o.find('.messages').append('<div class="' + classname + '">' + data.message + '</div>');
+		var receiver = Dispatcher.Store.get(this.eventName, this.props.user.id);
+		if (receiver && message) {
+			if (sessionManager.isLogged()) {
+				ajax.post('/sendmessage', function (response) {
+					Dispatcher.emit(Dispatcher.Events.SENT_MESSAGE, response.data);
+				}, { 'message': message, code: receiver.id, id: receiver.itemId });
+			}
 		}
 	},
 	render: function render() {
 		var user = Dispatcher.Store.get(this.eventName, this.props.user.id);
 		if (user) {
-			var _isGuest = sessionManager.get('isGuest', true);
-			var _isCurrentUser = isCurrentUser(user);
-			var _isFollowingTo = isFollowingTo(user);
-			var _isFollowerOf = isFollowerOf(user);
-
-			var className = 'chatbox ' + util.getAttr(this.props, 'className', '');
+			var className = 'chatbox ' + util.getClassName(this.props);
 			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman');
 			var href = '/' + user.name;
+			var messages = util.getAttr.bind(user)('messages', []);
 			return React.createElement(
 				'div',
 				{ className: className },
@@ -8016,7 +7995,13 @@ var ChatBox = React.createClass({
 					),
 					React.createElement('div', { className: 'clearfix' })
 				),
-				React.createElement('div', { className: 'messages' }),
+				React.createElement(
+					'div',
+					{ className: 'messages' },
+					messages.map(function (item, i) {
+						return React.createElement(MessageItem, { message: item, key: i });
+					})
+				),
 				React.createElement(
 					'div',
 					{ className: 'send' },
@@ -8127,10 +8112,10 @@ var ItemSummary = React.createClass({
 	render: function render() {
 		var item = Dispatcher.Store.get(this.eventName, this.props.item.id);
 		if (item) {
-			var prices = util.getAttr(this.props, 'prices', 'original,sale,now').split(',');
-			var className = 'item-summary ' + util.getAttr(this.props, 'className', '') + (item.liked ? ' liked' : ' unliked');
+			var prices = util.getAttr.bind(this.props)('prices', 'original,sale,now').split(',');
+			var className = 'item-summary ' + util.getClassName(this.props) + (item.liked ? ' liked' : ' unliked');
 			var iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
-			var showLink = util.getAttr(this.props, 'showLink', true);
+			var showLink = util.getAttr.bind(this.props)('showLink', true);
 			var href = showLink ? '/item/' + (sessionManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
 			var price_list = React.createElement(
 				'div',
@@ -8210,6 +8195,62 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 /**
+ * MessageItem defination
+ */
+var MessageItem = React.createClass({
+	displayName: 'MessageItem',
+
+	eventName: Dispatcher.Events.UPDATE_MESSAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, function () {});
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+		ui.plugins.format($(ReactDOM.findDOMNode(this)));
+	},
+	toggleTime: function toggleTime(e) {
+		$(e.currentTarget).parents('.chatitem').find('.created').slideToggle();
+	},
+	render: function render() {
+		var message = this.props.message;
+		if (message) {
+			var className = 'clearfix chatitem ' + (message.receiver ? 'myitem' : message.sender.gender == 'MALE' ? 'hisitem' : 'heritem');
+			var statusClassName = 'status ' + util.getAttr.bind(message)('status', '');
+			return React.createElement(
+				'div',
+				{ className: className },
+				React.createElement(
+					'div',
+					{ className: 'message', onClick: this.toggleTime },
+					React.createElement('div', { className: statusClassName }),
+					message.message
+				),
+				React.createElement(
+					'div',
+					{ className: 'datetimeformat created' },
+					message.created_at.date
+				),
+				React.createElement('div', { className: 'clearfix' })
+			);
+		}
+		return null;
+	}
+});
+
+window.MessageItem = MessageItem;
+exports.default = window.MessageItem;
+
+},{}],148:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+/**
  * ModeSwitch defination
  */
 var ModeSwitch = React.createClass({
@@ -8228,10 +8269,10 @@ var ModeSwitch = React.createClass({
 	},
 	render: function render() {
 		return React.createElement(
-			FormView.Form,
+			Form,
 			{ className: 'form', method: 'get', encType: 'multipart/form-data',
 				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
-			React.createElement(FormView.Input, { type: 'switch', name: 'mode', title: localization.mode,
+			React.createElement(Input, { type: 'switch', name: 'mode', title: localization.mode,
 				defaultChecked: getMode() == sessionManager.get('MODES').SELL ? true : false,
 				checkedChildren: localization.sell,
 				unCheckedChildren: localization.buy,
@@ -8243,7 +8284,7 @@ var ModeSwitch = React.createClass({
 window.ModeSwitch = ModeSwitch;
 exports.default = window.ModeSwitch;
 
-},{}],148:[function(require,module,exports){
+},{}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8364,7 +8405,7 @@ var Switch = React.createClass({
 window.Switch = Switch;
 exports.default = window.Switch;
 
-},{"classnames":13}],149:[function(require,module,exports){
+},{"classnames":13}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8391,11 +8432,12 @@ var UserBox = React.createClass({
 	},
 	onChatClick: function onChatClick(e) {
 		var user = this.props.user;
+		var itemId = this.props.itemId;
 		if (user) {
 			var _isGuest = sessionManager.get('isGuest', true);
 			var _isCurrentUser = isCurrentUser(user);
 			if (!_isGuest && !_isCurrentUser) {
-				Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user);
+				Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user, itemId);
 			}
 		}
 	},
@@ -8427,7 +8469,7 @@ var UserBox = React.createClass({
 			var _isCurrentUser = isCurrentUser(user);
 			var _isFollowingTo = isFollowingTo(user);
 
-			var className = 'userbox ' + util.getAttr(this.props, 'className', '');
+			var className = 'userbox ' + util.getClassName(this.props);
 			var iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
 			var iconChatTitle = _isGuest ? localization.please_login_first : _isCurrentUser ? localization.cannot_chat_with_yourself : 'Send message';
 			var iconFollowClassName = 'icon ' + (_isFollowingTo ? 'icon-unfollow' : 'icon-follow') + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
@@ -8458,7 +8500,7 @@ var UserBox = React.createClass({
 window.UserBox = UserBox;
 exports.default = window.UserBox;
 
-},{}],150:[function(require,module,exports){
+},{}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8512,13 +8554,21 @@ Dispatcher.Events = (0, _keymirror2.default)({
 	UPDATE_ITEMDETAILSPAGE: null,
 	UPDATE_LOGINPAGE: null,
 	UPDATE_CHANGEACCOUNTPAGE: null,
+	UPDATE_CHANGEEMAILPAGE: null,
+	UPDATE_CHANGPASSWORDPAGE: null,
 	UPDATE_SENDACTIVATIONPAGE: null,
 	UPDATE_REGISTERPAGE: null,
 	UPDATE_CHANGELOCATIONPAGE: null,
+	UPDATE_DEACTIVATEPAGE: null,
+	UPDATE_BUYITEMPAGE: null,
+	UPDATE_SELLITEMPAGE: null,
+	UPDATE_MESSAGE: null,
+
+	SENT_MESSAGE: null,
+	RECEIVED_MESSAGE: null,
 
 	UPDATE_ITEM: null,
 	UPDATE_USER: null,
-	UPDATE_MESSAGE: null,
 	UPDATE_CHATBOX: null,
 	UPDATE_CHATBAR: null,
 	ADD_CHATBOX: null
@@ -8584,8 +8634,6 @@ Dispatcher.Store = function () {
 					return null;
 				case Dispatcher.Events.UPDATE_USER:
 					return _data.lastUpdatedUser;
-				case Dispatcher.Events.UPDATE_MESSAGE:
-					return _data.lastMessage;
 				case Dispatcher.Events.UPDATE_CHATBOX:
 					return getChatUser(arguments[1]);
 				case Dispatcher.Events.ADD_CHATBOX:
@@ -8593,7 +8641,7 @@ Dispatcher.Store = function () {
 					return _data.chatusers;
 			}
 		},
-		set: function set(actionType, data) {
+		set: function set(actionType, data, params) {
 			switch (actionType) {
 				case Dispatcher.Events.UPDATE_APPLICATION:
 					_data.application = data;
@@ -8632,20 +8680,37 @@ Dispatcher.Store = function () {
 				case Dispatcher.Events.UPDATE_USER:
 					_data.lastUpdatedUser = data;
 					break;
-				case Dispatcher.Events.UPDATE_MESSAGE:
-					var json = JSON.parse(data);
-					if (json && json.user) {
-						_data.lastMessage = json;
-						var user = getChatUser(json.user.id);
-						if (!user && !isCurrentUser(json.user)) {
-							Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, json.user);
+				case Dispatcher.Events.SENT_MESSAGE:
+					var receiver = data.receiver;
+					if (receiver) {
+						var chattingUser = getChatUser(receiver.id);
+						if (chattingUser) {
+							if (!chattingUser.messages) chattingUser.messages = [];
+							chattingUser.messages.push(data);
+							setChatUser(receiver.id, chattingUser);
+							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBOX);
+						}
+					}
+					break;
+				case Dispatcher.Events.RECEIVED_MESSAGE:
+					var sender = data.sender;
+					if (sender) {
+						var chattingUser = getChatUser(sender.id);
+						if (chattingUser) {
+							if (!chattingUser.messages) chattingUser.messages = [];
+							chattingUser.messages.push(data);
+							setChatUser(sender.id, chattingUser);
+							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBOX);
 						}
 					}
 					break;
 				case Dispatcher.Events.ADD_CHATBOX:
 					if (data && data.id && data.displayname && _data.chatusers.indexOf(data) < 0) {
 						var user = getChatUser(data.id);
-						if (!user) _data.chatusers.push(data);
+						if (!user) {
+							if (params[2]) data.itemId = params[2];
+							_data.chatusers.push(data);
+						}
 					}
 					actionType = Dispatcher.Events.UPDATE_CHATBAR;
 					break;
@@ -8666,7 +8731,7 @@ Dispatcher.register(function (action) {
 
 Dispatcher.emit = function (actionType, _data) {
 	if (Dispatcher.Events.hasOwnProperty(actionType)) {
-		return Dispatcher.Store.set(actionType, _data);
+		return Dispatcher.Store.set(actionType, _data, arguments);
 	} else {
 		console.log('Dispatcher does not support this action ' + actionType);
 	}
@@ -8692,7 +8757,7 @@ window.Dispatcher = Dispatcher;
 
 exports.default = window.Dispatcher;
 
-},{"events":104,"flux":92,"keymirror":103}],151:[function(require,module,exports){
+},{"events":104,"flux":92,"keymirror":103}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8758,9 +8823,13 @@ _formsyReact2.default.addValidationRule('isAccountName', function (values, value
 	return false;
 });
 /**
+ * Form defination
+ */
+window.Form = _formsyReact2.default.Form;
+/**
  * Input defination
  */
-var Input = React.createClass({
+window.Input = React.createClass({
 	displayName: 'Input',
 
 	mixins: [_formsyReact2.default.Mixin],
@@ -9048,11 +9117,9 @@ var Input = React.createClass({
 	}
 });
 /**
- * FormView defination
+ * FormView mixin defination
  */
 exports.default = window.FormView = {
-	Input: Input,
-	Form: _formsyReact2.default.Form,
 	getInitialState: function getInitialState() {
 		return {
 			canSubmit: false
@@ -9121,7 +9188,7 @@ exports.default = window.FormView = {
 	}
 };
 
-},{"../components/switch.jsx":148,"formsy-react":98}],152:[function(require,module,exports){
+},{"../components/switch.jsx":149,"formsy-react":98}],153:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9132,6 +9199,9 @@ Object.assign(window, {
 		var me = this;
 		var _data = {};
 		return {
+			appMessage: function appMessage() {
+				return _data.appMessage;
+			},
 			location: function location() {
 				return _data.location;
 			},
@@ -9148,7 +9218,7 @@ Object.assign(window, {
 				return _data.page;
 			},
 			isLogged: function isLogged() {
-				if (!this.get('isGuest', true)) return this.get('user');
+				if (!this.get('isGuest', true)) return this.user();
 				return false;
 			},
 			isListPage: function isListPage() {
@@ -9177,7 +9247,7 @@ Object.assign(window, {
 	}()
 });
 
-},{}],153:[function(require,module,exports){
+},{}],154:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9430,13 +9500,17 @@ Object.assign(window, {
 	}
 });
 
-},{}],154:[function(require,module,exports){
+},{}],155:[function(require,module,exports){
 'use strict';
 
 /**
  * Util
  */
 Object.assign(window, {
+	l: function l(o, o2, o3, o4, o5, o6) {
+		console.log(o, o2, o3, o4, o5, o6, arguments);
+	},
+
 	util: {
 		clientIP: null,
 		uuid: function uuid(prefix) {
@@ -9445,8 +9519,8 @@ Object.assign(window, {
 		ip: function ip() {
 			return this.clientIP;
 		},
-		getAttr: function getAttr(o, name, defaultValue) {
-			if (o.hasOwnProperty(name)) return o[name];
+		getAttr: function getAttr(name, defaultValue) {
+			if (this.hasOwnProperty(name)) return this[name];
 			return defaultValue;
 		},
 		getClassName: function getClassName(o, defaultValue) {
