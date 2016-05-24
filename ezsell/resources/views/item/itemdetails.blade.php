@@ -10,5 +10,5 @@ $showBanner = false;
 
 @section('variables')
 @parent
-		sessionManager.set('page', 'ItemDetailsPage');
+		manager.set('page', 'ItemDetailsPage');
 @endsection

@@ -8,5 +8,5 @@ $showBanner = false;
 
 @section('variables')
 @parent
-		sessionManager.set('page', 'SellItemPage');
+		manager.set('page', 'SellItemPage');
 @endsection

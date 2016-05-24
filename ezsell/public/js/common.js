@@ -7580,53 +7580,67 @@ jQuery.migrateMute === void 0 && (jQuery.migrateMute = !0), function (e, t, n) {
 },{}],141:[function(require,module,exports){
 'use strict';
 
-var _util = require('./util.jsx');
+/**
+ * Application defination
+ */
+var Application = React.createClass({
+	displayName: 'Application',
 
-var _util2 = _interopRequireDefault(_util);
+	eventName: AppEvents.UPDATE_APPLICATION,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+		// press escape to hide popups
+		$(document).keyup(function (e) {
+			if (e.keyCode == 27) {
+				hideMenus();
+			}
+		});
+		// scroll to bottom to load more data
+		$(window).scroll(function () {
+			if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+				var paginate = appStore.paginate();
+				if (paginate && paginate.next_page_url) {
+					applicationSwitch(paginate.next_page_url);
+				} else {
+					//TODO
+				}
+			} else if ($(window).scrollTop() == 0) {}
+		});
+		if (appManager.appMessage()) {
+			showMessageDialog(appManager.appMessage());
+		}
+	},
+	render: function render() {
+		return React.createElement(
+			'div',
+			{ id: 'application' },
+			React.createElement('div', { className: 'container-fluid row clearfix', id: 'navigation-replacement' }),
+			React.createElement(Banner, { className: 'container-fluid row clearfix' }),
+			React.createElement(
+				'div',
+				{ className: 'container-fluid row clearfix', id: 'container' },
+				React.createElement(Left, null),
+				React.createElement(Center, null),
+				React.createElement(Right, null)
+			),
+			React.createElement(Footer, { className: 'container-fluid row clearfix' }),
+			React.createElement(Navigation, { className: 'container-fluid row clearfix' }),
+			React.createElement(ChatBar, { className: 'container-fluid row clearfix' })
+		);
+	}
+});
 
-var _session = require('./session.jsx');
+module.exports = window.Application = Application;
 
-var _session2 = _interopRequireDefault(_session);
-
-var _ui = require('./ui.jsx');
-
-var _ui2 = _interopRequireDefault(_ui);
-
-var _dispatcher = require('./dispatcher/dispatcher.jsx');
-
-var _dispatcher2 = _interopRequireDefault(_dispatcher);
-
-var _formview = require('./mixins/formview.jsx');
-
-var _formview2 = _interopRequireDefault(_formview);
-
-var _modeswitch = require('./components/modeswitch.jsx');
-
-var _modeswitch2 = _interopRequireDefault(_modeswitch);
-
-var _catmenu = require('./components/catmenu.jsx');
-
-var _catmenu2 = _interopRequireDefault(_catmenu);
-
-var _messageitem = require('./components/messageitem.jsx');
-
-var _messageitem2 = _interopRequireDefault(_messageitem);
-
-var _userbox = require('./components/userbox.jsx');
-
-var _userbox2 = _interopRequireDefault(_userbox);
-
-var _chatbar = require('./components/chatbar.jsx');
-
-var _chatbar2 = _interopRequireDefault(_chatbar);
-
-var _itemimage = require('./components/itemimage.jsx');
-
-var _itemimage2 = _interopRequireDefault(_itemimage);
-
-var _itemsummary = require('./components/itemsummary.jsx');
-
-var _itemsummary2 = _interopRequireDefault(_itemsummary);
+},{}],142:[function(require,module,exports){
+'use strict';
 
 var _reactImageGallery = require('react-image-gallery');
 
@@ -7634,69 +7648,141 @@ var _reactImageGallery2 = _interopRequireDefault(_reactImageGallery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//Outside components
 require('../jquery.base64.js');
 require('../jquery-migrate-1.2.1.min.js');
 require('../../../../node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js');
-//
 
-//
+Object.assign(window, {
+	ImageGallery: _reactImageGallery2.default
+});
 
-//
+// App helpers
+require('./util.jsx');
+require('./ui.jsx');
+// Mixins
+require('./mixins/mixin.jsx');
+require('./mixins/formview.jsx');
+require('./mixins/itemdates.jsx');
+// AppEvent
+require('./event/appevent.jsx');
+// AppStore
+require('./stores/store.jsx');
+require('./stores/appstore.jsx');
+// Dispatcher
+require('./dispatcher/dispatcher.jsx');
+// Managers
+require('./managers/appmanager.jsx');
+// Components
+require('./components/switch.jsx');
+require('./components/input.jsx');
+require('./components/catmenu.jsx');
+require('./components/chatbox.jsx');
+require('./components/chatbar.jsx');
 
-//
+require('./components/modeswitch.jsx');
 
+require('./components/itemimage.jsx');
+require('./components/itemsummary.jsx');
+require('./components/messageitem.jsx');
+require('./components/userbox.jsx');
+
+require('./components/banner.jsx');
+require('./components/left.jsx');
+require('./components/center.jsx');
+require('./components/right.jsx');
+require('./components/footer.jsx');
+require('./components/navigation.jsx');
+// Pages
+require('./pages/homepage.jsx');
+require('./pages/catitemspage.jsx');
+require('./pages/useritemspage.jsx');
+require('./pages/itemdetailspage.jsx');
+require('./pages/changelocationpage.jsx');
+require('./pages/loginpage.jsx');
+require('./pages/registerpage.jsx');
+require('./pages/changeaccountpage.jsx');
+require('./pages/sendactivationpage.jsx');
+require('./pages/deactivatepage.jsx');
+require('./pages/changeemailpage.jsx');
+require('./pages/changepasswordpage.jsx');
+require('./pages/buyitempage.jsx');
+require('./pages/sellitempage.jsx');
+// Application
+require('./application/application.jsx');
 //
 /**
  * Some common functions
  */
 Object.assign(window, {
-
-	ImageGallery: _reactImageGallery2.default,
-
-	getMode: function getMode() {
-		return sessionManager.get('mode');
-	},
-	setMode: function setMode(mode) {
-		sessionManager.set('mode', mode);
-	},
-
-
 	sensitive: 'input,select,textarea,img,.sensitive',
+	mode: function (_mode) {
+		function mode(_x) {
+			return _mode.apply(this, arguments);
+		}
 
-	isCurrentUser: function isCurrentUser(_user) {
-		var user = sessionManager.user();
-		if (user && user.id == _user.id) {
-			return true;
+		mode.toString = function () {
+			return _mode.toString();
+		};
+
+		return mode;
+	}(function (val) {
+		if (val) {
+			appManager.set('mode', mode);
 		}
-		return false;
-	},
-	isFollowingTo: function isFollowingTo(_user) {
-		var user = sessionManager.user();
-		if (user && !sessionManager.get('isGuest')) {
-			return user.following.indexOf(_user.id) >= 0;
-		}
-		return false;
-	},
-	isFollowerOf: function isFollowerOf(_user) {
-		var user = sessionManager.user();
-		if (user && !sessionManager.get('isGuest')) {
-			return user.followers.indexOf(_user.id) >= 0;
-		}
-		return false;
+		return appManager.mode();
+	}),
+	applicationSwitch: function applicationSwitch(url) {
+		if (!url) url = appStore.currentUrl();
+		ajax.post(url ? url : location.href, function (data) {});
 	}
 });
 
-},{"../../../../node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js":102,"../jquery-migrate-1.2.1.min.js":139,"../jquery.base64.js":140,"./components/catmenu.jsx":142,"./components/chatbar.jsx":143,"./components/itemimage.jsx":145,"./components/itemsummary.jsx":146,"./components/messageitem.jsx":147,"./components/modeswitch.jsx":148,"./components/userbox.jsx":150,"./dispatcher/dispatcher.jsx":151,"./mixins/formview.jsx":152,"./session.jsx":153,"./ui.jsx":154,"./util.jsx":155,"react-image-gallery":106}],142:[function(require,module,exports){
+},{"../../../../node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js":102,"../jquery-migrate-1.2.1.min.js":139,"../jquery.base64.js":140,"./application/application.jsx":141,"./components/banner.jsx":143,"./components/catmenu.jsx":144,"./components/center.jsx":145,"./components/chatbar.jsx":146,"./components/chatbox.jsx":147,"./components/footer.jsx":148,"./components/input.jsx":149,"./components/itemimage.jsx":150,"./components/itemsummary.jsx":151,"./components/left.jsx":152,"./components/messageitem.jsx":153,"./components/modeswitch.jsx":154,"./components/navigation.jsx":155,"./components/right.jsx":156,"./components/switch.jsx":157,"./components/userbox.jsx":158,"./dispatcher/dispatcher.jsx":159,"./event/appevent.jsx":160,"./managers/appmanager.jsx":161,"./mixins/formview.jsx":162,"./mixins/itemdates.jsx":163,"./mixins/mixin.jsx":164,"./pages/buyitempage.jsx":165,"./pages/catitemspage.jsx":166,"./pages/changeaccountpage.jsx":167,"./pages/changeemailpage.jsx":168,"./pages/changelocationpage.jsx":169,"./pages/changepasswordpage.jsx":170,"./pages/deactivatepage.jsx":171,"./pages/homepage.jsx":172,"./pages/itemdetailspage.jsx":173,"./pages/loginpage.jsx":174,"./pages/registerpage.jsx":175,"./pages/sellitempage.jsx":176,"./pages/sendactivationpage.jsx":177,"./pages/useritemspage.jsx":178,"./stores/appstore.jsx":179,"./stores/store.jsx":180,"./ui.jsx":181,"./util.jsx":182,"react-image-gallery":106}],143:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
+/**
+ * Banner defination
+ */
+var Banner = React.createClass({
+	displayName: 'Banner',
+
+	id: 'banner',
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_BANNER,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({
+			refreshCount: this.refreshCount++
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		var showBanner = appManager.showBanner();
+		if (showBanner) {
+			return React.createElement('div', { className: this.className(), id: this.getId() });
+		}
+		return null;
+	}
 });
+
+module.exports = window.Banner = Banner;
+
+},{}],144:[function(require,module,exports){
+'use strict';
+
 /**
  * MenuItem defination
  */
 var MenuItem = React.createClass({
 	displayName: 'MenuItem',
+
+	mixins: [Mixin],
 	getText: function getText(_item) {
 		try {
 			return this.props.getText(_item);
@@ -7741,6 +7827,11 @@ var MenuItem = React.createClass({
 			}
 		}
 	},
+	itemClick: function itemClick(e) {
+		if (this.props.itemClick) {
+			this.props.itemClick(this);
+		}
+	},
 	handleItemClick: function handleItemClick(event) {
 		var href = this.getHref(this.props.data).replace('javascript:', '');
 		var fn = eval('(function () {' + href + ';})');
@@ -7757,7 +7848,7 @@ var MenuItem = React.createClass({
 			if (href.indexOf("javascript:") == 0) {
 				html = React.createElement(
 					'a',
-					{ className: 'menuitem menuitem-nonatomic', onClick: this.handleItemClick },
+					{ className: 'menuitem menuitem-atomic', onClick: this.handleItemClick },
 					React.createElement(
 						'span',
 						null,
@@ -7778,7 +7869,7 @@ var MenuItem = React.createClass({
 		} else {
 			html = React.createElement(
 				'a',
-				{ className: 'menuitem menuitem-nonatomic' },
+				{ className: 'menuitem menuitem-nonatomic', onClick: this.itemClick },
 				React.createElement(
 					'span',
 					null,
@@ -7812,37 +7903,83 @@ var MenuItem = React.createClass({
 		}
 	}
 });
+window.MenuItem = MenuItem;
+
 /**
  * Menu defination
  */
 var Menu = React.createClass({
 	displayName: 'Menu',
+
+	mixins: [Mixin],
 	render: function render() {
-		var className = util.getClassName(this.props);
 		var me = this;
 		return React.createElement(
 			'ul',
-			{ className: className },
+			{ className: this.className() },
 			this.props.items.map(function (item, i) {
 				return React.createElement(MenuItem, { data: item, key: i,
 					getText: me.props.getText,
 					getHref: me.props.getHref,
+					itemClick: me.props.itemClick,
 					getChildren: me.props.getChildren,
 					getSubMenuClassName: me.props.getSubMenuClassName });
 			})
 		);
 	}
 });
+window.Menu = Menu;
+
 /**
  * CatMenu defination
  */
 var CatMenu = React.createClass({
 	displayName: 'CatMenu',
 
-	eventName: Dispatcher.Events.UPDATE_CATMENU,
+	mixins: [Mixin],
+	getText: function getText(_item) {
+		return _item.details ? _item.details.name : '';
+	},
+	getHref: function getHref(_item) {
+		if (!_item.parent_id) return 'javascript:expandMenu(this)';else if (_item.atomic) return 'javascript:applicationSwitch("cat/' + (appManager.get('usecode') ? _item.code.toLowerCase() : _item.id) + '")';else return '';
+	},
+	itemClick: function itemClick(_item) {
+		console.log(_item);
+	},
+	getSubMenuClassName: function getSubMenuClassName(_item) {
+		if (!_item.parent_id) return 'sensitive';
+		return '';
+	},
+	render: function render() {
+		var showRoot = this.attr('showRoot', true);
+		var items = showRoot ? this.props.items : this.props.items[0].children;
+		return React.createElement(Menu, { className: this.className('catmenu'), items: items,
+			getText: this.getText,
+			getHref: this.getHref,
+			itemClick: this.itemClick,
+			getSubMenuClassName: this.getSubMenuClassName });
+	}
+});
+
+module.exports = window.CatMenu = CatMenu;
+
+},{}],145:[function(require,module,exports){
+'use strict';
+
+/**
+ * Center defination
+ */
+var Center = React.createClass({
+	displayName: 'Center',
+
+	id: 'center',
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_CENTER,
 	refreshCount: 0,
 	refresh: function refresh() {
-		this.setState({ refreshCount: this.refreshCount++ });
+		this.setState({
+			refreshCount: this.refreshCount++
+		});
 	},
 	componentWillUnmount: function componentWillUnmount() {
 		Dispatcher.removeListener(this.eventName, this.refresh);
@@ -7850,45 +7987,68 @@ var CatMenu = React.createClass({
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
 	},
-	getText: function getText(_item) {
-		return _item.details ? _item.details.name : '';
-	},
-	getHref: function getHref(_item) {
-		if (!_item.parent_id) return 'javascript:expandMenu(this)';else if (_item.atomic) return 'cat/' + (sessionManager.get('usecode') ? _item.code.toLowerCase() : _item.id);else return '';
-	},
-	getSubMenuClassName: function getSubMenuClassName(_item) {
-		if (!_item.parent_id) return 'sensitive';
-		return '';
-	},
 	render: function render() {
-		var className = 'catmenu ' + util.getClassName(this.props);
-		var showRoot = util.getAttr.bind(this.props)('showRoot', true);
-		var items = showRoot ? this.props.items : this.props.items[0].children;
-		return React.createElement(Menu, { className: className, items: items,
-			getText: this.getText,
-			getHref: this.getHref,
-			getSubMenuClassName: this.getSubMenuClassName });
+		var showCenter = 12 - appManager.showLeft() - appManager.showRight();
+		var data = appManager.data();
+		var content;
+		switch (appManager.type()) {
+			case 'HomePage':
+				content = React.createElement(HomePage, null);
+				break;
+			case 'CatItemsPage':
+				content = React.createElement(CatItemsPage, null);
+				break;
+			case 'UserItemsPage':
+				content = React.createElement(UserItemsPage, null);
+				break;
+			case 'ItemDetailsPage':
+				content = React.createElement(ItemDetailsPage, null);
+				break;
+			case 'ChangeLocationPage':
+				content = React.createElement(ChangeLocationPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+				break;
+			case 'LoginPage':
+				content = React.createElement(LoginPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+				break;
+			case 'RegisterPage':
+				content = React.createElement(RegisterPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+				break;
+			case 'ChangeAccountPage':
+				content = React.createElement(ChangeAccountPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+				break;
+			case 'ChangeEmailPage':
+				content = React.createElement(ChangeEmailPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+				break;
+			case 'ChangePasswordPage':
+				content = React.createElement(ChangePasswordPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+				break;
+			case 'SendActivationPage':
+				content = React.createElement(SendActivationPage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+				break;
+			case 'DeactivatePage':
+				content = React.createElement(DeactivatePage, { className: 'col-xs-12 col-sm-6 col-md-5 center-block' });
+				break;
+			case 'BuyItemPage':
+				content = React.createElement(BuyItemPage, null);
+				break;
+			case 'SellItemPage':
+				content = React.createElement(SellItemPage, null);
+				break;
+		}
+
+		return React.createElement(
+			'div',
+			{ className: this.className('col-xs-12 col-sm-6 col-md-' + showCenter), id: this.getId() },
+			content
+		);
+		return null;
 	}
 });
-//
-CatMenu.Menu = Menu;
-CatMenu.MenuItem = MenuItem;
 
-window.CatMenu = CatMenu;
-exports.default = window.CatMenu;
+module.exports = window.Center = Center;
 
-},{}],143:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _chatbox = require('./chatbox.jsx');
-
-var _chatbox2 = _interopRequireDefault(_chatbox);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * ChatBar defination
@@ -7896,7 +8056,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var ChatBar = React.createClass({
 	displayName: 'ChatBar',
 
-	eventName: Dispatcher.Events.UPDATE_CHATBAR,
+	id: 'chatbar',
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_CHATBAR,
 	refreshCount: 0,
 	refresh: function refresh() {
 		this.setState({ refreshCount: this.refreshCount++ });
@@ -7908,14 +8070,13 @@ var ChatBar = React.createClass({
 		Dispatcher.addListener(this.eventName, this.refresh);
 	},
 	render: function render() {
-		var users = Dispatcher.Store.get(this.eventName);
+		var users = appStore.get(this.eventName);
 		if (users && users.length) {
-			var className = 'chatbar ' + util.getClassName(this.props);
 			return React.createElement(
 				'div',
-				{ className: className },
+				{ className: this.className() },
 				users.map(function (user, i) {
-					return React.createElement(_chatbox2.default, { user: user, key: i });
+					return React.createElement(ChatBox, { user: user, key: i });
 				}),
 				React.createElement('div', { className: 'clearfix' })
 			);
@@ -7924,22 +8085,19 @@ var ChatBar = React.createClass({
 	}
 });
 
-window.ChatBar = ChatBar;
-exports.default = window.ChatBar;
+module.exports = window.ChatBar = ChatBar;
 
-},{"./chatbox.jsx":144}],144:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
 /**
  * ChatBox defination
  */
 var ChatBox = React.createClass({
 	displayName: 'ChatBox',
 
-	eventName: Dispatcher.Events.UPDATE_CHATBOX,
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_CHATBOX,
 	refreshCount: 0,
 	refresh: function refresh() {
 		this.setState({ refreshCount: this.refreshCount++ });
@@ -7947,19 +8105,19 @@ var ChatBox = React.createClass({
 	},
 	componentWillUnmount: function componentWillUnmount() {
 		Dispatcher.removeListener(this.eventName, this.refresh);
-		Dispatcher.removeListener(Dispatcher.Events.SHOW_CHATBOX, this.showMe);
+		Dispatcher.removeListener(AppEvents.SHOW_CHATBOX, this.showMe);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		Dispatcher.addListener(Dispatcher.Events.SHOW_CHATBOX, this.showMe);
+		Dispatcher.addListener(AppEvents.SHOW_CHATBOX, this.showMe);
 		this.scrollToBottom();
 		this.getJQueryTextbox().focus();
 
-		var user = Dispatcher.Store.get(this.eventName, this.props.user.id);
-		Dispatcher.emit(Dispatcher.Events.LOAD_RECENT_MESSAGES, user);
+		var user = appStore.get(this.eventName, this.props.user.id);
+		appStore.set(AppEvents.LOAD_RECENT_MESSAGES, user);
 	},
 	showMe: function showMe() {
-		var user = Dispatcher.Store.get(Dispatcher.Events.SHOW_CHATBOX, this.props.user.id);
+		var user = appStore.get(AppEvents.SHOW_CHATBOX, this.props.user.id);
 		console.log(user, this.props.user.id);
 		console.log(user == this.props.user);
 		if (user && user.id == this.props.user.id) this.show();
@@ -7989,11 +8147,11 @@ var ChatBox = React.createClass({
 		var textbox = this.getJQueryTextbox();
 		var message = textbox.val();
 		textbox.val('');
-		var receiver = Dispatcher.Store.get(this.eventName, this.props.user.id);
+		var receiver = appStore.get(this.eventName, this.props.user.id);
 		if (receiver && message) {
-			if (sessionManager.isLogged()) {
+			if (appManager.isLogged()) {
 				ajax.post('/sendmessage', function (response) {
-					Dispatcher.emit(Dispatcher.Events.SENT_MESSAGE, response.data);
+					appStore.set(AppEvents.SENT_MESSAGE, response.data);
 				}, { 'message': message, code: receiver.id, id: receiver.itemId });
 			}
 		}
@@ -8015,21 +8173,20 @@ var ChatBox = React.createClass({
 		chatbox.find('.messages,.send').slideUp('slow');
 	},
 	close: function close(e) {
-		Dispatcher.emit(Dispatcher.Events.REMOVE_CHATBOX, Dispatcher.Store.get(this.eventName, this.props.user.id));
+		appStore.set(AppEvents.REMOVE_CHATBOX, appStore.get(this.eventName, this.props.user.id));
 	},
 	toggle: function toggle(e) {
 		if (this.visible) this.hide();else this.show();
 	},
 	render: function render() {
-		var user = Dispatcher.Store.get(this.eventName, this.props.user.id);
+		var user = appStore.get(this.eventName, this.props.user.id);
 		if (user) {
-			var className = 'chatbox ' + util.getClassName(this.props);
-			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman');
+			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? appManager.get('noavatarman') : appManager.get('noavatarwoman');
 			var href = '/' + user.name;
-			var messages = util.getAttr.bind(user)('messages', []);
+			var messages = attr.bind(user)('messages', []);
 			return React.createElement(
 				'div',
-				{ className: className },
+				{ className: this.className('', 'chatbox') },
 				React.createElement(
 					'div',
 					{ className: 'header' },
@@ -8038,7 +8195,7 @@ var ChatBox = React.createClass({
 						{ className: 'name' },
 						React.createElement(
 							'a',
-							{ href: href },
+							{ onClick: applicationSwitch(href) },
 							React.createElement(
 								'span',
 								null,
@@ -8049,12 +8206,12 @@ var ChatBox = React.createClass({
 					React.createElement(
 						'div',
 						{ className: 'close', onClick: this.close },
-						localization.close_sign
+						configurations.localization.close_sign
 					),
 					React.createElement(
 						'div',
 						{ className: 'toggle', onClick: this.toggle },
-						localization.minimize_sign
+						configurations.localization.minimize_sign
 					),
 					React.createElement('div', { className: 'clearfix' })
 				),
@@ -8069,7 +8226,7 @@ var ChatBox = React.createClass({
 					'div',
 					{ className: 'send' },
 					React.createElement('input', { type: 'text', className: '', onKeyPress: this.onKeyPress }),
-					React.createElement('input', { type: 'button', value: localization.send, onClick: this.onSend }),
+					React.createElement('input', { type: 'button', value: configurations.localization.send, onClick: this.onSend }),
 					React.createElement('div', { className: 'clearfix' })
 				),
 				React.createElement('div', { className: 'clearfix' })
@@ -8079,22 +8236,412 @@ var ChatBox = React.createClass({
 	}
 });
 
-window.ChatBox = ChatBox;
-exports.default = window.ChatBox;
+module.exports = window.ChatBox = ChatBox;
 
-},{}],145:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
+/**
+ * Footer defination
+ */
+var Footer = React.createClass({
+	displayName: 'Footer',
+
+	id: 'footer',
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_FOOTER,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({
+			refreshCount: this.refreshCount++
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		return React.createElement('div', { className: this.className(), id: this.getId() });
+		return null;
+	}
 });
+
+module.exports = window.Footer = Footer;
+
+},{}],149:[function(require,module,exports){
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _formsyReact = require('formsy-react');
+
+var _formsyReact2 = _interopRequireDefault(_formsyReact);
+
+var _switch = require('../components/switch.jsx');
+
+var _switch2 = _interopRequireDefault(_switch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+function _objectWithoutProperties(obj, keys) {
+	var target = {};for (var i in obj) {
+		if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
+	}return target;
+}
+//
+_formsyReact2.default.addValidationRule('notEqualsField', function (values, value, field) {
+	return value != values[field];
+});
+_formsyReact2.default.addValidationRule('equalsField', function (values, value, field) {
+	return value == values[field];
+});
+_formsyReact2.default.addValidationRule('notEquals', function (values, value, eql) {
+	return value != eql;
+});
+_formsyReact2.default.addValidationRule('notEqualsIgnoreCase', function (values, value, eql) {
+	return value && eql && value.toLowerCase() != eql.toLowerCase();
+});
+_formsyReact2.default.addValidationRule('isPassword', function (values, value) {
+	var minLength = 6,
+	    maxLength = 30;
+	var reg_at_least_1_lowercase_alphabet_character = /[a-z]+/;
+	var reg_at_least_1_uppercase_alphabet_character = /[A-Z]+/;
+	var reg_at_least_1_number_character = /[0-9]+/;
+	var reg_at_least_1_special_character = /[!@#0^&*()+]+/;
+	try {
+		if (value && value.length >= minLength && value.length <= maxLength) {
+			// check
+			// min
+			// &
+			// max
+			// length
+			return reg_at_least_1_lowercase_alphabet_character.test(value) && reg_at_least_1_uppercase_alphabet_character.test(value) && reg_at_least_1_number_character.test(value) && reg_at_least_1_special_character.test(value);
+		}
+	} catch (e) {}
+	return false;
+});
+_formsyReact2.default.addValidationRule('isAccountName', function (values, value) {
+	var minLength = 3,
+	    maxLength = 30;
+	var reg = /^[a-z0-9]([\._]?[a-z0-9]+)+$/;
+	try {
+		if (value && value.length >= minLength && value.length <= maxLength) {
+			// check
+			// min
+			// &
+			// max
+			// length
+			return reg.test(value.toLowerCase());
+		}
+	} catch (e) {}
+	return false;
+});
+/**
+ * Form defination
+ */
+window.Form = _formsyReact2.default.Form;
+/**
+ * Input defination
+ */
+module.exports = window.Input = React.createClass({
+	displayName: 'Input',
+
+	mixins: [Mixin, _formsyReact2.default.Mixin],
+	type: 'text',
+	changeValue: function changeValue(event) {
+		var type = this.props.type;
+		var value;
+		if (type == 'checkbox') {
+			value = event.currentTarget.checked;
+		} else if (type == 'switch') {
+			value = event;
+		} else if (type == 'textarea') {
+			value = event.currentTarget.value;
+		} else if (type == 'image') {
+			var max = this.attr('max', 20);
+			var min = this.attr('min', 1);
+			if (event.currentTarget.files.length < min || event.currentTarget.files.length > max) {
+				event.currentTarget.value = null;
+				showMessageDialog('You should select at least ' + min + ' file, and no more than ' + max + ' files');
+			} else {
+				FormView.showImagesPreview(event.currentTarget, this.props.previewContainer);
+			}
+			value = event.currentTarget.value;
+		} else {
+			value = event.currentTarget.value;
+		}
+		this.setValue(value);
+		if (this.props.onChange) this.props.onChange(this.props.name, value);
+	},
+	render: function render() {
+		this.type = this.attr('type', 'text').toLowerCase();
+
+		switch (this.type) {
+			case 'hidden':
+				return this.renderHidden();
+			case 'autocomplete':
+				return this.renderAutocomplete();
+			case 'checkbox':
+			case 'radio':
+				return this.renderCheckboxRadio();
+			case 'checkboxlist':
+			case 'radiolist':
+				return this.renderCheckboxRadioList();
+			case 'button':
+			case 'submit':
+				return this.renderButton();
+			case 'textarea':
+				return this.renderTextarea();
+			case 'select':
+				return this.renderSelect();
+			case 'file':
+				return this.renderFile();
+			case 'image':
+				return this.renderImage();
+			case 'switch':
+				return this.renderSwitch();
+			case 'text':
+			default:
+				return this.renderText();
+		}
+	},
+	renderHidden: function renderHidden() {
+		return React.createElement('input', { id: this.getId(), type: 'hidden', name: this.props.name, value: this.getValue() || '' });
+	},
+	formsyClassName: function formsyClassName() {
+		return this.className('', 'form-group', this.showRequired() ? 'required' : this.showError() ? 'error' : '');
+	},
+	renderText: function renderText() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'onChange', 'id', 'value']);
+		return React.createElement(
+			'div',
+			{ className: this.formsyClassName() },
+			React.createElement(
+				'label',
+				{ htmlFor: this.props.name },
+				this.props.title
+			),
+			React.createElement('input', _extends({}, restProps, { id: this.getId(), type: this.type, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
+			React.createElement(
+				'span',
+				{ className: 'validation-error' },
+				this.getErrorMessage()
+			)
+		);
+	},
+	renderAutocomplete: function renderAutocomplete() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'data-source']);
+		var source = this.props.source ? this.props.source : null;
+		return React.createElement(
+			'div',
+			{ className: this.formsyClassName() },
+			React.createElement(
+				'label',
+				{ htmlFor: this.props.name },
+				this.props.title
+			),
+			React.createElement('input', _extends({}, restProps, { id: this.getId(), type: 'text', onChange: this.changeValue, value: this.getValue() || '', className: 'form-control autocomplete',
+				'data-source': source })),
+			React.createElement('input', { type: 'hidden', name: this.props.name }),
+			React.createElement(
+				'span',
+				{ className: 'validation-error' },
+				this.getErrorMessage()
+			)
+		);
+	},
+	renderCheckboxRadio: function renderCheckboxRadio() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
+		var name = this.props.name ? this.props.name : util.uuid('radiolist_');
+		var labelClassName = 'form-' + this.type + '-label';
+		return React.createElement(
+			'div',
+			{ className: this.formsyClassName() + ' ' + this.type },
+			React.createElement(
+				'label',
+				{ className: labelClassName, htmlFor: name },
+				React.createElement('input', _extends({}, restProps, { id: this.getId(), type: this.type, name: name, onChange: this.changeValue, className: this.type })),
+				this.props.title
+			)
+		);
+	},
+	renderCheckboxRadioList: function renderCheckboxRadioList() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
+		var name = this.props.name ? this.props.name : util.uuid('radiolist_');
+		var type = this.type == 'checkboxlist' ? 'checkbox' : 'radio';
+		var changeValue = this.changeValue;
+		var labelClassName = 'form-' + type + '-label';
+		return React.createElement(
+			'div',
+			{ className: this.formsyClassName() + ' ' + this.type },
+			React.createElement(
+				'label',
+				{ className: labelClassName },
+				this.props.title
+			),
+			this.props.options.map(function (item, i) {
+				var itemname = name + '[' + i + ']';
+				var value = item.value;
+				var itemClassName = type + (i == 0 ? ' first-' + type : '');
+				return React.createElement(
+					'div',
+					{ className: itemClassName, key: i },
+					React.createElement(
+						'label',
+						{ htmlFor: itemname },
+						React.createElement('input', _extends({}, restProps, { type: type, name: name, id: itemname, value: value, className: type, onChange: changeValue })),
+						item.label
+					)
+				);
+			}),
+			React.createElement('div', { clasName: 'clearfix' })
+		);
+	},
+	renderButton: function renderButton() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'onClick', 'disabled']);
+		return React.createElement('input', _extends({}, restProps, { id: this.getId(), name: this.props.name, type: this.type, value: this.getValue() || '',
+			className: this.className('', 'btn btn-default'), onClick: this.props.onClick, disabled: this.props.disabled }));
+	},
+	renderTextarea: function renderTextarea() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'cols', 'rows']);
+		return React.createElement(
+			'div',
+			{ className: this.formsyClassName() },
+			React.createElement(
+				'label',
+				{ htmlFor: this.props.name },
+				this.props.title
+			),
+			React.createElement('textarea', _extends({}, restProps, { id: this.getId(), name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
+				cols: this.props.cols, rows: this.props.rows })),
+			React.createElement(
+				'span',
+				{ className: 'validation-error' },
+				this.getErrorMessage()
+			)
+		);
+	},
+	renderSelect: function renderSelect() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'disabled']);
+		var optionLabel = this.props.optionLabel || function () {
+			return this.label;
+		};
+		var optionValue = this.props.optionValue || function () {
+			return this.value;
+		};
+		var optionAttrs = this.props.optionAttrs || function () {
+			return {};
+		};
+		var placeholder = this.props.placeholder ? React.createElement(
+			'option',
+			null,
+			this.props.placeholder
+		) : '';
+		return React.createElement(
+			'div',
+			{ className: this.formsyClassName() },
+			React.createElement(
+				'label',
+				{ htmlFor: this.props.name },
+				this.props.title
+			),
+			React.createElement(
+				'select',
+				_extends({}, restProps, { id: this.getId(), name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control', disabled: this.props.disabled }),
+				placeholder,
+				this.props.options.map(function (item, i) {
+					var label = optionLabel.bind(item)();
+					var value = optionValue.bind(item)();
+					var props = optionAttrs.bind(item)();
+					return React.createElement(
+						'option',
+						_extends({ key: i }, props, { value: value }),
+						label
+					);
+				})
+			),
+			React.createElement(
+				'span',
+				{ className: 'validation-error' },
+				this.getErrorMessage()
+			)
+		);
+	},
+	renderFile: function renderFile() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
+		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
+		return React.createElement(
+			'div',
+			{ className: this.formsyClassName() },
+			React.createElement(
+				'label',
+				{ htmlFor: this.props.name },
+				this.props.title
+			),
+			React.createElement('input', _extends({}, restProps, { id: this.getId(), type: this.type, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
+			React.createElement(
+				'span',
+				{ className: 'validation-error' },
+				this.getErrorMessage()
+			)
+		);
+	},
+	renderImage: function renderImage() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'accept']);
+		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
+		return React.createElement(
+			'div',
+			{ className: this.formsyClassName() },
+			React.createElement(
+				'label',
+				{ htmlFor: this.props.name },
+				this.props.title
+			),
+			React.createElement('input', _extends({}, restProps, { id: this.getId(), type: 'file', name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
+				accept: 'image/*' })),
+			React.createElement(
+				'span',
+				{ className: 'validation-error' },
+				this.getErrorMessage()
+			),
+			React.createElement('div', { className: 'row image-preview' })
+		);
+	},
+	renderSwitch: function renderSwitch() {
+		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'accept']);
+		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
+		return React.createElement(
+			'div',
+			{ className: this.formsyClassName() },
+			React.createElement(
+				'label',
+				{ htmlFor: this.props.name },
+				this.props.title
+			),
+			React.createElement(_switch2.default, _extends({}, restProps, { id: this.getId(), name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
+			React.createElement(
+				'span',
+				{ className: 'validation-error' },
+				this.getErrorMessage()
+			)
+		);
+	}
+});
+
+},{"../components/switch.jsx":157,"formsy-react":98}],150:[function(require,module,exports){
+'use strict';
+
 /**
  * ItemImage defination
  */
 var ItemImage = React.createClass({
 	displayName: 'ItemImage',
 
-	eventName: Dispatcher.Events.UPDATE_ITEM,
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_ITEM,
 	refreshCount: 0,
 	refresh: function refresh() {
 		this.setState({ refreshCount: this.refreshCount++ });
@@ -8107,28 +8654,27 @@ var ItemImage = React.createClass({
 		Dispatcher.addListener(this.eventName, this.refresh);
 	},
 	onClick: function onClick(e) {
-		var isGuest = sessionManager.get('isGuest', true);
-		var user = sessionManager.user();
+		var isGuest = appManager.get('isGuest', true);
+		var user = appManager.user();
 		if (!isGuest && user && user.id) {
 			var item = Dispatcher.item(this.props.item.id);
-			var id = sessionManager.get('usecode') ? item.code : item.id;
+			var id = appManager.get('usecode') ? item.code : item.id;
 			if (id) {
 				ajax.post('/like', function (o) {
-					Dispatcher.emit(Dispatcher.Events.UPDATE_ITEMDETAILSPAGE, o.data);
+					appStore.set(AppEvents.UPDATE_ITEMDETAILSPAGE, o.data);
 				}, { id: id, user_id: user.id });
 			}
 		}
 	},
 	render: function render() {
-		var item = Dispatcher.Store.get(this.eventName, this.props.item.id);
+		var item = appStore.get(this.eventName, this.props.item.id);
 		if (item) {
-			var className = 'item-firstimage ' + (this.props.className ? this.props.className : '') + (item.liked ? ' liked' : ' unliked');
 			var iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : '');
 			var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-			var href = showLink ? '/item/' + (sessionManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			var href = showLink ? '/item/' + (appManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
 			return React.createElement(
 				'div',
-				{ className: className },
+				{ className: this.className('', item.liked ? ' liked' : ' unliked', 'item-firstimage ') },
 				React.createElement(
 					'div',
 					{ className: 'item-firstimage-wrapper' },
@@ -8145,22 +8691,19 @@ var ItemImage = React.createClass({
 	}
 });
 
-window.ItemImage = ItemImage;
-exports.default = window.ItemImage;
+module.exports = window.ItemImage = ItemImage;
 
-},{}],146:[function(require,module,exports){
+},{}],151:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
 /**
  * ItemSummary defination
  */
 var ItemSummary = React.createClass({
 	displayName: 'ItemSummary',
 
-	eventName: Dispatcher.Events.UPDATE_ITEM,
+	mixins: [Mixin, ItemDates],
+	eventName: AppEvents.UPDATE_ITEM,
 	refreshCount: 0,
 	refresh: function refresh() {
 		this.setState({ refreshCount: this.refreshCount++ });
@@ -8173,13 +8716,12 @@ var ItemSummary = React.createClass({
 		Dispatcher.addListener(this.eventName, this.refresh);
 	},
 	render: function render() {
-		var item = Dispatcher.Store.get(this.eventName, this.props.item.id);
+		var item = appStore.get(this.eventName, this.props.item.id);
 		if (item) {
-			var prices = util.getAttr.bind(this.props)('prices', 'original,sale,now').split(',');
-			var className = 'item-summary ' + util.getClassName(this.props) + (item.liked ? ' liked' : ' unliked');
+			var prices = util.attr.bind(this.props)('prices', 'original,sale,now').split(',');
 			var iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
-			var showLink = util.getAttr.bind(this.props)('showLink', true);
-			var href = showLink ? '/item/' + (sessionManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			var showLink = util.attr.bind(this.props)('showLink', true);
+			var href = showLink ? '/item/' + (appManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
 			var price_list = React.createElement(
 				'div',
 				{ className: 'item-prices' },
@@ -8192,7 +8734,7 @@ var ItemSummary = React.createClass({
 						React.createElement(
 							'span',
 							{ className: 'currency-sign' },
-							sessionManager.location().currency
+							appManager.location().currency
 						),
 						React.createElement(
 							'span',
@@ -8210,7 +8752,7 @@ var ItemSummary = React.createClass({
 
 			return React.createElement(
 				'div',
-				{ className: className },
+				{ className: this.className('', item.liked ? ' liked' : ' unliked', 'item-summary') },
 				React.createElement(
 					'div',
 					{ className: 'item-title' },
@@ -8248,31 +8790,58 @@ var ItemSummary = React.createClass({
 	}
 });
 
-window.ItemSummary = ItemSummary;
-exports.default = window.ItemSummary;
+module.exports = window.ItemSummary = ItemSummary;
 
-},{}],147:[function(require,module,exports){
+},{}],152:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
 /**
- * MessageItem defination
+ * Left defination
  */
-var MessageItem = React.createClass({
-	displayName: 'MessageItem',
+var Left = React.createClass({
+	displayName: 'Left',
 
-	eventName: Dispatcher.Events.UPDATE_MESSAGE,
+	id: 'left',
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_LEFT,
 	refreshCount: 0,
 	refresh: function refresh() {
-		this.setState({ refreshCount: this.refreshCount++ });
+		this.setState({
+			refreshCount: this.refreshCount++
+		});
 	},
 	componentWillUnmount: function componentWillUnmount() {
 		Dispatcher.removeListener(this.eventName, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		var showLeft = appManager.showLeft();
+		if (showLeft) {
+			return React.createElement(
+				'div',
+				{ className: this.className('col-xs-12 col-sm-6 col-md-' + showLeft), id: this.getId() },
+				React.createElement(CatMenu, { items: appManager.cats(), showRoot: false, className: 'leftmenu' })
+			);
+		}
+		return null;
+	}
+});
+
+module.exports = window.Left = Left;
+
+},{}],153:[function(require,module,exports){
+'use strict';
+
+/**
+ * MessageItem defination
+ */
+var MessageItem = React.createClass({
+	displayName: 'MessageItem',
+
+	mixins: [Mixin],
+	componentDidMount: function componentDidMount() {
 		ui.plugins.format($(getRootDom(this)));
 	},
 	toggleTime: function toggleTime(e) {
@@ -8281,11 +8850,10 @@ var MessageItem = React.createClass({
 	render: function render() {
 		var message = this.props.message;
 		if (message) {
-			var className = 'clearfix chatitem ' + (message.receiver ? 'myitem' : message.sender.gender == 'MALE' ? 'hisitem' : 'heritem');
-			var statusClassName = 'status ' + util.getAttr.bind(message)('status', '');
+			var statusClassName = 'status ' + util.attr.bind(message)('status', '');
 			return React.createElement(
 				'div',
-				{ className: className },
+				{ className: this.className('', message.receiver ? 'myitem' : message.sender.gender == 'MALE' ? 'hisitem' : 'heritem', 'clearfix chatitem') },
 				React.createElement(
 					'div',
 					{ className: 'message', onClick: this.toggleTime },
@@ -8304,50 +8872,149 @@ var MessageItem = React.createClass({
 	}
 });
 
-window.MessageItem = MessageItem;
-exports.default = window.MessageItem;
+module.exports = window.MessageItem = MessageItem;
 
-},{}],148:[function(require,module,exports){
+},{}],154:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
 /**
  * ModeSwitch defination
  */
 var ModeSwitch = React.createClass({
 	displayName: 'ModeSwitch',
 
-	mixins: [FormView],
+	mixins: [Mixin, FormView],
 	onMouseUp: function onMouseUp(e, checked) {
-		setMode(checked ? 1 : 0);
-		ajax.get(location.href, function (data) {
-			if (data && sessionManager.isListPage()) {
-				if (data && data.data) {
-					Dispatcher.emit(Dispatcher.Events.UPDATE_APPLICATION, data.data);
-				}
-			}
-		});
+		mode(checked ? 1 : 0);
+		applicationSwitch();
 	},
 	render: function render() {
 		return React.createElement(
 			Form,
-			{ className: 'form', method: 'get', encType: 'multipart/form-data',
+			{ className: this.className('', 'form'), method: 'get', encType: 'multipart/form-data',
 				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
-			React.createElement(Input, { type: 'switch', name: 'mode', title: localization.mode,
-				defaultChecked: getMode() == sessionManager.get('MODES').SELL ? true : false,
-				checkedChildren: localization.sell,
-				unCheckedChildren: localization.buy,
+			React.createElement(Input, { type: 'switch', name: 'mode', title: configurations.localization.mode,
+				defaultChecked: mode() == appManager.get('MODES').SELL ? true : false,
+				checkedChildren: configurations.localization.sell,
+				unCheckedChildren: configurations.localization.buy,
 				onMouseUp: this.onMouseUp })
 		);
 	}
 });
 
-window.ModeSwitch = ModeSwitch;
-exports.default = window.ModeSwitch;
+module.exports = window.ModeSwitch = ModeSwitch;
 
-},{}],149:[function(require,module,exports){
+},{}],155:[function(require,module,exports){
+"use strict";
+
+/**
+ * Navigation defination
+ */
+module.exports = window.Navigation = React.createClass({
+	displayName: "Navigation",
+
+	id: 'navigation',
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_NAVIGATION,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({
+			refreshCount: this.refreshCount++
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		return React.createElement(
+			"div",
+			{ className: this.className(), id: this.getId() },
+			React.createElement(
+				"div",
+				{ className: "container clearfix" },
+				React.createElement(
+					"div",
+					{ id: "leftmenu" },
+					React.createElement(
+						"ul",
+						{ className: "nav" },
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ onclick: "applicationSwitch('/')" },
+								React.createElement(
+									"span",
+									null,
+									configurations.localization.home
+								)
+							)
+						),
+						React.createElement(
+							"li",
+							{ id: "catmenu" },
+							React.createElement(CatMenu, { items: appManager.cats() })
+						),
+						React.createElement(
+							"li",
+							{ id: "extra" },
+							React.createElement(ModeSwitch, null)
+						)
+					),
+					React.createElement("div", { className: "clearfix" })
+				),
+				React.createElement(
+					"div",
+					{ id: "rightmenu" },
+					React.createElement("div", { className: "sensitive", id: "form-container" }),
+					React.createElement("div", { className: "clearfix" })
+				)
+			)
+		);
+		return null;
+	}
+});
+
+},{}],156:[function(require,module,exports){
+'use strict';
+
+/**
+ * Right defination
+ */
+var Right = React.createClass({
+	displayName: 'Right',
+
+	id: 'right',
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_RIGHT,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({
+			refreshCount: this.refreshCount++
+		});
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	render: function render() {
+		var showRight = appManager.showRight();
+		if (showRight) {
+			return React.createElement('div', { className: this.className('col-xs-12 col-sm-6 col-md-' + showRight), id: this.getId() });
+		}
+		return null;
+	}
+});
+
+module.exports = window.Right = Right;
+
+},{}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8468,84 +9135,81 @@ var Switch = React.createClass({
 window.Switch = Switch;
 exports.default = window.Switch;
 
-},{"classnames":13}],150:[function(require,module,exports){
+},{"classnames":13}],158:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
 /**
  * UserBox defination
  */
 var UserBox = React.createClass({
 	displayName: 'UserBox',
 
-	eventName: Dispatcher.Events.UPDATE_ITEM,
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_ITEM,
 	refreshCount: 0,
 	refresh: function refresh() {
 		this.setState({ refreshCount: this.refreshCount++ });
 	},
 	componentWillUnmount: function componentWillUnmount() {
 		Dispatcher.removeListener(this.eventName, this.refresh);
-		Dispatcher.removeListener(Dispatcher.Events.UPDATE_USER, this.refresh);
+		Dispatcher.removeListener(AppEvents.UPDATE_USER, this.refresh);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		Dispatcher.addListener(Dispatcher.Events.UPDATE_USER, this.refresh);
+		Dispatcher.addListener(AppEvents.UPDATE_USER, this.refresh);
 	},
 	onChatClick: function onChatClick(e) {
-		var user = this.props.user;
-		var itemId = this.props.itemId;
-		if (user) {
-			var _isGuest = sessionManager.get('isGuest', true);
-			var _isCurrentUser = isCurrentUser(user);
-			if (!_isGuest && !_isCurrentUser) {
-				Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user, itemId);
-			}
+		if (this.canDo()) {
+			var itemId = this.props.itemId;
+			appStore.set(AppEvents.ADD_CHATBOX, user, itemId);
 		}
 	},
 	onFollowClick: function onFollowClick(e) {
-		var user = this.props.user;
+		var user = this.canDo();
 		if (user) {
-			var _isGuest = sessionManager.get('isGuest', true);
-			var _isCurrentUser = isCurrentUser(user);
-			if (!_isGuest && !_isCurrentUser) {
-				var _isFollowingTo = isFollowingTo(user);
-				if (_isFollowingTo) {
-					//unfollow
-					ajax.post('/unfollow/' + user.id, function (o) {
-						Dispatcher.emit(Dispatcher.Events.UPDATE_USER, o.data);
-					});
-				} else {
-					//follow
-					ajax.post('/follow/' + user.id, function (o) {
-						Dispatcher.emit(Dispatcher.Events.UPDATE_USER, o.data);
-					});
-				}
+			var _isFollowingTo = isFollowingTo(user);
+			if (_isFollowingTo) {
+				// unfollow
+				ajax.post('/unfollow/' + user.id, function (o) {
+					appStore.set(AppEvents.UPDATE_USER, o.data);
+				});
+			} else {
+				// follow
+				ajax.post('/follow/' + user.id, function (o) {
+					appStore.set(AppEvents.UPDATE_USER, o.data);
+				});
 			}
 		}
+	},
+	canDo: function canDo(action) {
+		var user = this.props.user;
+		if (user) {
+			try {
+				return appManager.isLogged().id != user.id ? user : false;
+			} catch (e) {}
+		}
+		return false;
 	},
 	render: function render() {
 		var user = this.props.user;
 		if (user) {
-			var _isGuest = sessionManager.get('isGuest', true);
+			var _isGuest = appManagerisGuest();
 			var _isCurrentUser = isCurrentUser(user);
 			var _isFollowingTo = isFollowingTo(user);
 
-			var className = 'userbox ' + util.getClassName(this.props);
 			var iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
-			var iconChatTitle = _isGuest ? localization.please_login_first : _isCurrentUser ? localization.cannot_chat_with_yourself : 'Send message';
+			var iconChatTitle = _isGuest ? configurations.localization.please_login_first : _isCurrentUser ? configurations.localization.cannot_chat_with_yourself : 'Send message';
 			var iconFollowClassName = 'icon ' + (_isFollowingTo ? 'icon-unfollow' : 'icon-follow') + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
-			var iconFollowTitle = _isGuest ? localization.please_login_first : _isCurrentUser ? localization.cannot_follow_yourself : _isFollowingTo ? localization.unfollow : '';
-			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman');
+			var iconFollowTitle = _isGuest ? configurations.localization.please_login_first : _isCurrentUser ? configurations.localization.cannot_follow_yourself : _isFollowingTo ? configurations.localization.unfollow : '';
+			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? appManager.get('noavatarman') : appManager.get('noavatarwoman');
 			var href = '/' + user.name;
 			return React.createElement(
 				'div',
-				{ className: className },
+				{ className: this.className('', 'userbox') },
 				React.createElement('img', { src: avatar }),
 				React.createElement(
 					'a',
-					{ className: 'user-name', href: href },
+					{ className: 'user-name', onClick: applicationSwitch(href) },
 					React.createElement(
 						'span',
 						null,
@@ -8560,15 +9224,10 @@ var UserBox = React.createClass({
 	}
 });
 
-window.UserBox = UserBox;
-exports.default = window.UserBox;
+module.exports = window.UserBox = UserBox;
 
-},{}],151:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
 
 var _flux = require('flux');
 
@@ -8609,243 +9268,12 @@ var EventEmitter = function (_Events) {
 Dispatcher.EventEmitter = new EventEmitter();
 Dispatcher.EventEmitter.setMaxListeners(Infinity);
 //
-Dispatcher.Events = (0, _keymirror2.default)({
-	UPDATE_APPLICATION: null,
-	UPDATE_HOMEPAGE: null,
-	UPDATE_CATITEMSPAGE: null,
-	UPDATE_USERITEMSPAGE: null,
-	UPDATE_ITEMDETAILSPAGE: null,
-	UPDATE_LOGINPAGE: null,
-	UPDATE_CHANGEACCOUNTPAGE: null,
-	UPDATE_CHANGEEMAILPAGE: null,
-	UPDATE_CHANGPASSWORDPAGE: null,
-	UPDATE_SENDACTIVATIONPAGE: null,
-	UPDATE_REGISTERPAGE: null,
-	UPDATE_CHANGELOCATIONPAGE: null,
-	UPDATE_DEACTIVATEPAGE: null,
-	UPDATE_BUYITEMPAGE: null,
-	UPDATE_SELLITEMPAGE: null,
-	UPDATE_MESSAGE: null,
-
-	SENT_MESSAGE: null,
-	RECEIVED_MESSAGE: null,
-
-	UPDATE_CATMENU: null,
-	UPDATE_ITEM: null,
-	UPDATE_USER: null,
-
-	// MESSENGER EVENTS
-	UPDATE_CHATBAR: null,
-	UPDATE_CHATBOX: null,
-	ADD_CHATBOX: null,
-	SHOW_CHATBOX: null,
-	REMOVE_CHATBOX: null,
-	LOAD_RECENT_MESSAGES: null,
-	LOAD_OLD_MESSAGES: null
-});
-
-Dispatcher.Store = function () {
-	var _data = {
-		application: null,
-		catitems: null,
-		useritems: null,
-		itemdetails: null,
-		lastUpdatedUser: '',
-		lastMessage: '',
-		chatusers: [],
-		currentchatuser: null
-	};
-	function getChatUser(user_id) {
-		if (_data.chatusers.length > 0) {
-			for (var i = 0; i < _data.chatusers.length; i++) {
-				if (_data.chatusers[i].id == user_id) {
-					return _data.chatusers[i];
-				}
-			}
-		}
-		return null;
-	}
-	function setChatUser(user_id, user) {
-		if (_data.chatusers.length > 0) {
-			for (var i = 0; i < _data.chatusers.length; i++) {
-				if (_data.chatusers[i].id == user_id) {
-					_data.chatusers[i] = user;
-					return;
-				}
-			}
-		}
-		_data.chatusers.push(user);
-	}
-	return {
-		get: function get(actionType) {
-			switch (actionType) {
-				case Dispatcher.Events.UPDATE_APPLICATION:
-					return _data.application;
-				case Dispatcher.Events.UPDATE_CATITEMSPAGE:
-					return _data.catitems;;
-				case Dispatcher.Events.UPDATE_USERITEMSPAGE:
-					return _data.useritems;
-				case Dispatcher.Events.UPDATE_ITEMDETAILSPAGE:
-					return _data.itemdetails;
-					break;
-				case Dispatcher.Events.UPDATE_ITEM:
-					var item_id = arguments[1];
-					if (item_id) {
-						if (_data.catitems) {
-							for (var i = 0; i < _data.catitems.paginate.data.length; i++) {
-								if (_data.catitems.paginate.data[i].id == item_id) {
-									return _data.catitems.paginate.data[i];
-								}
-							}
-						} else if (_data.useritems) {
-							for (var i = 0; i < _data.useritems.paginate.data.length; i++) {
-								if (_data.useritems.paginate.data[i].id == item_id) {
-									return _data.useritems.paginate.data[i];
-								}
-							}
-						} else if (_data.itemdetails) {
-							return _data.itemdetails.itemdetails;
-						}
-					}
-					return null;
-				case Dispatcher.Events.UPDATE_USER:
-					return _data.lastUpdatedUser;
-				case Dispatcher.Events.UPDATE_CHATBOX:
-				case Dispatcher.Events.SHOW_CHATBOX:
-					return getChatUser(arguments[1]);
-				case Dispatcher.Events.UPDATE_CHATBAR:
-					return _data.chatusers;
-			}
-		},
-		set: function set(actionType, data, params) {
-			console.log('set', actionType, data);
-			switch (actionType) {
-				case Dispatcher.Events.UPDATE_APPLICATION:
-					_data.application = data;
-					if (_data.application.catitems) _data.catitems = _data.application;else if (_data.application.useritems) _data.useritems = _data.application;else if (_data.application.itemdetails) _data.itemdetails = _data.application;
-					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
-					break;
-				case Dispatcher.Events.UPDATE_CATITEMSPAGE:
-					_data.catitems = data;
-					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
-					break;
-				case Dispatcher.Events.UPDATE_USERITEMSPAGE:
-					_data.useritems = data;
-					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
-					break;
-				case Dispatcher.Events.UPDATE_ITEMDETAILSPAGE:
-					_data.itemdetails = data;
-					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
-					break;
-				case Dispatcher.Events.UPDATE_ITEM:
-					if (data && data.id) {
-						if (_data.catitems) {
-							for (var i = 0; i < _data.catitems.paginate.data.length; i++) {
-								if (_data.catitems.paginate.data[i].id == data.id) {
-									_data.catitems.paginate.data[i] = Object.assign(_data.catitems.paginate.data[i], data);
-									break;
-								}
-							}
-						} else if (_data.useritems) {
-							for (var i = 0; i < _data.useritems.paginate.data.length; i++) {
-								if (_data.useritems.paginate.data[i].id == data.id) {
-									_data.useritems.paginate.data[i] = Object.assign(_data.useritems.paginate.data[i], data);
-									break;
-								}
-							}
-						} else if (_data.itemdetails) {
-							_data.itemdetails.itemdetails = data;
-						}
-					}
-					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
-					break;
-				case Dispatcher.Events.UPDATE_USER:
-					_data.lastUpdatedUser = data;
-					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
-					break;
-				case Dispatcher.Events.SENT_MESSAGE:
-					var receiver = data.receiver;
-					if (receiver) {
-						var chattingUser = getChatUser(receiver.id);
-						if (chattingUser) {
-							if (!chattingUser.messages) chattingUser.messages = [];
-							chattingUser.messages.push(data);
-							_data.currentchatuser = chattingUser;
-							Dispatcher.dispatch({ actionType: Dispatcher.Events.UPDATE_CHATBOX, data: _data.currentchatuser });
-						}
-					}
-					break;
-				case Dispatcher.Events.RECEIVED_MESSAGE:
-					var sender = data.sender;
-					if (sender) {
-						var chattingUser = getChatUser(sender.id);
-						if (chattingUser) {
-							if (!chattingUser.messages) chattingUser.messages = [];
-							chattingUser.messages.push(data);
-							Dispatcher.dispatch({ actionType: Dispatcher.Events.UPDATE_CHATBOX, data: chattingUser });
-						} else {
-							Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, sender);
-						}
-					}
-					break;
-				case Dispatcher.Events.ADD_CHATBOX:
-					if (data && data.id && data.displayname) {
-						var user = getChatUser(data.id);
-						if (!user) {
-							if (params[2]) data.itemId = params[2];
-							_data.chatusers.push(data);
-							_data.currentchatuser = getChatUser(data.id);
-							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBAR);
-						} else {
-							_data.currentchatuser = user;
-							Dispatcher.dispatch({ actionType: Dispatcher.Events.SHOW_CHATBOX, data: user });
-						}
-					}
-					break;
-				case Dispatcher.Events.LOAD_RECENT_MESSAGES:
-					var owner = sessionManager.isLogged();
-					if (owner && data && data.id && data.displayname) {
-						ajax.post('/messages', function (response) {
-							if (response.data) {
-								data.messages = response.data.messages;
-								data.paginate = response.data.paginate;
-								Dispatcher.dispatch({ actionType: Dispatcher.Events.UPDATE_CHATBOX, data: data });
-							}
-						}, { code: data.id });
-					}
-					break;
-				case Dispatcher.Events.REMOVE_CHATBOX:
-					if (data && data.id && data.displayname) {
-						var index = _data.chatusers.indexOf(data);
-						if (index >= 0) {
-							_data.chatusers.splice(index, 1);
-							Dispatcher.emit(Dispatcher.Events.UPDATE_CHATBAR);
-						}
-					}
-					break;
-				case Dispatcher.Events.UPDATE_CHATBAR:
-					Dispatcher.dispatch({ actionType: actionType, data: Dispatcher.Store.get(actionType) });
-					break;
-			}
-			sessionManager.set('data', _data);
-		}
-	};
-}();
-
 Dispatcher.register(function (action) {
-	Dispatcher.EventEmitter.emit(action.actionType, Dispatcher.Store.get(action.actionType));
+	Dispatcher.EventEmitter.emit(action.actionType, appStore.get(action.actionType));
 });
-
-Dispatcher.emit = function (actionType, data) {
-	if (Dispatcher.Events.hasOwnProperty(actionType)) {
-		return Dispatcher.Store.set(actionType, data, arguments);
-	} else {
-		throw 'Dispatcher does not support this action ' + actionType;
-	}
-};
 
 Dispatcher.addListener = function (actionType, callback) {
-	if (Dispatcher.Events.hasOwnProperty(actionType)) {
+	if (AppEvents.hasOwnProperty(actionType)) {
 		return Dispatcher.EventEmitter.on(actionType, callback);
 	} else {
 		throw 'Dispatcher does not support this action ' + actionType;
@@ -8853,380 +9281,115 @@ Dispatcher.addListener = function (actionType, callback) {
 };
 
 Dispatcher.removeListener = function (actionType, callback) {
-	if (Dispatcher.Events.hasOwnProperty(actionType)) {
+	if (AppEvents.hasOwnProperty(actionType)) {
 		return Dispatcher.EventEmitter.removeListener(actionType, callback);
 	} else {
 		throw 'Dispatcher does not support this action ' + actionType;
 	}
 };
 
-window.Dispatcher = Dispatcher;
+module.exports = window.Dispatcher = Dispatcher;
 
-exports.default = window.Dispatcher;
-
-},{"events":104,"flux":92,"keymirror":103}],152:[function(require,module,exports){
+},{"events":104,"flux":92,"keymirror":103}],160:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
+module.exports = window.AppEvents = ArrayToObject(['UPDATE_APPLICATION', 'UPDATE_BANNER', 'UPDATE_LEFT', 'UPDATE_CENTER', 'UPDATE_RIGHT', 'UPDATE_FOOTER', 'UPDATE_NAVIGATION', 'UPDATE_CATITEMSPAGE', 'UPDATE_USERITEMSPAGE', 'UPDATE_ITEMDETAILSPAGE', 'UPDATE_BUYITEMPAGE', 'UPDATE_SELLITEMPAGE', 'UPDATE_MESSAGE', 'SENT_MESSAGE', 'RECEIVED_MESSAGE', 'UPDATE_CHATBAR', 'UPDATE_CHATBOX', 'ADD_CHATBOX', 'SHOW_CHATBOX', 'REMOVE_CHATBOX', 'LOAD_RECENT_MESSAGES', 'LOAD_OLD_MESSAGES', 'UPDATE_ITEM', 'UPDATE_USER']);
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+},{}],161:[function(require,module,exports){
+'use strict';
 
-var _formsyReact = require('formsy-react');
-
-var _formsyReact2 = _interopRequireDefault(_formsyReact);
-
-var _switch = require('../components/switch.jsx');
-
-var _switch2 = _interopRequireDefault(_switch);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//
-function _objectWithoutProperties(obj, keys) {
-	var target = {};for (var i in obj) {
-		if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
-	}return target;
-}
-//
-_formsyReact2.default.addValidationRule('notEqualsField', function (values, value, field) {
-	return value != values[field];
-});
-_formsyReact2.default.addValidationRule('equalsField', function (values, value, field) {
-	return value == values[field];
-});
-_formsyReact2.default.addValidationRule('notEquals', function (values, value, eql) {
-	return value != eql;
-});
-_formsyReact2.default.addValidationRule('notEqualsIgnoreCase', function (values, value, eql) {
-	return value && eql && value.toLowerCase() != eql.toLowerCase();
-});
-_formsyReact2.default.addValidationRule('isPassword', function (values, value) {
-	var minLength = 6,
-	    maxLength = 30;
-	var reg_at_least_1_lowercase_alphabet_character = /[a-z]+/;
-	var reg_at_least_1_uppercase_alphabet_character = /[A-Z]+/;
-	var reg_at_least_1_number_character = /[0-9]+/;
-	var reg_at_least_1_special_character = /[!@#0^&*()+]+/;
-	try {
-		if (value && value.length >= minLength && value.length <= maxLength) {
-			//check min & max length
-			return reg_at_least_1_lowercase_alphabet_character.test(value) && reg_at_least_1_uppercase_alphabet_character.test(value) && reg_at_least_1_number_character.test(value) && reg_at_least_1_special_character.test(value);
-		}
-	} catch (e) {}
-	return false;
-});
-_formsyReact2.default.addValidationRule('isAccountName', function (values, value) {
-	var minLength = 3,
-	    maxLength = 30;
-	var reg = /^[a-z0-9]([\._]?[a-z0-9]+)+$/;
-	try {
-		if (value && value.length >= minLength && value.length <= maxLength) {
-			//check min & max length
-			return reg.test(value.toLowerCase());
-		}
-	} catch (e) {}
-	return false;
-});
 /**
- * Form defination
+ * @class AppManager
  */
-window.Form = _formsyReact2.default.Form;
 /**
- * Input defination
+ * @variable appManager
  */
-window.Input = React.createClass({
-	displayName: 'Input',
-
-	mixins: [_formsyReact2.default.Mixin],
-	className: '',
-	type: 'text',
-	id: '',
-	changeValue: function changeValue(event) {
-		var type = this.props.type;
-		var value;
-		if (type == 'checkbox') {
-			value = event.currentTarget.checked;
-		} else if (type == 'switch') {
-			value = event;
-		} else if (type == 'textarea') {
-			value = event.currentTarget.value;
-		} else if (type == 'image') {
-			var max = this.props.max ? this.props.max : 20;
-			var min = this.props.min ? this.props.min : 1;
-			if (event.currentTarget.files.length < min || event.currentTarget.files.length > max) {
-				event.currentTarget.value = null;
-				showMessageDialog('You should select at least ' + min + ' file, and no more than ' + max + ' files');
-			} else {
-				FormView.showImagesPreview(event.currentTarget, this.props.previewContainer);
+module.exports = window.appManager = new Store();
+//
+Object.assign(appManager, {
+	socketId: function socketId(val) {
+		if (val) this.set('socketId', val);
+		return this.get('socketId');
+	},
+	clientKey: function clientKey() {
+		return this.user().id + '+' + location.hostname;
+	},
+	showLeft: function showLeft(val) {
+		if (val) this.set('showLeft', parseInt(val));
+		return this.get('showLeft', 0);
+	},
+	showRight: function showRight(val) {
+		if (val) this.set('showRight', parseInt(val));
+		return this.get('showRight', 0);
+	},
+	showBanner: function showBanner(val) {
+		if (val) this.set('showBanner', parseInt(val));
+		return this.get('showBanner', 0);
+	},
+	mode: function mode(val) {
+		if (val) this.set('mode', val);
+		return this.get('mode');
+	},
+	appMessage: function appMessage(val) {
+		if (val) this.set('appMessage', val);
+		return this.get('appMessage');
+	},
+	location: function location(val) {
+		if (val) this.set('location', val);
+		return this.get('location');
+	},
+	cats: function cats(val) {
+		if (val) this.set('cats', val);
+		return this.get('cats');
+	},
+	isGuest: function isGuest(val) {
+		if (val) this.set('isGuest', parseInt(val));
+		return this.get('isGuest', true);
+	},
+	isLogged: function isLogged() {
+		if (!this.isGuest()) return this.user();
+		return false;
+	},
+	user: function user(val) {
+		if (val) {
+			this.set('user', JSON.parse($.base64.decode(val)));
+		}
+		return this.get('user');
+	},
+	socketUri: function socketUri(val) {
+		if (val) this.set('socketUri', val);
+		return this.get('socketUri');
+	},
+	type: function type(val) {
+		if (val) this.set('type', val);
+		return this.get('type', 'HomePage');
+	},
+	data: function data(val) {
+		if (val) this.set('data', val);
+		return this.get('data');
+	},
+	paginate: function paginate(val) {
+		if (val) this.set('paginate', val);
+		return this.get('paginate');
+	},
+	configurations: function configurations(_configurations) {
+		for (var k in _configurations) {
+			try {
+				this[k](_configurations[k]);
+			} catch (e) {
+				this.set(k, _configurations[k]);
 			}
-			value = event.currentTarget.value;
-		} else {
-			value = event.currentTarget.value;
 		}
-		this.setValue(value);
-		if (this.props.onChange) this.props.onChange(this.props.name, value);
-	},
-	render: function render() {
-		this.className = 'form-group ' + (this.props.className || '') + ' ' + (this.showRequired() ? 'required' : this.showError() ? 'error' : '');
-		this.type = this.props.type ? this.props.type.toLowerCase() : 'text';
-		this.id = this.id ? this.id : this.props.id ? this.props.id : util.uuid(this.type + '_');
-
-		switch (this.type) {
-			case 'hidden':
-				return this.renderHidden();
-			case 'autocomplete':
-				return this.renderAutocomplete();
-			case 'checkbox':
-			case 'radio':
-				return this.renderCheckboxRadio();
-			case 'checkboxlist':
-			case 'radiolist':
-				return this.renderCheckboxRadioList();
-			case 'button':
-			case 'submit':
-				return this.renderButton();
-			case 'textarea':
-				return this.renderTextarea();
-			case 'select':
-				return this.renderSelect();
-			case 'file':
-				return this.renderFile();
-			case 'image':
-				return this.renderImage();
-			case 'switch':
-				return this.renderSwitch();
-			case 'text':
-			default:
-				return this.renderText();
-		}
-	},
-	renderHidden: function renderHidden() {
-		return React.createElement('input', { id: this.id, type: 'hidden', name: this.props.name, value: this.getValue() || '' });
-	},
-	renderText: function renderText() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'onChange', 'id', 'value']);
-		return React.createElement(
-			'div',
-			{ className: this.className },
-			React.createElement(
-				'label',
-				{ htmlFor: this.props.name },
-				this.props.title
-			),
-			React.createElement('input', _extends({}, restProps, { id: this.id, type: this.type, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
-			React.createElement(
-				'span',
-				{ className: 'validation-error' },
-				this.getErrorMessage()
-			)
-		);
-	},
-	renderAutocomplete: function renderAutocomplete() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'data-source']);
-		var source = this.props.source ? this.props.source : null;
-		return React.createElement(
-			'div',
-			{ className: this.className },
-			React.createElement(
-				'label',
-				{ htmlFor: this.props.name },
-				this.props.title
-			),
-			React.createElement('input', _extends({}, restProps, { id: this.id, type: 'text', onChange: this.changeValue, value: this.getValue() || '', className: 'form-control autocomplete',
-				'data-source': source })),
-			React.createElement('input', { type: 'hidden', name: this.props.name }),
-			React.createElement(
-				'span',
-				{ className: 'validation-error' },
-				this.getErrorMessage()
-			)
-		);
-	},
-	renderCheckboxRadio: function renderCheckboxRadio() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
-		var name = this.props.name ? this.props.name : util.uuid('radiolist_');
-		this.className += ' ' + this.type;
-		var labelClassName = 'form-' + this.type + '-label';
-		return React.createElement(
-			'div',
-			{ className: this.className },
-			React.createElement(
-				'label',
-				{ className: labelClassName, htmlFor: name },
-				React.createElement('input', _extends({}, restProps, { id: this.id, type: this.type, name: name, onChange: this.changeValue, className: this.type })),
-				this.props.title
-			)
-		);
-	},
-	renderCheckboxRadioList: function renderCheckboxRadioList() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
-		var name = this.props.name ? this.props.name : util.uuid('radiolist_');
-		var type = this.type == 'checkboxlist' ? 'checkbox' : 'radio';
-		this.className += ' ' + this.type;
-		var changeValue = this.changeValue;
-		var labelClassName = 'form-' + type + '-label';
-		return React.createElement(
-			'div',
-			{ className: this.className },
-			React.createElement(
-				'label',
-				{ className: labelClassName },
-				this.props.title
-			),
-			this.props.options.map(function (item, i) {
-				var itemname = name + '[' + i + ']';
-				var value = item.value;
-				var itemClassName = type + (i == 0 ? ' first-' + type : '');
-				return React.createElement(
-					'div',
-					{ className: itemClassName, key: i },
-					React.createElement(
-						'label',
-						{ htmlFor: itemname },
-						React.createElement('input', _extends({}, restProps, { type: type, name: name, id: itemname, value: value, className: type, onChange: changeValue })),
-						item.label
-					)
-				);
-			}),
-			React.createElement('div', { clasName: 'clearfix' })
-		);
-	},
-	renderButton: function renderButton() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'onClick', 'disabled']);
-		this.className = 'btn btn-default ' + (this.props.className ? this.props.className : '');
-		return React.createElement('input', _extends({}, restProps, { id: this.id, name: this.props.name, type: this.type, value: this.getValue() || '', className: this.className, onClick: this.props.onClick, disabled: this.props.disabled }));
-	},
-	renderTextarea: function renderTextarea() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'cols', 'rows']);
-		return React.createElement(
-			'div',
-			{ className: this.className },
-			React.createElement(
-				'label',
-				{ htmlFor: this.props.name },
-				this.props.title
-			),
-			React.createElement('textarea', _extends({}, restProps, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
-				cols: this.props.cols, rows: this.props.rows })),
-			React.createElement(
-				'span',
-				{ className: 'validation-error' },
-				this.getErrorMessage()
-			)
-		);
-	},
-	renderSelect: function renderSelect() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'disabled']);
-		var optionLabel = this.props.optionLabel || function () {
-			return this.label;
-		};
-		var optionValue = this.props.optionValue || function () {
-			return this.value;
-		};
-		var optionAttrs = this.props.optionAttrs || function () {
-			return {};
-		};
-		var placeholder = this.props.placeholder ? React.createElement(
-			'option',
-			null,
-			this.props.placeholder
-		) : '';
-		return React.createElement(
-			'div',
-			{ className: this.className },
-			React.createElement(
-				'label',
-				{ htmlFor: this.props.name },
-				this.props.title
-			),
-			React.createElement(
-				'select',
-				_extends({}, restProps, { id: this.id, name: this.props.name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control', disabled: this.props.disabled }),
-				placeholder,
-				this.props.options.map(function (item, i) {
-					var label = optionLabel.bind(item)();
-					var value = optionValue.bind(item)();
-					var props = optionAttrs.bind(item)();
-					return React.createElement(
-						'option',
-						_extends({ key: i }, props, { value: value }),
-						label
-					);
-				})
-			),
-			React.createElement(
-				'span',
-				{ className: 'validation-error' },
-				this.getErrorMessage()
-			)
-		);
-	},
-	renderFile: function renderFile() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value']);
-		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
-		return React.createElement(
-			'div',
-			{ className: this.className },
-			React.createElement(
-				'label',
-				{ htmlFor: this.props.name },
-				this.props.title
-			),
-			React.createElement('input', _extends({}, restProps, { id: this.id, type: this.type, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
-			React.createElement(
-				'span',
-				{ className: 'validation-error' },
-				this.getErrorMessage()
-			)
-		);
-	},
-	renderImage: function renderImage() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'accept']);
-		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
-		return React.createElement(
-			'div',
-			{ className: this.className },
-			React.createElement(
-				'label',
-				{ htmlFor: this.props.name },
-				this.props.title
-			),
-			React.createElement('input', _extends({}, restProps, { id: this.id, type: 'file', name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control',
-				accept: 'image/*' })),
-			React.createElement(
-				'span',
-				{ className: 'validation-error' },
-				this.getErrorMessage()
-			),
-			React.createElement('div', { className: 'row image-preview' })
-		);
-	},
-	renderSwitch: function renderSwitch() {
-		var restProps = _objectWithoutProperties(this.props, ['className', 'type', 'name', 'id', 'onChange', 'value', 'accept']);
-		var name = this.props.multiple ? this.props.name + '[]' : this.props.name;
-		return React.createElement(
-			'div',
-			{ className: this.className },
-			React.createElement(
-				'label',
-				{ htmlFor: this.props.name },
-				this.props.title
-			),
-			React.createElement(_switch2.default, _extends({}, restProps, { id: this.id, name: name, onChange: this.changeValue, value: this.getValue() || '', className: 'form-control' })),
-			React.createElement(
-				'span',
-				{ className: 'validation-error' },
-				this.getErrorMessage()
-			)
-		);
 	}
 });
+
+},{}],162:[function(require,module,exports){
+'use strict';
+
 /**
  * FormView mixin defination
  */
-exports.default = window.FormView = {
+module.exports = window.FormView = {
 	getInitialState: function getInitialState() {
 		return {
 			canSubmit: false
@@ -9295,192 +9458,952 @@ exports.default = window.FormView = {
 	}
 };
 
-},{"../components/switch.jsx":149,"formsy-react":98}],153:[function(require,module,exports){
+},{}],163:[function(require,module,exports){
+'use strict';
+
+module.exports = window.ItemDates = {
+	getItemExpires: function getItemExpires(item) {
+		return item.deleted_at ? React.createElement(
+			'div',
+			{ className: 'item-date item-expired' },
+			React.createElement(
+				'a',
+				null,
+				React.createElement(
+					'span',
+					{ className: 'label expired-label' },
+					configurations.localization.expires_at
+				),
+				React.createElement(
+					'span',
+					{ className: 'prettydateformat' },
+					item.deleted_at
+				)
+			)
+		) : null;
+	},
+	getItemPostedOrEdited: function getItemPostedOrEdited(item) {
+		var created = new Date(item.created_at);
+		var updated = new Date(item.updated_at);
+		return +updated !== +created ? React.createElement(
+			'div',
+			{ className: 'item-date item-updated' },
+			React.createElement(
+				'a',
+				null,
+				React.createElement(
+					'span',
+					{ className: 'label edited-label' },
+					configurations.localization.edited_at
+				),
+				React.createElement(
+					'span',
+					{ className: 'prettydateformat' },
+					item.updated_at
+				)
+			)
+		) : React.createElement(
+			'div',
+			{ className: 'item-date item-created' },
+			React.createElement(
+				'a',
+				null,
+				React.createElement(
+					'span',
+					{ className: 'label posted-label' },
+					configurations.localization.posted_at
+				),
+				React.createElement(
+					'span',
+					{ className: 'prettydateformat' },
+					item.created_at
+				)
+			)
+		);
+	}
+};
+
+},{}],164:[function(require,module,exports){
+'use strict';
+
+module.exports = window.Mixin = {
+	className: function className(defaultClassName, prefix, subfix) {
+		return (prefix ? prefix : '') + ' ' + this.attr('className', defaultClassName ? defaultClassName : '') + ' ' + (subfix ? subfix : '');
+	},
+	attr: function (_attr) {
+		function attr(_x, _x2) {
+			return _attr.apply(this, arguments);
+		}
+
+		attr.toString = function () {
+			return _attr.toString();
+		};
+
+		return attr;
+	}(function (name, defaultValue) {
+		return attr.bind(this.props)(name, defaultValue);
+	}),
+	getId: function getId(prefix) {
+		return this.id ? this.id : attr.bind(this.props)('id', uuid(prefix));
+	}
+};
+
+},{}],165:[function(require,module,exports){
 'use strict';
 
 /**
- * Session manager
+ * BuyItemPage defination
  */
-Object.assign(window, {
-	sessionManager: function () {
-		var me = this;
-		var _data = {};
-		return {
-			appMessage: function appMessage() {
-				return _data.appMessage;
-			},
-			location: function location() {
-				return _data.location;
-			},
-			cats: function cats() {
-				return _data.cats;
-			},
-			user: function user() {
-				return JSON.parse($.base64.decode(_data.user));
-			},
-			rawdata: function rawdata() {
-				return _data.rawdata;
-			},
-			getCurrentPage: function getCurrentPage() {
-				return _data.page;
-			},
-			isLogged: function isLogged() {
-				if (!this.get('isGuest', true)) return this.user();
-				return false;
-			},
-			isListPage: function isListPage() {
-				if (this.has('rawdata')) return this.get('rawdata').paginate;
-				return false;
-			},
-			has: function has(name) {
-				return _data.hasOwnProperty(name);
-			},
-			get: function get(name, defaultValue) {
-				if (this.has(name)) return _data[name];
-				return defaultValue;
-			},
-			set: function set(name, value) {
-				_data[name] = value;
-				return this;
-			},
-			assign: function assign(name, value) {
-				if (this.has(name)) Object.assign(_data[name], value);else _data[name] = Object.assign({}, value);
-				return this;
-			},
-			remove: function remove(name) {
-				if (this.has(name)) delete _data[name];
-				return this;
-			}
-		};
-	}()
+var BuyItemPage = React.createClass({
+	displayName: 'BuyItemPage',
+
+	mixins: [FormView, Mixin],
+	render: function render() {
+		var catoptions = [];
+		$(appManager.cats()).each(function (i, root) {
+			$(root.children).each(function (j, cat) {
+				$(cat.children).each(function (k, subcat) {
+					catoptions.push({
+						label: cat.details.name + ' >> ' + subcat.details.name,
+						value: subcat.id
+					});
+				});
+			});
+		});
+		var conditions = [{
+			label: configurations.localization.new,
+			value: 1
+		}, {
+			label: configurations.localization.used,
+			value: 0
+		}];
+		return React.createElement(
+			Form,
+			{ className: this.className('', 'form row'), method: 'post', action: '/buyitem', encType: 'multipart/form-data',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: 'row' },
+				React.createElement(Input, { type: 'select', required: true, name: 'parent_id', title: configurations.localization.category, options: catoptions,
+					className: 'col-xs-6 col-md-5', placeholder: configurations.localization.select_category }),
+				React.createElement(Input, { type: 'image', required: true, name: 'files', title: configurations.localization.images, cols: '4', multiple: true, min: '1', max: '12',
+					className: 'col-xs-6 col-md-3', previewContainer: '.image-preview-container' }),
+				React.createElement(Input, { type: 'radiolist', name: 'is_new', required: true, title: configurations.localization.condition, options: conditions,
+					className: 'col-xs-6 col-md-4 inline-block-list' })
+			),
+			React.createElement(
+				'div',
+				{ className: 'row' },
+				React.createElement(Input, { type: 'text', required: true, name: 'title', title: configurations.localization.title,
+					className: 'col-xs-6 col-md-5', placeholder: configurations.localization.title_hint }),
+				React.createElement(Input, { type: 'date', name: 'deleted_at', title: configurations.localization.expire,
+					className: 'col-xs-6 col-md-3', min: format.date(new Date(), 'yyyy-MM-dd') }),
+				React.createElement(Input, { type: 'number', name: 'originalprice', title: configurations.localization.min_price,
+					className: 'col-xs-6 col-md-2', step: '0.1', min: '0', placeholder: '1.0' }),
+				React.createElement(Input, { type: 'number', name: 'nowprice', title: configurations.localization.max_price,
+					className: 'col-xs-6 col-md-2', step: '0.1', min: '0', placeholder: '1.0' })
+			),
+			React.createElement(Input, { type: 'textarea', name: 'description', title: configurations.localization.description, cols: '10', rows: '4', placeholder: configurations.localization.description_hint }),
+			React.createElement(Input, { type: 'hidden', required: true, name: 'is_selling', value: '0' }),
+			React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: configurations.localization.buy, className: 'btn-fixed-right' }),
+			React.createElement('div', { className: 'row image-preview image-preview-container' })
+		);
+	}
 });
 
-},{}],154:[function(require,module,exports){
+module.exports = window.BuyItemPage = BuyItemPage;
+
+},{}],166:[function(require,module,exports){
 'use strict';
 
 /**
- * UI
+ * CatItemsPage defination
  */
+var CatItemsPage = React.createClass({
+	displayName: 'CatItemsPage',
+
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_CATITEMSPAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+		ui.plugins.format($(getRootDom(this)));
+	},
+	render: function render() {
+		var cat = appManager.data();
+		var paginate = appManager.paginate();
+		if (cat && paginate) {
+			var items = paginate.data;
+			return React.createElement(
+				'div',
+				{ className: this.className('', 'item-list-wrapper'), id: this.getId() },
+				React.createElement(
+					'div',
+					{ className: 'cat-detail' },
+					React.createElement(
+						'div',
+						{ className: 'cat-name' },
+						React.createElement(
+							'label',
+							null,
+							cat.details.name
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'cat-title' },
+						React.createElement(
+							'label',
+							null,
+							cat.details.title
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'cat-description' },
+						React.createElement(
+							'p',
+							null,
+							cat.details.description
+						)
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'row item-list' },
+					items.map(function (item, i) {
+						var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
+						var userbox = isCurrentUser(item.user) ? null : React.createElement(UserBox, { user: item.user, itemId: item.id });
+						return React.createElement(
+							'div',
+							{ className: itemClassName, key: i },
+							React.createElement(ItemImage, { item: item }),
+							React.createElement(ItemSummary, { item: item, prices: 'original,now' }),
+							userbox
+						);
+					})
+				)
+			);
+		}
+		return null;
+	}
+});
+
+module.exports = window.CatItemsPage = CatItemsPage;
+
+},{}],167:[function(require,module,exports){
+'use strict';
+
+/**
+ * ChangeAccountPage defination
+ */
+var ChangeAccountPage = React.createClass({
+	displayName: 'ChangeAccountPage',
+
+	mixins: [FormView, Mixin],
+	render: function render() {
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/account', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: this.className() },
+				React.createElement(Input, { type: 'password', required: true, name: 'current_password', title: configurations.localization.password,
+					validationError: configurations.localization.password_required }),
+				React.createElement(Input, { type: 'text', required: true, name: 'name', title: configurations.localization.account, validations: {
+						notEqualsIgnoreCase: appManager.user.name,
+						isAccountName: true
+					}, validationErrors: {
+						notEqualsIgnoreCase: configurations.localization.new_account_should_be_different,
+						isAccountName: configurations.localization.invalid_account
+					} }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: configurations.localization.change, className: 'center-block' })
+			)
+		);
+	}
+});
+
+module.exports = window.ChangeAccountPage = ChangeAccountPage;
+
+},{}],168:[function(require,module,exports){
+'use strict';
+
+/**
+ * ChangeEmailPage defination
+ */
+var ChangeEmailPage = React.createClass({
+	displayName: 'ChangeEmailPage',
+
+	mixins: [FormView, Mixin],
+	render: function render() {
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/email', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: this.className() },
+				React.createElement(Input, { type: 'password', required: true, name: 'current_password', title: configurations.localization.password,
+					validationError: configurations.localization.password_required }),
+				React.createElement(Input, { type: 'email', required: true, name: 'email', title: configurations.localization.email, validations: {
+						isEmail: true,
+						notEqualsIgnoreCase: appManager.user().email
+					}, validationErrors: {
+						isEmail: configurations.localization.invalid_email,
+						notEqualsIgnoreCase: configurations.localization.new_email_should_be_different
+					} }),
+				React.createElement(Input, { type: 'email', name: 'email_confirmation', title: configurations.localization.email_confirmation, validations: 'equalsField:email',
+					validationError: configurations.localization.email_confirmation_not_matched }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: configurations.localization.change, className: 'center-block' })
+			)
+		);
+	}
+});
+
+module.exports = window.ChangeEmailPage = ChangeEmailPage;
+
+},{}],169:[function(require,module,exports){
+'use strict';
+
+/**
+ * ChangeLocationPage defination
+ */
+var ChangeLocationPage = React.createClass({
+	displayName: 'ChangeLocationPage',
+
+	mixins: [FormView, Mixin],
+	getInitialState: function getInitialState() {
+		return {
+			value: '',
+			locations: [],
+			loading: false
+		};
+	},
+	onValidSubmit: function onValidSubmit(model) {},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+		$('.autocomplete').each(function (i, e) {
+			var _source = e.attribute('data-source');
+			$(e).autocomplete({
+				source: function source(request, response) {
+					$.ajax({
+						url: _source,
+						data: {
+							q: request.term
+						},
+						success: function success(_data) {
+							var items = [];
+							$.each(_data.data, function (i, v) {
+								items.push({
+									id: v.id,
+									label: v.fullname
+								});
+							});
+							response(items);
+						}
+					});
+				},
+				minLength: 2,
+				select: function select(event, ui) {
+					if (ui && ui.item) {
+						$(this).attr('data-value', ui.item);
+						var id = ui.item.id;
+						this.nextSibling.value = id;
+						if (id && id != appManager.location().id) submitForm($(this).parents('form:first'));
+					}
+				}
+			});
+		});
+	},
+	render: function render() {
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/location', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: this.className() },
+				React.createElement(Input, { type: 'autocomplete', name: 'location', title: configurations.localization.location, source: '/searchlocation', className: 'center-block',
+					value: appManager.location().name, placeholder: configurations.localization.please_type_location })
+			)
+		);
+	}
+});
+
+module.exports = window.ChangeLocationPage = ChangeLocationPage;
+
+},{}],170:[function(require,module,exports){
+'use strict';
+
+/**
+ * ChangePasswordPage defination
+ */
+var ChangePasswordPage = React.createClass({
+	displayName: 'ChangePasswordPage',
+
+	mixins: [FormView, Mixin],
+	render: function render() {
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/password', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: this.className() },
+				React.createElement(Input, { type: 'password', required: true, name: 'current_password', title: configurations.localization.current_password,
+					validationError: configurations.localization.password_required }),
+				React.createElement(Input, { type: 'password', required: true, name: 'password', title: 'New password', validations: {
+						notEqualsField: 'current_password',
+						isPassword: true
+					}, validationErrors: {
+						notEqualsField: configurations.localization.new_password_should_be_different,
+						isPasword: configurations.localization.password_rules
+					} }),
+				React.createElement(Input, { type: 'password', name: 'password_confirmation', title: configurations.localization.password_confirmation, validations: 'equalsField:password',
+					validationError: configurations.localization.password_confirmation_not_matched }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: configurations.localization.change, className: 'center-block' })
+			)
+		);
+	}
+});
+
+module.exports = window.ChangePasswordPage = ChangePasswordPage;
+
+},{}],171:[function(require,module,exports){
+'use strict';
+
+/**
+ * DeactivatePage defination
+ */
+var DeactivatePage = React.createClass({
+	displayName: 'DeactivatePage',
+
+	mixins: [FormView, Mixin],
+	render: function render() {
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/deactivate', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: this.className() },
+				React.createElement(Input, { type: 'password', required: true, name: 'current_password', title: configurations.localization.password,
+					validationError: configurations.localization.password_required }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: configurations.localization.deactivate, className: 'center-block' })
+			)
+		);
+	}
+});
+
+module.exports = window.DeactivatePage = DeactivatePage;
+
+},{}],172:[function(require,module,exports){
+'use strict';
+
+/**
+ * HomePage defination
+ */
+var HomePage = React.createClass({
+	displayName: 'HomePage',
+
+	eventName: AppEvents.UPDATE_HOMEPAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	id: function id() {
+		return this._id ? this._id : util.uuid('auto');
+	},
+	render: function render() {
+		var className = 'homepage ' + util.className(this.props);
+		return React.createElement('div', { className: className, id: this.id() });
+	}
+});
+
+module.exports = window.HomePage = HomePage;
+
+},{}],173:[function(require,module,exports){
+'use strict';
+
+/**
+ * ItemDetailsPage defination
+ */
+var ItemDetailsPage = React.createClass({
+	displayName: 'ItemDetailsPage',
+
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_ITEMDETAILSPAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+	},
+	handleImageLoad: function handleImageLoad(event) {},
+	handlePlay: function handlePlay() {
+		this._imageGallery.play();
+	},
+	handlePause: function handlePause() {
+		this._imageGallery.pause();
+	},
+	render: function render() {
+		var _this = this;
+
+		var item = appManager.data();
+		if (item) {
+			var showThumbnails = this.attr('showThumbnails', true);
+			var slideOnThumbnailHover = this.attr('slideOnThumbnailHover', true);
+			var showNav = this.attr('showNav', true);
+			var slideInterval = this.attr('slideInterval', 3000);
+			var images = [];
+			item.images.map(function (o, i) {
+				images.push({
+					original: o.url,
+					thumbnail: o.url,
+					originalAlt: o.title,
+					description: o.description
+				});
+			});
+			var lines = item.description.split('\n');
+			return React.createElement(
+				'div',
+				{ className: this.className('', 'item-details-wrapper'), id: this.getId() },
+				React.createElement(
+					'div',
+					{ className: 'row item-detail' },
+					React.createElement(
+						'div',
+						{ className: 'col-xs-6 col-md-7' },
+						React.createElement(ItemSummary, { item: item, showLink: false, prices: 'original,now' }),
+						React.createElement(
+							'div',
+							{ className: 'item-description' },
+							lines.map(function (o, i) {
+								return React.createElement(
+									'p',
+									{ key: i },
+									o
+								);
+							})
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'col-xs-6 col-md-5 item-gallery sensitive' },
+						React.createElement(ImageGallery, {
+							ref: function ref(i) {
+								return _this._imageGallery = i;
+							},
+							items: images,
+							slideInterval: slideInterval,
+							handleImageLoad: this.handleImageLoad,
+							showThumbnails: showThumbnails,
+							slideOnThumbnailHover: slideOnThumbnailHover,
+							showNav: showNav })
+					)
+				)
+			);
+		}
+		return null;
+	}
+});
+
+module.exports = window.ItemDetailsPage = ItemDetailsPage;
+
+},{}],174:[function(require,module,exports){
+'use strict';
+
+/**
+ * LoginPage defination
+ */
+var LoginPage = React.createClass({
+	displayName: 'LoginPage',
+
+	mixins: [FormView, Mixin],
+	render: function render() {
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/login', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: this.className() },
+				React.createElement(Input, { type: 'email', required: true, name: 'email', title: configurations.localization.email, validations: 'isEmail',
+					validationError: configurations.localization.invalid_email, value: 'user@gmail.com' }),
+				React.createElement(Input, { type: 'password', required: true, name: 'password', title: configurations.localization.password,
+					validationError: configurations.localization.password_required, value: 'user12' }),
+				React.createElement(Input, { type: 'checkbox', name: 'remember', title: configurations.localization.remember_me }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: configurations.localization.login, className: 'center-block' })
+			)
+		);
+	}
+});
+
+module.exports = window.LoginPage = LoginPage;
+
+},{}],175:[function(require,module,exports){
+'use strict';
+
+/**
+ * RegisterPage defination
+ */
+var RegisterPage = React.createClass({
+	displayName: 'RegisterPage',
+
+	mixins: [FormView, Mixin],
+	render: function render() {
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/register', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: this.className() },
+				React.createElement(Input, { type: 'email', required: true, name: 'email', title: configurations.localization.email, validations: 'isEmail',
+					validationError: configurations.localization.invalid_email }),
+				React.createElement(Input, { type: 'email', name: 'email_confirmation', title: configurations.localization.email_confirmation, validations: 'equalsField:email',
+					validationError: configurations.localization.email_confirmation_not_matched }),
+				React.createElement(Input, { type: 'password', required: true, name: 'password', title: configurations.localization.password, validations: 'isPassword',
+					validationError: configurations.localization.password_rules }),
+				React.createElement(Input, { type: 'password', name: 'password_confirmation', title: configurations.localization.password_confirmation, validations: 'equalsField:password',
+					validationError: configurations.localization.password_confirmation_not_matched }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: configurations.localization.register, className: 'center-block' })
+			)
+		);
+	}
+});
+
+module.exports = window.RegisterPage = RegisterPage;
+
+},{}],176:[function(require,module,exports){
+'use strict';
+
+/**
+ * SellItemPage defination
+ */
+var SellItemPage = React.createClass({
+	displayName: 'SellItemPage',
+
+	mixins: [FormView, Mixin],
+	render: function render() {
+		var catoptions = [];
+		$(appManager.cats([])).each(function (i, root) {
+			$(root.children).each(function (j, cat) {
+				$(cat.children).each(function (k, subcat) {
+					catoptions.push({
+						label: cat.details.name + ' >> ' + subcat.details.name,
+						value: subcat.id
+					});
+				});
+			});
+		});
+		var conditions = [{
+			label: configurations.localization.new,
+			value: 1
+		}, {
+			label: configurations.localization.used,
+			value: 0
+		}];
+		return React.createElement(
+			Form,
+			{ className: this.className('', 'form row'), method: 'post', action: '/sellitem', encType: 'multipart/form-data',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: 'row' },
+				React.createElement(Input, { type: 'select', required: true, name: 'parent_id', title: configurations.localization.category, options: catoptions,
+					className: 'col-xs-6 col-md-5', placeholder: configurations.localization.select_category }),
+				React.createElement(Input, { type: 'image', required: true, name: 'files', title: configurations.localization.images, cols: '4', multiple: true, min: '1', max: '12',
+					className: 'col-xs-6 col-md-3', previewContainer: '.image-preview-container' }),
+				React.createElement(Input, { type: 'radiolist', name: 'is_new', required: true, title: configurations.localization.condition, options: conditions,
+					className: 'col-xs-6 col-md-4 inline-block-list' })
+			),
+			React.createElement(
+				'div',
+				{ className: 'row' },
+				React.createElement(Input, { type: 'text', required: true, name: 'title', title: configurations.localization.title,
+					className: 'col-xs-6 col-md-5', placeholder: configurations.localization.title_hint }),
+				React.createElement(Input, { type: 'date', name: 'deleted_at', title: configurations.localization.expire,
+					className: 'col-xs-6 col-md-3', min: format.date(new Date(), 'yyyy-MM-dd') }),
+				React.createElement(Input, { type: 'number', name: 'originalprice', title: configurations.localization.original_price,
+					className: 'col-xs-6 col-md-2', step: '0.1', min: '0', placeholder: '1.0' }),
+				React.createElement(Input, { type: 'number', name: 'nowprice', title: configurations.localization.now_price,
+					className: 'col-xs-6 col-md-2', step: '0.1', min: '0', placeholder: '1.0' })
+			),
+			React.createElement(Input, { type: 'textarea', name: 'description', title: configurations.localization.description, cols: '10', rows: '4', placeholder: configurations.localization.description_hint }),
+			React.createElement(Input, { type: 'hidden', required: true, name: 'is_selling', value: '1' }),
+			React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: configurations.localization.sell, className: 'btn-fixed-right' }),
+			React.createElement('div', { className: 'row image-preview image-preview-container' })
+		);
+	}
+});
+
+module.exports = window.SellItemPage = SellItemPage;
+
+},{}],177:[function(require,module,exports){
+'use strict';
+
+/**
+ * SendActivationPage defination
+ */
+var SendActivationPage = React.createClass({
+	displayName: 'SendActivationPage',
+
+	mixins: [FormView, Mixin],
+	render: function render() {
+		return React.createElement(
+			Form,
+			{ className: 'form row', method: 'post', action: '/code', autocomplete: 'off', onkeypress: 'return event.keyCode != 13;',
+				onValidSubmit: this.submit, onValid: this.enableButton, onInvalid: this.disableButton },
+			React.createElement(
+				'div',
+				{ className: this.className() },
+				React.createElement(Input, { type: 'email', required: true, name: 'email', title: configurations.localization.email, validations: 'isEmail',
+					validationError: configurations.localization.invalid_email }),
+				React.createElement(Input, { type: 'submit', name: 'btn-submit', disabled: !this.state.canSubmit, value: configurations.localization.send, className: 'center-block' })
+			)
+		);
+	}
+});
+
+module.exports = window.SendActivationPage = SendActivationPage;
+
+},{}],178:[function(require,module,exports){
+'use strict';
+
+/**
+ * UserItemsPage defination
+ */
+var UserItemsPage = React.createClass({
+	displayName: 'UserItemsPage',
+
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_USERITEMSPAGE,
+	refreshCount: 0,
+	refresh: function refresh() {
+		this.setState({ refreshCount: this.refreshCount++ });
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		Dispatcher.removeListener(this.eventName, this.refresh);
+	},
+	componentDidMount: function componentDidMount() {
+		Dispatcher.addListener(this.eventName, this.refresh);
+		ui.plugins.format($(getRootDom(this)));
+	},
+	render: function render() {
+		var user = appManager.data();
+		var paginate = appManager.paginate();
+		if (user && paginate) {
+			var items = paginate.data;
+			return React.createElement(
+				'div',
+				{ className: this.className('', 'item-list-wrapper'), id: this.getId() },
+				React.createElement(
+					'div',
+					{ className: 'user-detail' },
+					React.createElement(UserBox, { user: user })
+				),
+				React.createElement(
+					'div',
+					{ className: 'row item-list' },
+					items.map(function (item, i) {
+						var itemClassName = 'col-xs-6 col-md-2 item ' + (i == 0 ? 'item-first' : '');
+						return React.createElement(
+							'div',
+							{ className: itemClassName, key: i },
+							React.createElement(ItemImage, { item: item }),
+							React.createElement(ItemSummary, { item: item, prices: 'original,now' })
+						);
+					})
+				)
+			);
+		}
+		return null;
+	}
+});
+
+module.exports = window.UserItemsPage = UserItemsPage;
+
+},{}],179:[function(require,module,exports){
+'use strict';
+
+/**
+ * @variable appStore
+ */
+module.exports = window.appStore = new Store();
+//
+Object.assign(appStore, {
+	chatusers: function chatusers() {
+		return this.get('chatusers');
+	},
+	chatuser: function chatuser(id) {
+		var chatusers = this.get('chatusers');
+		if (id && chatusers.length > 0) {
+			for (var i = 0; i < chatusers.length; i++) {
+				if (chatusers[i].id == id) {
+					return chatusers[i];
+				}
+			}
+		}
+		return null;
+	},
+	currentChatuser: function currentChatuser(val) {
+		if (val) this.set('currentChatuser', val);
+		return this.get('currentChatuser');
+	},
+	upsertChatuser: function upsertChatuser(user) {
+		var chatusers = this.get('chatusers');
+		if (user && chatusers.length > 0) {
+			for (var i = 0; i < chatusers.length; i++) {
+				if (chatusers[i].id == user.id) {
+					return Object.assign(chatusers[i], user);
+				}
+			}
+			chatusers.push(user);
+			return chatusers[chatusers.length - 1];
+		}
+		return null;
+	},
+	messages: function messages(id, origin, newer, older) {
+		var messages = this.get('messages');
+		if (!messages) this.set('messages', message = {});
+		var usermessages = attr.bind(messages)(id);
+		if (!usermessages) messages[id] = usermessages = [];
+		if (origin) usermessages = origin;else if (newer) usermessages.push(newer);else if (newer) usermessages = older.concat(usermessages);
+		return usermessages;
+	},
+	addMessage: function addMessage(data) {},
+	addNotification: function addNotification(data) {},
+	currentUrl: function currentUrl(val) {
+		if (!val) {
+			this.set('currentUrl', val);
+		}
+		return this.get('currentUrl');
+	},
+	currentPage: function currentPage(val) {
+		if (!val) {
+			this.set('currentPage', val);
+		}
+		return this.get('currentPage');
+	}
+});
+
+},{}],180:[function(require,module,exports){
+"use strict";
+
+/**
+ * @class Store
+ */
+module.exports = window.Store = function () {
+	var _data = {};
+	return {
+		has: function has(name) {
+			return _data.hasOwnProperty(name);
+		},
+		get: function get(name, defaultValue) {
+			if (this.has(name)) return _data[name];
+			return defaultValue;
+		},
+		set: function set(name, value) {
+			_data[name] = value;
+			return this;
+		},
+		assign: function assign(name, value) {
+			if (this.has(name)) Object.assign(_data[name], value);else _data[name] = Object.assign({}, value);
+			return this;
+		},
+		remove: function remove(name) {
+			if (this.has(name)) delete _data[name];
+			return this;
+		}
+	};
+};
+
+},{}],181:[function(require,module,exports){
+'use strict';
+
 Object.assign(window, {
 	getRootDom: function getRootDom(reactCpn) {
 		return ReactDOM.findDOMNode(reactCpn);
 	},
-	showLoginForm: function showLoginForm(e) {
-		if (!window.currentForm || window.currentForm != 'login') {
-			$('#form-container').hide();
-			window.currentForm = 'login';
-			ReactDOM.render(React.createElement(LoginPage, null), document.getElementById('form-container'), function () {
-				toggleElement($('#form-container'));
-			});
-		} else {
-			toggleElement($('#form-container'));
-		}
+	expandMenu: function expandMenu(e) {
+		var menu = $(e).next('ul');
+		toggleElement(menu);
 	},
-	showRegistrationForm: function showRegistrationForm(e) {
-		if (!window.currentForm || window.currentForm != 'register') {
-			$('#form-container').hide();
-			window.currentForm = 'register';
-			ReactDOM.render(React.createElement(RegisterPage, null), document.getElementById('form-container'), function () {
-				toggleElement($('#form-container'));
-			});
-		} else {
-			toggleElement($('#form-container'));
-		}
+	hideMenus: function hideMenus() {
+		slideUp($('.sensitive'));
 	},
-	showLocationForm: function showLocationForm(e) {
-		if (!window.currentForm || window.currentForm != 'location') {
-			$('#form-container').hide();
-			window.currentForm = 'location';
-			ReactDOM.render(React.createElement(ChangeLocationPage, null), document.getElementById('form-container'), function () {
-				toggleElement($('#form-container'));
-			});
-		} else {
-			toggleElement($('#form-container'));
-		}
+	toggleElement: function toggleElement(e) {
+		if (e.css('display') == 'none') slideDown(e);else slideUp(e);
 	},
-
+	slideDown: function slideDown(e) {
+		e.slideDown();
+		e.css('visibility', 'visible');
+		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
+	},
+	slideUp: function slideUp(e) {
+		e.slideUp(function () {
+			$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'visible');
+			e.css('visibility', 'hidden');
+		});
+	},
+	hideClassName: function hideClassName(classNameToHide, exceptions) {
+		$('.' + classNameToHide).not(exceptions).hide();
+	},
+	submitForm: function submitForm(form) {
+		$('<input>').attr({
+			type: 'hidden',
+			name: '_token',
+			value: token()
+		}).appendTo(form);
+		$('<input>').attr({
+			type: 'hidden',
+			name: 'redirect',
+			value: location.href
+		}).appendTo(form);
+		form.submit();
+	},
+	showMessageDialog: function showMessageDialog(msg, title, btn, callback) {
+		btn = btn ? btn : configurations.localization.ok;
+		title = title ? title : configurations.localization.message;
+		var buttons = {};
+		buttons[btn] = function () {
+			$(this).dialog('close');
+			$(this).remove();
+			if (callback) {
+				callback();
+			}
+		};
+		$('<div></div>').dialog({
+			modal: true,
+			title: title,
+			closeOnEscape: false,
+			open: function open(e, ui) {
+				$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
+				$(this).html(msg);
+			},
+			buttons: buttons
+		}); // end confirm dialog
+	},
 	ui: {
-		addEventHandlers: function addEventHandlers() {
-			$(document).keyup(function (e) {
-				if (e.keyCode == 27) {
-					hideMenus();
-				}
-			});
-			//scroll to bottom to load more data
-			$(window).scroll(function () {
-				if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-					var paginate = sessionManager.isListPage();
-					if (paginate && paginate.next_page_url) {
-						ajax.get(paginate.next_page_url, function (_data) {
-							if (_data && _data.data && _data.data.paginate) {
-								_data.data.paginate.data = paginate.data.concat(_data.data.paginate.data);
-								Dispatcher.emit(Dispatcher.Events.UPDATE_APPLICATION, _data.data);
-							}
-						});
-					}
-				} else if ($(window).scrollTop() == 0) {}
-			});
-		},
-		getItemExpires: function getItemExpires(item) {
-			return item.deleted_at ? expired_at = React.createElement(
-				'div',
-				{ className: 'item-date item-expired' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label expired-label' },
-						localization.expires_at
-					),
-					React.createElement(
-						'span',
-						{ className: 'prettydateformat' },
-						item.deleted_at
-					)
-				)
-			) : null;
-		},
-		getItemPostedOrEdited: function getItemPostedOrEdited(item) {
-			var created = new Date(item.created_at);
-			var updated = new Date(item.updated_at);
-			return +updated !== +created ? React.createElement(
-				'div',
-				{ className: 'item-date item-updated' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label edited-label' },
-						localization.edited_at
-					),
-					React.createElement(
-						'span',
-						{ className: 'prettydateformat' },
-						item.updated_at
-					)
-				)
-			) : React.createElement(
-				'div',
-				{ className: 'item-date item-created' },
-				React.createElement(
-					'a',
-					null,
-					React.createElement(
-						'span',
-						{ className: 'label posted-label' },
-						localization.posted_at
-					),
-					React.createElement(
-						'span',
-						{ className: 'prettydateformat' },
-						item.created_at
-					)
-				)
-			);
-		},
-
 		plugins: {
 			format: function (_format) {
 				function format(_x) {
@@ -9548,70 +10471,10 @@ Object.assign(window, {
 				}
 			})
 		}
-	},
-	submitForm: function submitForm(form) {
-		$('<input>').attr({
-			type: 'hidden',
-			name: '_token',
-			value: token()
-		}).appendTo(form);
-		$('<input>').attr({
-			type: 'hidden',
-			name: 'redirect',
-			value: location.href
-		}).appendTo(form);
-		form.submit();
-	},
-	showMessageDialog: function showMessageDialog(msg, title, btn, callback) {
-		btn = btn ? btn : localization.ok;
-		title = title ? title : localization.message;
-		var buttons = {};
-		buttons[btn] = function () {
-			$(this).dialog('close');
-			$(this).remove();
-			if (callback) {
-				callback();
-			}
-		};
-		$('<div></div>').dialog({
-			modal: true,
-			title: title,
-			closeOnEscape: false,
-			open: function open(e, ui) {
-				$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
-				$(this).html(msg);
-			},
-
-			buttons: buttons
-		}); //end confirm dialog
-	},
-	expandMenu: function expandMenu(e) {
-		var menu = $(e).next('ul');
-		toggleElement(menu);
-	},
-	hideMenus: function hideMenus() {
-		slideUp($('.sensitive'));
-	},
-	toggleElement: function toggleElement(e) {
-		if (e.css('display') == 'none') slideDown(e);else slideUp(e);
-	},
-	slideDown: function slideDown(e) {
-		e.slideDown();
-		e.css('visibility', 'visible');
-		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
-	},
-	slideUp: function slideUp(e) {
-		e.slideUp(function () {
-			$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'visible');
-			e.css('visibility', 'hidden');
-		});
-	},
-	hideClassName: function hideClassName(classNameToHide, exceptions) {
-		$('.' + classNameToHide).not(exceptions).hide();
 	}
 });
 
-},{}],155:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9621,28 +10484,13 @@ Object.assign(window, {
 	l: function l(o, o2, o3, o4, o5, o6) {
 		console.log(o, o2, o3, o4, o5, o6, arguments);
 	},
-	util: {
-		clientIP: null,
-		uuid: function uuid(prefix) {
-			return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
-		},
-		ip: function ip() {
-			return this.clientIP;
-		},
-		getAttr: function getAttr(name, defaultValue) {
-			if (this.hasOwnProperty(name)) return this[name];
-			return defaultValue;
-		},
-		getClassName: function getClassName(o, defaultValue) {
-			if (o.hasOwnProperty('className')) return o['className'];
-			return defaultValue ? defaultValue : '';
-		}
+	uuid: function uuid(prefix) {
+		return (prefix ? prefix : '') + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 	},
-	engine: function () {
-		$.getJSON('//ip-api.com/json?callback=?', function (data) {
-			util.clientIP = data.query;
-		});
-	}(),
+	attr: function attr(name, defaultValue) {
+		if (this.hasOwnProperty(name)) return this[name];
+		return defaultValue;
+	},
 	token: function token() {
 		return $('meta[name="csrf-token"]').attr('content');
 	},
@@ -9652,13 +10500,13 @@ Object.assign(window, {
 			return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		},
 		time: function time(v, format) {
-			return $.format.date(v, sessionManager.location().timeformat);
+			return $.format.date(v, appManager.location().timeformat);
 		},
 		date: function date(v, format) {
-			return $.format.date(v, format ? format : sessionManager.location().dateformat);
+			return $.format.date(v, format ? format : appManager.location().dateformat);
 		},
 		datetime: function datetime(v, format) {
-			return $.format.date(v, format ? format : sessionManager.location().datetimeformat);
+			return $.format.date(v, format ? format : appManager.location().datetimeformat);
 		},
 		prettyDate: function prettyDate(v) {
 			return $.format.prettyDate(v);
@@ -9671,7 +10519,7 @@ Object.assign(window, {
 				url: url,
 				data: Object.assign({
 					'_token': token(),
-					'mode': getMode()
+					'mode': mode()
 				}, data),
 				success: success
 			});
@@ -9688,9 +10536,37 @@ Object.assign(window, {
 		del: function del(url, success, data) {
 			this.exe(url, success, data, 'DELETE');
 		}
+	},
+	ArrayToObject: function ArrayToObject(arr) {
+		var o = {};
+		for (var i = 0; i < arr.length; i++) {
+			o[arr[i]] = arr[i];
+		}
+		return o;
+	},
+	isCurrentUser: function isCurrentUser(_user) {
+		var user = appManager.user();
+		if (user && user.id == _user.id) {
+			return true;
+		}
+		return false;
+	},
+	isFollowingTo: function isFollowingTo(_user) {
+		var user = appManager.user();
+		if (user && !appManager.get('isGuest')) {
+			return user.following.indexOf(_user.id) >= 0;
+		}
+		return false;
+	},
+	isFollowerOf: function isFollowerOf(_user) {
+		var user = appManager.user();
+		if (user && !appManager.get('isGuest')) {
+			return user.followers.indexOf(_user.id) >= 0;
+		}
+		return false;
 	}
 });
 
-},{}]},{},[141]);
+},{}]},{},[142]);
 
 //# sourceMappingURL=common.js.map

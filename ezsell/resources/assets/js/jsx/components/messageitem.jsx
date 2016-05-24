@@ -2,14 +2,8 @@
  * MessageItem defination
  */
 var MessageItem = React.createClass({
-	eventName: Dispatcher.Events.UPDATE_MESSAGE,
-	refreshCount: 0,
-	refresh() {this.setState({refreshCount: this.refreshCount++});},
-	componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, this.refresh);
-	},
+	mixins: [Mixin],
 	componentDidMount() {
-		Dispatcher.addListener(this.eventName, this.refresh);
         ui.plugins.format($(getRootDom(this)));
 	},
 	toggleTime(e) {
@@ -18,10 +12,9 @@ var MessageItem = React.createClass({
 	render(){
 		const message = this.props.message;
 		if (message) {
-			var className = 'clearfix chatitem ' + (message.receiver ? 'myitem' : (message.sender.gender == 'MALE' ? 'hisitem' : 'heritem'));
-			var statusClassName = 'status '+ util.getAttr.bind(message)('status', '');
+			var statusClassName = 'status '+ util.attr.bind(message)('status', '');
 			return (
-				<div className={className}>
+				<div className={this.className('', message.receiver ? 'myitem' : (message.sender.gender == 'MALE' ? 'hisitem' : 'heritem'), 'clearfix chatitem')}>
 					<div className='message' onClick={this.toggleTime}>
 						<div className={statusClassName}></div>
 						{message.message}
@@ -35,5 +28,4 @@ var MessageItem = React.createClass({
 	}
 });
 
-window.MessageItem = MessageItem;
-export default window.MessageItem;
+module.exports = window.MessageItem = MessageItem;

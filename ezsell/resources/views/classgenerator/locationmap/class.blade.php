@@ -1,9 +1,9 @@
 @extends('classgenerator.class')
 
-@section('namespace') App\Ezsell\Config @endsection
+@section('namespace') App\Platform\Config @endsection
 
 @section('uses')
-use App\Ezsell\Config\LocationMapTrait;
+use App\Platform\Config\LocationMapTrait;
 @endsection
 
 @section('name') LocationMap @endsection

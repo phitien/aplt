@@ -64,7 +64,7 @@ return [
 
    		'app' => [
    			'driver' => 'local',
-   			'root' => app_path('/Ezsell')
+   			'root' => app_path('/Platform')
    		],
     		
     ],

@@ -1,9 +1,9 @@
 <?php
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
-use App\Ezsell\Models\Cat;
-use App\Ezsell\Models\CatDetail;
-use App\Ezsell\Models\Location;
+use App\Platform\Models\Cat;
+use App\Platform\Models\CatDetail;
+use App\Platform\Models\Location;
 class CatsTableSeeder extends Seeder {
 	/**
 	 *

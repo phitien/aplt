@@ -1,9 +1,10 @@
-import ChatBox from './chatbox.jsx';
 /**
  * ChatBar defination
  */
 var ChatBar = React.createClass({
-	eventName: Dispatcher.Events.UPDATE_CHATBAR,
+	id: 'chatbar',
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_CHATBAR,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
@@ -13,11 +14,10 @@ var ChatBar = React.createClass({
 		Dispatcher.addListener(this.eventName, this.refresh);
 	},
 	render(){
-		const users = Dispatcher.Store.get(this.eventName);
+		const users = appStore.get(this.eventName);
 		if (users && users.length) {
-			const className = 'chatbar ' + util.getClassName(this.props);
 			return (
-				<div className={className}>
+				<div className={this.className()}>
 					{users.map(function (user, i) {
 						return <ChatBox user={user} key={i} />;
 					})}
@@ -29,5 +29,4 @@ var ChatBar = React.createClass({
 	}
 });
 
-window.ChatBar = ChatBar;
-export default window.ChatBar;
+module.exports = window.ChatBar = ChatBar;

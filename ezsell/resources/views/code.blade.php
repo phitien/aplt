@@ -4,5 +4,5 @@
 
 @section('variables')
 @parent
-		sessionManager.set('page', 'SendActivationPage');
+		manager.set('page', 'SendActivationPage');
 @endsection

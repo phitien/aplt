@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
-use App\Ezsell\Models\Place;
+use App\Platform\Models\Place;
 class PlacesTableSeeder extends Seeder {
 	/**
 	 * Run the database seeds.

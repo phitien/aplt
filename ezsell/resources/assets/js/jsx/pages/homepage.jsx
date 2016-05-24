@@ -2,7 +2,7 @@
  * HomePage defination
  */
 var HomePage = React.createClass({
-	eventName: Dispatcher.Events.UPDATE_HOMEPAGE,
+	eventName: AppEvents.UPDATE_HOMEPAGE,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
@@ -13,7 +13,7 @@ var HomePage = React.createClass({
 	},
 	id() {return this._id ? this._id : util.uuid('auto');},
 	render() {
-		const className = 'homepage ' + util.getClassName(this.props);
+		const className = 'homepage ' + util.className(this.props);
 		return (
 			<div className={className} id={this.id()}>
 			</div>
@@ -21,5 +21,4 @@ var HomePage = React.createClass({
 	}
 });
 
-window.HomePage = HomePage;
-export default window.HomePage;
+module.exports = window.HomePage = HomePage;

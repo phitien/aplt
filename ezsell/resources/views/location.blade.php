@@ -4,5 +4,5 @@
 
 @section('variables')
 @parent
-		sessionManager.set('page', 'ChangeLocationPage');
+		manager.set('page', 'ChangeLocationPage');
 @endsection

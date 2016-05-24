@@ -2,7 +2,7 @@
  * ChangeLocationPage defination
  */
 var ChangeLocationPage = React.createClass({
-	mixins: [FormView],
+	mixins: [FormView, Mixin],
 	getInitialState() {
 		return {
 			value: '',
@@ -11,16 +11,10 @@ var ChangeLocationPage = React.createClass({
 		};
 	},
 	onValidSubmit(model) {},
-	eventName: Dispatcher.Events.UPDATE_CHANGELOCATIONPAGE,
-	refreshCount: 0,
-	refresh() {this.setState({refreshCount: this.refreshCount++});},
-	componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, this.refresh);
-	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
 		$('.autocomplete').each(function (i,e) {
-			var source = e.getAttribute('data-source');
+			var source = e.attribute('data-source');
 			$(e).autocomplete({ 
 				source: function( request, response ) {
 					$.ajax({
@@ -46,7 +40,7 @@ var ChangeLocationPage = React.createClass({
 						$(this).attr('data-value', ui.item);
 						const id = ui.item.id;
 						this.nextSibling.value = id;
-						if (id && id != sessionManager.location().id)
+						if (id && id != appManager.location().id)
 							submitForm($(this).parents('form:first'));
 					}
 				}
@@ -54,18 +48,16 @@ var ChangeLocationPage = React.createClass({
 		});
 	},
 	render() {
-		const className = util.getClassName(this.props);
 		return (
 			<Form className='form row' method='post' action='/location' autocomplete='off' onkeypress='return event.keyCode != 13;'
 			onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-				<div className={className}>
-					<Input type='autocomplete' name='location' title={localization.location} source='/searchlocation' className='center-block' 
-						value={sessionManager.location().name} placeholder={localization.please_type_location} />
+				<div className={this.className()}>
+					<Input type='autocomplete' name='location' title={configurations.localization.location} source='/searchlocation' className='center-block' 
+						value={appManager.location().name} placeholder={configurations.localization.please_type_location} />
 				</div>
 			</Form>
 		); 
 	}
 });
 
-window.ChangeLocationPage = ChangeLocationPage;
-export default window.ChangeLocationPage;
+module.exports = window.ChangeLocationPage = ChangeLocationPage;

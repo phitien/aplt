@@ -28,7 +28,7 @@ class Kernel extends HttpKernel {
 					\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
 					\Illuminate\Session\Middleware\StartSession::class,
 					\Illuminate\View\Middleware\ShareErrorsFromSession::class,
-					\App\Ezsell\Middleware\VerifyCsrfToken::class 
+					\App\Platform\Middleware\VerifyCsrfToken::class 
 			],
 			
 			'api' => [ 
@@ -49,8 +49,8 @@ class Kernel extends HttpKernel {
 			'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class,
 			'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
 			'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-			'im.authentication' => \App\Ezsell\Middleware\Authentication::class,
-			'im.authorization' => \App\Ezsell\Middleware\Authorization::class,
-			'im.location' => \App\Ezsell\Middleware\Location::class
+			'im.authentication' => \App\Platform\Middleware\Authentication::class,
+			'im.authorization' => \App\Platform\Middleware\Authorization::class,
+			'im.location' => \App\Platform\Middleware\Location::class
 	];
 }

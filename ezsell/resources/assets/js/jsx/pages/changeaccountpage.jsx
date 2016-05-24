@@ -2,42 +2,26 @@
  * ChangeAccountPage defination
  */
 var ChangeAccountPage = React.createClass({
-	eventName: Dispatcher.Events.UPDATE_CHANGEACCOUNTPAGE,
-	refreshCount: 0,
-	refresh() {this.setState({refreshCount: this.refreshCount++});},
-	componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, this.refresh);
-	},
-	componentDidMount() {
-		Dispatcher.addListener(this.eventName, this.refresh);
-	},
-	formrender() { 
-		const className = util.getClassName(this.props);
+	mixins: [FormView, Mixin],
+	render() { 
 		return (
-			<Form className='form row' method='post' action='/account' 
+			<Form className='form row' method='post' action='/account' autocomplete='off' onkeypress='return event.keyCode != 13;'
 				onValidSubmit={this.submit}  onValid={this.enableButton} onInvalid={this.disableButton}>
-				<div className={className}>
-					<Input type='password' required name='current_password' title={localization.password} 
-						 validationError={localization.password_required} />
-					<Input type='text' required name='name' title={localization.account} validations={{
-							notEqualsIgnoreCase: sessionManager.user.name,
+				<div className={this.className()}>
+					<Input type='password' required name='current_password' title={configurations.localization.password} 
+						 validationError={configurations.localization.password_required} />
+					<Input type='text' required name='name' title={configurations.localization.account} validations={{
+							notEqualsIgnoreCase: appManager.user.name,
 							isAccountName: true
 						}} validationErrors={{
-							notEqualsIgnoreCase: localization.new_account_should_be_different,
-							isAccountName: localization.invalid_account
+							notEqualsIgnoreCase: configurations.localization.new_account_should_be_different,
+							isAccountName: configurations.localization.invalid_account
 						}} />
-					<Input type='submit' name='btn-submit' disabled={!this.state.canSubmit} value={localization.change} className='center-block' />
+					<Input type='submit' name='btn-submit' disabled={!this.state.canSubmit} value={configurations.localization.change} className='center-block'/>
 				</div>
 			</Form>
 		); 
-	},
-	render(){
-		const className = 'change-account-form ' + util.getClassName(this.props);
-		return (
-			<FormView className={className} formrender={this.formrender} />
-		);
 	}
 });
 
-window.ChangeAccountPage = ChangeAccountPage;
-export default window.ChangeAccountPage;
+module.exports = window.ChangeAccountPage = ChangeAccountPage;

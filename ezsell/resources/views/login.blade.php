@@ -4,5 +4,5 @@
 
 @section('variables')
 @parent
-		sessionManager.set('page', 'LoginPage');
+		manager.set('page', 'LoginPage');
 @endsection

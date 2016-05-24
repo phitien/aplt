@@ -25,7 +25,7 @@
     "autoload": {
         "classmap": [
             "database",
-            "app/Ezsell"
+            "app/Platform"
         ],
         "psr-4": {
             "App\\": "app/"

@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Ezsell\Models\User as Authenticatable;
+use App\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable {
 }

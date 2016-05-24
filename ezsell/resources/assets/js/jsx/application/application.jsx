@@ -2,7 +2,7 @@
  * Application defination
  */
 var Application = React.createClass({
-	eventName: Dispatcher.Events.UPDATE_APPLICATION,
+	eventName: AppEvents.UPDATE_APPLICATION,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
@@ -10,46 +10,46 @@ var Application = React.createClass({
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		Dispatcher.emit(this.eventName, sessionManager.rawdata());
-		if (sessionManager.appMessage()) {
-			showMessageDialog(sessionManager.appMessage());
+		// press escape to hide popups
+		$(document).keyup(function(e) {
+			if (e.keyCode == 27) {
+				hideMenus();
+			}
+		});
+		// scroll to bottom to load more data
+		$(window).scroll(function() {
+	    	if($(window).scrollTop() == $(document).height() - $(window).height()) {
+	    		var paginate = appStore.paginate();
+	    		if (paginate && paginate.next_page_url) {
+	    			applicationSwitch(paginate.next_page_url);
+	    		}
+	    		else {
+	    			//TODO
+	    		}
+	    	}
+	    	else if($(window).scrollTop() == 0) {
+	    	}
+		});
+		if (appManager.appMessage()) {
+			showMessageDialog(appManager.appMessage());
 		}
 	},
 	render() {
-		const pageClassName = sessionManager.getCurrentPage();
-		switch (pageClassName) {
-			case 'HomePage':
-				return (<HomePage />);
-			case 'CatItemsPage':
-				return (<CatItemsPage />);
-			case 'UserItemsPage':
-				return (<UserItemsPage />);
-			case 'ItemDetailsPage':
-				return (<ItemDetailsPage />);
-			case 'ChangeLocationPage':
-				return (<ChangeLocationPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
-			case 'LoginPage':
-				return (<LoginPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
-			case 'RegisterPage':
-				return (<RegisterPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
-			case 'ChangeAccountPage':
-				return (<ChangeAccountPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
-			case 'ChangeEmailPage':
-				return (<ChangeEmailPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
-			case 'ChangePasswordPage':
-				return (<ChangePasswordPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
-			case 'SendActivationPage':
-				return (<SendActivationPage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
-			case 'DeactivatePage':
-				return (<DeactivatePage className='col-xs-12 col-sm-6 col-md-5 center-block' />);
-			case 'BuyItemPage':
-				return (<BuyItemPage />);
-			case 'SellItemPage':
-				return (<SellItemPage />);
-		}
-		return null;
+		return (
+			<div id='application'>
+				<div className='container-fluid row clearfix' id='navigation-replacement'></div>
+				<Banner className='container-fluid row clearfix'/>
+				<div className='container-fluid row clearfix' id='container'>
+					<Left/>
+					<Center/>
+					<Right/>
+				</div>
+				<Footer className='container-fluid row clearfix'/>
+				<Navigation className='container-fluid row clearfix'/>
+				<ChatBar className='container-fluid row clearfix'/>
+			</div>
+		);
 	}
 });
 
-window.Application = Application;
-export default window.Application;
+module.exports = window.Application = Application;

@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
-use App\Ezsell\Traits\UtilTrait;
+use App\Platform\Traits\UtilTrait;
 class LocationsTableSeeder extends Seeder {
 	/**
 	 * TRAITS

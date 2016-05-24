@@ -151,13 +151,13 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Ezsell\Providers\AppServiceProvider::class,
-        App\Ezsell\Providers\AuthServiceProvider::class,
-        App\Ezsell\Providers\EventServiceProvider::class,
-        App\Ezsell\Providers\RouteServiceProvider::class,
-    	App\Ezsell\Providers\HtmlServiceProvider::class,
-    	App\Ezsell\Providers\ViewServiceProvider::class,
-    	App\Ezsell\Providers\JWTAuthServiceProvider::class,
+        App\Platform\Providers\AppServiceProvider::class,
+        App\Platform\Providers\AuthServiceProvider::class,
+        App\Platform\Providers\EventServiceProvider::class,
+        App\Platform\Providers\RouteServiceProvider::class,
+    	App\Platform\Providers\HtmlServiceProvider::class,
+    	App\Platform\Providers\ViewServiceProvider::class,
+    	App\Platform\Providers\JWTAuthServiceProvider::class,
     	//
     	Intervention\Image\ImageServiceProvider::class,
     		

@@ -9,5 +9,5 @@ $rightCols = 0;
 
 @section('variables')
 @parent
-		sessionManager.set('page', 'UserItemsPage');
+		manager.set('page', 'UserItemsPage');
 @endsection

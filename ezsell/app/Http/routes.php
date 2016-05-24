@@ -1,27 +1,27 @@
 <?php
-Route::get ( '/', 'Ezsell\Controllers\ItemController@index' );
-Route::any ( 'register', 'Ezsell\Controllers\AccountController@register' );
-Route::any ( 'code', 'Ezsell\Controllers\AccountController@code' );
-Route::any ( 'activate/{code}', 'Ezsell\Controllers\AccountController@activate' );
-Route::any ( 'deactivate', 'Ezsell\Controllers\AccountController@deactivate' );
+Route::get ( '/', 'Platform\Controllers\ItemController@index' );
+Route::any ( 'register', 'Platform\Controllers\AccountController@register' );
+Route::any ( 'code', 'Platform\Controllers\AccountController@code' );
+Route::any ( 'activate/{code}', 'Platform\Controllers\AccountController@activate' );
+Route::any ( 'deactivate', 'Platform\Controllers\AccountController@deactivate' );
 
-Route::any ( 'login', 'Ezsell\Controllers\AccountController@login' );
-Route::any ( 'logout', 'Ezsell\Controllers\AccountController@logout' );
+Route::any ( 'login', 'Platform\Controllers\AccountController@login' );
+Route::any ( 'logout', 'Platform\Controllers\AccountController@logout' );
 
-Route::any ( 'profile', 'Ezsell\Controllers\AccountController@profile' );
-Route::any ( 'profilex', 'Ezsell\Controllers\AccountController@profilex' );
+Route::any ( 'profile', 'Platform\Controllers\AccountController@profile' );
+Route::any ( 'profilex', 'Platform\Controllers\AccountController@profilex' );
 
-Route::any ( 'followers', 'Ezsell\Controllers\AccountController@followers' );
-Route::any ( 'following', 'Ezsell\Controllers\AccountController@following' );
-Route::post ( 'follow/{id}', 'Ezsell\Controllers\AccountController@follow' );
-Route::post ( 'accept/{id}', 'Ezsell\Controllers\AccountController@accept' );
-Route::post ( 'refuse/{id}', 'Ezsell\Controllers\AccountController@refuse' );
+Route::any ( 'followers', 'Platform\Controllers\AccountController@followers' );
+Route::any ( 'following', 'Platform\Controllers\AccountController@following' );
+Route::post ( 'follow/{id}', 'Platform\Controllers\AccountController@follow' );
+Route::post ( 'accept/{id}', 'Platform\Controllers\AccountController@accept' );
+Route::post ( 'refuse/{id}', 'Platform\Controllers\AccountController@refuse' );
 
-Route::any ( 'password', 'Ezsell\Controllers\AccountController@password' );
-Route::any ( 'email', 'Ezsell\Controllers\AccountController@email' );
-Route::any ( 'account', 'Ezsell\Controllers\AccountController@account' );
-Route::any ( 'forget', 'Ezsell\Controllers\AccountController@forget' );
-Route::any ( 'reset', 'Ezsell\Controllers\AccountController@reset' );
+Route::any ( 'password', 'Platform\Controllers\AccountController@password' );
+Route::any ( 'email', 'Platform\Controllers\AccountController@email' );
+Route::any ( 'account', 'Platform\Controllers\AccountController@account' );
+Route::any ( 'forget', 'Platform\Controllers\AccountController@forget' );
+Route::any ( 'reset', 'Platform\Controllers\AccountController@reset' );
 
-Route::any ( 'location', 'Ezsell\Controllers\LocationController@location' );
-Route::any ( 'searchlocation', 'Ezsell\Controllers\LocationController@searchlocation' );
+Route::any ( 'location', 'Platform\Controllers\LocationController@location' );
+Route::any ( 'searchlocation', 'Platform\Controllers\LocationController@searchlocation' );

@@ -2,7 +2,8 @@
  * ItemDetailsPage defination
  */
 var ItemDetailsPage = React.createClass({
-	eventName: Dispatcher.Events.UPDATE_ITEMDETAILSPAGE,
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_ITEMDETAILSPAGE,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount: function() {
@@ -20,15 +21,12 @@ var ItemDetailsPage = React.createClass({
 		this._imageGallery.pause()
 	},
 	render() {
-		const data = Dispatcher.Store.get(this.eventName);
-		if (data) {
-			var item = data.itemdetails;
-			this.id = this.id ? this.id : this.props.id ? this.props.id : util.uuid('item-list');
-			const className = 'item-details-wrapper ' + util.getClassName(this.props);
-			const showThumbnails = util.getAttr.bind(this.props)('showThumbnails', true);
-			const slideOnThumbnailHover = util.getAttr.bind(this.props)('slideOnThumbnailHover', true);
-			const showNav = util.getAttr.bind(this.props)('showNav', true);
-			const slideInterval = util.getAttr.bind(this.props)('slideInterval', 3000);
+		const item = appManager.data();
+		if (item) {
+			const showThumbnails = this.attr('showThumbnails', true);
+			const slideOnThumbnailHover = this.attr('slideOnThumbnailHover', true);
+			const showNav = this.attr('showNav', true);
+			const slideInterval = this.attr('slideInterval', 3000);
 			var images = [];
 			item.images.map(function (o, i) {
 				images.push({
@@ -40,7 +38,7 @@ var ItemDetailsPage = React.createClass({
 			});
 			var lines = item.description.split('\n'); 
 			return (
-				<div className={className} id={this.id}>
+				<div className={this.className('', 'item-details-wrapper')} id={this.getId()}>
 					<div className='row item-detail'>
 						<div className='col-xs-6 col-md-7'>
 							<ItemSummary item={item} showLink={false} prices='original,now' />
@@ -70,5 +68,4 @@ var ItemDetailsPage = React.createClass({
 	}
 });
 
-window.ItemDetailsPage = ItemDetailsPage;
-export default window.ItemDetailsPage;
+module.exports = window.ItemDetailsPage = ItemDetailsPage;

@@ -2,72 +2,71 @@
  * UserBox defination
  */
 var UserBox = React.createClass({
-	eventName: Dispatcher.Events.UPDATE_ITEM,
+	mixins: [Mixin],
+	eventName: AppEvents.UPDATE_ITEM,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
 		Dispatcher.removeListener(this.eventName, this.refresh);
-		Dispatcher.removeListener(Dispatcher.Events.UPDATE_USER, this.refresh);
+		Dispatcher.removeListener(AppEvents.UPDATE_USER, this.refresh);
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		Dispatcher.addListener(Dispatcher.Events.UPDATE_USER, this.refresh);
+		Dispatcher.addListener(AppEvents.UPDATE_USER, this.refresh);
 	},
 	onChatClick(e) {
-		const user = this.props.user;
-		const itemId = this.props.itemId;
-		if (user) {
-			const _isGuest = sessionManager.get('isGuest', true);
-			const _isCurrentUser = isCurrentUser(user);
-			if (!_isGuest && !_isCurrentUser) {
-				Dispatcher.emit(Dispatcher.Events.ADD_CHATBOX, user, itemId);
-			}
+		if (this.canDo()) {
+			const itemId = this.props.itemId;
+			appStore.set(AppEvents.ADD_CHATBOX, user, itemId);
 		}
 	},
 	onFollowClick(e) {
-		const user = this.props.user;
+		const user = this.canDo();
 		if (user) {
-			const _isGuest = sessionManager.get('isGuest', true);
-			const _isCurrentUser = isCurrentUser(user);
-			if (!_isGuest && !_isCurrentUser) {
-				const _isFollowingTo = isFollowingTo(user);
-				if (_isFollowingTo) {//unfollow
-					ajax.post('/unfollow/' + user.id, function(o) {
-						Dispatcher.emit(Dispatcher.Events.UPDATE_USER, o.data);
-					});
-				}
-				else {//follow
-					ajax.post('/follow/' + user.id, function(o) {
-						Dispatcher.emit(Dispatcher.Events.UPDATE_USER, o.data);
-					});
-				}
+			const _isFollowingTo = isFollowingTo(user);
+			if (_isFollowingTo) {// unfollow
+				ajax.post('/unfollow/' + user.id, function(o) {
+					appStore.set(AppEvents.UPDATE_USER, o.data);
+				});
+			}
+			else {// follow
+				ajax.post('/follow/' + user.id, function(o) {
+					appStore.set(AppEvents.UPDATE_USER, o.data);
+				});
 			}
 		}
 	},
-	render(){
+	canDo(action) {
 		const user = this.props.user;
 		if (user) {
-			const _isGuest = sessionManager.get('isGuest', true);
+			try { return appManager.isLogged().id != user.id ? user : false; }
+			catch(e) {}
+		}
+		return false;
+	},
+	render() {
+		const user = this.props.user;
+		if (user) {
+			const _isGuest = appManagerisGuest();
 			const _isCurrentUser = isCurrentUser(user);
 			const _isFollowingTo = isFollowingTo(user);
 
-			const className = 'userbox ' + util.getClassName(this.props);
 			const iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
-			const iconChatTitle = _isGuest ? localization.please_login_first : 
-				_isCurrentUser ? localization.cannot_chat_with_yourself : 'Send message';
+			const iconChatTitle = _isGuest ? configurations.localization.please_login_first : 
+				_isCurrentUser ? configurations.localization.cannot_chat_with_yourself : 'Send message';
 			const iconFollowClassName = 'icon ' 
 				+ (_isFollowingTo ? 'icon-unfollow' : 'icon-follow') 
 				+ (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
-			const iconFollowTitle = _isGuest ? localization.please_login_first : 
-				_isCurrentUser ? localization.cannot_follow_yourself : 
-				_isFollowingTo ? localization.unfollow : '';
+			const iconFollowTitle = _isGuest ? configurations.localization.please_login_first : 
+				_isCurrentUser ? configurations.localization.cannot_follow_yourself : 
+				_isFollowingTo ? configurations.localization.unfollow : '';
 			const avatar = user && user.avatar ? user.avatar : 
-				(user.gender == 'MALE' ? sessionManager.get('noavatarman') : sessionManager.get('noavatarwoman'));
+				(user.gender == 'MALE' ? appManager.get('noavatarman') : appManager.get('noavatarwoman'));
 			const href = '/' + user.name; 
 			return (
-				<div className={className}>
+				<div className={this.className('', 'userbox')}>
 					<img src={avatar} />
-					<a className='user-name' href={href}><span>{user.displayname}</span></a>
+					<a className='user-name' onClick={applicationSwitch(href)}><span>{user.displayname}</span></a>
 					<a className={iconChatClassName} onClick={this.onChatClick} title={iconChatTitle}></a>
 					<a className={iconFollowClassName} onClick={this.onFollowClick} title={iconFollowTitle}></a>
 				</div>
@@ -77,5 +76,4 @@ var UserBox = React.createClass({
 	}
 });
 
-window.UserBox = UserBox;
-export default window.UserBox;
+module.exports = window.UserBox = UserBox;

@@ -1,7 +1,8 @@
 /**
  * MenuItem defination
  */
-const MenuItem = React.createClass({
+var MenuItem = React.createClass({
+	mixins: [Mixin],
 	getText(_item) {
 		try {return this.props.getText(_item);}
 		catch (e) {
@@ -38,6 +39,11 @@ const MenuItem = React.createClass({
 			}
 		}
 	},
+	itemClick(e) {
+		if (this.props.itemClick) {
+			this.props.itemClick(this);
+		}
+	},
 	handleItemClick(event) {
 		var href = this.getHref(this.props.data).replace('javascript:', '');
 		var fn = eval('(function () {' + href + ';})');
@@ -54,14 +60,14 @@ const MenuItem = React.createClass({
 		var html;
 		if (href) {
 			if (href.indexOf("javascript:") == 0) {
-				html = <a className='menuitem menuitem-nonatomic' onClick={this.handleItemClick}><span>{text}</span></a>;
+				html = <a className='menuitem menuitem-atomic' onClick={this.handleItemClick}><span>{text}</span></a>;
 			}
 			else {
 				html = <a className='menuitem menuitem-atomic' href={href}><span>{text}</span></a>;
 			}
 		}
 		else {
-			html = <a className='menuitem menuitem-nonatomic'><span>{text}</span></a>;
+			html = <a className='menuitem menuitem-nonatomic' onClick={this.itemClick}><span>{text}</span></a>;
 		}
 		const children = this.getChildren(this.props.data);
 		var subMenuClassName = this.getSubMenuClassName(this.props.data); 
@@ -84,19 +90,22 @@ const MenuItem = React.createClass({
 		}
 	}
 });
+window.MenuItem = MenuItem;
+
 /**
  * Menu defination
  */
 const Menu = React.createClass({
+	mixins: [Mixin],
 	render() {
-		const className = util.getClassName(this.props);
 		const me = this;
 		return (
-			<ul className={className}>
+			<ul className={this.className()}>
 				{this.props.items.map(function(item, i) {
 					return <MenuItem data={item} key={i}
 						getText={me.props.getText} 
-						getHref={me.props.getHref} 
+						getHref={me.props.getHref}
+						itemClick={me.props.itemClick}
 						getChildren={me.props.getChildren} 
 						getSubMenuClassName={me.props.getSubMenuClassName} />
 				})}
@@ -104,19 +113,13 @@ const Menu = React.createClass({
 		);
 	}
 });
+window.Menu = Menu;
+
 /**
  * CatMenu defination
  */
 const CatMenu = React.createClass({
-	eventName: Dispatcher.Events.UPDATE_CATMENU,
-	refreshCount: 0,
-	refresh() {this.setState({refreshCount: this.refreshCount++});},
-	componentWillUnmount() {
-		Dispatcher.removeListener(this.eventName, this.refresh);
-	},
-	componentDidMount() {
-		Dispatcher.addListener(this.eventName, this.refresh);
-	},
+	mixins: [Mixin],
 	getText(_item) {
 		return _item.details ? _item.details.name : '';
 	},
@@ -124,9 +127,12 @@ const CatMenu = React.createClass({
 		if (!_item.parent_id) 
 			return 'javascript:expandMenu(this)';
 		else if (_item.atomic) 
-			return 'cat/' + (sessionManager.get('usecode') ? _item.code.toLowerCase() : _item.id);
+			return 'javascript:applicationSwitch("cat/' + (appManager.get('usecode') ? _item.code.toLowerCase() : _item.id) +'")';
 		else 
 			return '';
+	},
+	itemClick(_item) {
+		console.log(_item);
 	},
 	getSubMenuClassName(_item) {
 		if (!_item.parent_id) 
@@ -134,20 +140,16 @@ const CatMenu = React.createClass({
 		return '';
 	},
 	render() {
-		const className = 'catmenu ' + util.getClassName(this.props);
-		const showRoot = util.getAttr.bind(this.props)('showRoot', true);
+		const showRoot = this.attr('showRoot', true);
 		const items = showRoot ? this.props.items : this.props.items[0].children;
 		return (
-			<Menu className={className} items={items} 
+			<Menu className={this.className('catmenu')} items={items} 
 				getText={this.getText} 
-				getHref={this.getHref} 
+				getHref={this.getHref}
+				itemClick={this.itemClick}
 				getSubMenuClassName={this.getSubMenuClassName} />
 		);
 	}
 });
-//
-CatMenu.Menu = Menu;
-CatMenu.MenuItem = MenuItem;
 
-window.CatMenu = CatMenu;
-export default window.CatMenu;
+module.exports = window.CatMenu = CatMenu;

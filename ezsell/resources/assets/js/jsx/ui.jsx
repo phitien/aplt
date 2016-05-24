@@ -1,88 +1,73 @@
-/**
- * UI
- */
 Object.assign(window, {
-	getRootDom(reactCpn) {
+	getRootDom : function(reactCpn) {
 		return ReactDOM.findDOMNode(reactCpn);
 	},
-	showLoginForm(e) {
-		if (!window.currentForm || window.currentForm != 'login') {
-			$('#form-container').hide();
-			window.currentForm = 'login';
-			ReactDOM.render(<LoginPage />, document.getElementById('form-container'), function() {
-				toggleElement($('#form-container'));
-			});
-		}
-		else {
-			toggleElement($('#form-container'));
-		}
+	expandMenu : function(e) {
+		var menu = $(e).next('ul');
+		toggleElement(menu);
 	},
-	showRegistrationForm(e) {
-		if (!window.currentForm || window.currentForm != 'register') {
-			$('#form-container').hide();
-			window.currentForm = 'register';
-			ReactDOM.render(<RegisterPage />, document.getElementById('form-container'), function() {
-				toggleElement($('#form-container'));
-			});
-		}
-		else {
-			toggleElement($('#form-container'));
-		}
+	hideMenus : function() {
+		slideUp($('.sensitive'));
 	},
-	showLocationForm(e) {
-		if (!window.currentForm || window.currentForm != 'location') {
-			$('#form-container').hide();
-			window.currentForm = 'location';
-			ReactDOM.render(<ChangeLocationPage />, document.getElementById('form-container'), function() {
-				toggleElement($('#form-container'));
-			});
-		}
-		else {
-			toggleElement($('#form-container'));
-		}
+	toggleElement : function(e) {
+		if (e.css('display') == 'none')
+			slideDown(e);
+		else
+			slideUp(e);
+	},
+	slideDown : function(e) {
+		e.slideDown();
+		e.css('visibility', 'visible');
+		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
+	},
+	slideUp : function(e) {
+		e.slideUp(function() {
+			$(sensitive).not(e).not(e.find(sensitive)).css('visibility',
+					'visible');
+			e.css('visibility', 'hidden');
+		});
+	},
+	hideClassName : function(classNameToHide, exceptions) {
+		$('.' + classNameToHide).not(exceptions).hide();
+	},
+	submitForm : function(form) {
+		$('<input>').attr({
+			type : 'hidden',
+			name : '_token',
+			value : token()
+		}).appendTo(form);
+		$('<input>').attr({
+			type : 'hidden',
+			name : 'redirect',
+			value : location.href
+		}).appendTo(form);
+		form.submit();
+	},
+	showMessageDialog : function(msg, title, btn, callback) {
+		btn = btn ? btn : configurations.localization.ok;
+		title = title ? title : configurations.localization.message;
+		var buttons = {};
+		buttons[btn] = function() {
+			$(this).dialog('close');
+			$(this).remove();
+			if (callback) {
+				callback();
+			}
+		};
+		$('<div></div>').dialog({
+			modal : true,
+			title : title,
+			closeOnEscape : false,
+			open : function(e, ui) {
+				$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
+				$(this).html(msg);
+			},
+			buttons : buttons
+		});// end confirm dialog
 	},
 	ui: {
-		addEventHandlers() {
-			$(document).keyup(function(e) {
-				if (e.keyCode == 27) {
-					hideMenus();
-				}
-			});
-			//scroll to bottom to load more data
-			$(window).scroll(function() {
-		    	if($(window).scrollTop() == $(document).height() - $(window).height()) {
-		    		var paginate = sessionManager.isListPage();
-		    		if (paginate && paginate.next_page_url) {
-						ajax.get(paginate.next_page_url, function( _data ) {
-							if (_data && _data.data && _data.data.paginate) {
-								_data.data.paginate.data = paginate.data.concat(_data.data.paginate.data);
-								Dispatcher.emit(Dispatcher.Events.UPDATE_APPLICATION, _data.data);
-							}
-						});
-		    		}
-		    	}
-		    	else if($(window).scrollTop() == 0) {
-		    	}
-			});
-		},
-		getItemExpires(item) {
-			return item.deleted_at ? expired_at = <div className='item-date item-expired'>
-								<a><span className='label expired-label'>{localization.expires_at}</span><span className='prettydateformat'>{item.deleted_at}</span></a>
-							</div> : null;
-		},
-		getItemPostedOrEdited(item) {
-			var created = new Date(item.created_at);
-			var updated = new Date(item.updated_at);
-			return (+updated !== +created) ? 
-							<div className='item-date item-updated'>
-								<a><span className='label edited-label'>{localization.edited_at}</span><span className='prettydateformat'>{item.updated_at}</span></a>
-							</div> : 
-							<div className='item-date item-created'>
-								<a><span className='label posted-label'>{localization.posted_at}</span><span className='prettydateformat'>{item.created_at}</span></a>
-							</div>;
-		},
 		plugins: {
-			format ($container) {
+			format:function ($container) {
 				if (!$container) {
 					$('.prettydateformat').each(function () {
 						var me = $(this);
@@ -140,64 +125,4 @@ Object.assign(window, {
 			}
 		}
 	},
-	submitForm(form) {
-		$('<input>').attr({
-			type: 'hidden',
-			name: '_token',
-			value: token()
-		}).appendTo(form);
-		$('<input>').attr({
-			type: 'hidden',
-			name: 'redirect',
-			value: location.href
-		}).appendTo(form);
-		form.submit();
-	},
-	showMessageDialog(msg, title, btn, callback) {
-		btn = btn ? btn : localization.ok;
-		title = title ? title : localization.message;
-		var buttons = {};
-		buttons[btn] = function() {
-			$( this ).dialog( 'close' );
-			$( this ).remove();
-			if (callback) {
-				callback();
-			}
-		};
-	 	$('<div></div>').dialog({
-			modal: true,
-			title: title,
-			closeOnEscape: false,
-			open(e, ui) {
-				$('.ui-dialog-titlebar-close', ui.dialog | ui).hide();
-				$(this).html(msg);
-			},
-			buttons: buttons
-		});//end confirm dialog
-	},
-	expandMenu(e) {
-		var menu = $(e).next('ul');
-		toggleElement(menu);
-	},
-	hideMenus() {slideUp($('.sensitive'));},
-	toggleElement(e) {
-		if ( e.css('display') == 'none' ) 
-			slideDown(e);
-		else 
-			slideUp(e);
-	},
-	slideDown(e) {
-		e.slideDown();
-		e.css('visibility', 'visible');
-		$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'hidden');
-	},
-	slideUp(e) {
-		e.slideUp(function () {
-			$(sensitive).not(e).not(e.find(sensitive)).css('visibility', 'visible');
-			e.css('visibility', 'hidden');
-		});
-	},
-	hideClassName(classNameToHide, exceptions) {
-		$('.' + classNameToHide).not(exceptions).hide();
-	}
 });

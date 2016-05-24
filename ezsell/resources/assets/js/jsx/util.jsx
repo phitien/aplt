@@ -5,31 +5,15 @@ Object.assign(window, {
 	l : function(o, o2, o3, o4, o5, o6) {
 		console.log(o, o2, o3, o4, o5, o6, arguments);
 	},
-	util : {
-		clientIP : null,
-		uuid : function(prefix) {
-			return (prefix ? prefix : '') + Date.now().toString(36)
-					+ Math.random().toString(36).substr(2, 9);
-		},
-		ip : function() {
-			return this.clientIP;
-		},
-		getAttr : function(name, defaultValue) {
-			if (this.hasOwnProperty(name))
-				return this[name];
-			return defaultValue;
-		},
-		getClassName : function(o, defaultValue) {
-			if (o.hasOwnProperty('className'))
-				return o['className'];
-			return defaultValue ? defaultValue : '';
-		}
+	uuid : function(prefix) {
+		return (prefix ? prefix : '') + Date.now().toString(36)
+				+ Math.random().toString(36).substr(2, 9);
 	},
-	engine : (function() {
-		$.getJSON('//ip-api.com/json?callback=?', function(data) {
-			util.clientIP = data.query;
-		});
-	})(),
+	attr : function(name, defaultValue) {
+		if (this.hasOwnProperty(name))
+			return this[name];
+		return defaultValue;
+	},
 	token : function() {
 		return $('meta[name="csrf-token"]').attr('content');
 	},
@@ -39,15 +23,15 @@ Object.assign(window, {
 			return n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		},
 		time : function(v, format) {
-			return $.format.date(v, sessionManager.location().timeformat);
+			return $.format.date(v, appManager.location().timeformat);
 		},
 		date : function(v, format) {
 			return $.format.date(v, format ? format
-					: sessionManager.location().dateformat);
+					: appManager.location().dateformat);
 		},
 		datetime : function(v, format) {
 			return $.format.date(v, format ? format
-					: sessionManager.location().datetimeformat);
+					: appManager.location().datetimeformat);
 		},
 		prettyDate : function(v) {
 			return $.format.prettyDate(v);
@@ -60,7 +44,7 @@ Object.assign(window, {
 				url : url,
 				data : Object.assign({
 					'_token' : token(),
-					'mode' : getMode()
+					'mode' : mode()
 				}, data),
 				success : success
 			});
@@ -77,5 +61,33 @@ Object.assign(window, {
 		del : function(url, success, data) {
 			this.exe(url, success, data, 'DELETE');
 		}
-	}
+	},
+	ArrayToObject : function(arr) {
+		var o = {};
+		for (var i = 0; i < arr.length; i++) {
+			o[arr[i]] = arr[i];
+		}
+		return o;
+	},
+	isCurrentUser : function(_user) {
+		var user = appManager.user();
+		if (user && user.id == _user.id) {
+			return true;
+		}
+		return false;
+	},
+	isFollowingTo : function(_user) {
+		var user = appManager.user();
+		if (user && !appManager.get('isGuest')) {
+			return user.following.indexOf(_user.id) >= 0;
+		}
+		return false;
+	},
+	isFollowerOf : function(_user) {
+		var user = appManager.user();
+		if (user && !appManager.get('isGuest')) {
+			return user.followers.indexOf(_user.id) >= 0;
+		}
+		return false;
+	},
 });
