@@ -18,7 +18,7 @@ module.exports = window.FormView = {
 		});
 	},
 	submit : function(model) {
-		var form = getRootDom(this);
+		var form = this.getRootDom();
 		if (form.tagName.toLowerCase() == 'form') {
 			submitForm(form);
 		} else {

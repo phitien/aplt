@@ -3,7 +3,7 @@
  */
 var Left = React.createClass({
 	id: 'left',
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName : AppEvents.UPDATE_LEFT,
 	refreshCount : 0,
 	refresh : function() {

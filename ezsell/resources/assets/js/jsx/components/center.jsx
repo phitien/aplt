@@ -3,7 +3,7 @@
  */
 var Center = React.createClass({
 	id: 'center',
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName : AppEvents.UPDATE_CENTER,
 	refreshCount : 0,
 	refresh : function() {
@@ -25,13 +25,13 @@ var Center = React.createClass({
 		case 'HomePage':
 			content = <HomePage />;
 			break;
-		case 'CatItemsPage':
+		case 'CatItems':
 			content = <CatItemsPage />;
 			break;
-		case 'UserItemsPage':
+		case 'UserItems':
 			content = <UserItemsPage />;
 			break;
-		case 'ItemDetailsPage':
+		case 'ItemDetails':
 			content = <ItemDetailsPage />;
 			break;
 		case 'ChangeLocationPage':

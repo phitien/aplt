@@ -2,7 +2,7 @@
  * SellItemPage defination
  */
 var SellItemPage = React.createClass({
-	mixins: [FormView, Mixin],
+	mixins: [createMixin(), FormView],
 	render() {
 		var catoptions = [];
 		$(appManager.cats([])).each(function(i, root) {

@@ -35,14 +35,16 @@ Route::post ( 'sendmessage', 'SocketController@sendmessage' );
 Route::post ( 'messages', 'SocketController@messages' );
 
 /**
- * list items
+ * buy/sell forms
+ */
+Route::any ( '/buyitem', 'ItemController@buyitem' );
+Route::any ( '/sellitem', 'ItemController@sellitem' );
+Route::any ( '/like', 'ItemController@like' );
+/**
+ * list items -> need to be under buy/sellitem
  */
 Route::any ( '/cat/{id}', 'CatItemsController@list' );
 Route::any ( '/{username}', 'UserItemsController@list' );
-
-Route::any ( '/buyitem', 'ItemController@buyitem' );
-Route::any ( '/sellitem', 'ItemController@sellitem' );
-Route::any ( '/item/{id}', 'ItemController@item' );
-Route::any ( '/like', 'ItemController@like' );
+Route::any ( '/item/{id}', 'ItemController@details' );
 
 

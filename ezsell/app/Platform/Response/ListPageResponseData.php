@@ -2,7 +2,7 @@
 
 namespace App\Platform\Response;
 
-class ListPageResponseData extends ResponseData {
+class ListPageResponseData extends PageResponseData {
 	public function setPaginate($value) {
 		$this->paginate = $value;
 		return $this;

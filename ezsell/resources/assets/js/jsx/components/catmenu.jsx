@@ -2,7 +2,7 @@
  * MenuItem defination
  */
 var MenuItem = React.createClass({
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	getText(_item) {
 		try {return this.props.getText(_item);}
 		catch (e) {
@@ -96,7 +96,7 @@ window.MenuItem = MenuItem;
  * Menu defination
  */
 const Menu = React.createClass({
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	render() {
 		const me = this;
 		return (
@@ -119,7 +119,7 @@ window.Menu = Menu;
  * CatMenu defination
  */
 const CatMenu = React.createClass({
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	getText(_item) {
 		return _item.details ? _item.details.name : '';
 	},

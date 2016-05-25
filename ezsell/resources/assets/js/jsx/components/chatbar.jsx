@@ -3,7 +3,7 @@
  */
 var ChatBar = React.createClass({
 	id: 'chatbar',
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName: AppEvents.UPDATE_CHATBAR,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},

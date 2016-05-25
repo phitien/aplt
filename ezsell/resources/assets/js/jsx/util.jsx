@@ -69,25 +69,4 @@ Object.assign(window, {
 		}
 		return o;
 	},
-	isCurrentUser : function(_user) {
-		var user = appManager.user();
-		if (user && user.id == _user.id) {
-			return true;
-		}
-		return false;
-	},
-	isFollowingTo : function(_user) {
-		var user = appManager.user();
-		if (user && !appManager.get('isGuest')) {
-			return user.following.indexOf(_user.id) >= 0;
-		}
-		return false;
-	},
-	isFollowerOf : function(_user) {
-		var user = appManager.user();
-		if (user && !appManager.get('isGuest')) {
-			return user.followers.indexOf(_user.id) >= 0;
-		}
-		return false;
-	},
 });

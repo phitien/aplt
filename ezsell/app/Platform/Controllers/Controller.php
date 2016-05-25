@@ -25,16 +25,14 @@ abstract class Controller extends BaseController implements IController {
 	 */
 	protected function process($action, array $arguments) {
 		$action = ucfirst ( $action );
-		$method = "pget{$action}";
-		
-		if (request ()->ajax ()) {
-			$method = "pajax{$action}";
-		} else if (request ()->isMethod ( 'post' )) {
-			$method = "ppost{$action}";
+		$ajax = request ()->ajax () ? 'ajax' : '';
+		$method = "p{$ajax}get{$action}";
+		if (request ()->isMethod ( 'post' )) {
+			$method = "p{$ajax}post{$action}";
 		} else if (request ()->isMethod ( 'put' )) {
-			$method = "pput{$action}";
+			$method = "p{$ajax}put{$action}";
 		} else if (request ()->isMethod ( 'delete' )) {
-			$method = "pdelete{$action}";
+			$method = "p{$ajax}delete{$action}";
 		}
 		return call_user_func_array ( array (
 				$this,

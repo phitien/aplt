@@ -35,9 +35,11 @@ class LocationController extends Controller {
 		return $this->process ( 'location', func_get_args () );
 	}
 	protected function pgetLocation(Request $request) {
-		return $this->response ( view ( 'location' ) );
+		return $this->response ( view ( 'base', 
+
+		$this->getPageResponseData ()->setType ( 'ChangeLocationPage' )->setShowBanner ( true )->setShowLeft ( 2 )->setShowRight ( 2 ) ) );
 	}
-	protected function ppostLocation(Request $request) {
+	protected function pajaxpostLocation(Request $request) {
 		$location_id = $request->get ( 'location' );
 		static::setLocationId ( $location_id );
 		return $this->redirect ( static::getRedirectUri () );

@@ -24,9 +24,9 @@ trait  ProfileTrait {
 	 */
 	protected function pgetProfile(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( view ( 'login' ) );
+			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'profile' ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ProfilePage' ) ) );
 	}
 	/**
 	 * Return the authenticated user
@@ -38,16 +38,14 @@ trait  ProfileTrait {
 		$data = $request->request->all (); // only get post data
 		$response = static::apiCallUpdateProfile ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( view ( 'profile', [ 
-					'appMessage' => trans ( 'messages.sentences.profile_updated' ) 
-			] ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ProfilePage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.profile_updated', $data ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'profile', [ 
-					'appMessage' => trans ( 'messages.sentences.profile_update_failed', [ 
-							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
-					] ) 
-			] ), $response->getStatusCode () );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ProfilePage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.profile_update_failed', $data ) ) ), $response->getStatusCode () );
 		}
 	}
 	/**

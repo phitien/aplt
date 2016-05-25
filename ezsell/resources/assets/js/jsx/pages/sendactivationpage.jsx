@@ -2,7 +2,7 @@
  * SendActivationPage defination
  */
 var SendActivationPage = React.createClass({
-	mixins: [FormView, Mixin],
+	mixins: [createMixin(), FormView],
 	render() {
 		return (
 			<Form className='form row' method='post' action='/code' autocomplete='off' onkeypress='return event.keyCode != 13;'

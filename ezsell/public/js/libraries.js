@@ -24978,9 +24978,6 @@ var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
     draining = false;
     if (currentQueue.length) {
         queue = currentQueue.concat(queue);

@@ -1,8 +1,8 @@
 /**
  * UserBox defination
  */
-var UserBox = React.createClass({
-	mixins: [Mixin],
+module.exports = window.UserBox = React.createClass({
+	mixins: [createMixin()],
 	eventName: AppEvents.UPDATE_ITEM,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
@@ -23,7 +23,7 @@ var UserBox = React.createClass({
 	onFollowClick(e) {
 		const user = this.canDo();
 		if (user) {
-			const _isFollowingTo = isFollowingTo(user);
+			const _isFollowingTo = this.isFollowingTo(user);
 			if (_isFollowingTo) {// unfollow
 				ajax.post('/unfollow/' + user.id, function(o) {
 					appStore.set(AppEvents.UPDATE_USER, o.data);
@@ -47,9 +47,9 @@ var UserBox = React.createClass({
 	render() {
 		const user = this.props.user;
 		if (user) {
-			const _isGuest = appManagerisGuest();
-			const _isCurrentUser = isCurrentUser(user);
-			const _isFollowingTo = isFollowingTo(user);
+			const _isGuest = appManager.isGuest();
+			const _isCurrentUser = this.isCurrentUser(user);
+			const _isFollowingTo = this.isFollowingTo(user);
 
 			const iconChatClassName = 'icon icon-chat' + (_isGuest || _isCurrentUser ? ' icon-disabled' : '');
 			const iconChatTitle = _isGuest ? configurations.localization.please_login_first : 
@@ -62,11 +62,11 @@ var UserBox = React.createClass({
 				_isFollowingTo ? configurations.localization.unfollow : '';
 			const avatar = user && user.avatar ? user.avatar : 
 				(user.gender == 'MALE' ? appManager.get('noavatarman') : appManager.get('noavatarwoman'));
-			const href = '/' + user.name; 
+			this.href = '/' + user.name; 
 			return (
 				<div className={this.className('', 'userbox')}>
 					<img src={avatar} />
-					<a className='user-name' onClick={applicationSwitch(href)}><span>{user.displayname}</span></a>
+					<a className='user-name' onClick={this.onOpenLink}><span>{user.displayname}</span></a>
 					<a className={iconChatClassName} onClick={this.onChatClick} title={iconChatTitle}></a>
 					<a className={iconFollowClassName} onClick={this.onFollowClick} title={iconFollowTitle}></a>
 				</div>
@@ -75,5 +75,3 @@ var UserBox = React.createClass({
 		return null;
 	}
 });
-
-module.exports = window.UserBox = UserBox;

@@ -3,7 +3,7 @@
  */
 var Banner = React.createClass({
 	id: 'banner',
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName : AppEvents.UPDATE_BANNER,
 	refreshCount : 0,
 	refresh : function() {

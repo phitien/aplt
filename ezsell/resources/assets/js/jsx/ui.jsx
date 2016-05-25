@@ -68,60 +68,31 @@ Object.assign(window, {
 	ui: {
 		plugins: {
 			format:function ($container) {
-				if (!$container) {
-					$('.prettydateformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
-					});
-					$('.dateformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.date(text));
-					});
-					$('.timeformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.time(text));
-					});
-					$('.datetimeformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.datetime(text));
-					});
-					$('.currency-value').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.currency(text));
-					});
-				}
-				else {
-					$container.find('.prettydateformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
-					});
-					$container.find('.dateformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.date(text));
-					});
-					$container.find('.timeformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.time(text));
-					});
-					$container.find('.datetimeformat').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.datetime(text));
-					});
-					$container.find('.currency-value').each(function () {
-						var me = $(this);
-						var text = me.text().trim();
-						me.text(format.currency(text));
-					});
-				}
+				$container.find('.prettydateformat').each(function () {
+					var me = $(this);
+					var text = me.text().trim();
+					me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
+				});
+				$container.find('.dateformat').each(function () {
+					var me = $(this);
+					var text = me.text().trim();
+					me.text(format.date(text));
+				});
+				$container.find('.timeformat').each(function () {
+					var me = $(this);
+					var text = me.text().trim();
+					me.text(format.time(text));
+				});
+				$container.find('.datetimeformat').each(function () {
+					var me = $(this);
+					var text = me.text().trim();
+					me.text(format.datetime(text));
+				});
+				$container.find('.currency-value').each(function () {
+					var me = $(this);
+					var text = me.text().trim();
+					me.text(format.currency(text));
+				});
 			}
 		}
 	},

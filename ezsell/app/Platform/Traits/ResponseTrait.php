@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Image;
 use Illuminate\Support\Facades\Redirect;
+use App\Platform\Response\PageResponseData;
 
 trait ResponseTrait {
 	/**
@@ -117,5 +118,44 @@ trait ResponseTrait {
 	public function pumpImage($image) {
 		header ( "Content-Type: $image->mime ()" );
 		die ( $image->encode () );
+	}
+	/**
+	 *
+	 * @var PageResponseData $_pageResponseData
+	 */
+	private $_pageResponseData;
+	protected function setPageResponseData(PageResponseData $pageResponseData) {
+		$this->_pageResponseData = $pageResponseData;
+		return $this->_pageResponseData;
+	}
+	/**
+	 *
+	 * @return PageResponseData
+	 */
+	protected function getPageResponseData() {
+		if (! $this->_pageResponseData) {
+			$this->_pageResponseData = new PageResponseData ( null );
+		}
+		return $this->_pageResponseData;
+	}
+	/**
+	 *
+	 * @return Response $response
+	 */
+	protected function getLoginResponse() {
+		return $this->response ( view ( 'base', $this->getPageResponseData ()->setType ( 'LoginPage' ) ) );
+	}
+	/**
+	 *
+	 * @return Response $response
+	 */
+	protected function getTransMessage($message, $data) {
+		if ($data) {
+			$reason = $data ['message'] ? $data ['message'] : $data;
+			return trans ( $message, [ 
+					'reason' => trans ( "messages.errors.{$reason}" ) 
+			] );
+		} else
+			trans ( $message );
 	}
 }

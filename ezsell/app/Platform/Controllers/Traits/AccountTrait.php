@@ -7,6 +7,9 @@ use Illuminate\Http\Response;
 use App\Platform\Config;
 
 trait AccountTrait {
+	protected function getPageResponseDataOfAccountTrait() {
+		return $this->getPageResponseData ()->setShowBanner ( false );
+	}
 	/**
 	 * Return the authenticated user
 	 *
@@ -21,23 +24,21 @@ trait AccountTrait {
 		$response = static::apiCallPassword ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			// static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( view ( 'password', [ 
-					'appMessage' => trans ( 'messages.sentences.password_changed' ) 
-			] ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangePasswordPage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.password_changed' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'password', [ 
-					'appMessage' => trans ( 'messages.sentences.password_change_failed', [ 
-							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
-					] ) 
-			] ), $response->getStatusCode () );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangePasswordPage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.password_change_failed', $data ) ) ), $response->getStatusCode () );
 		}
 	}
 	protected function pgetPassword(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( view ( 'login' ) );
+			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'password' ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangePasswordPage' ) ) );
 	}
 	/**
 	 * Email: change user email
@@ -53,23 +54,21 @@ trait AccountTrait {
 		$response = static::apiCallEmail ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			// static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( view ( 'email', [ 
-					'appMessage' => trans ( 'messages.sentences.email_changed' ) 
-			] ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeEmailPage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.email_changed' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'email', [ 
-					'appMessage' => trans ( 'messages.sentences.email_change_failed', [ 
-							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
-					] ) 
-			] ), $response->getStatusCode () );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeEmailPage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.email_change_failed', $data ) ) ), $response->getStatusCode () );
 		}
 	}
 	protected function pgetEmail(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( view ( 'login' ) );
+			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'email' ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeEmailPage' ) ) );
 	}
 	/**
 	 * Account: change user account
@@ -84,23 +83,21 @@ trait AccountTrait {
 		$data = $request->only ( 'current_password', 'name' );
 		$response = static::apiCallAccount ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( view ( 'account', [ 
-					'appMessage' => trans ( 'messages.sentences.account_changed' ) 
-			] ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeAccountPage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.account_changed' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'account', [ 
-					'appMessage' => trans ( 'messages.sentences.account_change_failed', [ 
-							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
-					] ) 
-			] ), $response->getStatusCode () );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeAccountPage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.account_change_failed', $data ) ) ), $response->getStatusCode () );
 		}
 	}
 	protected function pgetAccount(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( view ( 'login' ) );
+			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'account' ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeAccountPage' ) ) );
 	}
 	/**
 	 * Reset: send reset link to the user email

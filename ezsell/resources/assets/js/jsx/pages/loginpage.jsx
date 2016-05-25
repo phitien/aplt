@@ -2,7 +2,7 @@
  * LoginPage defination
  */
 var LoginPage = React.createClass({
-	mixins: [FormView, Mixin],
+	mixins: [createMixin(), FormView],
 	render() {
 		return (
 			<Form className='form row' method='post' action='/login' autocomplete='off' onkeypress='return event.keyCode != 13;'

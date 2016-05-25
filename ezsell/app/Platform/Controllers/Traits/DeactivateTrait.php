@@ -20,22 +20,20 @@ trait DeactivateTrait {
 		$response = static::apiCallDeactive ( $request->get ( 'current_password' ) );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( view ( 'deactivate', [ 
-					'appMessage' => trans ( 'messages.sentences.deactivated' ) 
-			] ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'DeactivatePage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.deactivated' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'deactivate', [ 
-					'appMessage' => trans ( 'messages.sentences.deactivate_failed', [ 
-							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
-					] ) 
-			] ), $response->getStatusCode () );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'DeactivatePage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.deactivated', $data ) ) ), $response->getStatusCode () );
 		}
 	}
 	protected function pgetDeactivate(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( view ( 'login' ) );
+			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'deactivate' ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'DeactivatePage' ) ) );
 	}
 }

@@ -3,7 +3,6 @@
 namespace App\Platform\Controllers;
 
 use Illuminate\Http\Request;
-use App\Platform\Response\ResponseData;
 
 class HomeController extends Controller {
 	/**
@@ -31,14 +30,12 @@ class HomeController extends Controller {
 		return $this->process ( 'index', func_get_args () );
 	}
 	protected function pgetIndex(Request $request) {
-		return $this->response ( view ( 'base', $this->getResponseData ( $request ) ) );
+		return $this->response ( view ( 'base', $this->preparePageResponseData ( $request ) ) );
 	}
-	protected function pajaxIndex(Request $request) {
-		return $this->jsonResponse ( $this->getResponseData ( $request ) );
+	protected function pajaxpostIndex(Request $request) {
+		return $this->jsonResponse ( $this->preparePageResponseData ( $request ) );
 	}
-	protected function getResponseData(Request $request) {
-		return [ 
-				'configurations' => (new ResponseData ( 'HomePage' ))->setShowBanner ( true )->setShowLeft ( 2 )->setShowRight ( 2 )->getData () 
-		];
+	protected function preparePageResponseData(Request $request) {
+		return $this->getPageResponseData ()->setType ( 'HomePage' )->setShowBanner ( true )->setShowLeft ( 2 )->setShowRight ( 2 );
 	}
 }

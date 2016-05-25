@@ -3,7 +3,7 @@
  */
 var Right = React.createClass({
 	id: 'right',
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName : AppEvents.UPDATE_RIGHT,
 	refreshCount : 0,
 	refresh : function() {

@@ -4,13 +4,12 @@ namespace App\Platform\Controllers;
 
 use Illuminate\Http\Request;
 use App\Platform\Models\Item;
-use App\Platform\Exceptions\ItemNotFound;
-use App\Platform\Models\Cat;
 use App\Platform\Models\Image;
 use Carbon\Carbon;
 use App\Platform\Config;
-use App\Platform\Exceptions\UserNotFound;
 use App\Platform\Controllers\Traits\ItemLikeTrait;
+use App\Platform\Response\PageResponseData;
+use App\Platform\Exceptions\ItemNotFound;
 
 class ItemController extends Controller {
 	use ItemLikeTrait;
@@ -20,9 +19,7 @@ class ItemController extends Controller {
 	 */
 	protected $_authenticationMiddlewareOptions = [ 
 			'except' => [ 
-					'index',
-					'user',
-					'item',
+					'details',
 					'like' 
 			] 
 	];
@@ -49,6 +46,7 @@ class ItemController extends Controller {
 		where ( 'items.updated_at', '<=', $requestTime )->
 
 		whereRaw ( "(items.deleted_at IS NULL OR items.deleted_at > '{$now}')" );
+		
 		return $query->paginate ( Config::PAGE_SIZE );
 	}
 	/**
@@ -56,18 +54,30 @@ class ItemController extends Controller {
 	 * @param \Illuminate\Http\Request $request        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function item(Request $request) {
-		return $this->process ( 'item', func_get_args () );
+	public function details(Request $request) {
+		return $this->process ( 'details', func_get_args () );
 	}
-	protected function pgetItem(Request $request, $id) {
+	protected function prepareItemDetailsPageResponseData(Request $request, $id) {
 		$item = $this->getItemByIdOrCode ( $id );
 		if ($item) {
-			return $this->response ( view ( 'item.itemdetails', [ 
-					'type' => 'ItemDetailsPage',
-					'data' => $item 
-			] ) );
+			return $this->getPageResponseData ()->setType ( 'ItemDetails' )->setShowBanner ( false )->
+
+			setData ( $item );
+		}
+		return false;
+	}
+	protected function pgetDetails(Request $request, $id) {
+		if ($data = $this->prepareItemDetailsPageResponseData ( $request, $id )) {
+			return $this->response ( view ( 'base', $data ) );
 		} else {
-			return $this->redirect ( Config::HOME_PAGE );
+			throw new ItemNotFound ();
+		}
+	}
+	protected function pajaxpostDetails(Request $request, $id) {
+		if ($data = $this->prepareItemDetailsPageResponseData ( $request, $id )) {
+			return $this->jsonResponse ( 'item_details', $data );
+		} else {
+			throw new ItemNotFound ();
 		}
 	}
 	/**
@@ -78,11 +88,18 @@ class ItemController extends Controller {
 	public function sellitem(Request $request) {
 		return $this->process ( 'sellitem', func_get_args () );
 	}
+	protected function prepareSellItemPageResponseData(Request $request) {
+		return $this->getPageResponseData ()->setType ( 'SellItemPage' )->setShowBanner ( false );
+	}
 	protected function pgetSellitem(Request $request) {
-		return $this->response ( view ( 'item.sellitem' ) );
+		return $this->response ( view ( 'base', $this->prepareSellItemPageResponseData ( $request ) ) );
+	}
+	protected function pajaxpostSellitem(Request $request) {
+		$this->prepareSellItemPageResponseData ( $request );
+		return $this->jsonResponse ( 'sellitem', $this->prepareSellItemPageResponseData ( $request ) );
 	}
 	protected function ppostSellitem(Request $request) {
-		$this->createItem ( $request, 'item.sellitem' );
+		$this->createItem ( $request, $this->prepareSellItemPageResponseData ( $request ) );
 	}
 	/**
 	 *
@@ -92,13 +109,24 @@ class ItemController extends Controller {
 	public function buyitem(Request $request) {
 		return $this->process ( 'buyitem', func_get_args () );
 	}
+	protected function prepareBuyItemPageResponseData(Request $request) {
+		return $this->getPageResponseData ()->setType ( 'BuyItemPage' )->setShowBanner ( false );
+	}
 	protected function pgetBuyitem(Request $request) {
-		return $this->response ( view ( 'item.buyitem' ) );
+		return $this->response ( view ( 'base', $this->prepareBuyItemPageResponseData ( $request ) ) );
+	}
+	protected function pajaxpostBuyitem(Request $request) {
+		return $this->jsonResponse ( 'sellitem', $this->prepareBuyItemPageResponseData ( $request ) );
 	}
 	protected function ppostBuyitem(Request $request) {
-		$this->createItem ( $request, 'item.buyitem' );
+		$this->createItem ( $request, $this->prepareBuyItemPageResponseData ( $request ) );
 	}
-	protected function createItem(Request $request, $view) {
+	/**
+	 *
+	 * @param Request $request        	
+	 * @param PageResponseData $responseData        	
+	 */
+	protected function createItem(Request $request, PageResponseData $pageResponseData) {
 		$data = $request->only ( [ 
 				'parent_id',
 				'location_id',
@@ -145,60 +173,10 @@ class ItemController extends Controller {
 				return $this->redirect ( "/item/{$item->id}" );
 			}
 		} else {
-			return $this->response ( view ( $view, [ 
-					'appMessage' => trans ( 'messages.errors.item_create_failed' ) 
-			] ) );
+			$data->setAppMessage ( trans ( 'messages.errors.item_create_failed' ) );
+			return $this->response ( view ( 'base', $data ) );
 		}
 	}
-	/**
-	 *
-	 * @param \Illuminate\Http\Request $request        	
-	 * @return \Illuminate\Http\Response
-	 */
-	public function user(Request $request) {
-		return $this->process ( 'user', func_get_args () );
-	}
-	protected function pgetUser(Request $request, $username) {
-		$data = $this->puserGetResponseData ( $request, $username );
-		if ($data) {
-			return $this->response ( view ( 'item.useritems', $data ) );
-		} else {
-			throw new UserNotFound ();
-		}
-	}
-	protected function pajaxUser(Request $request, $username) {
-		$data = $this->puserGetResponseData ( $request, $username );
-		if ($data) {
-			return $this->jsonResponse ( 'user_item_list', $data );
-		} else {
-			throw new UserNotFound ();
-		}
-	}
-	protected function puserGetResponseData(Request $request, $username) {
-		$response = $this->apiCallInfo ( [ 
-				'code' => $username 
-		] );
-		$user = static::json_decode ( $response->getBody (), true ) ['data'];
-		if ($user) {
-			$now = Carbon::now ();
-			
-			$requestTime = static::getRequestTime ();
-			$paginate = $this->addWhere ( $request, Item::where ( 'user_id', $user ['id'] ) );
-			
-			$items = $paginate->getCollection ();
-			for($i = 0; $i < count ( $items ); $i ++) {
-				$items [$i] ['user'] = $user;
-			}
-			return [ 
-					'type' => 'UserItemsPage',
-					'data' => $user,
-					'paginate' => $paginate 
-			];
-		} else {
-			return null;
-		}
-	}
-	
 	/**
 	 *
 	 * @param string $id        	

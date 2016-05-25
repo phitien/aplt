@@ -14,6 +14,8 @@ module.exports = window.AppEvents = ArrayToObject([
 
 'UPDATE_NAVIGATION',
 
+'UPDATE_HOMEPAGE',
+
 'UPDATE_CATITEMSPAGE',
 
 'UPDATE_USERITEMSPAGE',
@@ -31,5 +33,7 @@ module.exports = window.AppEvents = ArrayToObject([
 'UPDATE_ITEM',
 
 'UPDATE_USER',
+
+'UPDATE_LOCATION',
 
 ]);

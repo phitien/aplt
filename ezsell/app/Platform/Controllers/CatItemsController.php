@@ -8,6 +8,7 @@ use App\Platform\Exceptions\ItemNotFound;
 use App\Platform\Models\Cat;
 use App\Platform\Config;
 use App\Platform\Response\ListPageResponseData;
+use App\Platform\Response\PageResponseData;
 
 class CatItemsController extends ItemController {
 	/**
@@ -34,7 +35,11 @@ class CatItemsController extends ItemController {
 	public function list(Request $request) {
 		return $this->process ( 'list', func_get_args () );
 	}
-	protected function getResponseData(Request $request, $id) {
+	/**
+	 *
+	 * @return PageResponseData
+	 */
+	protected function prepareListPageResponseData(Request $request, $id) {
 		if (Config::USE_CODE) {
 			$cat = Cat::where ( 'code', strtoupper ( $id ) )->first ();
 		} else {
@@ -59,28 +64,22 @@ class CatItemsController extends ItemController {
 				else
 					$items [$i] ['user'] = [ ];
 			}
-			return [ 
-					'configurations' => (new ListPageResponseData ( 'CatItemsPage' ))->
+			
+			return $this->setPageResponseData ( new ListPageResponseData ( 'CatItems' ) )->setShowBanner ( false )->
 
-					setData ( $cat )->
-
-					setPaginate ( $paginate )->getData () 
-			];
-		} else {
-			return null;
+			setData ( $cat )->setPaginate ( $paginate );
 		}
+		return false;
 	}
 	protected function pgetList(Request $request, $id) {
-		$data = $this->getResponseData ( $request, $id );
-		if ($data) {
+		if ($data = $this->prepareListPageResponseData ( $request, $id )) {
 			return $this->response ( view ( 'base', $data ) );
 		} else {
 			throw new ItemNotFound ();
 		}
 	}
-	protected function pajaxList(Request $request, $id) {
-		$data = $this->getResponseData ( $request, $id );
-		if ($data) {
+	protected function pajaxpostList(Request $request, $id) {
+		if ($data = $this->prepareListPageResponseData ( $request, $id )) {
 			return $this->jsonResponse ( 'cat_item_list', $data );
 		} else {
 			throw new ItemNotFound ();

@@ -2,7 +2,7 @@
  * ModeSwitch defination
  */
 var ModeSwitch = React.createClass({
-	mixins: [Mixin, FormView],
+	mixins: [createMixin(), FormView],
 	onMouseUp(e, checked) {
 		mode(checked ? 1 : 0);
 		applicationSwitch();

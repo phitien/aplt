@@ -2,7 +2,7 @@
  * ChatBox defination
  */
 var ChatBox = React.createClass({
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName: AppEvents.UPDATE_CHATBOX,
 	refreshCount: 0,
 	refresh() {
@@ -34,7 +34,7 @@ var ChatBox = React.createClass({
 		d.scrollTop(d.prop('scrollHeight'));
 	},
 	getJQueryRoot() {
-		return $(getRootDom(this));
+		return $(this.getRootDom());
 	},
 	getJQueryTextbox() {
 		return this.getJQueryRoot().find('input[type=text]');
@@ -92,12 +92,12 @@ var ChatBox = React.createClass({
 		if (user) {
 			const avatar = user && user.avatar ? user.avatar : 
 				(user.gender == 'MALE' ? appManager.get('noavatarman') : appManager.get('noavatarwoman'));
-			const href = '/' + user.name; 
+			this.href = '/' + user.name; 
 			const messages = attr.bind(user)('messages', []);
 			return (
 				<div className={this.className('', 'chatbox')}>
 					<div className='header'>
-						<div className='name'><a onClick={applicationSwitch(href)}><span>{user.displayname}</span></a></div>
+						<div className='name'><a onClick={this.onOpenLink}><span>{user.displayname}</span></a></div>
 						<div className='close' onClick={this.close}>{configurations.localization.close_sign}</div>
 						<div className='toggle' onClick={this.toggle}>{configurations.localization.minimize_sign}</div>
 						<div className='clearfix'></div>

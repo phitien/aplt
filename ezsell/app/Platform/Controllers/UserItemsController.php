@@ -7,8 +7,10 @@ use App\Platform\Models\Item;
 use Carbon\Carbon;
 use App\Platform\Exceptions\UserNotFound;
 use App\Platform\Controllers\Traits\ItemLikeTrait;
+use App\Platform\Response\ListPageResponseData;
+use App\Platform\Response\PageResponseData;
 
-class UserItemsController extends Controller {
+class UserItemsController extends ItemController {
 	use ItemLikeTrait;
 	/**
 	 *
@@ -34,23 +36,11 @@ class UserItemsController extends Controller {
 	public function list(Request $request) {
 		return $this->process ( 'list', func_get_args () );
 	}
-	protected function pgetList(Request $request, $username) {
-		$data = $this->getResponseData ( $request, $username );
-		if ($data) {
-			return $this->response ( view ( 'item.useritems', $data ) );
-		} else {
-			throw new UserNotFound ();
-		}
-	}
-	protected function pajaxList(Request $request, $username) {
-		$data = $this->getResponseData ( $request, $username );
-		if ($data) {
-			return $this->jsonResponse ( 'user_item_list', $data );
-		} else {
-			throw new UserNotFound ();
-		}
-	}
-	protected function getResponseData(Request $request, $username) {
+	/**
+	 *
+	 * @return PageResponseData
+	 */
+	protected function prepareListPageResponseData(Request $request, $username) {
 		$response = $this->apiCallInfo ( [ 
 				'code' => $username 
 		] );
@@ -65,13 +55,25 @@ class UserItemsController extends Controller {
 			for($i = 0; $i < count ( $items ); $i ++) {
 				$items [$i] ['user'] = $user;
 			}
-			return [ 
-					'type' => 'UserItemsPage',
-					'data' => $user,
-					'paginate' => $paginate 
-			];
+			
+			return $this->setPageResponseData ( new ListPageResponseData ( 'UserItems' ) )->setShowBanner ( false )->
+
+			setData ( $user )->setPaginate ( $paginate );
+		}
+		return false;
+	}
+	protected function pgetList(Request $request, $username) {
+		if ($data = $this->prepareListPageResponseData ( $request, $username )) {
+			return $this->response ( view ( 'base', $data ) );
 		} else {
-			return null;
+			throw new UserNotFound ();
+		}
+	}
+	protected function pajaxpostList(Request $request, $username) {
+		if ($data = $this->prepareListPageResponseData ( $request, $username )) {
+			return $this->jsonResponse ( 'user_item_list', $data );
+		} else {
+			throw new UserNotFound ();
 		}
 	}
 }

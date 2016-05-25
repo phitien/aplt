@@ -3,7 +3,7 @@
 namespace App\Platform\View;
 
 use Illuminate\View\Factory as BaseFactory;
-use App\Platform\Response\ResponseData;
+use App\Platform\Response\PageResponseData;
 
 class Factory extends BaseFactory {
 	/**
@@ -22,7 +22,7 @@ class Factory extends BaseFactory {
 	public function make($view, $data = [], $mergeData = []) {
 		// addon to add some default options to view
 		$data = $this->preProcessData ( $data );
-		return parent::make ( $view, $data, $mergeData );
+		return parent::make ( $view ? $view : 'base', $data, $mergeData );
 	}
 	/**
 	 *
@@ -30,7 +30,7 @@ class Factory extends BaseFactory {
 	 * @return array
 	 */
 	protected function preProcessData($data = []) {
-		if ($data instanceof ResponseData)
+		if ($data instanceof PageResponseData)
 			$data = $data->getData ();
 		if (! $this->requireOriginalRendering) {
 		}

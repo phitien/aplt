@@ -19,7 +19,7 @@ class Authentication extends Middleware {
 			if ($request->ajax ()) {
 				return $this->jsonResponse ( 'unauthenticated', null, Response::HTTP_BAD_REQUEST );
 			}
-			return $this->response ( view ( 'login' ) );
+			return $this->getLoginResponse ();
 		}
 		return $next ( $request );
 	}

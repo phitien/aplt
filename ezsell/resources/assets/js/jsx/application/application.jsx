@@ -19,7 +19,7 @@ var Application = React.createClass({
 		// scroll to bottom to load more data
 		$(window).scroll(function() {
 	    	if($(window).scrollTop() == $(document).height() - $(window).height()) {
-	    		var paginate = appStore.paginate();
+	    		var paginate = appManager.paginate();
 	    		if (paginate && paginate.next_page_url) {
 	    			applicationSwitch(paginate.next_page_url);
 	    		}

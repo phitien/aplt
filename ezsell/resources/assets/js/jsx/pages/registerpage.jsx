@@ -2,7 +2,7 @@
  * RegisterPage defination
  */
 var RegisterPage = React.createClass({
-	mixins: [FormView, Mixin],
+	mixins: [createMixin(), FormView],
 	render() {
 		return (
 			<Form className='form row' method='post' action='/register' autocomplete='off' onkeypress='return event.keyCode != 13;'

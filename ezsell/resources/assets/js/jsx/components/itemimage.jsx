@@ -2,7 +2,7 @@
  * ItemImage defination
  */
 var ItemImage = React.createClass({
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName: AppEvents.UPDATE_ITEM,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
@@ -12,30 +12,29 @@ var ItemImage = React.createClass({
 	componentDidMount: function() {
 		Dispatcher.addListener(this.eventName, this.refresh);
 	},
-	onClick(e) {
-		const isGuest = appManager.get('isGuest', true);
-		const user = appManager.user();
-		if (!isGuest && user && user.id) {
-			const item = Dispatcher.item(this.props.item.id);
+	onLikeClick(e) {
+		const user = appManager.isLogged();
+		if (user) {
+			const item = appManager.item(this.props.item.id);
 			var id = appManager.get('usecode') ? item.code : item.id;
 			if (id) {
 				ajax.post('/like', function(o) {
-					appStore.set(AppEvents.UPDATE_ITEMDETAILSPAGE, o.data);
+					appManager.item(this.props.item.id, o.data);
 				}, {id: id, user_id: user.id});
 			}
 		}
 	},
 	render() {
-		const item = appStore.get(this.eventName, this.props.item.id);
+		const item = appManager.item(this.props.item.id);
 		if (item) {
 			const iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : ''); 
 			const showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-			const href = showLink ? '/item/' + (appManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			this.href = showLink ? '/item/' + (appManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
 			return (
 				<div className={this.className('', (item.liked ? ' liked' : ' unliked'), 'item-firstimage ')}>
 					<div className='item-firstimage-wrapper'>
-						<a href={href}><img src={item.images[0].url}/></a>
-						<a className={iconClassName} onClick={this.onClick}></a>
+						<a onClick={this.onOpenLink}><img src={item.images[0].url}/></a>
+						<a className={iconClassName} onClick={this.onLikeClick}></a>
 					</div>
 				</div>
 			);

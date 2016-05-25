@@ -7,6 +7,11 @@
 module.exports = window.appManager = new Store();
 //
 Object.assign(appManager, {
+	linkDirectly : function(val) {
+		if (val)
+			this.set('linkDirectly', val);
+		return this.get('linkDirectly');
+	},
 	socketId : function(val) {
 		if (val)
 			this.set('socketId', val);
@@ -27,12 +32,12 @@ Object.assign(appManager, {
 	},
 	showBanner : function(val) {
 		if (val)
-			this.set('showBanner', parseInt(val));
-		return this.get('showBanner', 0);
+			this.set('showBanner', val);
+		return this.get('showBanner', false);
 	},
 	mode : function(val) {
 		if (val)
-			this.set('mode', val);
+			this.set('mode', parseInt(val));
 		return this.get('mode');
 	},
 	appMessage : function(val) {
@@ -52,7 +57,7 @@ Object.assign(appManager, {
 	},
 	isGuest : function(val) {
 		if (val)
-			this.set('isGuest', parseInt(val));
+			this.set('isGuest', val);
 		return this.get('isGuest', true);
 	},
 	isLogged : function() {
@@ -85,6 +90,21 @@ Object.assign(appManager, {
 		if (val)
 			this.set('paginate', val);
 		return this.get('paginate');
+	},
+	item : function(id, val) {
+		if (this.type() != 'CatItems' && this.type() != 'UserItems') {
+			return this.data(val);
+		} else {
+			var paginate = this.paginate();
+			for (var i = 0; i < paginate.data.length; i++) {
+				if (id == paginate.data[i].id) {
+					if (val)
+						paginate.data[i] = val;
+					return paginate.data[i];
+				}
+			}
+		}
+		return null;
 	},
 	configurations : function(configurations) {
 		for ( var k in configurations) {

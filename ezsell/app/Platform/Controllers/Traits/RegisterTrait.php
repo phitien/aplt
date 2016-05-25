@@ -20,20 +20,18 @@ trait  RegisterTrait {
 		$response = static::apiCallRegister ( $data );
 		if ($response->getStatusCode () != Response::HTTP_OK) {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'register', [ 
-					'appMessage' => trans ( 'messages.sentences.register_failed', [ 
-							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
-					] ) 
-			] ), $response->getStatusCode () );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'RegisterPage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.register_failed', $data ) ) ), $response->getStatusCode () );
 		} else {
-			return $this->response ( view ( 'register', [ 
-					'appMessage' => trans ( 'messages.sentences.registered' ) 
-			] ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'RegisterPage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.registered', $data ) ) ) );
 		}
 	}
 	protected function pgetRegister(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( view ( 'register' ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'RegisterPage' ) ) );
 		else
 			return $this->redirect ();
 	}

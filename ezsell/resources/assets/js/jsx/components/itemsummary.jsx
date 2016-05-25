@@ -2,7 +2,7 @@
  * ItemSummary defination
  */
 var ItemSummary = React.createClass({
-	mixins: [Mixin, ItemDates],
+	mixins: [createMixin(), ItemDates],
 	eventName: AppEvents.UPDATE_ITEM,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
@@ -11,14 +11,15 @@ var ItemSummary = React.createClass({
 	},
 	componentDidMount: function() {
 		Dispatcher.addListener(this.eventName, this.refresh);
+		ui.plugins.format($(this.getRootDom()));
 	},
 	render() {
-		const item = appStore.get(this.eventName, this.props.item.id);
+		const item = appManager.item(this.props.item.id);
 		if (item) {
-			const prices = util.attr.bind(this.props)('prices', 'original,sale,now').split(',');
+			const prices = this.attr('prices', 'original,sale,now').split(',');
 			const iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
-			const showLink = util.attr.bind(this.props)('showLink', true);
-			const href = showLink ? '/item/' + (appManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			const showLink = this.attr('showLink', true);
+			this.href = showLink ? '/item/' + (appManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
 			var price_list = 
 				<div className='item-prices'>{prices.map(function (o, i) {
 					var pclassName = 'item-price item-' + o + 'price';
@@ -36,10 +37,10 @@ var ItemSummary = React.createClass({
 			return (
 				<div className={this.className('', item.liked ? ' liked' : ' unliked', 'item-summary')}>
 					<div className='item-title'>
-						<a href={href}><span>{item.title}</span></a>
+						<a onClick={this.onOpenLink}><span>{item.title}</span></a>
 					</div>
-					{ui.getItemPostedOrEdited(item)}
-					{ui.getItemExpires(item)}
+					{this.getItemPostedOrEdited(item)}
+					{this.getItemExpires(item)}
 					<div className={item.is_new ? 'new' : 'used'}>{item.is_new ? 'New' : 'Used'}</div>
 					{price_list}
 					<div className='likes'>

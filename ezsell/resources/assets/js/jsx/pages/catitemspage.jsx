@@ -1,8 +1,8 @@
 /**
  * CatItemsPage defination
  */
-var CatItemsPage = React.createClass({
-	mixins: [Mixin],
+module.exports = window.CatItemsPage = React.createClass({
+	mixins: [createMixin()],
 	eventName: AppEvents.UPDATE_CATITEMSPAGE,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
@@ -11,9 +11,10 @@ var CatItemsPage = React.createClass({
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		ui.plugins.format($(getRootDom(this)));
+		ui.plugins.format($(this.getRootDom()));
 	},
 	render() {
+		var me = this;
 		const cat = appManager.data();
 		const paginate = appManager.paginate();
 		if (cat && paginate) {
@@ -34,7 +35,7 @@ var CatItemsPage = React.createClass({
 					<div className='row item-list'>
 						{items.map(function (item, i) {
 							var itemClassName = 'col-xs-6 col-md-2 item ' + (i==0?'item-first':'');
-							var userbox = isCurrentUser(item.user) ? null : <UserBox user={item.user} itemId={item.id}/>; 
+							var userbox = me.isCurrentUser(item.user) ? null : <UserBox user={item.user} itemId={item.id}/>; 
 							return (
 								<div className={itemClassName} key={i}>
 									<ItemImage item={item} />
@@ -50,5 +51,3 @@ var CatItemsPage = React.createClass({
 		return null;
 	}
 });
-
-module.exports = window.CatItemsPage = CatItemsPage;

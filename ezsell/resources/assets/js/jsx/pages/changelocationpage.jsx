@@ -2,7 +2,7 @@
  * ChangeLocationPage defination
  */
 var ChangeLocationPage = React.createClass({
-	mixins: [FormView, Mixin],
+	mixins: [createMixin(), FormView],
 	getInitialState() {
 		return {
 			value: '',
@@ -11,41 +11,11 @@ var ChangeLocationPage = React.createClass({
 		};
 	},
 	onValidSubmit(model) {},
+	eventName: AppEvents.UPDATE_LOCATION,
+	refreshCount: 0,
+	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		$('.autocomplete').each(function (i,e) {
-			var source = e.attribute('data-source');
-			$(e).autocomplete({ 
-				source: function( request, response ) {
-					$.ajax({
-						url: source,
-						data: {
-							q: request.term
-						},
-						success: function( _data ) {
-							var items = [];
-							$.each(_data.data, function (i, v) {
-								items.push({
-									id: v.id,
-									label: v.fullname
-								});
-							});
-							response(items);
-						}
-					});
-				},
-				minLength: 2,
-				select: function (event, ui) {
-					if (ui && ui.item) {
-						$(this).attr('data-value', ui.item);
-						const id = ui.item.id;
-						this.nextSibling.value = id;
-						if (id && id != appManager.location().id)
-							submitForm($(this).parents('form:first'));
-					}
-				}
-			});
-		});
 	},
 	render() {
 		return (

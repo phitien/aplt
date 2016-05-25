@@ -28,7 +28,7 @@ trait SocietyTrait {
 	public function follow(Request $request) {
 		return $this->process ( 'follow', func_get_args () );
 	}
-	protected function pajaxFollow(Request $request, $id) {
+	protected function pajaxpostFollow(Request $request, $id) {
 		$response = static::apiCallFollow ( $id );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->jsonResponse ( 'followed', static::getUser () );
@@ -47,7 +47,7 @@ trait SocietyTrait {
 	public function unfollow(Request $request, $id) {
 		return $this->process ( 'unfollow', func_get_args () );
 	}
-	protected function pajaxUnfollow(Request $request, $id) {
+	protected function pajaxpostUnfollow(Request $request, $id) {
 		$response = static::apiCallUnfollow ( $id );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->jsonResponse ( 'unfollowed', static::getUser () );

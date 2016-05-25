@@ -2,7 +2,7 @@
  * ItemDetailsPage defination
  */
 var ItemDetailsPage = React.createClass({
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName: AppEvents.UPDATE_ITEMDETAILSPAGE,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},

@@ -2,7 +2,7 @@
  * ChangePasswordPage defination
  */
 var ChangePasswordPage = React.createClass({
-	mixins: [FormView, Mixin],
+	mixins: [createMixin(), FormView],
 	render() {
 		return (
 			<Form className='form row' method='post' action='/password' autocomplete='off' onkeypress='return event.keyCode != 13;'

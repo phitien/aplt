@@ -3,7 +3,7 @@
  */
 var Footer = React.createClass({
 	id: 'footer',
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName : AppEvents.UPDATE_FOOTER,
 	refreshCount : 0,
 	refresh : function() {

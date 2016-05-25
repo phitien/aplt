@@ -34,7 +34,7 @@ trait  LoginTrait {
 	}
 	protected function pgetLogin(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( view ( 'login' ) );
+			return $this->getLoginResponse ();
 		else
 			return $this->redirect ();
 	}

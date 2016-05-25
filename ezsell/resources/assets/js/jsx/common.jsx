@@ -75,7 +75,13 @@ Object.assign(window, {
 	applicationSwitch : function(url) {
 		if (!url)
 			url = appStore.currentUrl();
-		ajax.post(url ? url : location.href, function( data ) {
-		});
+		if (appManager.linkDirectly()) {
+			location.href = url;
+		}
+		else {
+			ajax.post(url ? url : location.href, function( data ) {
+			});
+			
+		}
 	}
 });

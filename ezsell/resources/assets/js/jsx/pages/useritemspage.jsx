@@ -1,8 +1,8 @@
 /**
  * UserItemsPage defination
  */
-var UserItemsPage = React.createClass({
-	mixins: [Mixin],
+module.exports = window.UserItemsPage = React.createClass({
+	mixins: [createMixin()],
 	eventName: AppEvents.UPDATE_USERITEMSPAGE,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
@@ -11,7 +11,7 @@ var UserItemsPage = React.createClass({
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		ui.plugins.format($(getRootDom(this)));
+		ui.plugins.format($(this.getRootDom()));
 	},
 	render() {
 		const user = appManager.data();
@@ -40,5 +40,3 @@ var UserItemsPage = React.createClass({
 		return null;
 	}
 });
-
-module.exports = window.UserItemsPage = UserItemsPage;

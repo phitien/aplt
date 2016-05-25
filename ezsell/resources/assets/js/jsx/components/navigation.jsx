@@ -3,7 +3,7 @@
  */
 module.exports = window.Navigation = React.createClass({
 	id: 'navigation',
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	eventName : AppEvents.UPDATE_NAVIGATION,
 	refreshCount : 0,
 	refresh : function() {

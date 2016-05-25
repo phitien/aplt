@@ -23,7 +23,7 @@ class SocketController extends Controller {
 	public function sendmessage(Request $request) {
 		return $this->process ( 'sendmessage', func_get_args () );
 	}
-	protected function pajaxSendmessage(Request $request) {
+	protected function pajaxpostSendmessage(Request $request) {
 		$msg = $request->get ( 'message' );
 		if ($msg) {
 			$to = ( int ) $request->get ( 'code' );
@@ -70,7 +70,7 @@ class SocketController extends Controller {
 	public function messages(Request $request) {
 		return $this->process ( 'messages', func_get_args () );
 	}
-	protected function pajaxMessages(Request $request) {
+	protected function pajaxpostMessages(Request $request) {
 		$to = ( int ) $request->get ( 'code' );
 		$response = static::apiCallInfo ( [ 
 				'ids' => $to,

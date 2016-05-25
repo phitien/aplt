@@ -59,7 +59,7 @@ window.Form = Formsy.Form;
  * Input defination
  */
 module.exports = window.Input = React.createClass({
-	mixins: [Mixin, Formsy.Mixin],
+	mixins: [createMixin(), Formsy.Mixin],
 	type: 'text',
 	changeValue(event) {
 		const type = this.props.type;
@@ -91,6 +91,37 @@ module.exports = window.Input = React.createClass({
 		this.setValue(value);
 		if (this.props.onChange)
 			this.props.onChange(this.props.name, value);
+	},
+	componentDidMount() {
+		$(this.getRootDom()).find('.autocomplete').each(function (i,e) {
+			var source = $(e).attr('data-source');
+			$(e).autocomplete({ 
+				source: function( request, response ) {
+					ajax.post(source, function( _data ) {
+						var items = [];
+						$.each(_data.data, function (i, v) {
+							items.push({
+								id: v.id,
+								label: v.fullname
+							});
+						});
+						response(items);
+					}, {
+						q: request.term
+					});
+				},
+				minLength: 2,
+				select: function (event, ui) {
+					if (ui && ui.item) {
+						$(this).attr('data-value', ui.item);
+						const id = ui.item.id;
+						this.nextSibling.value = id;
+						if (id && id != appManager.location().id)
+							submitForm($(this).parents('form:first'));
+					}
+				}
+			});
+		});
 	},
 	render() {
 		this.type = this.attr('type', 'text').toLowerCase();

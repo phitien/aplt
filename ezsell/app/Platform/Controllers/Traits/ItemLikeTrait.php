@@ -18,7 +18,7 @@ trait ItemLikeTrait {
 	public function like(Request $request) {
 		return $this->process ( 'like', func_get_args () );
 	}
-	protected function pajaxLike(Request $request) {
+	protected function pajaxpostLike(Request $request) {
 		$id = $request->get ( 'id' );
 		$item = $this->getItemByIdOrCode ( $id );
 		if ($item) {

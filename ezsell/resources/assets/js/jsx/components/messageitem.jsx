@@ -2,9 +2,9 @@
  * MessageItem defination
  */
 var MessageItem = React.createClass({
-	mixins: [Mixin],
+	mixins: [createMixin()],
 	componentDidMount() {
-        ui.plugins.format($(getRootDom(this)));
+        ui.plugins.format($(this.getRootDom()));
 	},
 	toggleTime(e) {
 		$(e.currentTarget).parents('.chatitem').find('.created').slideToggle();
