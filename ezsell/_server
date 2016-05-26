@@ -47,7 +47,7 @@ redisClient.on("message", function(channel, jsonStr) {
 	if (channel == 'message') {
 		var data = JSON.parse(jsonStr);
 		if (data) {
-			console.log("message from: ", data.sender.id, ", to: ", data.to);
+			console.log("message from: ", data.sender.id, ", to: ", data.to, ", message: " + data.message);
 			if (users.hasOwnProperty(data.to)) {
 				users[data.to].emit('message', JSON.stringify({
 					'sender' : data.sender,

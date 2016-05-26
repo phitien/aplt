@@ -3,35 +3,40 @@
  */
 var ChatBox = React.createClass({
 	mixins: [createMixin()],
-	eventName: AppEvents.UPDATE_CHATBOX,
+	eventName: AppEvents.CHATUSER_UPDATE,
 	refreshCount: 0,
-	refresh() {
-		this.setState({refreshCount: this.refreshCount++});
-		this.scrollToBottom();
-	},
+	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
 		Dispatcher.removeListener(this.eventName, this.refresh);
-		Dispatcher.removeListener(AppEvents.SHOW_CHATBOX, this.showMe);
+		Dispatcher.removeListener(AppEvents.USERMESSAGES_LOADED, this.loaded);
+		Dispatcher.removeListener(AppEvents.USERMESSAGES_ADDED_NEW, this.addedNew);
+		Dispatcher.removeListener(AppEvents.USERMESSAGES_ADDED_OLD, this.addedOld);
 	},
 	componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		Dispatcher.addListener(AppEvents.SHOW_CHATBOX, this.showMe);
-		this.scrollToBottom();
+		Dispatcher.addListener(AppEvents.USERMESSAGES_LOADED, this.loaded);
+		Dispatcher.addListener(AppEvents.USERMESSAGES_ADDED_NEW, this.addedNew);
+		Dispatcher.addListener(AppEvents.USERMESSAGES_ADDED_OLD, this.addedOld);
 		this.getJQueryTextbox().focus();
-		
-		const user = appStore.get(this.eventName, this.props.user.id);
-		appStore.set(AppEvents.LOAD_RECENT_MESSAGES, user);
 	},
-	showMe() {
-		const user = appStore.get(AppEvents.SHOW_CHATBOX, this.props.user.id);
-		console.log(user, this.props.user.id);
-		console.log(user == this.props.user);
-		if (user && user.id == this.props.user.id)
-			this.show();
+	loaded() {
+		this.refresh();
+		this.scrollToBottom();
+	},
+	addedNew() {
+		this.refresh();
+		this.scrollToBottom();
+	},
+	addedOld() {
+		this.refresh();
+		this.scrollToTop();
 	},
 	scrollToBottom() {
 		var d = this.getJQueryMessages();
 		d.scrollTop(d.prop('scrollHeight'));
+	},
+	scrollToTop() {
+		this.getJQueryMessages().scrollTop(0);
 	},
 	getJQueryRoot() {
 		return $(this.getRootDom());
@@ -54,11 +59,11 @@ var ChatBox = React.createClass({
 		var textbox = this.getJQueryTextbox();
 		var message = textbox.val();
 		textbox.val('');
-		const receiver = appStore.get(this.eventName, this.props.user.id);
+		const receiver = appStore.chatuser(this.props.user.id);
 		if (receiver && message) {
 			if (appManager.isLogged()) {
 				ajax.post('/sendmessage', function(response) {
-					appStore.set(AppEvents.SENT_MESSAGE, response.data);
+					appStore.addMessage(receiver.id, response.data);
 				}, {'message': message, code: receiver.id, id: receiver.itemId});
 			}
 		}
@@ -79,7 +84,7 @@ var ChatBox = React.createClass({
 		chatbox.find('.messages,.send').slideUp('slow');
 	},
 	close(e) {
-		appStore.set(AppEvents.REMOVE_CHATBOX, appStore.get(this.eventName, this.props.user.id));
+		appStore.removechatuser(this.props.user.id);
 	},
 	toggle(e) {
 		if (this.visible)
@@ -88,12 +93,12 @@ var ChatBox = React.createClass({
 			this.show();
 	},
 	render(){
-		const user = appStore.get(this.eventName, this.props.user.id);
+		const user = appStore.chatuser(this.props.user.id);
 		if (user) {
+			this.href = '/' + user.name;
 			const avatar = user && user.avatar ? user.avatar : 
 				(user.gender == 'MALE' ? appManager.get('noavatarman') : appManager.get('noavatarwoman'));
-			this.href = '/' + user.name; 
-			const messages = attr.bind(user)('messages', []);
+			const messages = appStore.messages(this.props.user.id);
 			return (
 				<div className={this.className('', 'chatbox')}>
 					<div className='header'>

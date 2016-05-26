@@ -12,7 +12,7 @@ var MessageItem = React.createClass({
 	render(){
 		const message = this.props.message;
 		if (message) {
-			var statusClassName = 'status '+ util.attr.bind(message)('status', '');
+			var statusClassName = 'status '+ attr.bind(message)('status', 'SENT');
 			return (
 				<div className={this.className('', message.receiver ? 'myitem' : (message.sender.gender == 'MALE' ? 'hisitem' : 'heritem'), 'clearfix chatitem')}>
 					<div className='message' onClick={this.toggleTime}>

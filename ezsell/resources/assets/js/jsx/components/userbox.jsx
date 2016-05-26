@@ -15,9 +15,10 @@ module.exports = window.UserBox = React.createClass({
 		Dispatcher.addListener(AppEvents.UPDATE_USER, this.refresh);
 	},
 	onChatClick(e) {
-		if (this.canDo()) {
-			const itemId = this.props.itemId;
-			appStore.set(AppEvents.ADD_CHATBOX, user, itemId);
+		const user = this.canDo();
+		if (user) {
+			user.itemId = this.props.itemId;
+			appStore.chatuser(user.id, user);
 		}
 	},
 	onFollowClick(e) {
@@ -26,12 +27,12 @@ module.exports = window.UserBox = React.createClass({
 			const _isFollowingTo = this.isFollowingTo(user);
 			if (_isFollowingTo) {// unfollow
 				ajax.post('/unfollow/' + user.id, function(o) {
-					appStore.set(AppEvents.UPDATE_USER, o.data);
+					//TODO
 				});
 			}
 			else {// follow
 				ajax.post('/follow/' + user.id, function(o) {
-					appStore.set(AppEvents.UPDATE_USER, o.data);
+					//TODO
 				});
 			}
 		}

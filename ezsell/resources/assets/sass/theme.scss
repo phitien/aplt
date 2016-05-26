@@ -242,6 +242,7 @@ a:hover {text-decoration: none !important;}
 	}
 } 		
 
+/** CHATBAR && CHATBOX **/
 $chatbox-width: 250px;
 $chatbox-height: 322px;
 $chatbox-header-height: 32px;
@@ -249,88 +250,85 @@ $chatbox-header-padding: 3px;
 $chatbox-send-height: 32px;
 $chatbox-messages-height: $chatbox-height - $chatbox-header-height - $chatbox-send-height; 
 $chatbox-text-width: 165px;
-/** CHATBOX **/
-#chatbar {
+.chatbar {
 	position: fixed; bottom: 0;right: $sbig;
-	.chatbar {
-		background-color: transparent;
-		.chatbox {
-			@extend .border-all;
-			width: $chatbox-width;
-			vertical-align: top;overflow: hidden;
-			border-radius: $sbig;
-			margin: 0 2px;
-			background-color: lightgray;
-			float: right;
-			.header {
-				width: 100%;height: $chatbox-header-height;
-				border-top-left-radius: $sbig;border-top-right-radius: $sbig;
-				background-color: lightblue;color: white;
-				padding: $ssmall $sbig;overflow: hidden;
-				.name {float: left}
-				.close {@extend .icon,.border-all;}
-				.toggle {@extend .close;}
-			}
-			.messages {
-				width: 100%;height: $chatbox-messages-height;
-				border-top-left-radius: $sbig;border-top-right-radius: $sbig;
-				padding: $ssmall $sbig;
-				font-size: $fsmall;
-				overflow-x: hidden;
-				overflow-y: auto;
-				.chatitem {
-						display: inline-block;
-						max-width: 80%;
-						line-height: 20px;
-						padding: 2px $smedium;
-						border-radius: $ssmall;
-						clear: both;
-						margin: $ssmall;
-					.status {
-						margin-top:5px;height: $smedium;width: $smedium;border-radius: $ssmall;background-color: $disabled-color; 
-					}
-				}
-				.myitem {
-					@extend .chatitem;
-						text-align: right;
-						background-color: white;
-						float: right;
-					.status {
-						float: right;margin-left: 3px;
-					}
-				}
-				.heritem,.hisitem {
-					@extend .chatitem;
-						text-align: left;
-						background-color: darkgray;
-						float: left;
-					.status {
-						float: left;margin-right: 3px;
-					}
-				}
-				.created {
-					color: $disabled-color;
-					font-size: $fxsmall;
-					display: none;
+	background-color: transparent;
+	.chatbox {
+		@extend .border-all;
+		width: $chatbox-width;
+		vertical-align: top;overflow: hidden;
+		border-radius: $sbig;
+		margin: 0 2px;
+		background-color: lightgray;
+		float: right;
+		.header {
+			width: 100%;height: $chatbox-header-height;
+			border-top-left-radius: $sbig;border-top-right-radius: $sbig;
+			background-color: lightblue;color: white;
+			padding: $ssmall $sbig;overflow: hidden;
+			.name {float: left}
+			.close {@extend .icon,.border-all;}
+			.toggle {@extend .close;}
+		}
+		.messages {
+			width: 100%;height: $chatbox-messages-height;
+			border-top-left-radius: $sbig;border-top-right-radius: $sbig;
+			padding: $ssmall $sbig;
+			font-size: $fsmall;
+			overflow-x: hidden;
+			overflow-y: auto;
+			.chatitem {
+					display: inline-block;
+					max-width: 80%;
+					line-height: 20px;
+					padding: 2px $smedium;
+					border-radius: $ssmall;
+					clear: both;
+					margin: $ssmall;
+				.status {
+					margin-top:5px;height: $smedium;width: $smedium;border-radius: $ssmall;background-color: $disabled-color; 
 				}
 			}
-			.send {
-				width: 100%;height: $chatbox-send-height;
-				border-bottom-left-radius: $sbig;border-bottom-right-radius: $sbig;
-				padding: $ssmall $sbig;background-color:white;
-				font-size: $fsmall;vertical-align: top;text-align: left;
-				input[type=text] {
-					@extend .border-all,.no-margin-padding;
-					float: left;line-height: 26px;height: 26px;
-					width: $chatbox-text-width;
-				}
-				input[type=button] {
-					@extend .border-all,.no-margin-padding;
-					float: right;line-height: 26px;height: 26px;
-					width: 53px;
+			.myitem {
+				@extend .chatitem;
+					text-align: right;
 					background-color: white;
-					color: black;
+					float: right;
+				.status {
+					float: right;margin-left: 3px;
 				}
+			}
+			.heritem,.hisitem {
+				@extend .chatitem;
+					text-align: left;
+					background-color: darkgray;
+					float: left;
+				.status {
+					float: left;margin-right: 3px;
+				}
+			}
+			.created {
+				color: $disabled-color;
+				font-size: $fxsmall;
+				display: none;
+			}
+		}
+		.send {
+			width: 100%;height: $chatbox-send-height;
+			border-bottom-left-radius: $sbig;border-bottom-right-radius: $sbig;
+			padding: $ssmall $sbig;background-color:white;
+			font-size: $fsmall;vertical-align: top;text-align: left;
+			input[type=text] {
+				@extend .border-all,.no-margin-padding;
+				float: left;line-height: 26px;height: 26px;
+				width: $chatbox-text-width;
+			}
+			input[type=button] {
+				@extend .border-all,.no-margin-padding;
+				float: right;line-height: 26px;height: 26px;
+				width: 53px;
+				background-color: white;
+				color: black;
 			}
 		}
 	}

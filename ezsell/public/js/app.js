@@ -2,6 +2,11 @@
 'use strict';
 
 $(document).ready(function () {
+	// set app data
+	appManager.configurations(configurations);
+	// start socket connection
+	window.appSocket = new AppSocket(appManager.socketUri(), appManager.clientKey());
+	// launch application
 	ReactDOM.render(React.createElement(Application, null), document.getElementById('viewport'));
 });
 

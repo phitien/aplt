@@ -25,7 +25,7 @@ module.exports = window.Navigation = React.createClass({
 						<ul className="nav">
 							<li><a onclick="applicationSwitch('/')"><span>{configurations.localization.home}</span></a></li>
 							<li id="catmenu">
-								<CatMenu items={appManager.cats()}></CatMenu>
+								<CatMenu></CatMenu>
 							</li>
 							<li id="extra">
 								<ModeSwitch />
@@ -34,6 +34,7 @@ module.exports = window.Navigation = React.createClass({
 						<div className="clearfix"></div>
 					</div>
 					<div id="rightmenu">
+						<RightMenu />
 						<div className="sensitive" id="form-container"></div>
 						<div className="clearfix"></div>
 					</div>

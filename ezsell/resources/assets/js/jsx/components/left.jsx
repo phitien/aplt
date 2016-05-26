@@ -22,7 +22,7 @@ var Left = React.createClass({
 		if (showLeft) {
 			return (
 				<div className={this.className('col-xs-12 col-sm-6 col-md-' + showLeft)} id={this.getId()}>
-					<CatMenu items={appManager.cats()} showRoot={false} className='leftmenu'></CatMenu>
+					<CatMenu showRoot={false} className='leftmenu'></CatMenu>
 				</div>
 			);
 		}

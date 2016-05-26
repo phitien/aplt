@@ -15,18 +15,23 @@ require('./mixins/mixin.jsx');
 require('./mixins/formview.jsx');
 require('./mixins/itemdates.jsx');
 // AppEvent
-require('./event/appevent.jsx');
+require('./flux/appevent.jsx');
+require('./flux/action.jsx');
 // AppStore
-require('./stores/store.jsx');
-require('./stores/appstore.jsx');
+require('./flux/store.jsx');
+require('./flux/appstore.jsx');
 // Dispatcher
-require('./dispatcher/dispatcher.jsx');
+require('./flux/dispatcher.jsx');
 // Managers
-require('./managers/appmanager.jsx');
+require('./flux/appmanager.jsx');
 // Components
 require('./components/switch.jsx');
 require('./components/input.jsx');
+require('./components/menuitem.jsx');
+require('./components/menu.jsx');
+
 require('./components/catmenu.jsx');
+require('./components/rightmenu.jsx');
 require('./components/chatbox.jsx');
 require('./components/chatbar.jsx');
 
@@ -58,6 +63,8 @@ require('./pages/changeemailpage.jsx');
 require('./pages/changepasswordpage.jsx');
 require('./pages/buyitempage.jsx');
 require('./pages/sellitempage.jsx');
+//Socket
+require('./socket/appsocket.jsx');
 // Application
 require('./application/application.jsx');
 //

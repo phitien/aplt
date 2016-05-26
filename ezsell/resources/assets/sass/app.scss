@@ -101,23 +101,26 @@
 	}
 }
 
-
-#rightmenu {position: inherit;float: right;width: 25%;height: 100%;}
-#rightmenu>ul a {padding: $smedium;background-color: transparent;}
-#rightmenu>ul a:hover {background-color: transparent;}
-
-#rightmenu ul {margin: 0;padding: 0;}
-#rightmenu li {margin: 0;padding: 0;position: inherit;}
-#rightmenu>ul {text-align: right;}
-#rightmenu>ul>li {display: inline-block;}
-#rightmenu>ul>li>ul {
-	@extend .border-all,.overlay-menu;
-	top: ($navigation-height);
-	right: 0;
+#rightmenu {
+	position: inherit;float: right;width: 25%;height: 100%;
+	a {padding: $sbig;background-color: transparent;}
+	a:hover {background-color: transparent;}
+	.rightmenu {
+		margin: 0;padding: 0;text-align: right;margin-top: $sbig;
+		li {
+			margin: 0;padding: 0;position: inherit;display: inline-block;
+			ul {
+				@extend .border-all,.overlay-menu;top: ($navigation-height);right: 0;
+				li {
+					display: inline-block;position: relative;padding: $ssmall $sbig;
+					a {padding: 0;text-decoration: none;}
+				}
+				li:hover {background-color: #ffffff;}
+			}
+		}
+	}
 }
-#rightmenu>ul>li>ul>li {display: inline-block;position: relative;padding: $ssmall $sbig;}
-#rightmenu>ul>li>ul>li>a {padding: 0;text-decoration: none;}
-#rightmenu>ul>li>ul>li:hover {background-color: #ffffff;}
+
 
 #form-container {
 	display: none;

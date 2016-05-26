@@ -7,7 +7,6 @@ use LRedis;
 use App\Platform\Models\Message;
 use App\Platform\Models\Item;
 use App\Platform\Config;
-use DB;
 
 class SocketController extends Controller {
 	/**
@@ -71,7 +70,7 @@ class SocketController extends Controller {
 		return $this->process ( 'messages', func_get_args () );
 	}
 	protected function pajaxpostMessages(Request $request) {
-		$to = ( int ) $request->get ( 'code' );
+		$to = ( int ) $request->get ( 'id' );
 		$response = static::apiCallInfo ( [ 
 				'ids' => $to,
 				'first' => true 
@@ -85,7 +84,7 @@ class SocketController extends Controller {
 
 				orWhere ( function ($query) use ($from, $touser) {
 					$query->where ( 'from_id', '=', $touser ['id'] )->where ( 'to_id', '=', $from->id );
-				} )->paginate ( Config::PAGE_SIZE );
+				} )->orderBy ( 'id', 'desc' )->paginate ( Config::PAGE_SIZE );
 				
 				$items = $paginate->getCollection ();
 				
@@ -103,7 +102,7 @@ class SocketController extends Controller {
 					] );
 				}
 				return $this->jsonResponse ( 'list_messages', [ 
-						'messages' => $messages,
+						'messages' => array_reverse ( $messages ),
 						'paginate' => $paginate 
 				] );
 			}

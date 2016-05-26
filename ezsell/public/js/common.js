@@ -7670,18 +7670,23 @@ require('./mixins/mixin.jsx');
 require('./mixins/formview.jsx');
 require('./mixins/itemdates.jsx');
 // AppEvent
-require('./event/appevent.jsx');
+require('./flux/appevent.jsx');
+require('./flux/action.jsx');
 // AppStore
-require('./stores/store.jsx');
-require('./stores/appstore.jsx');
+require('./flux/store.jsx');
+require('./flux/appstore.jsx');
 // Dispatcher
-require('./dispatcher/dispatcher.jsx');
+require('./flux/dispatcher.jsx');
 // Managers
-require('./managers/appmanager.jsx');
+require('./flux/appmanager.jsx');
 // Components
 require('./components/switch.jsx');
 require('./components/input.jsx');
+require('./components/menuitem.jsx');
+require('./components/menu.jsx');
+
 require('./components/catmenu.jsx');
+require('./components/rightmenu.jsx');
 require('./components/chatbox.jsx');
 require('./components/chatbar.jsx');
 
@@ -7713,6 +7718,8 @@ require('./pages/changeemailpage.jsx');
 require('./pages/changepasswordpage.jsx');
 require('./pages/buyitempage.jsx');
 require('./pages/sellitempage.jsx');
+//Socket
+require('./socket/appsocket.jsx');
 // Application
 require('./application/application.jsx');
 //
@@ -7747,7 +7754,7 @@ Object.assign(window, {
 	}
 });
 
-},{"../../../../node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js":102,"../jquery-migrate-1.2.1.min.js":139,"../jquery.base64.js":140,"./application/application.jsx":141,"./components/banner.jsx":143,"./components/catmenu.jsx":144,"./components/center.jsx":145,"./components/chatbar.jsx":146,"./components/chatbox.jsx":147,"./components/footer.jsx":148,"./components/input.jsx":149,"./components/itemimage.jsx":150,"./components/itemsummary.jsx":151,"./components/left.jsx":152,"./components/messageitem.jsx":153,"./components/modeswitch.jsx":154,"./components/navigation.jsx":155,"./components/right.jsx":156,"./components/switch.jsx":157,"./components/userbox.jsx":158,"./dispatcher/dispatcher.jsx":159,"./event/appevent.jsx":160,"./managers/appmanager.jsx":161,"./mixins/formview.jsx":162,"./mixins/itemdates.jsx":163,"./mixins/mixin.jsx":164,"./pages/buyitempage.jsx":165,"./pages/catitemspage.jsx":166,"./pages/changeaccountpage.jsx":167,"./pages/changeemailpage.jsx":168,"./pages/changelocationpage.jsx":169,"./pages/changepasswordpage.jsx":170,"./pages/deactivatepage.jsx":171,"./pages/homepage.jsx":172,"./pages/itemdetailspage.jsx":173,"./pages/loginpage.jsx":174,"./pages/registerpage.jsx":175,"./pages/sellitempage.jsx":176,"./pages/sendactivationpage.jsx":177,"./pages/useritemspage.jsx":178,"./stores/appstore.jsx":179,"./stores/store.jsx":180,"./ui.jsx":181,"./util.jsx":182,"react-image-gallery":106}],143:[function(require,module,exports){
+},{"../../../../node_modules/jquery-dateformat/dist/jquery-dateFormat.min.js":102,"../jquery-migrate-1.2.1.min.js":139,"../jquery.base64.js":140,"./application/application.jsx":141,"./components/banner.jsx":143,"./components/catmenu.jsx":144,"./components/center.jsx":145,"./components/chatbar.jsx":146,"./components/chatbox.jsx":147,"./components/footer.jsx":148,"./components/input.jsx":149,"./components/itemimage.jsx":150,"./components/itemsummary.jsx":151,"./components/left.jsx":152,"./components/menu.jsx":153,"./components/menuitem.jsx":154,"./components/messageitem.jsx":155,"./components/modeswitch.jsx":156,"./components/navigation.jsx":157,"./components/right.jsx":158,"./components/rightmenu.jsx":159,"./components/switch.jsx":160,"./components/userbox.jsx":161,"./flux/action.jsx":162,"./flux/appevent.jsx":163,"./flux/appmanager.jsx":164,"./flux/appstore.jsx":165,"./flux/dispatcher.jsx":166,"./flux/store.jsx":167,"./mixins/formview.jsx":168,"./mixins/itemdates.jsx":169,"./mixins/mixin.jsx":170,"./pages/buyitempage.jsx":171,"./pages/catitemspage.jsx":172,"./pages/changeaccountpage.jsx":173,"./pages/changeemailpage.jsx":174,"./pages/changelocationpage.jsx":175,"./pages/changepasswordpage.jsx":176,"./pages/deactivatepage.jsx":177,"./pages/homepage.jsx":178,"./pages/itemdetailspage.jsx":179,"./pages/loginpage.jsx":180,"./pages/registerpage.jsx":181,"./pages/sellitempage.jsx":182,"./pages/sendactivationpage.jsx":183,"./pages/useritemspage.jsx":184,"./socket/appsocket.jsx":185,"./ui.jsx":186,"./util.jsx":187,"react-image-gallery":106}],143:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7786,163 +7793,9 @@ module.exports = window.Banner = Banner;
 'use strict';
 
 /**
- * MenuItem defination
- */
-var MenuItem = React.createClass({
-	displayName: 'MenuItem',
-
-	mixins: [createMixin()],
-	getText: function getText(_item) {
-		try {
-			return this.props.getText(_item);
-		} catch (e) {
-			try {
-				return _item.text;
-			} catch (e) {
-				return '';
-			}
-		}
-	},
-	getHref: function getHref(_item) {
-		try {
-			return this.props.getHref(_item);
-		} catch (e) {
-			try {
-				return _item.href;
-			} catch (e) {
-				return '';
-			}
-		}
-	},
-	getChildren: function getChildren(_item) {
-		try {
-			return this.props.getChildren(_item);
-		} catch (e) {
-			try {
-				return _item.children;
-			} catch (e) {
-				return [];
-			}
-		}
-	},
-	getSubMenuClassName: function getSubMenuClassName(_item) {
-		try {
-			return this.props.getSubMenuClassName(_item);
-		} catch (e) {
-			try {
-				return _item.subMenuClassName;
-			} catch (e) {
-				return '';
-			}
-		}
-	},
-	itemClick: function itemClick(e) {
-		if (this.props.itemClick) {
-			this.props.itemClick(this);
-		}
-	},
-	handleItemClick: function handleItemClick(event) {
-		var href = this.getHref(this.props.data).replace('javascript:', '');
-		var fn = eval('(function () {' + href + ';})');
-		fn.bind(event.currentTarget)();
-	},
-	render: function render() {
-		var text = this.getText(this.props.data);
-		if (!text) {
-			return React.createElement('li', null);
-		}
-		var href = this.getHref(this.props.data);
-		var html;
-		if (href) {
-			if (href.indexOf("javascript:") == 0) {
-				html = React.createElement(
-					'a',
-					{ className: 'menuitem menuitem-atomic', onClick: this.handleItemClick },
-					React.createElement(
-						'span',
-						null,
-						text
-					)
-				);
-			} else {
-				html = React.createElement(
-					'a',
-					{ className: 'menuitem menuitem-atomic', href: href },
-					React.createElement(
-						'span',
-						null,
-						text
-					)
-				);
-			}
-		} else {
-			html = React.createElement(
-				'a',
-				{ className: 'menuitem menuitem-nonatomic', onClick: this.itemClick },
-				React.createElement(
-					'span',
-					null,
-					text
-				)
-			);
-		}
-		var children = this.getChildren(this.props.data);
-		var subMenuClassName = this.getSubMenuClassName(this.props.data);
-		if (children && children.length > 0) {
-			return React.createElement(
-				'li',
-				null,
-				html,
-				React.createElement(Menu, { className: subMenuClassName, items: children,
-					getText: this.props.getText,
-					getHref: this.props.getHref,
-					getChildren: this.props.getChildren,
-					getSubMenuClassName: this.props.getSubMenuClassName })
-			);
-		} else {
-			return React.createElement(
-				'li',
-				null,
-				React.createElement(
-					'span',
-					null,
-					html
-				)
-			);
-		}
-	}
-});
-window.MenuItem = MenuItem;
-
-/**
- * Menu defination
- */
-var Menu = React.createClass({
-	displayName: 'Menu',
-
-	mixins: [createMixin()],
-	render: function render() {
-		var me = this;
-		return React.createElement(
-			'ul',
-			{ className: this.className() },
-			this.props.items.map(function (item, i) {
-				return React.createElement(MenuItem, { data: item, key: i,
-					getText: me.props.getText,
-					getHref: me.props.getHref,
-					itemClick: me.props.itemClick,
-					getChildren: me.props.getChildren,
-					getSubMenuClassName: me.props.getSubMenuClassName });
-			})
-		);
-	}
-});
-window.Menu = Menu;
-
-/**
  * CatMenu defination
  */
-var CatMenu = React.createClass({
+module.exports = window.CatMenu = React.createClass({
 	displayName: 'CatMenu',
 
 	mixins: [createMixin()],
@@ -7950,10 +7803,10 @@ var CatMenu = React.createClass({
 		return _item.details ? _item.details.name : '';
 	},
 	getHref: function getHref(_item) {
-		if (!_item.parent_id) return 'javascript:expandMenu(this)';else if (_item.atomic) return 'javascript:applicationSwitch("cat/' + (appManager.get('usecode') ? _item.code.toLowerCase() : _item.id) + '")';else return '';
+		if (!_item.parent_id) return 'javascript:expandMenu(this)';else if (_item.atomic) return 'cat/' + (appManager.usecode() ? _item.code.toLowerCase() : _item.id);else return '';
 	},
-	itemClick: function itemClick(_item) {
-		console.log(_item);
+	itemClick: function itemClick(data) {
+		applicationSwitch(this.getHref(data));
 	},
 	getSubMenuClassName: function getSubMenuClassName(_item) {
 		if (!_item.parent_id) return 'sensitive';
@@ -7961,7 +7814,8 @@ var CatMenu = React.createClass({
 	},
 	render: function render() {
 		var showRoot = this.attr('showRoot', true);
-		var items = showRoot ? this.props.items : this.props.items[0].children;
+		var items = appManager.cats();
+		items = showRoot ? items : items[0].children;
 		return React.createElement(Menu, { className: this.className('catmenu'), items: items,
 			getText: this.getText,
 			getHref: this.getHref,
@@ -7969,8 +7823,6 @@ var CatMenu = React.createClass({
 			getSubMenuClassName: this.getSubMenuClassName });
 	}
 });
-
-module.exports = window.CatMenu = CatMenu;
 
 },{}],145:[function(require,module,exports){
 'use strict';
@@ -8067,7 +7919,7 @@ var ChatBar = React.createClass({
 
 	id: 'chatbar',
 	mixins: [createMixin()],
-	eventName: AppEvents.UPDATE_CHATBAR,
+	eventName: AppEvents.CHATUSERS_UPDATE,
 	refreshCount: 0,
 	refresh: function refresh() {
 		this.setState({ refreshCount: this.refreshCount++ });
@@ -8079,11 +7931,11 @@ var ChatBar = React.createClass({
 		Dispatcher.addListener(this.eventName, this.refresh);
 	},
 	render: function render() {
-		var users = appStore.get(this.eventName);
+		var users = appStore.chatusers();
 		if (users && users.length) {
 			return React.createElement(
 				'div',
-				{ className: this.className() },
+				{ className: this.className('', 'chatbar'), id: this.getId() },
 				users.map(function (user, i) {
 					return React.createElement(ChatBox, { user: user, key: i });
 				}),
@@ -8106,34 +7958,42 @@ var ChatBox = React.createClass({
 	displayName: 'ChatBox',
 
 	mixins: [createMixin()],
-	eventName: AppEvents.UPDATE_CHATBOX,
+	eventName: AppEvents.CHATUSER_UPDATE,
 	refreshCount: 0,
 	refresh: function refresh() {
 		this.setState({ refreshCount: this.refreshCount++ });
-		this.scrollToBottom();
 	},
 	componentWillUnmount: function componentWillUnmount() {
 		Dispatcher.removeListener(this.eventName, this.refresh);
-		Dispatcher.removeListener(AppEvents.SHOW_CHATBOX, this.showMe);
+		Dispatcher.removeListener(AppEvents.USERMESSAGES_LOADED, this.loaded);
+		Dispatcher.removeListener(AppEvents.USERMESSAGES_ADDED_NEW, this.addedNew);
+		Dispatcher.removeListener(AppEvents.USERMESSAGES_ADDED_OLD, this.addedOld);
 	},
 	componentDidMount: function componentDidMount() {
 		Dispatcher.addListener(this.eventName, this.refresh);
-		Dispatcher.addListener(AppEvents.SHOW_CHATBOX, this.showMe);
-		this.scrollToBottom();
+		Dispatcher.addListener(AppEvents.USERMESSAGES_LOADED, this.loaded);
+		Dispatcher.addListener(AppEvents.USERMESSAGES_ADDED_NEW, this.addedNew);
+		Dispatcher.addListener(AppEvents.USERMESSAGES_ADDED_OLD, this.addedOld);
 		this.getJQueryTextbox().focus();
-
-		var user = appStore.get(this.eventName, this.props.user.id);
-		appStore.set(AppEvents.LOAD_RECENT_MESSAGES, user);
 	},
-	showMe: function showMe() {
-		var user = appStore.get(AppEvents.SHOW_CHATBOX, this.props.user.id);
-		console.log(user, this.props.user.id);
-		console.log(user == this.props.user);
-		if (user && user.id == this.props.user.id) this.show();
+	loaded: function loaded() {
+		this.refresh();
+		this.scrollToBottom();
+	},
+	addedNew: function addedNew() {
+		this.refresh();
+		this.scrollToBottom();
+	},
+	addedOld: function addedOld() {
+		this.refresh();
+		this.scrollToTop();
 	},
 	scrollToBottom: function scrollToBottom() {
 		var d = this.getJQueryMessages();
 		d.scrollTop(d.prop('scrollHeight'));
+	},
+	scrollToTop: function scrollToTop() {
+		this.getJQueryMessages().scrollTop(0);
 	},
 	getJQueryRoot: function getJQueryRoot() {
 		return $(this.getRootDom());
@@ -8156,11 +8016,11 @@ var ChatBox = React.createClass({
 		var textbox = this.getJQueryTextbox();
 		var message = textbox.val();
 		textbox.val('');
-		var receiver = appStore.get(this.eventName, this.props.user.id);
+		var receiver = appStore.chatuser(this.props.user.id);
 		if (receiver && message) {
 			if (appManager.isLogged()) {
 				ajax.post('/sendmessage', function (response) {
-					appStore.set(AppEvents.SENT_MESSAGE, response.data);
+					appStore.addMessage(receiver.id, response.data);
 				}, { 'message': message, code: receiver.id, id: receiver.itemId });
 			}
 		}
@@ -8182,17 +8042,17 @@ var ChatBox = React.createClass({
 		chatbox.find('.messages,.send').slideUp('slow');
 	},
 	close: function close(e) {
-		appStore.set(AppEvents.REMOVE_CHATBOX, appStore.get(this.eventName, this.props.user.id));
+		appStore.removechatuser(this.props.user.id);
 	},
 	toggle: function toggle(e) {
 		if (this.visible) this.hide();else this.show();
 	},
 	render: function render() {
-		var user = appStore.get(this.eventName, this.props.user.id);
+		var user = appStore.chatuser(this.props.user.id);
 		if (user) {
-			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? appManager.get('noavatarman') : appManager.get('noavatarwoman');
 			this.href = '/' + user.name;
-			var messages = attr.bind(user)('messages', []);
+			var avatar = user && user.avatar ? user.avatar : user.gender == 'MALE' ? appManager.get('noavatarman') : appManager.get('noavatarwoman');
+			var messages = appStore.messages(this.props.user.id);
 			return React.createElement(
 				'div',
 				{ className: this.className('', 'chatbox') },
@@ -8670,7 +8530,7 @@ module.exports = window.Input = React.createClass({
 	}
 });
 
-},{"../components/switch.jsx":157,"formsy-react":98}],150:[function(require,module,exports){
+},{"../components/switch.jsx":160,"formsy-react":98}],150:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8696,7 +8556,7 @@ var ItemImage = React.createClass({
 		var user = appManager.isLogged();
 		if (user) {
 			var item = appManager.item(this.props.item.id);
-			var id = appManager.get('usecode') ? item.code : item.id;
+			var id = appManager.usecode() ? item.code : item.id;
 			if (id) {
 				ajax.post('/like', function (o) {
 					appManager.item(this.props.item.id, o.data);
@@ -8709,7 +8569,7 @@ var ItemImage = React.createClass({
 		if (item) {
 			var iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : '');
 			var showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-			this.href = showLink ? '/item/' + (appManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			this.href = showLink ? '/item/' + (appManager.usecode() ? item.code : item.id) : 'javascript:void(0);';
 			return React.createElement(
 				'div',
 				{ className: this.className('', item.liked ? ' liked' : ' unliked', 'item-firstimage ') },
@@ -8760,7 +8620,7 @@ var ItemSummary = React.createClass({
 			var prices = this.attr('prices', 'original,sale,now').split(',');
 			var iconClassName = 'icon icon-like ' + (item.liked ? '' : 'icon-like-unliked');
 			var showLink = this.attr('showLink', true);
-			this.href = showLink ? '/item/' + (appManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			this.href = showLink ? '/item/' + (appManager.usecode() ? item.code : item.id) : 'javascript:void(0);';
 			var price_list = React.createElement(
 				'div',
 				{ className: 'item-prices' },
@@ -8861,7 +8721,7 @@ var Left = React.createClass({
 			return React.createElement(
 				'div',
 				{ className: this.className('col-xs-12 col-sm-6 col-md-' + showLeft), id: this.getId() },
-				React.createElement(CatMenu, { items: appManager.cats(), showRoot: false, className: 'leftmenu' })
+				React.createElement(CatMenu, { showRoot: false, className: 'leftmenu' })
 			);
 		}
 		return null;
@@ -8871,6 +8731,157 @@ var Left = React.createClass({
 module.exports = window.Left = Left;
 
 },{}],153:[function(require,module,exports){
+"use strict";
+
+/**
+ * Menu defination
+ */
+module.exports = window.Menu = React.createClass({
+	displayName: "Menu",
+
+	mixins: [createMixin()],
+	render: function render() {
+		var me = this;
+		return React.createElement(
+			"ul",
+			{ className: this.className() },
+			this.props.items.map(function (item, i) {
+				return React.createElement(MenuItem, { data: item, key: i,
+					getText: me.props.getText,
+					getHref: me.props.getHref,
+					itemClick: me.props.itemClick,
+					getChildren: me.props.getChildren,
+					getSubMenuClassName: me.props.getSubMenuClassName });
+			})
+		);
+	}
+});
+
+},{}],154:[function(require,module,exports){
+'use strict';
+
+module.exports = window.MenuItem = React.createClass({
+	displayName: 'MenuItem',
+
+	mixins: [createMixin()],
+	getText: function getText(_item) {
+		try {
+			return this.props.getText(_item);
+		} catch (e) {
+			try {
+				return _item.text;
+			} catch (e) {
+				return '';
+			}
+		}
+	},
+	getHref: function getHref(_item) {
+		try {
+			return this.props.getHref(_item);
+		} catch (e) {
+			try {
+				return _item.href;
+			} catch (e) {
+				return '';
+			}
+		}
+	},
+	getChildren: function getChildren(_item) {
+		try {
+			return this.props.getChildren(_item);
+		} catch (e) {
+			try {
+				return _item.children;
+			} catch (e) {
+				return [];
+			}
+		}
+	},
+	getSubMenuClassName: function getSubMenuClassName(_item) {
+		try {
+			return this.props.getSubMenuClassName(_item);
+		} catch (e) {
+			try {
+				return _item.subMenuClassName;
+			} catch (e) {
+				return '';
+			}
+		}
+	},
+	itemClick: function itemClick(e) {
+		var href = this.getHref(this.props.data);
+		if (href.indexOf("javascript:") == 0) {
+			href = href.replace('javascript:', '');
+			var fn = eval('(function () {' + href + ';})');
+			fn.bind(e.currentTarget)();
+		} else {
+			this.props.itemClick(this.props.data);
+		}
+	},
+	render: function render() {
+		var text = this.getText(this.props.data);
+		if (!text) {
+			return React.createElement('li', null);
+		}
+		var html;
+		var href = this.getHref(this.props.data);
+		var children = this.getChildren(this.props.data);
+		var linkClassName = children && children.length > 0 ? 'menuitem menuitem-nonatomic' : 'menuitem menuitem-atomic';
+		if (this.props.itemClick || href && href.indexOf("javascript:") == 0) {
+			html = React.createElement(
+				'a',
+				{ className: linkClassName, onClick: this.itemClick },
+				React.createElement(
+					'span',
+					null,
+					text
+				)
+			);
+		} else if (href) {
+			html = React.createElement(
+				'a',
+				{ className: linkClassName, href: href },
+				React.createElement(
+					'span',
+					null,
+					text
+				)
+			);
+		} else {
+			html = React.createElement(
+				'a',
+				{ className: linkClassName },
+				React.createElement(
+					'span',
+					null,
+					text
+				)
+			);
+		}
+		var subMenuClassName = this.getSubMenuClassName(this.props.data);
+		if (children && children.length > 0) {
+			return React.createElement(
+				'li',
+				null,
+				html,
+				React.createElement(Menu, { className: subMenuClassName, items: children,
+					getText: this.props.getText,
+					getHref: this.props.getHref,
+					getChildren: this.props.getChildren,
+					itemClick: this.props.itemClick,
+					getSubMenuClassName: this.props.getSubMenuClassName })
+			);
+		} else {
+			return React.createElement(
+				'li',
+				null,
+				html
+			);
+		}
+	}
+});
+
+},{}],155:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8889,7 +8900,7 @@ var MessageItem = React.createClass({
 	render: function render() {
 		var message = this.props.message;
 		if (message) {
-			var statusClassName = 'status ' + util.attr.bind(message)('status', '');
+			var statusClassName = 'status ' + attr.bind(message)('status', 'SENT');
 			return React.createElement(
 				'div',
 				{ className: this.className('', message.receiver ? 'myitem' : message.sender.gender == 'MALE' ? 'hisitem' : 'heritem', 'clearfix chatitem') },
@@ -8913,7 +8924,7 @@ var MessageItem = React.createClass({
 
 module.exports = window.MessageItem = MessageItem;
 
-},{}],154:[function(require,module,exports){
+},{}],156:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8943,7 +8954,7 @@ var ModeSwitch = React.createClass({
 
 module.exports = window.ModeSwitch = ModeSwitch;
 
-},{}],155:[function(require,module,exports){
+},{}],157:[function(require,module,exports){
 "use strict";
 
 /**
@@ -8996,7 +9007,7 @@ module.exports = window.Navigation = React.createClass({
 						React.createElement(
 							"li",
 							{ id: "catmenu" },
-							React.createElement(CatMenu, { items: appManager.cats() })
+							React.createElement(CatMenu, null)
 						),
 						React.createElement(
 							"li",
@@ -9009,6 +9020,7 @@ module.exports = window.Navigation = React.createClass({
 				React.createElement(
 					"div",
 					{ id: "rightmenu" },
+					React.createElement(RightMenu, null),
 					React.createElement("div", { className: "sensitive", id: "form-container" }),
 					React.createElement("div", { className: "clearfix" })
 				)
@@ -9018,7 +9030,7 @@ module.exports = window.Navigation = React.createClass({
 	}
 });
 
-},{}],156:[function(require,module,exports){
+},{}],158:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9053,7 +9065,36 @@ var Right = React.createClass({
 
 module.exports = window.Right = Right;
 
-},{}],157:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
+'use strict';
+
+/**
+ * CatMenu defination
+ */
+module.exports = window.RightMenu = React.createClass({
+	displayName: 'RightMenu',
+
+	mixins: [createMixin()],
+	itemClick: function itemClick(data) {
+		applicationSwitch(data.href);
+	},
+	render: function render() {
+		var user = appManager.isLogged();
+		var items = user ? [] : [{
+			text: configurations.localization.login,
+			href: '/login'
+		}, {
+			text: configurations.localization.register,
+			href: '/register'
+		}, {
+			text: configurations.localization.location,
+			href: '/location'
+		}];
+		return React.createElement(Menu, { className: this.className('rightmenu'), items: items, itemClick: this.itemClick });
+	}
+});
+
+},{}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9174,7 +9215,7 @@ var Switch = React.createClass({
 window.Switch = Switch;
 exports.default = window.Switch;
 
-},{"classnames":91}],158:[function(require,module,exports){
+},{"classnames":91}],161:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9198,9 +9239,10 @@ module.exports = window.UserBox = React.createClass({
 		Dispatcher.addListener(AppEvents.UPDATE_USER, this.refresh);
 	},
 	onChatClick: function onChatClick(e) {
-		if (this.canDo()) {
-			var itemId = this.props.itemId;
-			appStore.set(AppEvents.ADD_CHATBOX, user, itemId);
+		var user = this.canDo();
+		if (user) {
+			user.itemId = this.props.itemId;
+			appStore.chatuser(user.id, user);
 		}
 	},
 	onFollowClick: function onFollowClick(e) {
@@ -9210,14 +9252,14 @@ module.exports = window.UserBox = React.createClass({
 			if (_isFollowingTo) {
 				// unfollow
 				ajax.post('/unfollow/' + user.id, function (o) {
-					appStore.set(AppEvents.UPDATE_USER, o.data);
+					//TODO
 				});
 			} else {
-				// follow
-				ajax.post('/follow/' + user.id, function (o) {
-					appStore.set(AppEvents.UPDATE_USER, o.data);
-				});
-			}
+					// follow
+					ajax.post('/follow/' + user.id, function (o) {
+						//TODO
+					});
+				}
 		}
 	},
 	canDo: function canDo(action) {
@@ -9263,7 +9305,240 @@ module.exports = window.UserBox = React.createClass({
 	}
 });
 
-},{}],159:[function(require,module,exports){
+},{}],162:[function(require,module,exports){
+"use strict";
+
+/**
+ * @class Store
+ */
+module.exports = window.Action = function (type, data) {
+	this.actionType = type;
+	this.data = data;
+};
+Object.assign(window.Action.prototype, {
+	valid: function valid() {
+		if (this.actionType && AppEvents.hasOwnProperty(this.actionType)) return true;
+		return false;
+	}
+});
+
+},{}],163:[function(require,module,exports){
+'use strict';
+
+module.exports = window.AppEvents = ArrayToObject(['UPDATE_APPLICATION', 'UPDATE_BANNER', 'UPDATE_LEFT', 'UPDATE_CENTER', 'UPDATE_RIGHT', 'UPDATE_FOOTER', 'UPDATE_NAVIGATION', 'UPDATE_HOMEPAGE', 'UPDATE_CATITEMSPAGE', 'UPDATE_USERITEMSPAGE', 'UPDATE_ITEMDETAILSPAGE', 'UPDATE_BUYITEMPAGE', 'UPDATE_SELLITEMPAGE', 'UPDATE_MESSAGE', 'SENT_MESSAGE', 'RECEIVED_MESSAGE', 'UPDATE_CHATBAR', 'UPDATE_CHATBOX', 'ADD_CHATBOX', 'SHOW_CHATBOX', 'REMOVE_CHATBOX', 'LOAD_RECENT_MESSAGES', 'LOAD_OLD_MESSAGES', 'UPDATE_ITEM', 'UPDATE_USER', 'UPDATE_LOCATION', 'CHATUSERS_UPDATE', 'CHATUSER_UPDATE', 'CURRENTCHATUSER_UPDATE', 'USERMESSAGES_LOADED', 'USERMESSAGES_ADDED_NEW', 'USERMESSAGES_ADDED_OLD']);
+
+},{}],164:[function(require,module,exports){
+'use strict';
+
+/**
+ * @class AppManager
+ */
+/**
+ * @variable appManager
+ */
+module.exports = window.appManager = new Store();
+//
+Object.assign(appManager, {
+	linkDirectly: function linkDirectly(val) {
+		if (val != null) this.set('linkDirectly', val);
+		return this.get('linkDirectly');
+	},
+	usecode: function usecode(val) {
+		if (val != null) this.set('usecode', val);
+		return this.get('usecode');
+	},
+	socketId: function socketId(val) {
+		if (val != null) this.set('socketId', val);
+		return this.get('socketId');
+	},
+	clientKey: function clientKey() {
+		return this.user().id + '+' + location.hostname;
+	},
+	showLeft: function showLeft(val) {
+		if (val != null) this.set('showLeft', parseInt(val));
+		return this.get('showLeft', 0);
+	},
+	showRight: function showRight(val) {
+		if (val != null) this.set('showRight', parseInt(val));
+		return this.get('showRight', 0);
+	},
+	showBanner: function showBanner(val) {
+		if (val != null) this.set('showBanner', val);
+		return this.get('showBanner', false);
+	},
+	mode: function mode(val) {
+		if (val != null) this.set('mode', parseInt(val));
+		return this.get('mode');
+	},
+	appMessage: function appMessage(val) {
+		if (val != null) this.set('appMessage', val);
+		return this.get('appMessage');
+	},
+	location: function location(val) {
+		if (val != null) this.set('location', val);
+		return this.get('location');
+	},
+	cats: function cats(val) {
+		if (val != null) this.set('cats', val);
+		return this.get('cats');
+	},
+	isGuest: function isGuest(val) {
+		if (val != null) this.set('isGuest', val);
+		return this.get('isGuest', true);
+	},
+	isLogged: function isLogged() {
+		if (!this.isGuest()) return this.user();
+		return false;
+	},
+	user: function user(val) {
+		if (val != null) {
+			this.set('user', JSON.parse($.base64.decode(val)));
+		}
+		return this.get('user');
+	},
+	socketUri: function socketUri(val) {
+		if (val != null) this.set('socketUri', val);
+		return this.get('socketUri');
+	},
+	type: function type(val) {
+		if (val != null) this.set('type', val);
+		return this.get('type', 'HomePage');
+	},
+	data: function data(val) {
+		if (val != null) this.set('data', val);
+		return this.get('data');
+	},
+	paginate: function paginate(val) {
+		if (val != null) this.set('paginate', val);
+		return this.get('paginate');
+	},
+	item: function item(id, val) {
+		if (this.type() != 'CatItems' && this.type() != 'UserItems') {
+			return this.data(val);
+		} else {
+			var paginate = this.paginate();
+			for (var i = 0; i < paginate.data.length; i++) {
+				if (id == paginate.data[i].id) {
+					if (val != null) paginate.data[i] = val;
+					return paginate.data[i];
+				}
+			}
+		}
+		return null;
+	},
+	configurations: function configurations(_configurations) {
+		for (var k in _configurations) {
+			try {
+				this[k](_configurations[k]);
+			} catch (e) {
+				this.set(k, _configurations[k]);
+			}
+		}
+		document.title = this.get('title');
+	}
+});
+
+},{}],165:[function(require,module,exports){
+'use strict';
+
+/**
+ * @variable appStore
+ */
+module.exports = window.appStore = new Store();
+//
+Object.assign(appStore, {
+	chatusers: function chatusers() {
+		var chatusers = this.get('chatusers');
+		if (!chatusers) {
+			this.set('chatusers', chatusers = []);
+		}
+		return chatusers;
+	},
+	currentChatuser: function currentChatuser(val) {
+		if (val) {
+			this.set('currentChatuser', val);
+			Dispatcher.dispatch(new Action(AppEvents.CURRENTCHATUSER_UPDATE, chatusers));
+		}
+		return this.get('currentChatuser');
+	},
+	chatuser: function chatuser(id, val) {
+		var chatusers = this.chatusers();
+		if (id && chatusers) {
+			for (var i = 0; i < chatusers.length; i++) {
+				if (chatusers[i].id == id) {
+					var user = chatusers[i];
+					if (val) {
+						Object.assign(user, val);
+						Dispatcher.dispatch(new Action(AppEvents.CHATUSER_UPDATE, user));
+					}
+					return user;
+				}
+			}
+			if (val) {
+				chatusers.push(val);
+				var user = chatusers[chatusers.length - 1];
+				Dispatcher.dispatch(new Action(AppEvents.CHATUSERS_UPDATE, user));
+				//load user messages
+				ajax.post('/messages', function (response) {
+					if (response.data && response.data.messages) {
+						appStore.messages(user.id, response.data);
+					}
+				}, {
+					'id': user.id
+				});
+				return user;
+			}
+		}
+		return null;
+	},
+	removechatuser: function removechatuser(id) {
+		var chatusers = this.chatusers();
+		if (id && chatusers) {
+			for (var i = 0; i < chatusers.length; i++) {
+				if (chatusers[i].id == id) {
+					var allmessages = this.get('messages');
+					var usermessages = allmessages[id];
+					delete allmessages[id];
+					var user = chatusers.slice(i, 1);
+					Dispatcher.dispatch(new Action(AppEvents.CHATUSERS_UPDATE, user));
+					return { 'user': user, 'messages': usermessages };
+				}
+			}
+		}
+		return null;
+	},
+	messages: function messages(id, origin, newer, older) {
+		var user = this.chatuser(id);
+		if (!user && newer && newer.sender) {
+			this.chatuser(id, newer.sender);
+			return;
+		}
+		var field = '+' + id;
+		var allmessages = this.get('messages');
+		if (!allmessages) this.set('messages', allmessages = {});
+		var usermessages = attr.bind(allmessages)(field);
+		if (!usermessages) allmessages[field] = usermessages = {};
+		if (origin) {
+			allmessages[field] = usermessages = origin;
+			Dispatcher.dispatch(new Action(AppEvents.USERMESSAGES_LOADED, usermessages.messages));
+		} else if (newer) {
+			if (!usermessages.messages) usermessages.messages = [];
+			usermessages.messages.push(newer);
+			Dispatcher.dispatch(new Action(AppEvents.USERMESSAGES_ADDED_NEW, usermessages.messages));
+		} else if (older) {
+			if (!usermessages.messages) usermessages.messages = [];
+			usermessages.messages = older.concat(usermessages.messages);
+			Dispatcher.dispatch(new Action(AppEvents.USERMESSAGES_ADDED_OLD, usermessages.messages));
+		}
+		return attr.bind(usermessages)('messages', []);
+	},
+	addMessage: function addMessage(id, val) {
+		return this.messages(id, null, val);
+	},
+	addNotification: function addNotification(val) {}
+});
+
+},{}],166:[function(require,module,exports){
 'use strict';
 
 var _flux = require('flux');
@@ -9306,9 +9581,18 @@ Dispatcher.EventEmitter = new EventEmitter();
 Dispatcher.EventEmitter.setMaxListeners(Infinity);
 //
 Dispatcher.register(function (action) {
-	Dispatcher.EventEmitter.emit(action.actionType, appStore.get(action.actionType));
+	if (Dispatcher.actionValid(action)) {
+		Dispatcher.EventEmitter.emit(action.actionType, action.data);
+	} else {
+		throw 'Dispatcher does not support this action ' + actionType;
+	}
 });
-
+Dispatcher.actionValid = function (action) {
+	if (action instanceof Action && action.valid()) {
+		return true;
+	}
+	return false;
+};
 Dispatcher.addListener = function (actionType, callback) {
 	if (AppEvents.hasOwnProperty(actionType)) {
 		return Dispatcher.EventEmitter.on(actionType, callback);
@@ -9327,118 +9611,41 @@ Dispatcher.removeListener = function (actionType, callback) {
 
 module.exports = window.Dispatcher = Dispatcher;
 
-},{"events":104,"flux":92,"keymirror":103}],160:[function(require,module,exports){
-'use strict';
-
-module.exports = window.AppEvents = ArrayToObject(['UPDATE_APPLICATION', 'UPDATE_BANNER', 'UPDATE_LEFT', 'UPDATE_CENTER', 'UPDATE_RIGHT', 'UPDATE_FOOTER', 'UPDATE_NAVIGATION', 'UPDATE_HOMEPAGE', 'UPDATE_CATITEMSPAGE', 'UPDATE_USERITEMSPAGE', 'UPDATE_ITEMDETAILSPAGE', 'UPDATE_BUYITEMPAGE', 'UPDATE_SELLITEMPAGE', 'UPDATE_MESSAGE', 'SENT_MESSAGE', 'RECEIVED_MESSAGE', 'UPDATE_CHATBAR', 'UPDATE_CHATBOX', 'ADD_CHATBOX', 'SHOW_CHATBOX', 'REMOVE_CHATBOX', 'LOAD_RECENT_MESSAGES', 'LOAD_OLD_MESSAGES', 'UPDATE_ITEM', 'UPDATE_USER', 'UPDATE_LOCATION']);
-
-},{}],161:[function(require,module,exports){
-'use strict';
+},{"events":104,"flux":92,"keymirror":103}],167:[function(require,module,exports){
+"use strict";
 
 /**
- * @class AppManager
+ * @class Store
  */
-/**
- * @variable appManager
- */
-module.exports = window.appManager = new Store();
-//
-Object.assign(appManager, {
-	linkDirectly: function linkDirectly(val) {
-		if (val) this.set('linkDirectly', val);
-		return this.get('linkDirectly');
-	},
-	socketId: function socketId(val) {
-		if (val) this.set('socketId', val);
-		return this.get('socketId');
-	},
-	clientKey: function clientKey() {
-		return this.user().id + '+' + location.hostname;
-	},
-	showLeft: function showLeft(val) {
-		if (val) this.set('showLeft', parseInt(val));
-		return this.get('showLeft', 0);
-	},
-	showRight: function showRight(val) {
-		if (val) this.set('showRight', parseInt(val));
-		return this.get('showRight', 0);
-	},
-	showBanner: function showBanner(val) {
-		if (val) this.set('showBanner', val);
-		return this.get('showBanner', false);
-	},
-	mode: function mode(val) {
-		if (val) this.set('mode', parseInt(val));
-		return this.get('mode');
-	},
-	appMessage: function appMessage(val) {
-		if (val) this.set('appMessage', val);
-		return this.get('appMessage');
-	},
-	location: function location(val) {
-		if (val) this.set('location', val);
-		return this.get('location');
-	},
-	cats: function cats(val) {
-		if (val) this.set('cats', val);
-		return this.get('cats');
-	},
-	isGuest: function isGuest(val) {
-		if (val) this.set('isGuest', val);
-		return this.get('isGuest', true);
-	},
-	isLogged: function isLogged() {
-		if (!this.isGuest()) return this.user();
-		return false;
-	},
-	user: function user(val) {
-		if (val) {
-			this.set('user', JSON.parse($.base64.decode(val)));
+module.exports = window.Store = function () {
+	var _data = {};
+	return {
+		has: function has(name) {
+			return _data.hasOwnProperty(name);
+		},
+		get: function get(name, defaultValue) {
+			if (this.has(name)) return _data[name];
+			return defaultValue;
+		},
+		set: function set(name, value) {
+			_data[name] = value;
+			return this;
+		},
+		assign: function assign(name, value) {
+			if (this.has(name)) Object.assign(_data[name], value);else _data[name] = Object.assign({}, value);
+			return this;
+		},
+		remove: function remove(name) {
+			if (this.has(name)) delete _data[name];
+			return this;
+		},
+		showdata: function showdata() {
+			console.log(_data);
 		}
-		return this.get('user');
-	},
-	socketUri: function socketUri(val) {
-		if (val) this.set('socketUri', val);
-		return this.get('socketUri');
-	},
-	type: function type(val) {
-		if (val) this.set('type', val);
-		return this.get('type', 'HomePage');
-	},
-	data: function data(val) {
-		if (val) this.set('data', val);
-		return this.get('data');
-	},
-	paginate: function paginate(val) {
-		if (val) this.set('paginate', val);
-		return this.get('paginate');
-	},
-	item: function item(id, val) {
-		if (this.type() != 'CatItems' && this.type() != 'UserItems') {
-			return this.data(val);
-		} else {
-			var paginate = this.paginate();
-			for (var i = 0; i < paginate.data.length; i++) {
-				if (id == paginate.data[i].id) {
-					if (val) paginate.data[i] = val;
-					return paginate.data[i];
-				}
-			}
-		}
-		return null;
-	},
-	configurations: function configurations(_configurations) {
-		for (var k in _configurations) {
-			try {
-				this[k](_configurations[k]);
-			} catch (e) {
-				this.set(k, _configurations[k]);
-			}
-		}
-	}
-});
+	};
+};
 
-},{}],162:[function(require,module,exports){
+},{}],168:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9513,7 +9720,7 @@ module.exports = window.FormView = {
 	}
 };
 
-},{}],163:[function(require,module,exports){
+},{}],169:[function(require,module,exports){
 'use strict';
 
 module.exports = window.ItemDates = {
@@ -9578,7 +9785,7 @@ module.exports = window.ItemDates = {
 	}
 };
 
-},{}],164:[function(require,module,exports){
+},{}],170:[function(require,module,exports){
 'use strict';
 
 module.exports = window.createMixin = function (name, cpn) {
@@ -9643,7 +9850,7 @@ module.exports = window.createMixin = function (name, cpn) {
 	});
 };
 
-},{}],165:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9708,7 +9915,7 @@ var BuyItemPage = React.createClass({
 
 module.exports = window.BuyItemPage = BuyItemPage;
 
-},{}],166:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9791,7 +9998,7 @@ module.exports = window.CatItemsPage = React.createClass({
 	}
 });
 
-},{}],167:[function(require,module,exports){
+},{}],173:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9826,7 +10033,7 @@ var ChangeAccountPage = React.createClass({
 
 module.exports = window.ChangeAccountPage = ChangeAccountPage;
 
-},{}],168:[function(require,module,exports){
+},{}],174:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9863,7 +10070,7 @@ var ChangeEmailPage = React.createClass({
 
 module.exports = window.ChangeEmailPage = ChangeEmailPage;
 
-},{}],169:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9907,7 +10114,7 @@ var ChangeLocationPage = React.createClass({
 
 module.exports = window.ChangeLocationPage = ChangeLocationPage;
 
-},{}],170:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9944,7 +10151,7 @@ var ChangePasswordPage = React.createClass({
 
 module.exports = window.ChangePasswordPage = ChangePasswordPage;
 
-},{}],171:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9972,7 +10179,7 @@ var DeactivatePage = React.createClass({
 
 module.exports = window.DeactivatePage = DeactivatePage;
 
-},{}],172:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10000,7 +10207,7 @@ var HomePage = React.createClass({
 
 module.exports = window.HomePage = HomePage;
 
-},{}],173:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10093,7 +10300,7 @@ var ItemDetailsPage = React.createClass({
 
 module.exports = window.ItemDetailsPage = ItemDetailsPage;
 
-},{}],174:[function(require,module,exports){
+},{}],180:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10124,7 +10331,7 @@ var LoginPage = React.createClass({
 
 module.exports = window.LoginPage = LoginPage;
 
-},{}],175:[function(require,module,exports){
+},{}],181:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10158,7 +10365,7 @@ var RegisterPage = React.createClass({
 
 module.exports = window.RegisterPage = RegisterPage;
 
-},{}],176:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10223,7 +10430,7 @@ var SellItemPage = React.createClass({
 
 module.exports = window.SellItemPage = SellItemPage;
 
-},{}],177:[function(require,module,exports){
+},{}],183:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10251,7 +10458,7 @@ var SendActivationPage = React.createClass({
 
 module.exports = window.SendActivationPage = SendActivationPage;
 
-},{}],178:[function(require,module,exports){
+},{}],184:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10305,102 +10512,52 @@ module.exports = window.UserItemsPage = React.createClass({
 	}
 });
 
-},{}],179:[function(require,module,exports){
+},{}],185:[function(require,module,exports){
 'use strict';
 
 /**
- * @variable appStore
+ * @class AppSocket
  */
-module.exports = window.appStore = new Store();
-//
-Object.assign(appStore, {
-	chatusers: function chatusers() {
-		return this.get('chatusers');
-	},
-	chatuser: function chatuser(id) {
-		var chatusers = this.get('chatusers');
-		if (id && chatusers.length > 0) {
-			for (var i = 0; i < chatusers.length; i++) {
-				if (chatusers[i].id == id) {
-					return chatusers[i];
+module.exports = window.AppSocket = function (uri, clientKey, options) {
+	this.setParams(uri, clientKey, options);
+};
+
+Object.assign(window.AppSocket.prototype, {
+	init: function init() {
+		if (!this.socket) {
+			var me = this;
+			this.socket = io.connect(this.uri, this.options);
+			this.socket.on('connect', function () {
+				if (appManager.isLogged()) {
+					me.socket.emit('join', me.clientKey);
 				}
-			}
+			});
+			this.socket.on('accepted', function (socketId) {
+				appManager.socketId(socketId);
+			});
+			this.socket.on('message', function (data) {
+				var response = JSON.parse(data);
+				appStore.addMessage(appManager.user().id, response);
+			});
+			this.socket.on('notification', function (data) {
+				appStore.addNotification(JSON.parse(data));
+			});
+			this.socket.on('disconnect', function () {
+				console.log('disconnected');
+			});
 		}
-		return null;
 	},
-	currentChatuser: function currentChatuser(val) {
-		if (val) this.set('currentChatuser', val);
-		return this.get('currentChatuser');
-	},
-	upsertChatuser: function upsertChatuser(user) {
-		var chatusers = this.get('chatusers');
-		if (user && chatusers.length > 0) {
-			for (var i = 0; i < chatusers.length; i++) {
-				if (chatusers[i].id == user.id) {
-					return Object.assign(chatusers[i], user);
-				}
-			}
-			chatusers.push(user);
-			return chatusers[chatusers.length - 1];
+	setParams: function setParams(uri, clientKey, options) {
+		if (uri && clientKey) {
+			this.uri = uri;
+			this.clientKey = clientKey;
+			this.options = options;
+			this.init();
 		}
-		return null;
-	},
-	messages: function messages(id, origin, newer, older) {
-		var messages = this.get('messages');
-		if (!messages) this.set('messages', message = {});
-		var usermessages = attr.bind(messages)(id);
-		if (!usermessages) messages[id] = usermessages = [];
-		if (origin) usermessages = origin;else if (newer) usermessages.push(newer);else if (newer) usermessages = older.concat(usermessages);
-		return usermessages;
-	},
-	addMessage: function addMessage(data) {},
-	addNotification: function addNotification(data) {},
-	currentUrl: function currentUrl(val) {
-		if (!val) {
-			this.set('currentUrl', val);
-		}
-		return this.get('currentUrl');
-	},
-	currentPage: function currentPage(val) {
-		if (!val) {
-			this.set('currentPage', val);
-		}
-		return this.get('currentPage');
 	}
 });
 
-},{}],180:[function(require,module,exports){
-"use strict";
-
-/**
- * @class Store
- */
-module.exports = window.Store = function () {
-	var _data = {};
-	return {
-		has: function has(name) {
-			return _data.hasOwnProperty(name);
-		},
-		get: function get(name, defaultValue) {
-			if (this.has(name)) return _data[name];
-			return defaultValue;
-		},
-		set: function set(name, value) {
-			_data[name] = value;
-			return this;
-		},
-		assign: function assign(name, value) {
-			if (this.has(name)) Object.assign(_data[name], value);else _data[name] = Object.assign({}, value);
-			return this;
-		},
-		remove: function remove(name) {
-			if (this.has(name)) delete _data[name];
-			return this;
-		}
-	};
-};
-
-},{}],181:[function(require,module,exports){
+},{}],186:[function(require,module,exports){
 'use strict';
 
 Object.assign(window, {
@@ -10509,7 +10666,7 @@ Object.assign(window, {
 	}
 });
 
-},{}],182:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
 'use strict';
 
 /**

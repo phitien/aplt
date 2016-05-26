@@ -4,7 +4,7 @@
 var ChatBar = React.createClass({
 	id: 'chatbar',
 	mixins: [createMixin()],
-	eventName: AppEvents.UPDATE_CHATBAR,
+	eventName: AppEvents.CHATUSERS_UPDATE,
 	refreshCount: 0,
 	refresh() {this.setState({refreshCount: this.refreshCount++});},
 	componentWillUnmount() {
@@ -14,10 +14,10 @@ var ChatBar = React.createClass({
 		Dispatcher.addListener(this.eventName, this.refresh);
 	},
 	render(){
-		const users = appStore.get(this.eventName);
+		const users = appStore.chatusers();
 		if (users && users.length) {
 			return (
-				<div className={this.className()}>
+				<div className={this.className('', 'chatbar')} id={this.getId()}>
 					{users.map(function (user, i) {
 						return <ChatBox user={user} key={i} />;
 					})}

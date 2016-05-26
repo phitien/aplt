@@ -16,7 +16,7 @@ var ItemImage = React.createClass({
 		const user = appManager.isLogged();
 		if (user) {
 			const item = appManager.item(this.props.item.id);
-			var id = appManager.get('usecode') ? item.code : item.id;
+			var id = appManager.usecode() ? item.code : item.id;
 			if (id) {
 				ajax.post('/like', function(o) {
 					appManager.item(this.props.item.id, o.data);
@@ -29,7 +29,7 @@ var ItemImage = React.createClass({
 		if (item) {
 			const iconClassName = 'icon icon-like ' + (item.liked ? 'icon-like-unliked' : ''); 
 			const showLink = this.props.hasOwnProperty('showLink') ? this.props.showLink : true;
-			this.href = showLink ? '/item/' + (appManager.get('usecode') ? item.code : item.id) : 'javascript:void(0);';
+			this.href = showLink ? '/item/' + (appManager.usecode() ? item.code : item.id) : 'javascript:void(0);';
 			return (
 				<div className={this.className('', (item.liked ? ' liked' : ' unliked'), 'item-firstimage ')}>
 					<div className='item-firstimage-wrapper'>
