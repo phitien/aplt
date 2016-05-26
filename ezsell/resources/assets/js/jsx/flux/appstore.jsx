@@ -4,6 +4,13 @@
 module.exports = window.appStore = new Store();
 //
 Object.assign(appStore, {
+	currentUrl : function(val) {
+		var currentUrl = this.get('currentUrl', location.href);
+		if (!val) {
+			this.set('currentUrl', val);
+		}
+		return currentUrl;
+	},
 	chatusers : function() {
 		var chatusers = this.get('chatusers');
 		if (!chatusers) {
@@ -57,7 +64,7 @@ Object.assign(appStore, {
 					var allmessages = this.get('messages');
 					var usermessages = allmessages[id];
 					delete allmessages[id];
-					var user = chatusers.slice(i, 1);
+					var user = chatusers.splice(i, 1);
 					Dispatcher.dispatch(new Action(AppEvents.CHATUSERS_UPDATE, user));
 					return {'user': user, 'messages': usermessages};
 				}
@@ -66,10 +73,12 @@ Object.assign(appStore, {
 		return null;
 	},
 	messages : function(id, origin, newer, older) {
-		var user = this.chatuser(id);
-		if (!user && newer && newer.sender) {
-			this.chatuser(id, newer.sender);
-			return;
+		if (newer && newer.sender) {
+			var user = this.chatuser(newer.sender.id);
+			if (!user) {
+				this.chatuser(newer.sender.id, newer.sender);
+				return;
+			}
 		}
 		var field = '+' + id;
 		var allmessages = this.get('messages');

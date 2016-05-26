@@ -39,6 +39,11 @@ class LocationController extends Controller {
 
 		$this->getPageResponseData ()->setType ( 'ChangeLocationPage' )->setShowBanner ( true )->setShowLeft ( 2 )->setShowRight ( 2 ) ) );
 	}
+	protected function ppostLocation(Request $request) {
+		$location_id = $request->get ( 'location' );
+		static::setLocationId ( $location_id );
+		return $this->redirect ( static::getRedirectUri () );
+	}
 	protected function pajaxpostLocation(Request $request) {
 		$location_id = $request->get ( 'location' );
 		static::setLocationId ( $location_id );

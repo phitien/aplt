@@ -25,11 +25,9 @@ trait  LoginTrait {
 			return $this->redirect ( static::getRedirectUri () );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'login', [ 
-					'appMessage' => trans ( 'messages.sentences.login_failed', [ 
-							'reason' => trans ( "messages.errors.{$data ['message']}" ) 
-					] ) 
-			] ), $response->getStatusCode () );
+			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'LoginPage' )->
+
+			setAppMessage ( $this->getTransMessage ( 'messages.sentences.login_failed', $data ) ) ), $response->getStatusCode () );
 		}
 	}
 	protected function pgetLogin(Request $request) {

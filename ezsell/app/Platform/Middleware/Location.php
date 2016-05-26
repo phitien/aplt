@@ -17,7 +17,7 @@ class Location extends Middleware {
 	public function im_handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
 		$location = static::getLocation ();
 		if (! $location || $location == LocationMap::earth ()) {
-			return $this->response ( view ( 'location' ) );
+			return $this->response ( view ( 'base', $this->getPageResponseData()->setType ( 'ChangeLocationPage' ) ) );
 		}
 		return $next ( $request );
 	}

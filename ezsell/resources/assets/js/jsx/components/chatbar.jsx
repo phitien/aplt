@@ -19,7 +19,9 @@ var ChatBar = React.createClass({
 			return (
 				<div className={this.className('', 'chatbar')} id={this.getId()}>
 					{users.map(function (user, i) {
-						return <ChatBox user={user} key={i} />;
+						return <div className='chatbox-wrapper' key={i}>
+								<ChatBox user={user}></ChatBox>
+							</div>;
 					})}
 					<div className='clearfix'></div>
 				</div>

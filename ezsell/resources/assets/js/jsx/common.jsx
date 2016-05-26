@@ -63,7 +63,7 @@ require('./pages/changeemailpage.jsx');
 require('./pages/changepasswordpage.jsx');
 require('./pages/buyitempage.jsx');
 require('./pages/sellitempage.jsx');
-//Socket
+// Socket
 require('./socket/appsocket.jsx');
 // Application
 require('./application/application.jsx');
@@ -74,19 +74,15 @@ require('./application/application.jsx');
 Object.assign(window, {
 	sensitive : 'input,select,textarea,img,.sensitive',
 	mode : function(val) {
-		if (val) {
-			appManager.set('mode', mode);	
-		}
-		return appManager.mode();
+		return appManager.mode(val);
 	},
 	applicationSwitch : function(url) {
-		if (!url)
-			url = appStore.currentUrl();
+		url = url ? url : appStore.currentUrl(url);
 		if (appManager.linkDirectly()) {
-			location.href = url;
+			location.href = url.replace(/\?mode=(\d)/g,'') + '?mode=' + appManager.mode();
 		}
 		else {
-			ajax.post(url ? url : location.href, function( data ) {
+			ajax.post(url, function( data ) {
 			});
 			
 		}

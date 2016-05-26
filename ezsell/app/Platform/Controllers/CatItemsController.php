@@ -57,7 +57,6 @@ class CatItemsController extends ItemController {
 			] );
 			
 			$users = static::json_decode ( $response->getBody (), true ) ['data'];
-			
 			for($i = 0; $i < count ( $items ); $i ++) {
 				if (isset ( $users [$items [$i]->user_id] ))
 					$items [$i] ['user'] = $users [$items [$i]->user_id];

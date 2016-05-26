@@ -245,6 +245,7 @@ a:hover {text-decoration: none !important;}
 /** CHATBAR && CHATBOX **/
 $chatbox-width: 250px;
 $chatbox-height: 322px;
+$chatbox-collapsed-width: 150px;
 $chatbox-header-height: 32px;
 $chatbox-header-padding: 3px;
 $chatbox-send-height: 32px;
@@ -253,14 +254,19 @@ $chatbox-text-width: 165px;
 .chatbar {
 	position: fixed; bottom: 0;right: $sbig;
 	background-color: transparent;
+	.chatbox-wrapper {
+	    width: $chatbox-width;position: relative;display: inline-block;
+	}
+	.chatbox-wrapper-collapsed {
+		width: $chatbox-collapsed-width !important;
+	}
 	.chatbox {
 		@extend .border-all;
-		width: $chatbox-width;
+		width: 100%;position: absolute;bottom: 0;
 		vertical-align: top;overflow: hidden;
 		border-radius: $sbig;
 		margin: 0 2px;
 		background-color: lightgray;
-		float: right;
 		.header {
 			width: 100%;height: $chatbox-header-height;
 			border-top-left-radius: $sbig;border-top-right-radius: $sbig;

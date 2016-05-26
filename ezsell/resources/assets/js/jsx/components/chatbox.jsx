@@ -5,7 +5,11 @@ var ChatBox = React.createClass({
 	mixins: [createMixin()],
 	eventName: AppEvents.CHATUSER_UPDATE,
 	refreshCount: 0,
-	refresh() {this.setState({refreshCount: this.refreshCount++});},
+	refresh(data) {
+		this.setState({refreshCount: this.refreshCount++});
+		if (data == appStore.chatuser(this.props.user.id))
+			this.show();
+	},
 	componentWillUnmount() {
 		Dispatcher.removeListener(this.eventName, this.refresh);
 		Dispatcher.removeListener(AppEvents.USERMESSAGES_LOADED, this.loaded);
@@ -73,6 +77,7 @@ var ChatBox = React.createClass({
 		var me = this;
 		me.visible = true;
 		var chatbox = me.getJQueryRoot();
+		chatbox.parents('.chatbox-wrapper').removeClass('chatbox-wrapper-collapsed');
 		chatbox.find('.messages,.send').slideDown('slow', function() {
 			me.getJQueryTextbox().focus();
 		});
@@ -81,6 +86,7 @@ var ChatBox = React.createClass({
 		var me = this;
 		me.visible = false;
 		var chatbox = me.getJQueryRoot();
+		chatbox.parents('.chatbox-wrapper').addClass('chatbox-wrapper-collapsed');
 		chatbox.find('.messages,.send').slideUp('slow');
 	},
 	close(e) {

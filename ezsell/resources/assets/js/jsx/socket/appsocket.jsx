@@ -20,7 +20,7 @@ Object.assign(window.AppSocket.prototype, {
 			});
 			this.socket.on('message', function(data) {
 				var response = JSON.parse(data);
-				appStore.addMessage(appManager.user().id, response);
+				appStore.addMessage(response.sender.id, response);
 			});
 			this.socket.on('notification', function(data) {
 				appStore.addNotification(JSON.parse(data));
