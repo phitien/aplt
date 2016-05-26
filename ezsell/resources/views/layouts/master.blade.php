@@ -11,13 +11,16 @@
 <base href="/" target="_self">
 <!-- CSS -->
 {{ Html::style('css/jquery-ui/themes/base/jquery.ui.all.css') }} {{
-Html::style('css/jquery-ui/themes/' . $configurations['theme'] . '/jquery-ui.min.css') }} {{
-Html::style('css/jquery-ui/themes/' . $configurations['theme'] . '/jquery.ui.theme.css') }} {{
-Html::style('css/app.css') }} @yield('css')
+Html::style('css/jquery-ui/themes/' . $configurations['theme'] .
+'/jquery-ui.min.css') }} {{ Html::style('css/jquery-ui/themes/' .
+$configurations['theme'] . '/jquery.ui.theme.css') }} {{
+Html::style('jemotion/css/style.css') }} {{ Html::style('css/app.css')
+}} @yield('css')
 <!-- JS -->
 {{ Html::script('js/libraries.js', ['type' => 'text/javascript']) }}
 {{Html::script('js/socket.io-1.3.4.js', ['type' => 'text/javascript'])
 }} {{Html::script('js/bootstrap.min.js', ['type' => 'text/javascript'])
+}} {{Html::script('jemotion/jemotion.js', ['type' => 'text/javascript'])
 }} {{ Html::script('js/common.js', ['type' => 'text/javascript']) }}
 <script type="text/javascript">
 		//configurations

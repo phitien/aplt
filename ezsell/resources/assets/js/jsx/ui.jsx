@@ -65,33 +65,44 @@ Object.assign(window, {
 			buttons : buttons
 		});// end confirm dialog
 	},
-	ui: {
-		plugins: {
-			format:function ($container) {
-				$container.find('.prettydateformat').each(function () {
-					var me = $(this);
-					var text = me.text().trim();
-					me.text((format.prettyDate(text) ? format.prettyDate(text) : '') + ' (' + format.date(text) + ')');
-				});
-				$container.find('.dateformat').each(function () {
+	ui : {
+		plugins : {
+			format : function($container) {
+				$container.find('.prettydateformat').each(
+						function() {
+							var me = $(this);
+							var text = me.text().trim();
+							me.text((format.prettyDate(text) ? format
+									.prettyDate(text) : '')
+									+ ' (' + format.date(text) + ')');
+						});
+				$container.find('.dateformat').each(function() {
 					var me = $(this);
 					var text = me.text().trim();
 					me.text(format.date(text));
 				});
-				$container.find('.timeformat').each(function () {
+				$container.find('.timeformat').each(function() {
 					var me = $(this);
 					var text = me.text().trim();
 					me.text(format.time(text));
 				});
-				$container.find('.datetimeformat').each(function () {
+				$container.find('.datetimeformat').each(function() {
 					var me = $(this);
 					var text = me.text().trim();
 					me.text(format.datetime(text));
 				});
-				$container.find('.currency-value').each(function () {
+				$container.find('.currency-value').each(function() {
 					var me = $(this);
 					var text = me.text().trim();
 					me.text(format.currency(text));
+				});
+				$container.find('.emotion').emotions({
+					handle : '#etoggle',
+					dir : 'emotions/',
+					label_on : 'On Emotions',
+					label_off : 'Off Emotions',
+					style : 'background: #eee',
+					css : 'class2'
 				});
 			}
 		}

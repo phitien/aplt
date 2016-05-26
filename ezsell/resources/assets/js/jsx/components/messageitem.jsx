@@ -7,7 +7,8 @@ var MessageItem = React.createClass({
         ui.plugins.format($(this.getRootDom()));
 	},
 	toggleTime(e) {
-		$(e.currentTarget).parents('.chatitem').find('.created').slideToggle();
+		$(this.getRootDom()).find('.status').slideToggle();
+		$(this.getRootDom()).find('.created').slideToggle();
 	},
 	render(){
 		const message = this.props.message;
@@ -15,10 +16,8 @@ var MessageItem = React.createClass({
 			var statusClassName = 'status '+ attr.bind(message)('status', 'SENT');
 			return (
 				<div className={this.className('', message.receiver ? 'myitem' : (message.sender.gender == 'MALE' ? 'hisitem' : 'heritem'), 'clearfix chatitem')}>
-					<div className='message' onClick={this.toggleTime}>
-						<div className={statusClassName}></div>
-						{message.message}
-					</div>
+					<div className='emotion message' onClick={this.toggleTime}>{message.message}</div>
+					<div className={statusClassName}></div>
 					<div className='datetimeformat created'>{message.created_at.date}</div>
 					<div className='clearfix'></div>
 				</div>

@@ -285,19 +285,18 @@ $chatbox-text-width: 165px;
 			overflow-y: auto;
 			.chatitem {
 					display: inline-block;
-					max-width: 80%;
+					max-width: 90%;
 					line-height: 20px;
 					padding: 2px $smedium;
 					border-radius: $ssmall;
 					clear: both;
 					margin: $ssmall;
 				.status {
-					margin-top:5px;height: $smedium;width: $smedium;border-radius: $ssmall;background-color: $disabled-color; 
+					display: none;margin-top:5px;height: $smedium;width: $smedium;border-radius: $ssmall;background-color: $disabled-color; 
 				}
 			}
 			.myitem {
 				@extend .chatitem;
-					text-align: right;
 					background-color: white;
 					float: right;
 				.status {
@@ -306,7 +305,6 @@ $chatbox-text-width: 165px;
 			}
 			.heritem,.hisitem {
 				@extend .chatitem;
-					text-align: left;
 					background-color: darkgray;
 					float: left;
 				.status {

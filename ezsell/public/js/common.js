@@ -8884,7 +8884,8 @@ var MessageItem = React.createClass({
 		ui.plugins.format($(this.getRootDom()));
 	},
 	toggleTime: function toggleTime(e) {
-		$(e.currentTarget).parents('.chatitem').find('.created').slideToggle();
+		$(this.getRootDom()).find('.status').slideToggle();
+		$(this.getRootDom()).find('.created').slideToggle();
 	},
 	render: function render() {
 		var message = this.props.message;
@@ -8895,10 +8896,10 @@ var MessageItem = React.createClass({
 				{ className: this.className('', message.receiver ? 'myitem' : message.sender.gender == 'MALE' ? 'hisitem' : 'heritem', 'clearfix chatitem') },
 				React.createElement(
 					'div',
-					{ className: 'message', onClick: this.toggleTime },
-					React.createElement('div', { className: statusClassName }),
+					{ className: 'emotion message', onClick: this.toggleTime },
 					message.message
 				),
+				React.createElement('div', { className: statusClassName }),
 				React.createElement(
 					'div',
 					{ className: 'datetimeformat created' },
@@ -10658,6 +10659,14 @@ Object.assign(window, {
 					var me = $(this);
 					var text = me.text().trim();
 					me.text(format.currency(text));
+				});
+				$container.find('.emotion').emotions({
+					handle: '#etoggle',
+					dir: 'emotions/',
+					label_on: 'On Emotions',
+					label_off: 'Off Emotions',
+					style: 'background: #eee',
+					css: 'class2'
 				});
 			})
 		}
