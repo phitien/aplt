@@ -72,7 +72,7 @@ trait ResponseTrait {
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
 		return $this->applyCookies ( response ()->json ( [ 
 				'message' => $message,
-				'data' => $data 
+				'data' => $data instanceof PageResponseData ? $data->getData () : $data 
 		], $status, $headers ) );
 	}
 	/**
@@ -85,7 +85,7 @@ trait ResponseTrait {
 	public function updateJsonResponse(JsonResponse $response, $message = null, $data = null) {
 		return $response->setData ( [ 
 				'message' => $message,
-				'data' => $data 
+				'data' => $data instanceof PageResponseData ? $data->getData () : $data 
 		] );
 	}
 	/**
@@ -144,6 +144,13 @@ trait ResponseTrait {
 	 */
 	protected function getLoginResponse() {
 		return $this->response ( view ( 'base', $this->getPageResponseData ()->setType ( 'LoginPage' ) ) );
+	}
+	/**
+	 *
+	 * @return PageResponseData
+	 */
+	protected function getPageResponseDataNoBanner() {
+		return $this->getPageResponseData ()->setShowBanner ( false );
 	}
 	/**
 	 *

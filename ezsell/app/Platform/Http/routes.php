@@ -1,5 +1,5 @@
 <?php
-Route::get ( '/', 'HomeController@index' );
+Route::any ( '/', 'HomeController@index' );
 
 Route::any ( 'register', 'AccountController@register' );
 Route::any ( 'code', 'AccountController@code' );

@@ -17,12 +17,12 @@ trait  ActivateTrait {
 	public function activate(Request $request, $code) {
 		$response = static::apiCallActivate ( $code );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ActivatePage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ActivatePage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.activated' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ActivatePage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ActivatePage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.activate_failed', $data ) ) ), $response->getStatusCode () );
 		}
@@ -42,19 +42,19 @@ trait  ActivateTrait {
 				'email' => $email 
 		] );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'SendActivationPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'SendActivationPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.code_sent' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'SendActivationPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'SendActivationPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.code_send_failed', $data ) ) ), $response->getStatusCode () );
 		}
 	}
 	protected function pgetCode(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'SendActivationPage' ) ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'SendActivationPage' ) ) );
 		else
 			return $this->redirect ();
 	}

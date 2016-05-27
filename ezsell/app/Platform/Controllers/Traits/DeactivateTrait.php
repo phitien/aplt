@@ -20,12 +20,12 @@ trait DeactivateTrait {
 		$response = static::apiCallDeactive ( $request->get ( 'current_password' ) );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'DeactivatePage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'DeactivatePage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.deactivated' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'DeactivatePage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'DeactivatePage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.deactivated', $data ) ) ), $response->getStatusCode () );
 		}
@@ -34,6 +34,6 @@ trait DeactivateTrait {
 		if (static::getUser ()->isGuest ())
 			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'DeactivatePage' ) ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'DeactivatePage' ) ) );
 	}
 }

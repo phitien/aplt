@@ -25,10 +25,13 @@ trait  LoginTrait {
 			return $this->redirect ( static::getRedirectUri () );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'LoginPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseData ()->setType ( 'LoginPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.login_failed', $data ) ) ), $response->getStatusCode () );
 		}
+	}
+	protected function pajaxpostLogin(Request $request) {
+		return $this->jsonResponse ( 'login_page', $this->getPageResponseData ()->setType ( 'LoginPage' ) );
 	}
 	protected function pgetLogin(Request $request) {
 		if (static::getUser ()->isGuest ())

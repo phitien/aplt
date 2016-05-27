@@ -26,7 +26,7 @@ trait  ProfileTrait {
 		if (static::getUser ()->isGuest ())
 			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ProfilePage' ) ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ProfilePage' ) ) );
 	}
 	/**
 	 * Return the authenticated user
@@ -38,12 +38,12 @@ trait  ProfileTrait {
 		$data = $request->request->all (); // only get post data
 		$response = static::apiCallUpdateProfile ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ProfilePage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ProfilePage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.profile_updated', $data ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ProfilePage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ProfilePage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.profile_update_failed', $data ) ) ), $response->getStatusCode () );
 		}
