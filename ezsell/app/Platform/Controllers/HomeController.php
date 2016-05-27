@@ -33,7 +33,7 @@ class HomeController extends Controller {
 		return $this->response ( view ( 'base', $this->preparePageResponseData ( $request ) ) );
 	}
 	protected function pajaxpostIndex(Request $request) {
-		return $this->jsonResponse ( $this->preparePageResponseData ( $request ) );
+		return $this->jsonResponse ( 'home_page', $this->preparePageResponseData ( $request ) );
 	}
 	protected function preparePageResponseData(Request $request) {
 		return $this->getPageResponseData ()->setType ( 'HomePage' )->setShowBanner ( true )->setShowLeft ( 2 )->setShowRight ( 2 );

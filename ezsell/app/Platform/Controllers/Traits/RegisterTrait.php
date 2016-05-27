@@ -20,18 +20,21 @@ trait  RegisterTrait {
 		$response = static::apiCallRegister ( $data );
 		if ($response->getStatusCode () != Response::HTTP_OK) {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'RegisterPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'RegisterPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.register_failed', $data ) ) ), $response->getStatusCode () );
 		} else {
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'RegisterPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'RegisterPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.registered', $data ) ) ) );
 		}
 	}
+	protected function pajaxpostRegister(Request $request) {
+		return $this->jsonResponse ( 'register_page', $this->getPageResponseData ()->setType ( 'RegisterPage' ) );
+	}
 	protected function pgetRegister(Request $request) {
 		if (static::getUser ()->isGuest ())
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'RegisterPage' ) ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'RegisterPage' ) ) );
 		else
 			return $this->redirect ();
 	}

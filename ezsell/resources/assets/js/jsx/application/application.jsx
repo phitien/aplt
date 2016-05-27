@@ -2,9 +2,11 @@
  * Application defination
  */
 var Application = React.createClass({
-	eventName: AppEvents.UPDATE_APPLICATION,
+	eventName: AppEvents.CONFIGURATIONS_UPDATE,
 	refreshCount: 0,
-	refresh() {this.setState({refreshCount: this.refreshCount++});},
+	refresh() {
+		this.setState({refreshCount: this.refreshCount++});
+	},
 	componentWillUnmount() {
 		Dispatcher.removeListener(this.eventName, this.refresh);
 	},

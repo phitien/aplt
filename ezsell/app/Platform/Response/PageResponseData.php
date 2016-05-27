@@ -74,7 +74,7 @@ class PageResponseData implements \ArrayAccess {
 				'location' => Helper::getLocation (),
 				'appMessage' => '',
 				'socketUri' => Config::SOCKET_SERVER_URL,
-				'linkDirectly' => true 
+				'linkDirectly' => false 
 		];
 	}
 	public function __get($key) {

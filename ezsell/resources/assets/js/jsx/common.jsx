@@ -77,12 +77,16 @@ Object.assign(window, {
 		return appManager.mode(val);
 	},
 	applicationSwitch : function(url) {
+		hideMenus();
 		url = url ? url : appStore.currentUrl(url);
 		if (appManager.linkDirectly()) {
 			location.href = url.replace(/\?mode=(\d)/g,'') + '?mode=' + appManager.mode();
 		}
 		else {
-			ajax.post(url, function( data ) {
+			ajax.post(url, function( response ) {
+				if (response.data && response.data.configurations) {
+					appManager.configurations(response.data.configurations);
+				}
 			});
 			
 		}

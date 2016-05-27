@@ -38,7 +38,7 @@ Object.assign(appManager, {
 	showBanner : function(val) {
 		if (val != null)
 			this.set('showBanner', val);
-		return this.get('showBanner', false);
+		return this.get('showBanner');
 	},
 	mode : function(val) {
 		if (val != null)
@@ -63,7 +63,7 @@ Object.assign(appManager, {
 	isGuest : function(val) {
 		if (val != null)
 			this.set('isGuest', val);
-		return this.get('isGuest', true);
+		return this.get('isGuest');
 	},
 	isLogged : function() {
 		if (!this.isGuest())
@@ -82,8 +82,9 @@ Object.assign(appManager, {
 		return this.get('socketUri');
 	},
 	type : function(val) {
-		if (val != null)
+		if (val != null) {
 			this.set('type', val);
+		}
 		return this.get('type', 'HomePage');
 	},
 	data : function(val) {
@@ -120,5 +121,6 @@ Object.assign(appManager, {
 			}
 		}
 		document.title = this.get('title');
+		Dispatcher.dispatch(new Action(AppEvents.CONFIGURATIONS_UPDATE, configurations));
 	}
 });

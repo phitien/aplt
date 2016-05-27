@@ -7,9 +7,6 @@ use Illuminate\Http\Response;
 use App\Platform\Config;
 
 trait AccountTrait {
-	protected function getPageResponseDataOfAccountTrait() {
-		return $this->getPageResponseData ()->setShowBanner ( false );
-	}
 	/**
 	 * Return the authenticated user
 	 *
@@ -24,12 +21,12 @@ trait AccountTrait {
 		$response = static::apiCallPassword ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			// static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangePasswordPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangePasswordPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.password_changed' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangePasswordPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangePasswordPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.password_change_failed', $data ) ) ), $response->getStatusCode () );
 		}
@@ -38,7 +35,7 @@ trait AccountTrait {
 		if (static::getUser ()->isGuest ())
 			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangePasswordPage' ) ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangePasswordPage' ) ) );
 	}
 	/**
 	 * Email: change user email
@@ -54,12 +51,12 @@ trait AccountTrait {
 		$response = static::apiCallEmail ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			// static::setToken ( Config::INVALID_TOKEN );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeEmailPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeEmailPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.email_changed' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeEmailPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeEmailPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.email_change_failed', $data ) ) ), $response->getStatusCode () );
 		}
@@ -68,7 +65,7 @@ trait AccountTrait {
 		if (static::getUser ()->isGuest ())
 			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeEmailPage' ) ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeEmailPage' ) ) );
 	}
 	/**
 	 * Account: change user account
@@ -83,12 +80,12 @@ trait AccountTrait {
 		$data = $request->only ( 'current_password', 'name' );
 		$response = static::apiCallAccount ( $data );
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeAccountPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeAccountPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.account_changed' ) ) ) );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeAccountPage' )->
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeAccountPage' )->
 
 			setAppMessage ( $this->getTransMessage ( 'messages.sentences.account_change_failed', $data ) ) ), $response->getStatusCode () );
 		}
@@ -97,7 +94,7 @@ trait AccountTrait {
 		if (static::getUser ()->isGuest ())
 			return $this->getLoginResponse ();
 		else
-			return $this->response ( view ( 'base', $this->getPageResponseDataOfAccountTrait ()->setType ( 'ChangeAccountPage' ) ) );
+			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeAccountPage' ) ) );
 	}
 	/**
 	 * Reset: send reset link to the user email

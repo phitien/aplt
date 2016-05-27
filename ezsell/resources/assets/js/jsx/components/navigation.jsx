@@ -17,13 +17,16 @@ module.exports = window.Navigation = React.createClass({
 	componentDidMount : function() {
 		Dispatcher.addListener(this.eventName, this.refresh);
 	},
+	goToHomePage : function () {
+		applicationSwitch('/');
+	},
 	render : function() {
 		return (
 			<div className={this.className()} id={this.getId()}>
 				<div className="container clearfix">
 					<div id="leftmenu">
 						<ul className="nav">
-							<li><a onclick="applicationSwitch('/')"><span>{configurations.localization.home}</span></a></li>
+							<li><a onClick={this.goToHomePage}><span>{configurations.localization.home}</span></a></li>
 							<li id="catmenu">
 								<CatMenu></CatMenu>
 							</li>
