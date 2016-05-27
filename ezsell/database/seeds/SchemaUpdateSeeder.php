@@ -15,32 +15,32 @@ class SchemaUpdateSeeder extends Seeder {
 		Model::reguard ();
 	}
 	protected function createMessagesTable() {
-		Schema::dropIfExists ( 'messages' );
-		Schema::create ( 'messages', function (Blueprint $table) {
+		Schema::dropIfExists ( 'groups' );
+		Schema::dropIfExists ( 'topics' );
+		Schema::create ( 'topics', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			//
-			$table->integer ( 'parent_id' )->unsigned ()->nullable (); // item_id
-			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'items' )->onDelete ( 'cascade' );
+			$table->integer ( 'location_id' )->unsigned ();
 			//
-			$table->integer ( 'to_id' )->unsigned ();
-			$table->integer ( 'from_id' )->unsigned ();
-			$table->string ( 'content' );
-			$table->boolean ( 'show_on_to' )->default ( true );
-			$table->boolean ( 'show_on_from' )->default ( true );
-			$table->enum ( 'status', [ 
-					'SENT',
-					'RECEIVED',
-					'READ' 
-			] )->default ( 'SENT' );
+			$table->boolean ( 'active' )->nullable ()->default ( 0 );
+			//
+			$table->string ( 'title' )->unique ();
+			$table->text ( 'description' )->nullable ();
+			$table->text ( 'avatar' )->nullable ();
+			$table->text ( 'cover' )->nullable ();
+			//
+			$table->text ( 'tags' )->nullable ();
 			$table->text ( 'options' )->nullable ();
+			//
+			$table->integer ( 'bits' )->nullable ()->default ( 0 );
+			//
 			$table->timestamps ();
 			$table->softDeletes ();
 			//
 			$table->index ( [ 
-					'parent_id',
-					'to_id',
-					'from_id' 
-			], 'message_search_index' );
+					'location_id',
+					'title' 
+			], 'topic_search_index' );
 		} );
 	}
 }

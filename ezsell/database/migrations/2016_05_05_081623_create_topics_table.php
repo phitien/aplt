@@ -8,7 +8,7 @@ class CreateGroupsTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create ( 'groups', function (Blueprint $table) {
+		Schema::create ( 'topics', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			//
 			$table->integer ( 'location_id' )->unsigned ();
@@ -41,9 +41,9 @@ class CreateGroupsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::table ( 'groups', function (Blueprint $table) {
+		Schema::table ( 'topics', function (Blueprint $table) {
 			$table->dropIndex ( 'group_search_index' );
 		} );
-		Schema::dropIfExists ( 'groups' );
+		Schema::dropIfExists ( 'topics' );
 	}
 }

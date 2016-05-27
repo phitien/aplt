@@ -27,6 +27,15 @@ module.exports = window.MenuItem = React.createClass({
 			}
 		}
 	},
+	getIcon(_item) {
+		try {return this.props.getIcon(_item);}
+		catch (e) {
+			try {return _item.icon;}
+			catch (e) {
+				return '';
+			}
+		}
+	},
 	getSubMenuClassName(_item) {
 		try {return this.props.getSubMenuClassName(_item);}
 		catch (e) {
@@ -48,16 +57,15 @@ module.exports = window.MenuItem = React.createClass({
 		}
 	},
 	render() {
-		var text = this.getText(this.props.data);
-		if (!text) {
-			return (
-				<li></li>
-			); 
-		}
 		var html;
+		var text = this.getText(this.props.data);
+		var icon = this.getIcon(this.props.data);
+		if (!text && !icon) {
+			return null; 
+		}
 		var href = this.getHref(this.props.data);
 		var children = this.getChildren(this.props.data);
-		var linkClassName = children && children.length > 0 ? 'menuitem menuitem-nonatomic' : 'menuitem menuitem-atomic';
+		var linkClassName = (children && children.length > 0 ? 'menuitem menuitem-nonatomic ' : 'menuitem menuitem-atomic ') + icon;
 		if (this.props.itemClick || (href && href.indexOf("javascript:") == 0)) {
 			html = <a className={linkClassName} onClick={this.itemClick}><span>{text}</span></a>;
 		}

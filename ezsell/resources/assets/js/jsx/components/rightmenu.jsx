@@ -8,7 +8,10 @@ module.exports = window.RightMenu = React.createClass({
 	},
 	render() {
 		const user = appManager.isLogged();
-		var items = user ? [] : 
+		var items = user ? [{
+				icon: 'ui-icon ui-icon-grip-dotted-horizontal',
+				href: '/login'
+			}] : 
 			[{
 				text: configurations.localization.login,
 				href: '/login'

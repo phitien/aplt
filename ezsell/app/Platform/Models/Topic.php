@@ -2,7 +2,7 @@
 
 namespace App\Platform\Models;
 
-class Group extends Model {
+class Topic extends Model {
 	protected $guarded = [ 
 			'id' 
 	];
