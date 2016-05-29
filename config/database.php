@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => 'app',//env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,49 @@ return [
             'prefix' => '',
         ],
 
-        'mysql' => [
+        'im' => [
+            'driver' => 'mysql',
+            'host' => '127.0.0.1',
+            'port' => '3306',
+            'database' => 'im',
+            'username' => 'root',
+            'password' => 'root',
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => null,
+        ],
+    		
+    	'media' => [
+    		'driver' => 'mysql',
+    		'host' => '127.0.0.1',
+    		'port' => '3306',
+    		'database' => 'media',
+    		'username' => 'root',
+    		'password' => 'root',
+    		'charset' => 'utf8',
+    		'collation' => 'utf8_unicode_ci',
+    		'prefix' => '',
+    		'strict' => false,
+    		'engine' => null,
+    	],
+    		
+    	'app' => [
+    		'driver' => 'mysql',
+    		'host' => '127.0.0.1',
+    		'port' => '3306',
+    		'database' => 'ezsell',
+    		'username' => 'root',
+    		'password' => 'root',
+    		'charset' => 'utf8',
+    		'collation' => 'utf8_unicode_ci',
+    		'prefix' => '',
+    		'strict' => false,
+    		'engine' => null,
+    	],
+    		
+    	'mysql' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
@@ -66,7 +108,7 @@ return [
             'engine' => null,
         ],
 
-        'pgsql' => [
+    	'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '5432'),

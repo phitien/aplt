@@ -2,7 +2,7 @@
 
 namespace App\IM\Models;
 
-use App\IM\Config\Config;
+use App\IM\Config;
 
 class Role extends Model {
 	/**
@@ -46,7 +46,7 @@ class Role extends Model {
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function users() {
-		return $this->belongsToMany ( 'App\User', 'user_role', 'role_id', 'user_id' );
+		return $this->belongsToMany ( 'App\IM\Models\User', 'user_role', 'role_id', 'user_id' );
 	}
 	/**
 	 *

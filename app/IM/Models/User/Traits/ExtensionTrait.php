@@ -9,7 +9,7 @@ trait ExtensionTrait
 	protected $_extension;
 	/**
 	 *
-	 * @return \App\UserExtension
+	 * @return \App\IM\Models\UserExtension
 	 */
 	public function extension() {
 		if (! $this->_extension)

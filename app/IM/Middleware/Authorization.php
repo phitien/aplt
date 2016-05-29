@@ -3,7 +3,7 @@
 namespace App\IM\Middleware;
 
 use Closure;
-use App\IM\Config\Config;
+use App\IM\Config;
 
 class Authorization extends Middleware {
 	/**

@@ -5,8 +5,8 @@ namespace App\IM\Models\User\Relations;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\Collection;
 use App\IM\Models\Action;
-use App\User;
-use App\IM\Config\Config;
+use App\IM\Models\User;
+use App\IM\Config;
 
 class Actions extends Relation {
 	/**

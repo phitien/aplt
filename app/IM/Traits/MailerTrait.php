@@ -3,13 +3,12 @@
 namespace App\IM\Traits;
 
 use Mail;
-use App\User;
+use App\IM\Models\User;
 use Html;
-use App\IM\Config\Config;
+use App\IM\Config;
 
 trait MailerTrait
 {
-	use UserTrait;
 	/**
 	 *
 	 * @param User $receiver        	

@@ -2,24 +2,18 @@
 
 namespace App\IM\Controllers;
 
-use App\Http\Controllers\Controller as BaseController;
-use App\IM\Controllers\Traits\MiddlewareTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
 use Hash;
+use App\Shared\Controllers\Controller as SharedController;
+use App\IM\Traits\AllTrait;
 
-abstract class Controller extends BaseController implements IController {
+abstract class Controller extends SharedController {
 	/**
 	 * TRAITS
 	 */
-	use MiddlewareTrait;
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		$this->setupMiddlewares ();
-	}
+	use AllTrait;
 	/**
 	 *
 	 * @param Request $request        	

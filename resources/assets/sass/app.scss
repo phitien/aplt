@@ -1,0 +1,177 @@
+@import "theme";
+
+.form {
+	.center-block {float: none !important;}
+}
+.validation-error {color: $warning-color;}
+.inline-block-list {
+	div.radio,div.checkbox {display: inline-block;margin: 0 $smedium;}
+}
+.image-preview {
+	@extend .border-all;
+	display: none;
+	img {
+		width: 100%;
+		margin: 3px 0;
+	}
+	.image-preview-item {
+		margin: $sbig 0;
+	}
+	.image-info {
+		float: left;
+		margin-top: 10px;
+	}
+	.image-remove {
+		float: right;
+		margin-top: 3px;
+	}
+}
+
+.btn-fixed-right {position: fixed; top: ($navigation-height + $sbig); right: $sbig;}
+
+.menuitem {}
+.menuitem-atomic {cursor: pointer;}
+.menuitem-nonatomic {font-style: italic;text-decoration: none !important;color: $menuitem-nonatomic-color;cursor: text;}
+.overlay-menu {display: none;position: absolute;overflow-y: hidden;width: 100%;background: white;top: ($navigation-height + 1px);}
+
+#navigation-replacement {
+	@extend .no-margin;
+	height: ($navigation-height + $border-width);width: 100%;
+	background-color: transparent;
+}
+#navigation {
+	@extend .no-margin;@extend .border-bottom;
+	position: fixed;top: 0;
+	width: 100%;
+	background: white;
+	ul,li {vertical-align: top;}
+	ul.nav {height: $navigation-height;}
+}
+#leftmenu {
+	position: inherit;float: left;width: 75%;height: 100%;
+	a {padding: $sbig;background-color: transparent;}
+	a:hover {background-color: transparent;}
+	ul {
+		width: 100%;margin: 0;padding: 0;
+		li:first-child {display: inline-block;}
+		li#catmenu {
+			display: inline-block;margin-top: $sbig;position: inherit;
+			ul {
+				text-align: left;margin: 0;padding: 0;
+				li {
+					display: inline-block;margin: 0;padding: 0;
+					a:first-child {cursor: pointer;}
+					a {
+						span{}
+					}
+					ul {
+						@extend .border-bottom,.overlay-menu;
+						padding: $sbig 0;left: 0;margin: 0;padding: 0;
+						a {
+							padding: $ssmall $sbig;
+							span{}
+						}
+						li {
+							display: block;float: left;
+							a {
+								span{}
+							}
+							ul {
+								display: block;height: 200px;
+								position: initial;
+								li {
+									float: none;
+									a {
+										span{}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		li#extra {
+			display: inline-block;
+			form {
+				padding: $sbig;
+				.rc-switch {margin-left: $ssmall;}
+			}
+		}
+	}
+}
+
+#rightmenu {
+	position: inherit;float: right;width: 25%;height: 100%;
+	a {padding: $sbig;background-color: transparent;}
+	a:hover {background-color: transparent;}
+	.rightmenu {
+		margin: 0;padding: 0;text-align: right;margin-top: $sbig;
+		li {
+			margin: 0;padding: 0;position: inherit;display: inline-block;
+			ul {
+				@extend .border-all,.overlay-menu;top: ($navigation-height);right: 0;
+				li {
+					display: inline-block;position: relative;padding: $ssmall $sbig;
+					a {padding: 0;text-decoration: none;}
+				}
+				li:hover {background-color: #ffffff;}
+			}
+		}
+	}
+}
+
+
+#overlay {
+	display: none;height: 100% !important;width: 100% !important;background-color: black;opacity: 0.3;
+}
+#dialog {
+	width: 350px;
+	form {
+		background-color: $formview-background-color;padding: $sbig;
+	}
+}
+
+#banner {
+	@extend .border-bottom;
+	min-height: $banner-height;
+}
+
+#container {@extend .no-margin;padding-bottom: $footer-height + $sbig;margin-top: $sbig;}
+
+#left {
+	.leftmenu {
+		@extend .no-margin-padding;
+		li {
+			@extend .no-margin-padding;
+			list-style: none;
+			font-size: $fsmall;
+			ul {
+				@extend .no-margin-padding;
+				padding-left: $sbig;
+				li {
+					font-size: $fmedium;
+					list-style: none;
+				}
+			}
+		}
+	}
+}
+#center {}
+#right {}
+#footer {
+	@extend .no-margin;@extend .border-top;
+	position: fixed;bottom: 0;right: 0;height: $footer-height;width: 100%;
+	background-color: $border-color;
+}
+#messages {
+	@extend .border-all;
+	display: none;
+	position: absolute;bottom: 28px;right: 10px;padding: 10px;height: 280px;width: 230px;overflow-y: auto;overflow-x: auto;
+}
+#sendmessages {
+	@extend .border-all;
+	position: absolute;bottom: 0x;right: 10px;height: 28px;width: 230px;
+}
+#sendmessages input[type=text] {width: 170px;line-height:22px;padding-top: 3px;padding-bottom: 2px;}
+#sendmessages input[type=button] {float: right;}

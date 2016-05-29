@@ -2,7 +2,7 @@
 
 namespace App\IM\Models\User\Relations;
 
-use App\User;
+use App\IM\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\IM\Models\Role;
 

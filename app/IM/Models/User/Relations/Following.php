@@ -2,7 +2,7 @@
 
 namespace App\IM\Models\User\Relations;
 
-use App\User;
+use App\IM\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Following extends BelongsToMany {
@@ -12,7 +12,7 @@ class Following extends BelongsToMany {
 	 * @param unknown $relation
 	 */
 	public function __construct(User $user, $relation) {
-		$related = 'App\User';
+		$related = 'App\IM\Models\User';
 		$table = 'user_follower';
 		$foreignKey = 'user_id';
 		$otherKey = 'follower_id';

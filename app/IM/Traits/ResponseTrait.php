@@ -2,25 +2,52 @@
 
 namespace App\IM\Traits;
 
-use App\IM\Config\Config;
+use App\IM\Config;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Cookie;
 
 trait ResponseTrait
 {
-	use RequestTrait;
 	/**
 	 *
+	 * @param \Illuminate\Http\Response $response        	
+	 */
+	protected static function applyCookies($response) {
+		return $response-> //
+
+		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true );
+	}
+	/**
+	 *
+	 * @param \Illuminate\Http\Response $response        	
+	 */
+	protected static function clearCookies($response) {
+		return $response-> //
+
+		withCookie ( Config::TOKEN_KEY, null, true );
+	}
+	/**
+	 * Build response
+	 *
+	 * @param string $to        	
+	 * @param number $status        	
+	 * @param array $headers        	
+	 * @param bool $secure        	
+	 * @return \Illuminate\Http\Response
+	 */
+	public function redirect($to = Config::HOME_PAGE, $status = 302, $headers = [], $secure = null) {
+		return static::applyCookies ( redirect ( $to, $status, $headers, $secure ) );
+	}
+	/**
+	 *
+	 * @param string $content        	
 	 * @param number $status        	
 	 * @param array $headers        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function response($content = '', $status = Response::HTTP_OK, array $headers = []) {
-		if (! $this->user ()->isGuest ()) {
-			$headers [Config::TOKEN_KEY] = $this->token ();
-			$headers [Config::SESSION_KEY] = static::encrypt ( ( string ) $this->user () );
-		}
-		return response ( $content, $status, $headers );
+	public function response($content, $status = Response::HTTP_OK, array $headers = []) {
+		return static::applyCookies ( response ( $content, $status, $headers ) );
 	}
 	/**
 	 *
@@ -31,15 +58,10 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
-		if (! $this->user ()->isGuest ()) {
-			$headers [Config::TOKEN_KEY] = $this->token ();
-			$headers [Config::SESSION_KEY] = static::encrypt ( ( string ) $this->user () );
-			$headers ['Content-Type'] = 'application/json';
-		}
-		return response ()->json ( [ 
-				'message' => $message ? $message : '',
-				'data' => $data ? $data : [ ] 
-		], $status, $headers );
+		return $this->applyCookies ( response ()->json ( [ 
+				'message' => $message,
+				'data' => $data 
+		], $status, $headers ) );
 	}
 	/**
 	 *
@@ -50,17 +72,18 @@ trait ResponseTrait
 	 */
 	public function updateJsonResponse(JsonResponse $response, $message = null, $data = null) {
 		return $response->setData ( [ 
-				'message' => $message ? $message : '',
-				'data' => $data ? $data : [ ] 
+				'message' => $message,
+				'data' => $data 
 		] );
 	}
 	/**
 	 * set the IM token to the response cookies.
 	 *
 	 * @param \Illuminate\Http\Response $response        	
+	 * @param string $cookie        	
 	 * @return \Illuminate\Http\Response
 	 */
-	public function setResponseToken($response) {
-		return $response->header ( Config::TOKEN_KEY, $this->token (), true );
+	public function setResponseToken($response, $token) {
+		return $response->withCookie ( Config::TOKEN_KEY, $token, true );
 	}
 }

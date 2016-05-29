@@ -8,20 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | JWT Authentication Secret
-    |--------------------------------------------------------------------------
-    |
-    | Don't forget to set this, as it will be used to sign your tokens.
-    | A helper command is provided for this: `php artisan jwt:generate`
-    |
-    */
-
-    'secret' => env('JWT_SECRET', 'Suywk2JrFXVJ0ArdVj1CcDpcGDGNAmp6'),
+return [ 
+		
+		/*
+		 * |--------------------------------------------------------------------------
+		 * | JWT Authentication Secret
+		 * |--------------------------------------------------------------------------
+		 * |
+		 * | Don't forget to set this, as it will be used to sign your tokens.
+		 * | A helper command is provided for this: `php artisan jwt:generate`
+		 * |
+		 */
+		
+		'secret' => env ( 'JWT_SECRET', 'Suywk2JrFXVJ0ArdVj1CcDpcGDGNAmp6' ),
 
     /*
     |--------------------------------------------------------------------------
@@ -73,7 +72,7 @@ return [
     |
     */
 
-    'user' => 'App\User',
+    'user' => App\User::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -98,7 +97,14 @@ return [
     |
     */
 
-    'required_claims' => ['iss', 'iat', 'exp', 'nbf', 'sub', 'jti'],
+    'required_claims' => [ 
+				'iss',
+				'iat',
+				'exp',
+				'nbf',
+				'sub',
+				'jti' 
+		],
 
     /*
     |--------------------------------------------------------------------------
@@ -110,7 +116,7 @@ return [
     |
     */
 
-    'blacklist_enabled' => env('JWT_BLACKLIST_ENABLED', true),
+    'blacklist_enabled' => env ( 'JWT_BLACKLIST_ENABLED', true ),
 
     /*
     |--------------------------------------------------------------------------
@@ -121,19 +127,19 @@ return [
     |
     */
 
-    'providers' => [
-
-        /*
-        |--------------------------------------------------------------------------
-        | User Provider
-        |--------------------------------------------------------------------------
-        |
-        | Specify the provider that is used to find the user based
-        | on the subject claim
-        |
-        */
-
-        'user' => 'Tymon\JWTAuth\Providers\User\EloquentUserAdapter',
+    'providers' => [ 
+				
+				/*
+				 * |--------------------------------------------------------------------------
+				 * | User Provider
+				 * |--------------------------------------------------------------------------
+				 * |
+				 * | Specify the provider that is used to find the user based
+				 * | on the subject claim
+				 * |
+				 */
+				
+				'user' => 'Tymon\JWTAuth\Providers\User\EloquentUserAdapter',
 
         /*
         |--------------------------------------------------------------------------
@@ -166,8 +172,8 @@ return [
         |
         */
 
-        'storage' => 'Tymon\JWTAuth\Providers\Storage\IlluminateCacheAdapter',
-
-    ],
-
-];
+        'storage' => 'Tymon\JWTAuth\Providers\Storage\IlluminateCacheAdapter' 
+		]
+		 
+]
+;

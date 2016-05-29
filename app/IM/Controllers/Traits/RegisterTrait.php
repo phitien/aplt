@@ -2,7 +2,7 @@
 
 namespace App\IM\Controllers\Traits;
 
-use App\User;
+use App\IM\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

@@ -2,16 +2,15 @@
 
 namespace App\IM\Traits;
 
-use App\IM\Config\Config;
+use App\IM\Config;
 use JWTAuth;
 use App\IM\Exceptions\TokenNotFound;
 use App\IM\Exceptions\UserNotFound;
-use App\User;
+use App\IM\Models\User;
 use Exception;
 
 trait UserTrait
 {
-	use ResponseTrait;
 	/**
 	 *
 	 * @var string
@@ -44,12 +43,12 @@ trait UserTrait
 	}
 	/**
 	 *
-	 * @var \App\User
+	 * @var \App\IM\Models\User
 	 */
 	protected static $_user;
 	/**
 	 *
-	 * @return \App\User
+	 * @return \App\IM\Models\User
 	 */
 	protected static function getUser($throwExceptionIfNotFound = false) {
 		if (! static::$_user || $throwExceptionIfNotFound) {
@@ -83,7 +82,7 @@ trait UserTrait
 	/**
 	 *
 	 * @param string $throwExceptionIfNotFound        	
-	 * @return \App\User
+	 * @return \App\IM\Models\User
 	 */
 	protected function user($throwExceptionIfNotFound = false) {
 		return static::getUser ( $throwExceptionIfNotFound );

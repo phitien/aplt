@@ -1,32 +1,27 @@
 <?php
-Route::get ( '/', function () {
-	return view ( 'welcome', [ ] );
-} );
+Route::get ( '/', 'Platform\Controllers\ItemController@index' );
+Route::any ( 'register', 'Platform\Controllers\AccountController@register' );
+Route::any ( 'code', 'Platform\Controllers\AccountController@code' );
+Route::any ( 'activate/{code}', 'Platform\Controllers\AccountController@activate' );
+Route::any ( 'deactivate', 'Platform\Controllers\AccountController@deactivate' );
 
-Route::group ( [ 
-		'prefix' => 'api' 
-], function () {
-	Route::post ( 'register', 'IM\Controllers\AccountController@register' );
-	Route::any ( 'code', 'IM\Controllers\AccountController@code' );
-	Route::get ( 'activate/{code}', 'IM\Controllers\AccountController@activate' );
-	Route::post ( 'deactivate', 'IM\Controllers\AccountController@deactivate' );
-	
-	Route::post ( 'login', 'IM\Controllers\AccountController@login' );
-	Route::any ( 'logout', 'IM\Controllers\AccountController@logout' );
-	
-	Route::any ( 'profile', 'IM\Controllers\AccountController@profile' );
-	Route::any ( 'profilex', 'IM\Controllers\AccountController@profilex' );
-	
-	Route::any ( 'followers', 'IM\Controllers\AccountController@followers' );
-	Route::any ( 'following', 'IM\Controllers\AccountController@following' );
-	Route::post ( 'follow/{id}', 'IM\Controllers\AccountController@follow' );
-	Route::post ( 'unfollow/{id}', 'IM\Controllers\AccountController@unfollow' );
-	Route::post ( 'accept/{id}', 'IM\Controllers\AccountController@accept' );
-	Route::post ( 'refuse/{id}', 'IM\Controllers\AccountController@refuse' );
-	
-	Route::post ( 'password', 'IM\Controllers\AccountController@password' );
-	Route::post ( 'email', 'IM\Controllers\AccountController@email' );
-	Route::post ( 'account', 'IM\Controllers\AccountController@account' );
-	Route::post ( 'forget', 'IM\Controllers\AccountController@forget' );
-	Route::post ( 'reset', 'IM\Controllers\AccountController@reset' );
-} );
+Route::any ( 'login', 'Platform\Controllers\AccountController@login' );
+Route::any ( 'logout', 'Platform\Controllers\AccountController@logout' );
+
+Route::any ( 'profile', 'Platform\Controllers\AccountController@profile' );
+Route::any ( 'profilex', 'Platform\Controllers\AccountController@profilex' );
+
+Route::any ( 'followers', 'Platform\Controllers\AccountController@followers' );
+Route::any ( 'following', 'Platform\Controllers\AccountController@following' );
+Route::post ( 'follow/{id}', 'Platform\Controllers\AccountController@follow' );
+Route::post ( 'accept/{id}', 'Platform\Controllers\AccountController@accept' );
+Route::post ( 'refuse/{id}', 'Platform\Controllers\AccountController@refuse' );
+
+Route::any ( 'password', 'Platform\Controllers\AccountController@password' );
+Route::any ( 'email', 'Platform\Controllers\AccountController@email' );
+Route::any ( 'account', 'Platform\Controllers\AccountController@account' );
+Route::any ( 'forget', 'Platform\Controllers\AccountController@forget' );
+Route::any ( 'reset', 'Platform\Controllers\AccountController@reset' );
+
+Route::any ( 'location', 'Platform\Controllers\LocationController@location' );
+Route::any ( 'searchlocation', 'Platform\Controllers\LocationController@searchlocation' );

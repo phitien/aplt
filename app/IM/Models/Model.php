@@ -2,10 +2,11 @@
 
 namespace App\IM\Models;
 
-use Illuminate\Database\Eloquent\Model as CoreModel;
 use App\IM\Traits\AllTrait;
+use App\Shared\Models\Model as SharedModel;
 
-class Model extends CoreModel implements IModel {
+class Model extends SharedModel {
+	protected $connection = 'im';
 	/**
 	 * Traits
 	 */

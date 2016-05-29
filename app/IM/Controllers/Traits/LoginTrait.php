@@ -5,9 +5,8 @@ namespace App\IM\Controllers\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use JWTAuth;
-use Exception;
-use App\User;
-use App\IM\Config\Config;
+use App\IM\Models\User;
+use App\IM\Config;
 
 trait  LoginTrait {
 	/**
@@ -27,30 +26,26 @@ trait  LoginTrait {
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	protected function doLogin($credentials) {
-		try {
-			if (! ($credentials instanceof User)) {
-				$user = User::where ( 'email', $credentials ['email'] )->first ();
-				if (! $user)
-					return $this->jsonResponse ( 'user_not_found', null, Response::HTTP_UNAUTHORIZED );
-				if ($user && ! $user->active)
-					return $this->jsonResponse ( 'user_is_not_activated', null, Response::HTTP_UNAUTHORIZED );
-				$credentials ['active'] = 1;
-				// verify the credentials and create a token for the user
-				if (! $token = JWTAuth::attempt ( $credentials ))
-					return $this->jsonResponse ( 'invalid_password', null, Response::HTTP_UNAUTHORIZED );
-			} else {
-				if (! $credentials->active)
-					return $this->jsonResponse ( 'user_is_not_activated', null, Response::HTTP_UNAUTHORIZED );
-				if (! $token = JWTAuth::fromUser ( $credentials ))
-					return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_UNAUTHORIZED );
-			}
-		} catch ( Exception $e ) {
-			// something went wrong
-			return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_UNAUTHORIZED );
+		if (! ($credentials instanceof User)) {
+			$user = User::where ( 'email', $credentials ['email'] )->first ();
+			if (! $user)
+				return $this->jsonResponse ( 'user_not_found', null, Response::HTTP_UNAUTHORIZED );
+			if ($user && ! $user->active)
+				return $this->jsonResponse ( 'user_is_not_activated', null, Response::HTTP_UNAUTHORIZED );
+			$credentials ['active'] = 1;
+			$remember = isset ( $credentials ['remember'] ) ? $credentials ['remember'] : false;
+			// verify the credentials and create a token for the user
+			if (! $token = JWTAuth::attempt ( $credentials ))
+				return $this->jsonResponse ( 'invalid_password', null, Response::HTTP_UNAUTHORIZED );
+		} else {
+			if (! $credentials->active)
+				return $this->jsonResponse ( 'user_is_not_activated', null, Response::HTTP_UNAUTHORIZED );
+			if (! $token = JWTAuth::fromUser ( $credentials ))
+				return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_UNAUTHORIZED );
 		}
 		$this->setToken ( $token );
 		$this->setUser ( JWTAuth::authenticate ( $token ) );
-		return $this->setResponseToken ( $this->jsonResponse ( 'login_successfully', $this->user () ) );
+		return $this->jsonResponse ( 'login_successfully', $this->user () );
 	}
 	/**
 	 * Logout

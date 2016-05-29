@@ -6,7 +6,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Exception;
 use Closure;
-use App\IM\Config\Config;
+use App\IM\Config;
 use Illuminate\Http\Response;
 use App\IM\Exceptions\TokenNotFound;
 use App\IM\Exceptions\UserNotFound;
