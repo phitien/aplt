@@ -8,7 +8,7 @@ class CreateImagesTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create ( 'images', function (Blueprint $table) {
+		Schema::connection ( 'app' )->create ( 'images', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			$table->integer ( 'parent_id' )->unsigned ();
 			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'items' )->onDelete ( 'cascade' );
@@ -28,11 +28,11 @@ class CreateImagesTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::table ( 'images', function (Blueprint $table) {
+		Schema::connection ( 'app' )->table ( 'images', function (Blueprint $table) {
 			$table->dropForeign ( [ 
 					'parent_id' 
 			] );
 		} );
-		Schema::dropIfExists ( 'images' );
+		Schema::connection ( 'app' )->dropIfExists ( 'images' );
 	}
 }

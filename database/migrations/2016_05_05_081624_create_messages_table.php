@@ -8,7 +8,7 @@ class CreateMessagesTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create ( 'messages', function (Blueprint $table) {
+		Schema::connection ( 'app' )->create ( 'messages', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			//
 			$table->integer ( 'parent_id' )->unsigned ()->nullable (); // item_id
@@ -42,6 +42,6 @@ class CreateMessagesTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::dropIfExists ( 'messages' );
+		Schema::connection ( 'app' )->dropIfExists ( 'messages' );
 	}
 }

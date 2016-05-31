@@ -8,7 +8,7 @@ class CreateCommentsTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create ( 'comments', function (Blueprint $table) {
+		Schema::connection ( 'app' )->create ( 'comments', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			$table->integer ( 'item_id' )->unsigned ();
 			$table->foreign ( 'item_id' )->references ( 'id' )->on ( 'items' )->onDelete ( 'cascade' );
@@ -38,7 +38,7 @@ class CreateCommentsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::table ( 'comments', function (Blueprint $table) {
+		Schema::connection ( 'app' )->table ( 'comments', function (Blueprint $table) {
 			try {
 				$table->dropForeign ( [ 
 						'parent_id' 
@@ -49,6 +49,6 @@ class CreateCommentsTable extends Migration {
 			} catch ( Exception $e ) {
 			}
 		} );
-		Schema::dropIfExists ( 'comments' );
+		Schema::connection ( 'app' )->dropIfExists ( 'comments' );
 	}
 }

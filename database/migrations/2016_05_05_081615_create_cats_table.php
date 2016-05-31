@@ -8,7 +8,7 @@ class CreateCatsTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create ( 'cats', function (Blueprint $table) {
+		Schema::connection ( 'app' )->create ( 'cats', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			$table->integer ( 'parent_id' )->unsigned ()->nullable ();
 			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'cats' )->onDelete ( 'cascade' );
@@ -34,12 +34,12 @@ class CreateCatsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::table ( 'cats', function (Blueprint $table) {
+		Schema::connection ( 'app' )->table ( 'cats', function (Blueprint $table) {
 			$table->dropForeign ( [ 
 					'parent_id' 
 			] );
 			$table->dropIndex ( 'cat_search_index' );
 		} );
-		Schema::dropIfExists ( 'cats' );
+		Schema::connection ( 'app' )->dropIfExists ( 'cats' );
 	}
 }

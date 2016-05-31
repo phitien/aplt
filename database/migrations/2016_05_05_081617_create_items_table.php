@@ -8,7 +8,7 @@ class CreateItemsTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create ( 'items', function (Blueprint $table) {
+		Schema::connection ( 'app' )->create ( 'items', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			$table->integer ( 'user_id' )->unsigned ();
 			$table->integer ( 'parent_id' )->unsigned ();
@@ -51,7 +51,7 @@ class CreateItemsTable extends Migration {
 			], 'item_search_index' );
 		} );
 		//
-		// DB::statement ( 'ALTER TABLE items ADD FULLTEXT KEY item_fulltext_index (title,description)' );
+		// DB::connection ( 'app' )->statement ( 'ALTER TABLE items ADD FULLTEXT KEY item_fulltext_index (title,description)' );
 	}
 	
 	/**
@@ -61,12 +61,12 @@ class CreateItemsTable extends Migration {
 	 */
 	public function down() {
 		// DB::statement ( 'ALTER TABLE items DROP INDEX item_fulltext_index' );
-		Schema::table ( 'items', function (Blueprint $table) {
+		Schema::connection ( 'app' )->table ( 'items', function (Blueprint $table) {
 			$table->dropForeign ( [ 
 					'parent_id' 
 			] );
 			$table->dropIndex ( 'item_search_index' );
 		} );
-		Schema::dropIfExists ( 'items' );
+		Schema::connection ( 'app' )->dropIfExists ( 'items' );
 	}
 }

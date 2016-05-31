@@ -8,7 +8,7 @@ class CreateCatDetailsTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create ( 'cat_details', function (Blueprint $table) {
+		Schema::connection ( 'app' )->create ( 'cat_details', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			$table->integer ( 'parent_id' )->unsigned ()->nullable ();
 			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'cats' )->onDelete ( 'cascade' );
@@ -44,7 +44,7 @@ class CreateCatDetailsTable extends Migration {
 			], 'cat_detail_search_index' );
 		} );
 		//
-		// DB::statement ( 'ALTER TABLE cat_details ADD FULLTEXT KEY cat_detail_fulltext_index (name,title,description)' );
+		// DB::connection ( 'app' )->statement ( 'ALTER TABLE cat_details ADD FULLTEXT KEY cat_detail_fulltext_index (name,title,description)' );
 	}
 	
 	/**
@@ -53,13 +53,13 @@ class CreateCatDetailsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		// DB::statement ( 'ALTER TABLE cat_details DROP INDEX cat_detail_fulltext_index' );
-		Schema::table ( 'cat_details', function (Blueprint $table) {
+		// DB::connection ( 'app' )->statement ( 'ALTER TABLE cat_details DROP INDEX cat_detail_fulltext_index' );
+		Schema::connection ( 'app' )->table ( 'cat_details', function (Blueprint $table) {
 			$table->dropForeign ( [ 
 					'parent_id' 
 			] );
 			$table->dropIndex ( 'cat_detail_search_index' );
 		} );
-		Schema::dropIfExists ( 'cat_details' );
+		Schema::connection ( 'app' )->dropIfExists ( 'cat_details' );
 	}
 }

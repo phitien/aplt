@@ -8,7 +8,7 @@ class CreatePricesTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create ( 'prices', function (Blueprint $table) {
+		Schema::connection ( 'app' )->create ( 'prices', function (Blueprint $table) {
 			$table->increments ( 'id' );
 			$table->integer ( 'parent_id' )->unsigned ();
 			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'items' )->onDelete ( 'cascade' );
@@ -31,12 +31,12 @@ class CreatePricesTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::table ( 'prices', function (Blueprint $table) {
+		Schema::connection ( 'app' )->table ( 'prices', function (Blueprint $table) {
 			$table->dropForeign ( [ 
 					'parent_id' 
 			] );
 		} );
-		Schema::dropIfExists ( 'prices' );
+		Schema::connection ( 'app' )->dropIfExists ( 'prices' );
 	}
 }
     	
