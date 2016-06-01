@@ -90,12 +90,11 @@ Object.assign(window, {
 				bg: 'rgba(255,255,255,0.7)',
 				color: '#000',
 			});
-			ajax.post(url, function( response, error, errorMessage ) {
+			ajax.get(url, function(data, status, response) {
 				$(waitMeContainer).waitMe('hide');
-				if (response.status < 300) {
-					if (response.data && response.data.configurations) {
-						window.history.pushState(response.data.configurations, response.data.configurations.title, url);
-						appManager.configurations(response.data.configurations);
+				if (status == 'success') {
+					if (applyConfigurations(data)) {
+						window.history.pushState(data.data.configurations, data.data.configurations.title, url);
 					}
 				}
 				else {
@@ -104,5 +103,12 @@ Object.assign(window, {
 			});
 			
 		}
+	},
+	applyConfigurations : function(data) {
+		if (data.data && data.data.configurations) {
+			appManager.configurations(data.data.configurations);
+			return true;
+		}
+		return false;
 	}
 });

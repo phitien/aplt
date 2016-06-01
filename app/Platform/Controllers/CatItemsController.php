@@ -77,7 +77,7 @@ class CatItemsController extends ItemController {
 			throw new ItemNotFound ();
 		}
 	}
-	protected function pajaxpostList(Request $request, $id) {
+	protected function pajaxgetList(Request $request, $id) {
 		if ($data = $this->prepareListPageResponseData ( $request, $id )) {
 			return $this->jsonResponse ( 'cat_item_list', $data );
 		} else {

@@ -69,7 +69,7 @@ class UserItemsController extends ItemController {
 			throw new UserNotFound ();
 		}
 	}
-	protected function pajaxpostList(Request $request, $username) {
+	protected function pajaxgetList(Request $request, $username) {
 		if ($data = $this->prepareListPageResponseData ( $request, $username )) {
 			return $this->jsonResponse ( 'user_item_list', $data );
 		} else {

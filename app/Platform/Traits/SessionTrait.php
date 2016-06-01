@@ -12,13 +12,6 @@ trait SessionTrait {
 	 *
 	 * @return string
 	 */
-	public static function getBaseUri() {
-		return (request ()->secure () ? 'https' : 'http') . '://' . request ()->server->get ( 'SERVER_NAME' );
-	}
-	/**
-	 *
-	 * @return string
-	 */
 	public static function getRedirectUri() {
 		return request ()->session ()->get ( 'redirect', '/' );
 	}

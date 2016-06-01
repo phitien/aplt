@@ -48,10 +48,19 @@ module.exports = window.RightMenu = React.createClass({
 				text: configurations.localization.login,
 				href: '/login',
 				itemClick: function(e) {
+					var handler = function(data, stauts, response) {
+						dialog.close();
+						if (stauts == 'success') {
+							console.log(data);
+							if (window.applyConfigurations(data)) {
+								
+							}
+						}
+					};
 					dialog.get({
 						dialogClass: 'dialogNoTitle',
 						open: function () {
-							ReactDOM.render(<LoginPage />, document.getElementById('dialog'));
+							ReactDOM.render(<LoginPage ajax={true} callback={handler}></LoginPage>, document.getElementById('dialog'));
 						},
 					}).open();
 				}
@@ -59,10 +68,13 @@ module.exports = window.RightMenu = React.createClass({
 				text: configurations.localization.register,
 				href: '/register',
 				itemClick: function(e) {
+					var handler = function(response, stauts, errorMessage) {
+						dialog.close();
+					};
 					dialog.get({
 						dialogClass: 'dialogNoTitle',
 						open: function () {
-							ReactDOM.render(<RegisterPage />, document.getElementById('dialog'));
+							ReactDOM.render(<RegisterPage ajax={true} callback={handler}></RegisterPage>, document.getElementById('dialog'));
 						},
 					}).open();
 				}
@@ -73,7 +85,7 @@ module.exports = window.RightMenu = React.createClass({
 					dialog.get({
 						dialogClass: 'dialogNoTitle',
 						open: function () {
-							ReactDOM.render(<ChangeLocationPage />, document.getElementById('dialog'));
+							ReactDOM.render(<ChangeLocationPage ajax={true}></ChangeLocationPage>, document.getElementById('dialog'));
 						},
 					}).open();
 				}

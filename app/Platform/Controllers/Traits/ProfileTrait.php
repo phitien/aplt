@@ -28,6 +28,12 @@ trait  ProfileTrait {
 		else
 			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ProfilePage' ) ) );
 	}
+	protected function pajaxgetProfile(Request $request) {
+		if (static::getUser ()->isGuest ())
+			return $this->getLoginResponse ();
+		else
+			return $this->jsonResponse ( 'profile', $this->getPageResponseDataNoBanner ()->setType ( 'ProfilePage' ) );
+	}
 	/**
 	 * Return the authenticated user
 	 *

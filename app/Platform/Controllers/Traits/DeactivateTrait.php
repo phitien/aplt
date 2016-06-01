@@ -36,4 +36,10 @@ trait DeactivateTrait {
 		else
 			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'DeactivatePage' ) ) );
 	}
+	protected function pajaxgetDeactivate(Request $request) {
+		if (static::getUser ()->isGuest ())
+			return $this->getLoginResponse ();
+		else
+			return $this->jsonResponse ( 'deactivate', $this->getPageResponseDataNoBanner ()->setType ( 'DeactivatePage' ) );
+	}
 }

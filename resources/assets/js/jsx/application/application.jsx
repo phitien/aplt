@@ -43,7 +43,7 @@ var Application = React.createClass({
 				<Footer className='container-fluid row clearfix'/>
 				<Navigation className='container-fluid row clearfix'/>
 				<ChatBar className='container-fluid row clearfix'/>
-				<div className="sensitive" id="dialog"></div>
+				<div id="dialog"></div>
 			</div>
 		);
 	}

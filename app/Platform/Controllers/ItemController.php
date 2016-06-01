@@ -73,7 +73,7 @@ class ItemController extends Controller {
 			throw new ItemNotFound ();
 		}
 	}
-	protected function pajaxpostDetails(Request $request, $id) {
+	protected function pajaxgetDetails(Request $request, $id) {
 		if ($data = $this->prepareItemDetailsPageResponseData ( $request, $id )) {
 			return $this->jsonResponse ( 'item_details', $data );
 		} else {
@@ -94,7 +94,7 @@ class ItemController extends Controller {
 	protected function pgetSellitem(Request $request) {
 		return $this->response ( view ( 'base', $this->prepareSellItemPageResponseData ( $request ) ) );
 	}
-	protected function pajaxpostSellitem(Request $request) {
+	protected function pajaxgetSellitem(Request $request) {
 		$this->prepareSellItemPageResponseData ( $request );
 		return $this->jsonResponse ( 'sellitem', $this->prepareSellItemPageResponseData ( $request ) );
 	}
@@ -115,7 +115,7 @@ class ItemController extends Controller {
 	protected function pgetBuyitem(Request $request) {
 		return $this->response ( view ( 'base', $this->prepareBuyItemPageResponseData ( $request ) ) );
 	}
-	protected function pajaxpostBuyitem(Request $request) {
+	protected function pajaxgetBuyitem(Request $request) {
 		return $this->jsonResponse ( 'sellitem', $this->prepareBuyItemPageResponseData ( $request ) );
 	}
 	protected function ppostBuyitem(Request $request) {

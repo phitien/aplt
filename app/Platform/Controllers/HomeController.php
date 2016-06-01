@@ -32,7 +32,7 @@ class HomeController extends Controller {
 	protected function pgetIndex(Request $request) {
 		return $this->response ( view ( 'base', $this->preparePageResponseData ( $request ) ) );
 	}
-	protected function pajaxpostIndex(Request $request) {
+	protected function pajaxgetIndex(Request $request) {
 		return $this->jsonResponse ( 'home_page', $this->preparePageResponseData ( $request ) );
 	}
 	protected function preparePageResponseData(Request $request) {

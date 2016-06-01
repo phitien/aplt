@@ -37,7 +37,7 @@ trait AccountTrait {
 		else
 			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangePasswordPage' ) ) );
 	}
-	protected function pajaxpostPassword(Request $request) {
+	protected function pajaxgetPassword(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->getLoginResponse ();
 		else
@@ -73,7 +73,7 @@ trait AccountTrait {
 		else
 			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeEmailPage' ) ) );
 	}
-	protected function pajaxpostEmail(Request $request) {
+	protected function pajaxgetEmail(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->getLoginResponse ();
 		else
@@ -108,11 +108,11 @@ trait AccountTrait {
 		else
 			return $this->response ( view ( 'base', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeAccountPage' ) ) );
 	}
-	protected function pajaxpostAccount(Request $request) {
+	protected function pajaxgetAccount(Request $request) {
 		if (static::getUser ()->isGuest ())
 			return $this->getLoginResponse ();
-			else
-				return $this->jsonResponse ( 'change_account', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeAccountPage' ) );
+		else
+			return $this->jsonResponse ( 'change_account', $this->getPageResponseDataNoBanner ()->setType ( 'ChangeAccountPage' ) );
 	}
 	/**
 	 * Reset: send reset link to the user email

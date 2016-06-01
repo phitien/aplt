@@ -38,4 +38,8 @@ trait  RegisterTrait {
 		else
 			return $this->redirect ();
 	}
+	protected function pajaxgetRegister(Request $request) {
+		if (static::getUser ()->isGuest ())
+			return $this->jsonResponse ( 'register_page', $this->getPageResponseData ()->setType ( 'RegisterPage' ) );
+	}
 }

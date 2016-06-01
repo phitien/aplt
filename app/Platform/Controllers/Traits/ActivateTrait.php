@@ -58,4 +58,8 @@ trait  ActivateTrait {
 		else
 			return $this->redirect ();
 	}
+	protected function pajaxgetCode(Request $request) {
+		if (static::getUser ()->isGuest ())
+			return $this->jsonResponse ( 'send_activation', $this->getPageResponseDataNoBanner ()->setType ( 'SendActivationPage' ) );
+	}
 }

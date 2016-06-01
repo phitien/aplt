@@ -35,7 +35,7 @@ Object.assign(window, {
 	hideClassName : function(classNameToHide, exceptions) {
 		$('.' + classNameToHide).not(exceptions).hide();
 	},
-	submitForm : function(form) {
+	submitForm : function(form, ajax, callback) {
 		$('<input>').attr({
 			type : 'hidden',
 			name : '_token',
@@ -46,7 +46,17 @@ Object.assign(window, {
 			name : 'redirect',
 			value : location.href
 		}).appendTo(form);
-		form.submit();
+		if (!ajax)
+			form.submit();
+		else {
+			var $form = $(form); 
+			var url = $form.attr('action') ? $form.attr('action') : '/';
+			var data = {};
+			$form.serializeArray().map(function(x){data[x.name] = x.value;});
+			window.ajax.post(url, function(data, status, response) {
+				callback(data, status, response);
+			}, data);
+		}
 	},
 	dialog : {
 		get : function(options, container) {
@@ -67,6 +77,11 @@ Object.assign(window, {
 		},
 		open : function () {
 			this.$.dialog('open');
+			return this;
+		},
+		close : function() {
+			if (this.$)
+				this.$.dialog('close');
 			return this;
 		}
 	},

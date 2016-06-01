@@ -18,12 +18,15 @@ module.exports = window.FormView = {
 		});
 	},
 	submit : function(model) {
-		var form = this.getRootDom();
-		if (form.tagName.toLowerCase() == 'form') {
-			submitForm(form);
+		var ajax = this.props.ajax ? this.props.ajax : false;
+		var callback = this.props.callback ? this.props.callback : function(data, status, response) {};
+		var form, root = this.getRootDom();
+		if (root.tagName.toLowerCase() == 'form') {
+			form = root;
 		} else {
-			submitForm($(form).find('form').get(0));
+			form = $(form).find('form').get(0);
 		}
+		submitForm(form, ajax, callback);
 	},
 	showImagesPreview : function(input, previewContainer) {
 		if (input.files && input.files.length > 0) {
