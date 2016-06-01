@@ -96,7 +96,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 				'baseUrl' => static::getBaseUrl (),
 				'active' => 0 
 		];
-		$user = parent::create ( $attributes );
+		$user = parent::on ( 'im' )->create ( $attributes );
 		$user->generateActivationCode ();
 		return $user;
 	}

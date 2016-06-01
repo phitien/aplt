@@ -8,17 +8,18 @@ class CreateRoleActionTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::connection ( 'im' )->create ( 'role_action', function (Blueprint $table) {
-			$table->increments ( 'id' );
-			$table->integer ( 'role_id' )->unsigned ();
-			$table->foreign ( 'role_id' )->references ( 'id' )->on ( 'roles' )->onDelete ( 'cascade' );
-			$table->integer ( 'action_id' )->unsigned ();
-			$table->foreign ( 'action_id' )->references ( 'id' )->on ( 'actions' )->onDelete ( 'cascade' );
-			$table->unique ( [ 
-					'role_id',
-					'action_id' 
-			], 'role_action_unique' );
-		} );
+		if (! Schema::connection ( 'im' )->hasTable ( 'role_action' ))
+			Schema::connection ( 'im' )->create ( 'role_action', function (Blueprint $table) {
+				$table->increments ( 'id' );
+				$table->integer ( 'role_id' )->unsigned ();
+				$table->foreign ( 'role_id' )->references ( 'id' )->on ( 'roles' )->onDelete ( 'cascade' );
+				$table->integer ( 'action_id' )->unsigned ();
+				$table->foreign ( 'action_id' )->references ( 'id' )->on ( 'actions' )->onDelete ( 'cascade' );
+				$table->unique ( [ 
+						'role_id',
+						'action_id' 
+				], 'role_action_unique' );
+			} );
 	}
 	
 	/**
@@ -27,6 +28,7 @@ class CreateRoleActionTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::connection ( 'im' )->dropIfExists ( 'role_action' );
+// 		if (! Schema::connection ( 'im' )->hasTable ( 'role_action' ))
+// 			Schema::connection ( 'im' )->dropIfExists ( 'role_action' );
 	}
 }

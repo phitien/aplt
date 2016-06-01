@@ -5,7 +5,7 @@ namespace App\Platform\Controllers;
 use Illuminate\Http\Request;
 use App\Platform\Models\Item;
 use Carbon\Carbon;
-use App\Platform\Exceptions\UserNotFound;
+use App\Shared\Exceptions\UserNotFound;
 use App\Platform\Controllers\Traits\ItemLikeTrait;
 use App\Platform\Response\ListPageResponseData;
 use App\Platform\Response\PageResponseData;

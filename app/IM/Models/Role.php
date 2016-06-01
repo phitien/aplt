@@ -67,7 +67,7 @@ class Role extends Model {
 	 */
 	public static function getSupremeRole() {
 		if (null === static::$_supremeRole) {
-			static::$_supremeRole = static::where ( 'code', '=', Config::ROLE_SUPREME )->first ();
+			static::$_supremeRole = static::on ( 'im' )->where ( 'code', '=', Config::ROLE_SUPREME )->first ();
 		}
 		return static::$_supremeRole;
 	}
@@ -83,7 +83,7 @@ class Role extends Model {
 	 */
 	public static function getManagerRole() {
 		if (null === static::$_managerRole) {
-			static::$_managerRole = static::where ( 'code', '=', Config::ROLE_MANAGER )->first ();
+			static::$_managerRole = static::on ( 'im' )->where ( 'code', '=', Config::ROLE_MANAGER )->first ();
 		}
 		return static::$_managerRole;
 	}
@@ -99,7 +99,7 @@ class Role extends Model {
 	 */
 	public static function getUserRole() {
 		if (null === static::$_userRole) {
-			static::$_userRole = static::where ( 'code', '=', Config::ROLE_USER )->first ();
+			static::$_userRole = static::on ( 'im' )->where ( 'code', '=', Config::ROLE_USER )->first ();
 		}
 		return static::$_userRole;
 	}
@@ -115,7 +115,7 @@ class Role extends Model {
 	 */
 	public static function getGuestRole() {
 		if (null === static::$_guestRole) {
-			static::$_guestRole = static::where ( 'code', '=', Config::ROLE_GUEST )->first ();
+			static::$_guestRole = static::on ( 'im' )->where ( 'code', '=', Config::ROLE_GUEST )->first ();
 		}
 		return static::$_guestRole;
 	}
@@ -193,7 +193,7 @@ class Role extends Model {
 	}
 	/**
 	 *
-	 * Save the model and re-build App\IM\Config\RolesActions class
+	 * Save the model and re-build App\Shared\Config\RolesActions class
 	 *
 	 * @return bool
 	 */
@@ -204,7 +204,7 @@ class Role extends Model {
 	}
 	/**
 	 *
-	 * Delete the model and re-build App\IM\Config\RolesActions class
+	 * Delete the model and re-build App\Shared\Config\RolesActions class
 	 *
 	 * @return bool
 	 */

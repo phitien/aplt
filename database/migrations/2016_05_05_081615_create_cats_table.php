@@ -8,24 +8,25 @@ class CreateCatsTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::connection ( 'app' )->create ( 'cats', function (Blueprint $table) {
-			$table->increments ( 'id' );
-			$table->integer ( 'parent_id' )->unsigned ()->nullable ();
-			$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'cats' )->onDelete ( 'cascade' );
-			//
-			$table->string ( 'code' )->unique ();
-			$table->boolean ( 'active' )->nullable ()->default ( 0 );
-			$table->boolean ( 'atomic' )->nullable ()->default ( 0 );
-			//
-			$table->integer ( 'order' )->unsigned ();
-			//
-			$table->timestamps ();
-			$table->softDeletes ();
-			//
-			$table->index ( [ 
-					'code' 
-			], 'cat_search_index' );
-		} );
+		if (! Schema::connection ( 'app' )->hasTable ( 'cats' ))
+			Schema::connection ( 'app' )->create ( 'cats', function (Blueprint $table) {
+				$table->increments ( 'id' );
+				$table->integer ( 'parent_id' )->unsigned ()->nullable ();
+				$table->foreign ( 'parent_id' )->references ( 'id' )->on ( 'cats' )->onDelete ( 'cascade' );
+				//
+				$table->string ( 'code' )->unique ();
+				$table->boolean ( 'active' )->nullable ()->default ( 0 );
+				$table->boolean ( 'atomic' )->nullable ()->default ( 0 );
+				//
+				$table->integer ( 'order' )->unsigned ();
+				//
+				$table->timestamps ();
+				$table->softDeletes ();
+				//
+				$table->index ( [ 
+						'code' 
+				], 'cat_search_index' );
+			} );
 	}
 	
 	/**
@@ -34,12 +35,12 @@ class CreateCatsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::connection ( 'app' )->table ( 'cats', function (Blueprint $table) {
-			$table->dropForeign ( [ 
-					'parent_id' 
-			] );
-			$table->dropIndex ( 'cat_search_index' );
-		} );
-		Schema::connection ( 'app' )->dropIfExists ( 'cats' );
+		// Schema::connection ( 'app' )->table ( 'cats', function (Blueprint $table) {
+		// $table->dropForeign ( [
+		// 'parent_id'
+		// ] );
+		// $table->dropIndex ( 'cat_search_index' );
+		// } );
+		// Schema::connection ( 'app' )->dropIfExists ( 'cats' );
 	}
 }

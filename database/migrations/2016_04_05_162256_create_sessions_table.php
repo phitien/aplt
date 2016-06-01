@@ -8,14 +8,15 @@ class CreateSessionsTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::connection ( 'im' )->create ( 'sessions', function (Blueprint $table) {
-			$table->string ( 'id' )->unique ();
-			$table->integer ( 'user_id' )->nullable ();
-			$table->string ( 'ip_address', 45 )->nullable ();
-			$table->text ( 'user_agent' )->nullable ();
-			$table->text ( 'payload' );
-			$table->integer ( 'last_activity' );
-		} );
+		if (! Schema::connection ( 'im' )->hasTable ( 'sessions' ))
+			Schema::connection ( 'im' )->create ( 'sessions', function (Blueprint $table) {
+				$table->string ( 'id' )->unique ();
+				$table->integer ( 'user_id' )->nullable ();
+				$table->string ( 'ip_address', 45 )->nullable ();
+				$table->text ( 'user_agent' )->nullable ();
+				$table->text ( 'payload' );
+				$table->integer ( 'last_activity' );
+			} );
 	}
 	
 	/**
@@ -24,6 +25,7 @@ class CreateSessionsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::connection ( 'im' )->dropIfExists ( 'sessions' );
+		// if (Schema::connection ( 'im' )->hasTable ( 'sessions' ))
+		// Schema::connection ( 'im' )->dropIfExists ( 'sessions' );
 	}
 }

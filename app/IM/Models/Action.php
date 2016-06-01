@@ -55,14 +55,14 @@ class Action extends Model {
 	 */
 	public static function getAction($code) {
 		try {
-			return static::where ( 'code', '=', $code )->first ();
+			return static::on ( 'im' )->where ( 'code', '=', $code )->first ();
 		} catch ( Exception $e ) {
 		}
 		return null;
 	}
 	/**
 	 *
-	 * Save the model and re-build App\IM\Config\RolesActions class
+	 * Save the model and re-build App\Shared\Config\RolesActions class
 	 *
 	 * @return bool
 	 */
@@ -73,7 +73,7 @@ class Action extends Model {
 	}
 	/**
 	 *
-	 * Delete the model and re-build App\IM\Config\RolesActions class
+	 * Delete the model and re-build App\Shared\Config\RolesActions class
 	 *
 	 * @return bool
 	 */

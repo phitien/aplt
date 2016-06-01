@@ -8,9 +8,10 @@ class DatabaseSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		$this->call ( SchemaUpdateSeeder::class );
+		// $this->call ( IMDatabaseSeeder::class );
 		// $this->call ( PlacesTableSeeder::class );
 		// $this->call ( LocationsTableSeeder::class );
 		// $this->call ( CatsTableSeeder::class );
+		$this->call ( SchemaUpdateSeeder::class );
 	}
 }

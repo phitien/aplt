@@ -8,12 +8,13 @@ class CreateRolesTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::connection ( 'im' )->create ( 'roles', function (Blueprint $table) {
-			$table->increments ( 'id' );
-			$table->string ( 'code' )->unique ();
-			$table->string ( 'name' );
-			$table->string ( 'description' );
-		} );
+		if (! Schema::connection ( 'im' )->hasTable ( 'roles' ))
+			Schema::connection ( 'im' )->create ( 'roles', function (Blueprint $table) {
+				$table->increments ( 'id' );
+				$table->string ( 'code' )->unique ();
+				$table->string ( 'name' );
+				$table->string ( 'description' );
+			} );
 	}
 	
 	/**
@@ -22,6 +23,7 @@ class CreateRolesTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::connection ( 'im' )->dropIfExists ( 'roles' );
+// 		if (Schema::connection ( 'im' )->hasTable ( 'roles' ))
+// 			Schema::connection ( 'im' )->dropIfExists ( 'roles' );
 	}
 }

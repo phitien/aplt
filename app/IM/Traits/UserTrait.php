@@ -4,8 +4,8 @@ namespace App\IM\Traits;
 
 use App\IM\Config;
 use JWTAuth;
-use App\IM\Exceptions\TokenNotFound;
-use App\IM\Exceptions\UserNotFound;
+use App\Shared\Exceptions\TokenNotFound;
+use App\Shared\Exceptions\UserNotFound;
 use App\IM\Models\User;
 use Exception;
 

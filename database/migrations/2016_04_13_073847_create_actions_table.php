@@ -8,12 +8,13 @@ class CreateActionsTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::connection ( 'im' )->create ( 'actions', function (Blueprint $table) {
-			$table->increments ( 'id' );
-			$table->string ( 'code' )->unique ();
-			$table->string ( 'name' );
-			$table->text ( 'description' );
-		} );
+		if (! Schema::connection ( 'im' )->hasTable ( 'actions' ))
+			Schema::connection ( 'im' )->create ( 'actions', function (Blueprint $table) {
+				$table->increments ( 'id' );
+				$table->string ( 'code' )->unique ();
+				$table->string ( 'name' );
+				$table->text ( 'description' );
+			} );
 	}
 	
 	/**
@@ -22,6 +23,7 @@ class CreateActionsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
-		Schema::connection ( 'im' )->dropIfExists ( 'actions' );
+		// if (Schema::connection ( 'im' )->hasTable ( 'actions' ))
+		// Schema::connection ( 'im' )->dropIfExists ( 'actions' );
 	}
 }

@@ -8,8 +8,8 @@ use Exception;
 use Closure;
 use App\IM\Config;
 use Illuminate\Http\Response;
-use App\IM\Exceptions\TokenNotFound;
-use App\IM\Exceptions\UserNotFound;
+use App\Shared\Exceptions\TokenNotFound;
+use App\Shared\Exceptions\UserNotFound;
 
 class Authentication extends Middleware {
 	/**
