@@ -172,14 +172,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 	 * @see \Illuminate\Database\Eloquent\Model::toArray()
 	 */
 	public function toArray() {
-		$attributes = parent::toArray ();
-		
-		return array_merge ( $attributes, [ 
-				'displayname' => $this->getDisplayName (),
-				'extension' => $this->extension ()->all (),
-				'followers' => $this->followers->lists('id'),
-				'following' => $this->following->lists('id') 
-		] );
+		if (! $this->isGuest ()) {
+			$attributes = parent::toArray ();
+			return array_merge ( $attributes, [ 
+					'displayname' => $this->getDisplayName (),
+					'extension' => $this->extension ()->all (),
+					'followers' => $this->followers->lists ( 'id' ),
+					'following' => $this->following->lists ( 'id' ) 
+			] );
+		}
+		return parent::toArray ();
 	}
 	protected function getDisplayName() {
 		return $this->alias ? $this->alias : 

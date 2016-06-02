@@ -33,7 +33,7 @@ class Helper {
 	public static $_userInfoFromRequest;
 	/**
 	 *
-	 * @var \App\Platform\Models\User
+	 * @var \App\Shared\Models\User
 	 */
 	public static $_user;
 	/**

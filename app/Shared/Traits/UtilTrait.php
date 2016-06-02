@@ -83,4 +83,41 @@ trait UtilTrait {
 	protected static function getBaseUri() {
 		return (request ()->secure () ? 'https://' : 'http://') . strtolower ( request ()->server ( 'SERVER_NAME' ) );
 	}
+	/**
+	 *
+	 * @param unknown $header        	
+	 * @return array cookies
+	 */
+	protected static function cookie_parse($header) {
+		$cookies = array ();
+		foreach ( $header as $line ) {
+			if (preg_match ( '/^Set-Cookie: /i', $line )) {
+				$line = preg_replace ( '/^Set-Cookie: /i', '', trim ( $line ) );
+				$csplit = explode ( ';', $line );
+				$cdata = array ();
+				foreach ( $csplit as $data ) {
+					$cinfo = explode ( '=', $data );
+					$cinfo [0] = trim ( $cinfo [0] );
+					if ($cinfo [0] == 'expires')
+						$cinfo [1] = strtotime ( $cinfo [1] );
+					if ($cinfo [0] == 'secure')
+						$cinfo [1] = "true";
+					if (in_array ( $cinfo [0], array (
+							'domain',
+							'expires',
+							'path',
+							'secure',
+							'comment' 
+					) )) {
+						$cdata [trim ( $cinfo [0] )] = $cinfo [1];
+					} else {
+						$cdata ['value'] ['key'] = $cinfo [0];
+						$cdata ['value'] ['value'] = $cinfo [1];
+					}
+				}
+				$cookies [] = $cdata;
+			}
+		}
+		return $cookies;
+	}
 }

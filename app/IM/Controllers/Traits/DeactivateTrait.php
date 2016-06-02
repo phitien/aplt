@@ -15,7 +15,7 @@ trait  DeactivateTrait {
 		if ($response = $this->enterWrongPassword ( $request )) {
 			return $response;
 		}
-		$ok = $this->user ()->deactivate ();
+		$ok = static::getUser ()->deactivate ();
 		$this->doLogout ();
 		return $this->jsonResponse ( 'deactivated_successfully', null );
 	}

@@ -3,7 +3,7 @@
 namespace App\Platform\Traits;
 
 use Mail;
-use App\Platform\Models\User;
+use App\Shared\Models\User;
 use Html;
 use App\Platform\Config;
 

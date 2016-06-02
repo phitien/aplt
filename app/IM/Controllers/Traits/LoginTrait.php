@@ -43,9 +43,9 @@ trait  LoginTrait {
 			if (! $token = JWTAuth::fromUser ( $credentials ))
 				return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_UNAUTHORIZED );
 		}
-		$this->setToken ( $token );
-		$this->setUser ( JWTAuth::authenticate ( $token ) );
-		return $this->jsonResponse ( 'login_successfully', $this->user () );
+		static::setToken ( $token );
+		static::setUser ( JWTAuth::authenticate ( $token ) );
+		return $this->jsonResponse ( 'login_successfully' );
 	}
 	/**
 	 * Logout
@@ -60,8 +60,9 @@ trait  LoginTrait {
 	 * @return void
 	 */
 	protected function doLogout() {
-		JWTAuth::invalidate ( $this->token () );
-		$this->setToken ( Config::INVALID_TOKEN );
-		return $this->jsonResponse ( 'logged_out', null );
+		JWTAuth::invalidate ( static::token () );
+		static::setToken ( Config::INVALID_TOKEN );
+		static::setUser ( User::getGuest () );
+		return $this->jsonResponse ( 'logged_out' );
 	}
 }

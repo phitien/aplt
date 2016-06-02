@@ -18,8 +18,6 @@ trait ResponseTrait {
 
 		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )-> //
 
-		withCookie ( Cookie::forever ( Config::SESSION_KEY, static::encrypt ( ( string ) static::getUser () ) ), true )-> //
-
 		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::getLocationId () ), true )-> //
 
 		withCookie ( Cookie::forever ( Config::MODE, static::getMode () ), true );
@@ -32,8 +30,6 @@ trait ResponseTrait {
 		return $response-> //
 
 		withCookie ( Config::TOKEN_KEY, null, true )-> //
-
-		withCookie ( Config::SESSION_KEY, null, true )-> //
 
 		withCookie ( Config::MODE, null, true );
 	}
@@ -134,15 +130,5 @@ trait ResponseTrait {
 				'message' => $message,
 				'data' => $data instanceof PageResponseData ? $data->getData () : $data
 		] );
-	}
-	/**
-	 * set the IM token to the response cookies.
-	 *
-	 * @param \Illuminate\Http\Response $response
-	 * @param string $cookie
-	 * @return \Illuminate\Http\Response
-	 */
-	public function setResponseToken($response, $token) {
-		return $response->withCookie ( Config::TOKEN_KEY, $token, true );
 	}
 }

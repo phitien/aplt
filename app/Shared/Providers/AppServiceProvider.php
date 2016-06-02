@@ -27,16 +27,16 @@ class AppServiceProvider extends BaseAppServiceProvider {
 			case 'media.ezsell.com' :
 				config ( [ 
 						'database.default' => 'ezsell',
-						'auth.providers.users.model' => \App\Media\Models\User::class,
-						'jwt.user' => \App\Media\Models\User::class 
+						'auth.providers.users.model' => \App\Shared\Models\User::class,
+						'jwt.user' => \App\Shared\Models\User::class 
 				] );
 				break;
 			case 'www.ezsell.com' :
 			default :
 				config ( [ 
 						'database.default' => 'app',
-						'auth.providers.users.model' => \App\Platform\Models\User::class,
-						'jwt.user' => \App\Platform\Models\User::class 
+						'auth.providers.users.model' => \App\Shared\Models\User::class,
+						'jwt.user' => \App\Shared\Models\User::class 
 				] );
 				
 				break;

@@ -43,12 +43,4 @@ interface IResponse {
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function updateJsonResponse(JsonResponse $response, $message = null, $data = null);
-	/**
-	 * set the IM token to the response cookies.
-	 *
-	 * @param \Illuminate\Http\Response $response        	
-	 * @param string $cookie        	
-	 * @return \Illuminate\Http\Response
-	 */
-	public function setResponseToken($response, $cookie);
 }

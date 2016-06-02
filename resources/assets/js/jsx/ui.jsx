@@ -51,12 +51,15 @@ Object.assign(window, {
 		else {
 			var $form = $(form); 
 			var url = $form.attr('action') ? $form.attr('action') : '/';
-			var data = {};
-			$form.serializeArray().map(function(x){data[x.name] = x.value;});
-			window.ajax.post(url, function(data, status, response) {
+			window.ajax.post(url, function(data, status, response) {	
 				callback(data, status, response);
-			}, data);
+			}, window.formToJson(form));
 		}
+	},
+	formToJson : function(form) {
+		var data = {};
+		$(form).serializeArray().map(function(x){data[x.name] = x.value;});
+		return data;
 	},
 	dialog : {
 		get : function(options, container) {

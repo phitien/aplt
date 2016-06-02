@@ -28,7 +28,7 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	protected function getProfile(Request $request) {
-		return $this->jsonResponse ( 'profile', $this->user () );
+		return $this->jsonResponse ( 'profile', static::getUser () );
 	}
 	/**
 	 * Return the authenticated user
@@ -45,10 +45,10 @@ trait  ProfileTrait {
 			if ($msg = $this->validateProfileData ( $data )) {
 				return $this->jsonResponse ( $msg, null, Response::HTTP_BAD_REQUEST );
 			}
-			$this->user ()->fill ( $data );
-			$this->user ()->save ();
+			static::getUser ()->fill ( $data );
+			static::getUser ()->save ();
 			// the token is valid and we have found the user via the sub claim
-			return $this->jsonResponse ( 'update_profile_successfully', $this->user () );
+			return $this->jsonResponse ( 'update_profile_successfully', static::getUser () );
 		} catch ( Exception $e ) {
 			return $this->jsonResponse ( 'update_profile_unsuccessfully', $e->getMessage (), Response::HTTP_BAD_REQUEST );
 		}
@@ -73,7 +73,7 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	protected function getProfileEx(Request $request) {
-		return $this->jsonResponse ( 'profile_extension', $this->user ()->extension ()->all () );
+		return $this->jsonResponse ( 'profile_extension', static::getUser ()->extension ()->all () );
 	}
 	/**
 	 * Return the authenticated user
@@ -82,8 +82,8 @@ trait  ProfileTrait {
 	 * @return \Illuminate\Http\Response
 	 */
 	protected function saveProfileEx(Request $request) {
-		$this->user ()->fillEx ( $request->request->all () )->save ();
+		static::getUser ()->fillEx ( $request->request->all () )->save ();
 		// the token is valid and we have found the user via the sub claim
-		return $this->jsonResponse ( 'update_profile_extension_successfully', $this->user ()->extension ()->all () );
+		return $this->jsonResponse ( 'update_profile_extension_successfully', static::getUser ()->extension ()->all () );
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace App\Platform\Controllers\Traits;
 
-use App\Platform\Models\User;
+use App\Shared\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

@@ -11147,14 +11147,17 @@ Object.assign(window, {
 		if (!ajax) form.submit();else {
 			var $form = $(form);
 			var url = $form.attr('action') ? $form.attr('action') : '/';
-			var data = {};
-			$form.serializeArray().map(function (x) {
-				data[x.name] = x.value;
-			});
 			window.ajax.post(url, function (data, status, response) {
 				callback(data, status, response);
-			}, data);
+			}, window.formToJson(form));
 		}
+	},
+	formToJson: function formToJson(form) {
+		var data = {};
+		$(form).serializeArray().map(function (x) {
+			data[x.name] = x.value;
+		});
+		return data;
 	},
 	dialog: {
 		get: function get(options, container) {
@@ -11299,6 +11302,9 @@ Object.assign(window, {
 					'_token': token(),
 					'mode': mode()
 				}, data),
+				xhrFields: {
+					withCredentials: true
+				},
 				success: callback
 			}).fail(callback);
 		},

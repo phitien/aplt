@@ -2,9 +2,7 @@
 
 namespace App\Platform\Traits;
 
-use App\Platform\Config;
-use App\Platform\Models\User;
-use Exception;
+use App\Shared\Models\User;
 use App\Platform\Helper;
 
 trait SessionTrait {
@@ -17,40 +15,10 @@ trait SessionTrait {
 	}
 	/**
 	 *
-	 * @return string $_userInfoFromRequest
-	 */
-	protected static function getUserInfoFromRequest() {
-		if (! Helper::$_userInfoFromRequest) {
-			Helper::$_userInfoFromRequest = static::param ( Config::SESSION_KEY );
-		}
-		return Helper::$_userInfoFromRequest;
-	}
-	/**
-	 *
-	 * @param string $_userInfoFromRequest        	
-	 * @return string $_userInfoFromRequest
-	 */
-	protected static function setUserInfoFromRequest($userInfoFromRequest) {
-		Helper::$_userInfoFromRequest = $userInfoFromRequest;
-	}
-	/**
-	 *
 	 * @return User
 	 */
-	public static function getUser($throwExceptionIfNotFound = false) {
-		if (! Helper::$_user) {
-			if (static::getToken ()) {
-				try {
-					// try to get user info by sending get user profile api to im
-					$reponse = static::apiCallProfile ();
-				} catch ( Exception $e ) {
-				}
-			}
-			// if no user found, set it to guest
-			if (! Helper::$_user)
-				Helper::$_user = User::getGuest ();
-		}
-		return Helper::$_user;
+	public static function getUser() {
+		return Helper::$_user ? Helper::$_user : static::setUser ( User::getGuest () );
 	}
 	/**
 	 *
@@ -58,5 +26,6 @@ trait SessionTrait {
 	 */
 	protected static function setUser(User $user) {
 		Helper::$_user = $user;
+		return Helper::$_user;
 	}
 }

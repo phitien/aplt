@@ -5,27 +5,26 @@ namespace App\IM\Traits;
 use App\IM\Config;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Cookie;
 
 trait ResponseTrait
 {
 	/**
 	 *
-	 * @param \Illuminate\Http\Response $response        	
+	 * @param BaseResponse $response        	
 	 */
-	protected static function applyCookies($response) {
-		return $response-> //
+	protected static function applyCookies(BaseResponse $response) {
+		return $response->withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )->
 
-		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true );
+		header ( Config::SESSION_KEY, ( string ) static::getUser (), true );
 	}
 	/**
 	 *
-	 * @param \Illuminate\Http\Response $response        	
+	 * @param BaseResponse $response        	
 	 */
-	protected static function clearCookies($response) {
-		return $response-> //
-
-		withCookie ( Config::TOKEN_KEY, null, true );
+	protected static function clearCookies(BaseResponse $response) {
+		return $response->withCookie ( Cookie::forever ( Config::TOKEN_KEY, Config::INVALID_TOKEN ), true );
 	}
 	/**
 	 * Build response
@@ -34,7 +33,7 @@ trait ResponseTrait
 	 * @param number $status        	
 	 * @param array $headers        	
 	 * @param bool $secure        	
-	 * @return \Illuminate\Http\Response
+	 * @return BaseResponse
 	 */
 	public function redirect($to = Config::HOME_PAGE, $status = 302, $headers = [], $secure = null) {
 		return static::applyCookies ( redirect ( $to, $status, $headers, $secure ) );
@@ -79,11 +78,11 @@ trait ResponseTrait
 	/**
 	 * set the IM token to the response cookies.
 	 *
-	 * @param \Illuminate\Http\Response $response        	
+	 * @param BaseResponse $response        	
 	 * @param string $cookie        	
-	 * @return \Illuminate\Http\Response
+	 * @return BaseResponse
 	 */
-	public function setResponseToken($response, $token) {
+	public function setResponseToken(BaseResponse $response, $token) {
 		return $response->withCookie ( Config::TOKEN_KEY, $token, true );
 	}
 }

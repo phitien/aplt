@@ -90,16 +90,6 @@ trait ResponseTrait
 		] );
 	}
 	/**
-	 * set the IM token to the response cookies.
-	 *
-	 * @param \Illuminate\Http\Response $response        	
-	 * @param string $cookie        	
-	 * @return \Illuminate\Http\Response
-	 */
-	public function setResponseToken($response, $token) {
-		return $response->withCookie ( Config::TOKEN_KEY, $token, true );
-	}
-	/**
 	 *
 	 * @param string $path        	
 	 */

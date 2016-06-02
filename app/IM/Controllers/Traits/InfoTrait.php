@@ -25,12 +25,12 @@ trait  InfoTrait {
 				$ids = explode ( ',', $ids );
 				if ($ids) {
 					if ($request->input ( 'first' )) {
-						$info = Info::find ( $ids [0] );
+						$info = Info::on ( 'im' )->find ( $ids [0] );
 						if ($info) {
 							return $this->jsonResponse ( 'user_info', $info );
 						}
 					} else {
-						$users = Info::whereIn ( 'id', $ids )->get ();
+						$users = Info::on ( 'im' )->whereIn ( 'id', $ids )->get ();
 						$info = [ ];
 						foreach ( $users as $user ) {
 							$info [$user->id] = $user;
@@ -42,14 +42,14 @@ trait  InfoTrait {
 		} else {
 			$code = $request->input ( 'code' );
 			if ($code) {
-				$info = Info::where ( 'name', $code )->first ();
+				$info = Info::on ( 'im' )->where ( 'name', $code )->first ();
 				if ($info) {
 					return $this->jsonResponse ( 'user_info', $info );
 				}
 			} else {
 				$email = $request->input ( 'email' );
 				if ($email) {
-					$info = Info::where ( 'email', $email )->first ();
+					$info = Info::on ( 'im' )->where ( 'email', $email )->first ();
 					if ($info) {
 						return $this->jsonResponse ( 'user_info', $info );
 					}

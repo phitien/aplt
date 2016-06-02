@@ -24,7 +24,7 @@ abstract class Controller extends SharedController {
 		if (! $current_password) {
 			return $this->jsonResponse ( 'current_password_not_provided', null, Response::HTTP_BAD_REQUEST );
 		}
-		if (strlen ( $current_password ) > 0 && ! Hash::check ( $current_password, $this->user ()->password )) {
+		if (strlen ( $current_password ) > 0 && ! Hash::check ( $current_password, static::getUser ()->password )) {
 			return $this->jsonResponse ( 'current_password_incorrect', null, Response::HTTP_BAD_REQUEST );
 		}
 		return false;
@@ -104,7 +104,7 @@ abstract class Controller extends SharedController {
 	 */
 	protected function validateProfileData(array $data) {
 		$email = $data ['second_email'];
-		if ($email != $this->user ()->second_email) {
+		if ($email != static::getUser ()->second_email) {
 			$validator = Validator::make ( $data, [ 
 					'second_email' => 'unique:users,second_email' 
 			] );
@@ -113,7 +113,7 @@ abstract class Controller extends SharedController {
 			}
 		}
 		$mobile = $data ['mobile'];
-		if ($mobile != $this->user ()->mobile) {
+		if ($mobile != static::getUser ()->mobile) {
 			$validator = Validator::make ( $data, [ 
 					'mobile' => 'unique:users,mobile' 
 			] );

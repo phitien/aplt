@@ -3,6 +3,7 @@
 namespace App\Platform\Traits;
 
 use App\Platform\Config;
+use App\Platform\Helper;
 
 trait TokenTrait {
 	/**
@@ -10,10 +11,9 @@ trait TokenTrait {
 	 * @return string token
 	 */
 	public static function getToken() {
-		if (! \App\Platform\Helper::$_token) {
-			\App\Platform\Helper::$_token = static::param ( Config::TOKEN_KEY );
-		}
-		return \App\Platform\Helper::$_token == Config::INVALID_TOKEN ? null : \App\Platform\Helper::$_token;
+		if (! Helper::$_token)
+			Helper::$_token = static::param ( Config::TOKEN_KEY );
+		return Helper::$_token;
 	}
 	/**
 	 *
@@ -21,6 +21,6 @@ trait TokenTrait {
 	 * @return string token
 	 */
 	protected static function setToken($token) {
-		\App\Platform\Helper::$_token = $token;
+		Helper::$_token = $token;
 	}
 }
