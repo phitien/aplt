@@ -46,9 +46,6 @@ Object.assign(window, {
 					'_token' : token(),
 					'mode' : mode()
 				}, data),
-				xhrFields: {
-				    withCredentials: true
-				},
 				success : callback,
 			}).fail(callback);
 		},

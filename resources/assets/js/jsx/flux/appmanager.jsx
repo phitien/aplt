@@ -78,9 +78,9 @@ Object.assign(appManager, {
 	},
 	user : function(val) {
 		if (val != null) {
-			this.set('user', JSON.parse($.base64.decode(val)));
+			this.set('user', val);
 		}
-		return this.get('user');
+		return JSON.parse($.base64.decode(this.get('user')));
 	},
 	socketUri : function(val) {
 		if (val != null)

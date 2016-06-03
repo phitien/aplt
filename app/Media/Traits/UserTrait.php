@@ -31,12 +31,12 @@ trait UserTrait
 	}
 	/**
 	 *
-	 * @var \App\User
+	 * @var User
 	 */
 	protected static $_user;
 	/**
 	 *
-	 * @return \App\User
+	 * @return User
 	 */
 	protected static function getUser() {
 		return static::$_user ? static::$_user : static::setUser ( User::getGuest () );
@@ -46,6 +46,6 @@ trait UserTrait
 	 * @param User $user        	
 	 */
 	protected static function setUser(User $user) {
-		static::$_user = $user;
+		return static::$_user = $user;
 	}
 }

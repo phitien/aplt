@@ -9925,9 +9925,9 @@ Object.assign(appManager, {
 	},
 	user: function user(val) {
 		if (val != null) {
-			this.set('user', JSON.parse($.base64.decode(val)));
+			this.set('user', val);
 		}
-		return this.get('user');
+		return JSON.parse($.base64.decode(this.get('user')));
 	},
 	socketUri: function socketUri(val) {
 		if (val != null) this.set('socketUri', val);
@@ -10156,29 +10156,25 @@ module.exports = window.Dispatcher = Dispatcher;
  * @class Store
  */
 module.exports = window.Store = function () {
-	var _data = {};
 	return {
 		has: function has(name) {
-			return _data.hasOwnProperty(name);
+			return localStorage.hasOwnProperty(name);
 		},
 		get: function get(name, defaultValue) {
-			if (this.has(name)) return _data[name];
+			if (this.has(name)) return JSON.parse(localStorage.getItem(name));
 			return defaultValue;
 		},
 		set: function set(name, value) {
-			_data[name] = value;
+			localStorage.setItem(name, JSON.stringify(value));
 			return this;
 		},
 		assign: function assign(name, value) {
-			if (this.has(name)) Object.assign(_data[name], value);else _data[name] = Object.assign({}, value);
+			this.set(name, Object.assign(this.get(name, {}), value));
 			return this;
 		},
 		remove: function remove(name) {
-			if (this.has(name)) delete _data[name];
+			localStorage.removeItem(name);
 			return this;
-		},
-		showdata: function showdata() {
-			console.log(_data);
 		}
 	};
 };
@@ -11303,9 +11299,6 @@ Object.assign(window, {
 					'_token': token(),
 					'mode': mode()
 				}, data),
-				xhrFields: {
-					withCredentials: true
-				},
 				success: callback
 			}).fail(callback);
 		},
