@@ -18,6 +18,9 @@ trait SessionTrait {
 	 * @return User
 	 */
 	public static function getUser() {
+		if (! Helper::$_user) {
+			static::apiCallProfile ();
+		}
 		return Helper::$_user ? Helper::$_user : static::setUser ( User::getGuest () );
 	}
 	/**

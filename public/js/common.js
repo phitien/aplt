@@ -11299,7 +11299,12 @@ Object.assign(window, {
 					'_token': token(),
 					'mode': mode()
 				}, data),
-				success: callback
+				success: function success(data, status, response) {
+					callback.bind(this)(data, status, response);
+				},
+				xhrFields: {
+					withCredentials: true
+				}
 			}).fail(callback);
 		},
 		get: function get(url, success, data) {

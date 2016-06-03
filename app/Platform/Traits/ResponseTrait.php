@@ -3,7 +3,6 @@
 namespace App\Platform\Traits;
 
 use App\Platform\Config;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Platform\Response\PageResponseData;
@@ -14,24 +13,19 @@ trait ResponseTrait {
 	 * @param \Illuminate\Http\Response $response        	
 	 */
 	protected static function applyCookies($response) {
-		return $response-> //
-
-		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )-> //
-
-		withCookie ( Cookie::forever ( Config::LOCATION_KEY, static::getLocationId () ), true )-> //
-
-		withCookie ( Cookie::forever ( Config::MODE, static::getMode () ), true );
+		$response = static::addCookieToResponse ( $response, Config::TOKEN_KEY, static::getToken () );
+		$response = static::addCookieToResponse ( $response, Config::LOCATION_KEY, static::getLocationId () );
+		$response = static::addCookieToResponse ( $response, Config::MODE, static::getMode () );
+		return $response;
 	}
 	/**
 	 *
 	 * @param \Illuminate\Http\Response $response        	
 	 */
 	protected static function clearCookies($response) {
-		return $response-> //
-
-		withCookie ( Config::TOKEN_KEY, null, true )-> //
-
-		withCookie ( Config::MODE, null, true );
+		$response = static::addCookieToResponse ( $response, Config::TOKEN_KEY, null );
+		$response = static::addCookieToResponse ( $response, Config::MODE, null );
+		return $response;
 	}
 	/**
 	 *

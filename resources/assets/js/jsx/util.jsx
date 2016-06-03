@@ -46,7 +46,12 @@ Object.assign(window, {
 					'_token' : token(),
 					'mode' : mode()
 				}, data),
-				success : callback,
+				success : function(data, status, response) {
+					callback.bind(this)(data, status, response);
+				},
+				xhrFields: {
+					withCredentials: true
+				}
 			}).fail(callback);
 		},
 		get : function(url, success, data) {

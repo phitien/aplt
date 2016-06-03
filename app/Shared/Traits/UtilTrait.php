@@ -120,4 +120,14 @@ trait UtilTrait {
 		}
 		return $cookies;
 	}
+	/**
+	 * Add cookie
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	protected static function addCookieToResponse($response, $key, $value) {
+		$config = config ( 'session' );
+		$response->headers->setCookie ( new \Symfony\Component\HttpFoundation\Cookie ( $key, $value, time () + 60 * 120, $config ['path'], $config ['domain'], $config ['secure'], false ) );
+		return $response;
+	}
 }
