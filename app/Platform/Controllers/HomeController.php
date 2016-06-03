@@ -27,15 +27,6 @@ class HomeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request) {
-		return $this->process ( 'index', func_get_args () );
-	}
-	protected function pgetIndex(Request $request) {
-		return $this->response ( view ( 'base', $this->preparePageResponseData ( $request ) ) );
-	}
-	protected function pajaxgetIndex(Request $request) {
-		return $this->jsonResponse ( 'home_page', $this->preparePageResponseData ( $request ) );
-	}
-	protected function preparePageResponseData(Request $request) {
-		return $this->getPageResponseData ()->setType ( 'HomePage' )->setShowBanner ( true )->setShowLeft ( 2 )->setShowRight ( 2 );
+		return $this->getHomePageResponse ( $request );
 	}
 }

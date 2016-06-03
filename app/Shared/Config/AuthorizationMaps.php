@@ -13,7 +13,7 @@ class AuthorizationMaps {
 			 * profile/profilex
 			 * followers/following/follow/accept/refuse
 			 */
-			'App\Shared\Controllers\AccountController' => [ 
+			'App\IM\Controllers\AccountController' => [ 
 					'login' => Config::ACTION_GUEST_ACT,
 					'logout' => Config::ACTION_OWN_ACT,
 					'register' => Config::ACTION_GUEST_ACT . '|' . Config::ACTION_MANAGER_ACT . '|' . Config::ACTION_CREATE_USER,

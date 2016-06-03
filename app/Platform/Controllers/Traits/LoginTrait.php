@@ -2,7 +2,6 @@
 
 namespace App\Platform\Controllers\Traits;
 
-use App\Platform\Config;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
@@ -42,9 +41,10 @@ trait  LoginTrait {
 	 */
 	protected function doLogin(Request $request) {
 		$response = static::apiCallLogin ( $request->only ( 'email', 'password' ) );
+		
 		if ($response->getStatusCode () == Response::HTTP_OK) {
 			return $this->jsonResponse ( 'login_successfully', $this->getPageResponseData ()->setType ( 'HomePage' ) );
-			// return $this->redirect ( static::getRedirectUri () );
+			return $this->redirect ( static::getRedirectUri () );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );
 			if ($request->ajax ()) {
@@ -68,8 +68,9 @@ trait  LoginTrait {
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	protected function doLogout(Request $request) {
-		$response = static::apiCallLogout ();
-		static::setToken ( Config::INVALID_TOKEN );
-		return $this->redirect ();
+		static::apiCallLogout ();
+		static::setToken ( null );
+		static::setUser ( null );
+		return $this->redirect ( '/' );
 	}
 }

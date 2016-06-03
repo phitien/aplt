@@ -51,7 +51,6 @@ module.exports = window.RightMenu = React.createClass({
 					var handler = function(data, stauts, response) {
 						dialog.close();
 						if (stauts == 'success') {
-							console.log(data);
 							if (window.applyConfigurations(data)) {
 								
 							}

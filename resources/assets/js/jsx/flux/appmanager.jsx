@@ -71,8 +71,9 @@ Object.assign(appManager, {
 		return this.get('isGuest');
 	},
 	isLogged : function() {
-		if (!this.isGuest())
+		if (this.user() && this.user().id && this.user().id > 0) {
 			return this.user();
+		}
 		return false;
 	},
 	user : function(val) {
@@ -126,6 +127,7 @@ Object.assign(appManager, {
 			}
 		}
 		document.title = this.get('title');
-		Dispatcher.dispatch(new Action(AppEvents.CONFIGURATIONS_UPDATE, configurations));
+		Dispatcher.dispatch(new Action(AppEvents.CONFIGURATIONS_UPDATE,
+				configurations));
 	}
 });

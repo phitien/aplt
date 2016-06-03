@@ -9581,7 +9581,6 @@ module.exports = window.RightMenu = React.createClass({
 				var handler = function handler(data, stauts, response) {
 					dialog.close();
 					if (stauts == 'success') {
-						console.log(data);
 						if (window.applyConfigurations(data)) {}
 					}
 				};
@@ -9919,7 +9918,9 @@ Object.assign(appManager, {
 		return this.get('isGuest');
 	},
 	isLogged: function isLogged() {
-		if (!this.isGuest()) return this.user();
+		if (this.user() && this.user().id && this.user().id > 0) {
+			return this.user();
+		}
 		return false;
 	},
 	user: function user(val) {

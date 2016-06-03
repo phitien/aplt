@@ -30,7 +30,7 @@ trait RoleTrait
 	 * @return boolean
 	 */
 	public function isGuest() {
-		return $this->id < 0;
+		return ! $this->id || $this->id < 0;
 	}
 	/**
 	 *

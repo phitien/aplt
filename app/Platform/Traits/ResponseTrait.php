@@ -64,6 +64,17 @@ trait ResponseTrait {
 	}
 	/**
 	 *
+	 * @return Response $response
+	 */
+	protected function getHomePageResponse() {
+		$this->getPageResponseData ()->setType ( 'HomePage' )->setShowBanner ( true )->setShowLeft ( 2 )->setShowRight ( 2 );
+		if (request ()->ajax ())
+			return $this->jsonResponse ( 'home_page', $this->getPageResponseData () );
+		else
+			return $this->response ( view ( 'base', $this->getPageResponseData () ) );
+	}
+	/**
+	 *
 	 * @return PageResponseData
 	 */
 	protected function getPageResponseDataNoBanner() {
@@ -85,10 +96,10 @@ trait ResponseTrait {
 	/**
 	 * Build response
 	 *
-	 * @param string $to
-	 * @param number $status
-	 * @param array $headers
-	 * @param bool $secure
+	 * @param string $to        	
+	 * @param number $status        	
+	 * @param array $headers        	
+	 * @param bool $secure        	
 	 * @return \Illuminate\Http\Response
 	 */
 	public function redirect($to = Config::HOME_PAGE, $status = 302, $headers = [], $secure = null) {
@@ -96,9 +107,9 @@ trait ResponseTrait {
 	}
 	/**
 	 *
-	 * @param string $content
-	 * @param number $status
-	 * @param array $headers
+	 * @param string $content        	
+	 * @param number $status        	
+	 * @param array $headers        	
 	 * @return \Illuminate\Http\Response
 	 */
 	public function response($content, $status = Response::HTTP_OK, array $headers = []) {
@@ -106,29 +117,29 @@ trait ResponseTrait {
 	}
 	/**
 	 *
-	 * @param string $message
-	 * @param string $data
-	 * @param number $status
-	 * @param array $headers
+	 * @param string $message        	
+	 * @param string $data        	
+	 * @param number $status        	
+	 * @param array $headers        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
-		return $this->applyCookies ( response ()->json ( [
+		return $this->applyCookies ( response ()->json ( [ 
 				'message' => $message,
-				'data' => $data instanceof PageResponseData ? $data->getData () : $data
+				'data' => $data instanceof PageResponseData ? $data->getData () : $data 
 		], $status, $headers ) );
 	}
 	/**
 	 *
-	 * @param Response $response
-	 * @param string $message
-	 * @param string $data
+	 * @param Response $response        	
+	 * @param string $message        	
+	 * @param string $data        	
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function updateJsonResponse(JsonResponse $response, $message = null, $data = null) {
-		return $response->setData ( [
+		return $response->setData ( [ 
 				'message' => $message,
-				'data' => $data instanceof PageResponseData ? $data->getData () : $data
+				'data' => $data instanceof PageResponseData ? $data->getData () : $data 
 		] );
 	}
 }

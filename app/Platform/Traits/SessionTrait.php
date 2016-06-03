@@ -24,7 +24,7 @@ trait SessionTrait {
 	 *
 	 * @param User $user        	
 	 */
-	protected static function setUser(User $user) {
+	protected static function setUser(User $user = NULL) {
 		Helper::$_user = $user;
 		return Helper::$_user;
 	}

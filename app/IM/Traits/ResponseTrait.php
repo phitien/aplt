@@ -17,7 +17,7 @@ trait ResponseTrait
 	protected static function applyCookies(BaseResponse $response) {
 		return $response->withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )->
 
-		header ( Config::SESSION_KEY, ( string ) static::getUser (), true );
+		header ( Config::SESSION_KEY, static::encrypt ( ( string ) static::getUser () ), true );
 	}
 	/**
 	 *

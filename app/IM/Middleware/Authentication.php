@@ -18,7 +18,7 @@ class Authentication extends Middleware {
 	public function im_handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
 		$user = static::getUser ();
 		if (static::getUser ()->isGuest ())
-			return $this->jsonResponse ( 'unauthorized', null, Response::HTTP_UNAUTHORIZED );
+			return $this->jsonResponse ( 'unauthenticated', null, Response::HTTP_UNAUTHORIZED );
 		
 		$this->events->fire ( 'tymon.jwt.valid', $user );
 		
