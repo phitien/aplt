@@ -39,9 +39,12 @@ Object.assign(window, {
 	},
 	ajax : {
 		exe : function(url, callback, data, type) {
+			var headers = {};
+			headers[appManager.tokenKey()] = $.cookie(appManager.tokenKey());
 			$.ajax({
 				type : type ? type : 'GET',
 				url : url,
+				headers : headers,
 				data : Object.assign({
 					'_token' : token(),
 					'mode' : mode()
@@ -49,8 +52,8 @@ Object.assign(window, {
 				success : function(data, status, response) {
 					callback.bind(this)(data, status, response);
 				},
-				xhrFields: {
-					withCredentials: true
+				xhrFields : {
+					withCredentials : true
 				}
 			}).fail(callback);
 		},

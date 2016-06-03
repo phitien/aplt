@@ -9866,6 +9866,10 @@ module.exports = window.AppEvents = ArrayToObject(['UPDATE_APPLICATION', 'UPDATE
 module.exports = window.appManager = new Store();
 //
 Object.assign(appManager, {
+	tokenKey: function tokenKey(val) {
+		if (val != null) this.set('tokenKey', val);
+		return this.get('tokenKey');
+	},
 	currentUrl: function currentUrl(val) {
 		if (val != null) this.set('currentUrl', val);
 		return this.get('currentUrl');
@@ -11292,9 +11296,12 @@ Object.assign(window, {
 	},
 	ajax: {
 		exe: function exe(url, callback, data, type) {
+			var headers = {};
+			headers[appManager.tokenKey()] = $.cookie(appManager.tokenKey());
 			$.ajax({
 				type: type ? type : 'GET',
 				url: url,
+				headers: headers,
 				data: Object.assign({
 					'_token': token(),
 					'mode': mode()

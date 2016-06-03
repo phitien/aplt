@@ -5,27 +5,26 @@ namespace App\Media\Traits;
 use App\Media\Config;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Image, Cookie;
+use Image;
+use Symfony\Component\HttpFoundation\Response as BaseResponse;
 
 trait ResponseTrait
 {
 	/**
 	 *
-	 * @param \Illuminate\Http\Response $response        	
+	 * @param BaseResponse $response        	
 	 */
-	protected static function applyCookies($response) {
-		return $response-> //
-
-		withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true );
+	protected static function addHeaders(BaseResponse $response) {
+		$response = static::addCookieToResponse ( $response, Config::TOKEN_KEY, static::getToken () );
+		return $response;
 	}
 	/**
 	 *
-	 * @param \Illuminate\Http\Response $response        	
+	 * @param BaseResponse $response        	
 	 */
-	protected static function clearCookies($response) {
-		return $response-> //
-
-		withCookie ( Config::TOKEN_KEY, null, true );
+	protected static function clearHeaders(BaseResponse $response) {
+		$response = static::addCookieToResponse ( $response, Config::TOKEN_KEY, null );
+		return $response;
 	}
 	/**
 	 *
@@ -50,7 +49,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function redirect($to = Config::HOME_PAGE, $status = 302, $headers = [], $secure = null) {
-		return static::applyCookies ( redirect ( $to, $status, $headers, $secure ) );
+		return static::addHeaders ( redirect ( $to, $status, $headers, $secure ) );
 	}
 	/**
 	 *
@@ -60,7 +59,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function response($content, $status = Response::HTTP_OK, array $headers = []) {
-		return static::applyCookies ( response ( $content, $status, $headers ) );
+		return static::addHeaders ( response ( $content, $status, $headers ) );
 	}
 	/**
 	 *
@@ -71,7 +70,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
-		return $this->applyCookies ( response ()->json ( [ 
+		return $this->addHeaders ( response ()->json ( [ 
 				'message' => $message,
 				'data' => $data instanceof PageResponseData ? $data->getData () : $data 
 		], $status, $headers ) );

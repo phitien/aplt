@@ -3,8 +3,9 @@
 namespace App\Platform;
 
 use App\Platform\Traits\AllTrait;
+use App\Shared\Helper as BaseHelper;
 
-class Helper {
+class Helper extends BaseHelper {
 	use AllTrait;
 	/**
 	 *
@@ -28,17 +29,7 @@ class Helper {
 	public static $_mode;
 	/**
 	 *
-	 * @var string $_userInfoFromRequest
-	 */
-	public static $_userInfoFromRequest;
-	/**
-	 *
 	 * @var \App\Shared\Models\User
 	 */
 	public static $_user;
-	/**
-	 *
-	 * @var string
-	 */
-	public static $_token;
 }

@@ -14,17 +14,17 @@ trait ResponseTrait
 	 *
 	 * @param BaseResponse $response        	
 	 */
-	protected static function applyCookies(BaseResponse $response) {
-		return $response->withCookie ( Cookie::forever ( Config::TOKEN_KEY, static::getToken () ), true )->
-
-		header ( Config::SESSION_KEY, static::encrypt ( ( string ) static::getUser () ), true );
+	protected static function addHeaders(BaseResponse $response) {
+		$response = static::addCookieToResponse ( $response, Config::TOKEN_KEY, static::getToken () );
+		return $response;
 	}
 	/**
 	 *
 	 * @param BaseResponse $response        	
 	 */
-	protected static function clearCookies(BaseResponse $response) {
-		return $response->withCookie ( Cookie::forever ( Config::TOKEN_KEY, Config::INVALID_TOKEN ), true );
+	protected static function clearHeaders(BaseResponse $response) {
+		$response = static::addCookieToResponse ( $response, Config::TOKEN_KEY, null );
+		return $response;
 	}
 	/**
 	 * Build response
@@ -36,7 +36,7 @@ trait ResponseTrait
 	 * @return BaseResponse
 	 */
 	public function redirect($to = Config::HOME_PAGE, $status = 302, $headers = [], $secure = null) {
-		return static::applyCookies ( redirect ( $to, $status, $headers, $secure ) );
+		return static::addHeaders ( redirect ( $to, $status, $headers, $secure ) );
 	}
 	/**
 	 *
@@ -46,7 +46,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\Response
 	 */
 	public function response($content, $status = Response::HTTP_OK, array $headers = []) {
-		return static::applyCookies ( response ( $content, $status, $headers ) );
+		return static::addHeaders ( response ( $content, $status, $headers ) );
 	}
 	/**
 	 *
@@ -57,7 +57,7 @@ trait ResponseTrait
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function jsonResponse($message = null, $data = null, $status = Response::HTTP_OK, array $headers = []) {
-		return $this->applyCookies ( response ()->json ( [ 
+		return $this->addHeaders ( response ()->json ( [ 
 				'message' => $message,
 				'data' => $data 
 		], $status, $headers ) );

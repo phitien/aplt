@@ -4,22 +4,15 @@ namespace App\Platform\Middleware;
 
 use Closure;
 use App\Platform\Config;
-use Tymon\JWTAuth\Middleware\BaseMiddleware;
 use App\Platform\Traits\AllTrait;
 use DateTime;
+use App\Shared\Middleware\Prehandle as BasePrehandle;
 
-class Prehandle extends BaseMiddleware {
+class Prehandle extends BasePrehandle {
 	/**
 	 * TRAITS
 	 */
 	use AllTrait;
-	/**
-	 *
-	 * @param \Illuminate\Http\Request $request        	
-	 * @param Closure $next        	
-	 * @param string $actions        	
-	 * @return \Illuminate\Http\Response
-	 */
 	public function handle($request, Closure $next, $actions = Config::ACTION_GUEST_ACT) {
 		// Set request time variable in session
 		if ($request->has ( Config::MODE ) || ! $request->ajax ()) {
@@ -31,6 +24,6 @@ class Prehandle extends BaseMiddleware {
 				$request->session ()->set ( 'redirect', $url );
 			}
 		}
-		return $next ( $request );
+		return parent::handle ( $request, $next, $actions );
 	}
 }

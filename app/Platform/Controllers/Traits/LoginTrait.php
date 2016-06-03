@@ -41,9 +41,7 @@ trait  LoginTrait {
 	 */
 	protected function doLogin(Request $request) {
 		$response = static::apiCallLogin ( $request->only ( 'email', 'password' ) );
-		
 		if ($response->getStatusCode () == Response::HTTP_OK) {
-			return $this->jsonResponse ( 'login_successfully', $this->getPageResponseData ()->setType ( 'HomePage' ) );
 			return $this->redirect ( static::getRedirectUri () );
 		} else {
 			$data = static::json_decode ( $response->getBody (), true );

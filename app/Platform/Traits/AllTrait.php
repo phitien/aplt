@@ -12,7 +12,6 @@ trait AllTrait {
 		RequestTimeTrait, 
 		ResponseTrait, 
 		SessionTrait, 
-		TokenTrait, 
 		ModeTrait,
 		UtilTrait;
 	

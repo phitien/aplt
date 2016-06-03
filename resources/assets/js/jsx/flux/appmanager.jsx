@@ -7,6 +7,11 @@
 module.exports = window.appManager = new Store();
 //
 Object.assign(appManager, {
+	tokenKey : function(val) {
+		if (val != null)
+			this.set('tokenKey', val);
+		return this.get('tokenKey');
+	},
 	currentUrl : function(val) {
 		if (val != null)
 			this.set('currentUrl', val);

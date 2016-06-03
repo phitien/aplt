@@ -43,6 +43,7 @@ trait  LoginTrait {
 			if (! $token = JWTAuth::fromUser ( $credentials ))
 				return $this->jsonResponse ( 'could_not_create_token', null, Response::HTTP_UNAUTHORIZED );
 		}
+		echo $token;
 		static::setToken ( $token );
 		static::setUser ( JWTAuth::authenticate ( $token ) );
 		return $this->jsonResponse ( 'login_successfully' );

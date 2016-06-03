@@ -52,6 +52,7 @@ class PageResponseData implements \ArrayAccess {
 	public function __construct($type) {
 		$user = Helper::getUser ();
 		$this->_data ['configurations'] = [ 
+				'tokenKey' => Config::TOKEN_KEY,
 				'type' => $type,
 				'title' => 'Ezsell',
 				'keywords' => 'Ezsell',

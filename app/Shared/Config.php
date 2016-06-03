@@ -18,8 +18,8 @@ class Config {
 	const FOLLOWER_REQUEST_ACCEPTED = 1;
 	const FOLLOWER_REQUEST_REFUSED = 2;
 	//
-	const TOKEN_KEY = "TOKEN-KEY";
-	const SESSION_KEY = "SESSION-KEY";
+	const TOKEN_KEY = "Session-Key";
+	const INFO_KEY = "Info-Key";
 	//
 	const ACTION_GUEST_ACT = 'GUEST_ACT';
 	const ACTION_GOD_ACT = 'GOD_ACT';

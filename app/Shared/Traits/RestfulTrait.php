@@ -42,7 +42,7 @@ trait RestfulTrait {
 	 */
 	protected static function setParamsFromResponse(ResponseInterface $response, CookieJar $jar = NULL) {
 		try {
-			if ($arr = $response->getHeader ( Config::SESSION_KEY )) {
+			if ($arr = $response->getHeader ( Config::INFO_KEY )) {
 				static::setUser ( new User ( json_decode ( static::decrypt ( $arr [0] ), true ) ) );
 			} else {
 				static::setUser ( User::getGuest () );
